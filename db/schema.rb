@@ -10,15 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_28_091305) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_28_092414) do
   create_table "legal_guardians", force: :cascade do |t|
-    t.string "name"
-    t.string "surname"
+    t.string "name", null: false
+    t.string "surname", null: false
     t.string "email"
     t.string "phone"
-    t.date "date_of_birth"
+    t.date "date_of_birth", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "surname", null: false
+    t.string "email"
+    t.string "phone"
+    t.date "date_of_birth", null: false
+    t.date "med_cert_exp_date"
+    t.integer "legal_guardian_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["legal_guardian_id"], name: "index_users_on_legal_guardian_id"
+  end
+
+  add_foreign_key "users", "legal_guardians"
 end

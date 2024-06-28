@@ -51,6 +51,9 @@ gem "bootsnap", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
+  gem "faker", "~> 3.4"
+  gem "pry", "~> 0.14.2"
+  gem "pry-rails", "~> 0.3.11"
 end
 
 group :development do

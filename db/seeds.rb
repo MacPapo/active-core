@@ -7,3 +7,47 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# Pulizia del database
+User.destroy_all
+LegalGuardian.destroy_all
+
+# Creazione di tutori legali
+10.times do
+  LegalGuardian.create!(
+    name: Faker::Name.first_name,
+    surname: Faker::Name.last_name,
+    email: Faker::Internet.email,
+    phone: Faker::PhoneNumber.cell_phone_in_e164,
+    date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60)
+  )
+end
+
+# Creazione di utenti minorenni con tutore legale
+40.times do
+  legal_guardian = LegalGuardian.all.sample
+  User.create!(
+    name: Faker::Name.first_name,
+    surname: Faker::Name.last_name,
+    email: Faker::Internet.email,
+    phone: Faker::PhoneNumber.cell_phone_in_e164,
+    date_of_birth: Faker::Date.birthday(min_age: 5, max_age: 17),
+    med_cert_exp_date: Faker::Date.forward(days: 365),
+    legal_guardian: legal_guardian
+  )
+end
+
+# Creazione di utenti maggiorenni senza tutore legale
+20.times do
+  User.create!(
+    name: Faker::Name.first_name,
+    surname: Faker::Name.last_name,
+    email: Faker::Internet.email,
+    phone: Faker::PhoneNumber.cell_phone_in_e164,
+    date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 100),
+    med_cert_exp_date: Faker::Date.forward(days: 365),
+    legal_guardian: nil
+  )
+end
+
+puts "All DONE!!"
