@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_28_095133) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_28_100600) do
   create_table "courses", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -25,6 +25,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_28_095133) do
     t.date "date_of_birth", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "subscription_types", force: :cascade do |t|
+    t.text "desc"
+    t.integer "duration"
+    t.float "cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["desc"], name: "index_subscription_types_on_desc", unique: true
   end
 
   create_table "users", force: :cascade do |t|

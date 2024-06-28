@@ -8,10 +8,13 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+# Clean up existing data to ensure idempotency
 User.destroy_all
 LegalGuardian.destroy_all
 Course.destroy_all
+SubscriptionType.destroy_all
 
+# Seed LegalGuardians
 10.times do
   LegalGuardian.create!(
     name: Faker::Name.first_name,
@@ -22,6 +25,7 @@ Course.destroy_all
   )
 end
 
+# Seed Users with Legal Guardians
 40.times do
   legal_guardian = LegalGuardian.all.sample
   User.create!(
@@ -35,6 +39,7 @@ end
   )
 end
 
+# Seed Users without Legal Guardians
 20.times do
   User.create!(
     name: Faker::Name.first_name,
@@ -47,10 +52,24 @@ end
   )
 end
 
+# Seed Courses
 30.times do
   Course.create!(
     name: Faker::Sport.sport
   )
 end
 
-puts "All DONE!!"
+# Seed Subscription Types
+[
+  { desc: 'Basic', duration: 30, cost: 29.99 },
+  { desc: 'Standard', duration: 60, cost: 49.99 },
+  { desc: 'Premium', duration: 90, cost: 79.99 }
+].each do |subscription_type_attrs|
+  SubscriptionType.find_or_create_by!(
+    desc: subscription_type_attrs[:desc],
+    duration: subscription_type_attrs[:duration],
+    cost: subscription_type_attrs[:cost]
+  )
+end
+
+puts "Seeding completed successfully!"
