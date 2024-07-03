@@ -13,6 +13,7 @@ User.destroy_all
 LegalGuardian.destroy_all
 Course.destroy_all
 SubscriptionType.destroy_all
+Subscription.destroy_all
 
 # Seed LegalGuardians
 10.times do
@@ -55,7 +56,7 @@ end
 # Seed Courses
 30.times do
   Course.create!(
-    name: Faker::Sport.sport
+    name: Faker::Sport.unique.sport
   )
 end
 
@@ -70,6 +71,32 @@ end
     duration: subscription_type_attrs[:duration],
     cost: subscription_type_attrs[:cost]
   )
+end
+
+users = User.all
+courses = Course.all
+subscription_types = SubscriptionType.all
+
+subscription_types.each do |subscription_type|
+  duration_in_days = subscription_type.duration
+
+  # Calcola le date di inizio e fine in base alla durata del subscription_type
+  100.times do
+    user = users.sample
+    course = courses.sample
+
+    start_date = Faker::Date.backward(days: duration_in_days)  # Data di inizio è indietro di `duration_in_days` giorni
+    end_date = start_date + duration_in_days                   # Data di fine è `duration_in_days` giorni dopo la data di inizio
+
+    Subscription.create!(
+      start: start_date,
+      end: end_date,
+      user: user,
+      course: course,
+      subscription_type: subscription_type,
+      state: ['attivo', 'scaduto', 'cancellato'].sample
+    )
+  end
 end
 
 puts "Seeding completed successfully!"

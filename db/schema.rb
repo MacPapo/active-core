@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_28_100600) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_28_101817) do
   create_table "courses", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_courses_on_name", unique: true
   end
 
   create_table "legal_guardians", force: :cascade do |t|
@@ -36,6 +37,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_28_100600) do
     t.index ["desc"], name: "index_subscription_types_on_desc", unique: true
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.date "start"
+    t.date "end"
+    t.integer "user_id", null: false
+    t.integer "course_id", null: false
+    t.integer "subscription_type_id", null: false
+    t.string "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_subscriptions_on_course_id"
+    t.index ["subscription_type_id"], name: "index_subscriptions_on_subscription_type_id"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+    t.check_constraint "state IN ('attivo', 'scaduto', 'cancellato')", name: "state_check"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "surname", null: false
@@ -49,5 +65,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_28_100600) do
     t.index ["legal_guardian_id"], name: "index_users_on_legal_guardian_id"
   end
 
+  add_foreign_key "subscriptions", "courses"
+  add_foreign_key "subscriptions", "subscription_types"
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "users", "legal_guardians"
 end
