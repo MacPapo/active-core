@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :staffs
   resources :subscriptions
   resources :subscription_types
   resources :courses

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_28_101817) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_03_105122) do
   create_table "courses", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -26,6 +26,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_28_101817) do
     t.date "date_of_birth", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "staffs", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.date "card_expiry_date"
+    t.string "password"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_staffs_on_user_id"
   end
 
   create_table "subscription_types", force: :cascade do |t|
@@ -65,6 +75,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_28_101817) do
     t.index ["legal_guardian_id"], name: "index_users_on_legal_guardian_id"
   end
 
+  add_foreign_key "staffs", "users"
   add_foreign_key "subscriptions", "courses"
   add_foreign_key "subscriptions", "subscription_types"
   add_foreign_key "subscriptions", "users"

@@ -9,11 +9,12 @@
 #   end
 
 # Clean up existing data to ensure idempotency
-User.destroy_all
-LegalGuardian.destroy_all
 Course.destroy_all
-SubscriptionType.destroy_all
 Subscription.destroy_all
+SubscriptionType.destroy_all
+LegalGuardian.destroy_all
+User.destroy_all
+Staff.destroy_all
 
 # Seed LegalGuardians
 10.times do
@@ -25,6 +26,8 @@ Subscription.destroy_all
     date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60)
   )
 end
+
+puts "LegalGuardians Added"
 
 # Seed Users with Legal Guardians
 40.times do
@@ -40,6 +43,8 @@ end
   )
 end
 
+puts "Minor Users Added"
+
 # Seed Users without Legal Guardians
 20.times do
   User.create!(
@@ -53,12 +58,16 @@ end
   )
 end
 
+puts "Normal Users Added"
+
 # Seed Courses
 30.times do
   Course.create!(
     name: Faker::Sport.unique.sport
   )
 end
+
+puts "Courses Added"
 
 # Seed Subscription Types
 [
@@ -72,6 +81,8 @@ end
     cost: subscription_type_attrs[:cost]
   )
 end
+
+puts "SubscriptionTypes Added"
 
 users = User.all
 courses = Course.all
@@ -98,5 +109,49 @@ subscription_types.each do |subscription_type|
     )
   end
 end
+
+puts "Subscriptions Added"
+puts "Updated Users with courses"
+
+# Seed Staff Members
+admin_user = User.create!(
+  name: 'Admin',
+  surname: 'User',
+  email: 'admin@example.com',
+  phone: Faker::PhoneNumber.cell_phone_in_e164,
+  date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60),
+  med_cert_exp_date: nil
+)
+
+puts "Admin User Added"
+
+Staff.create!(
+  user: admin_user,
+  card_expiry_date: nil,
+  password: 'adminpassword',
+  role: 'admin'
+)
+
+puts "Admin Staff Added"
+
+10.times do
+  user = User.create!(
+    name: Faker::Name.first_name,
+    surname: Faker::Name.last_name,
+    email: Faker::Internet.email,
+    phone: Faker::PhoneNumber.cell_phone_in_e164,
+    date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 60),
+    med_cert_exp_date: nil
+  )
+
+  Staff.create!(
+    user: user,
+    card_expiry_date: Faker::Date.forward(days: 365),
+    password: 'password',
+    role: ['collaboratore', 'volontario'].sample
+  )
+end
+
+puts "Staff Added"
 
 puts "Seeding completed successfully!"
