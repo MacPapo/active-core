@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :payments
   resources :subscription_histories
   resources :staffs
   resources :subscriptions

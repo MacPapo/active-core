@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_03_105122) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
   create_table "courses", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -28,6 +28,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_03_105122) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "payments", force: :cascade do |t|
+    t.float "amount", null: false
+    t.date "date", null: false
+    t.string "method", null: false
+    t.string "payment_type", null: false
+    t.string "entry_type", null: false
+    t.string "state", null: false
+    t.text "note"
+    t.integer "subscription_id"
+    t.integer "staff_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["staff_id"], name: "index_payments_on_staff_id"
+    t.index ["subscription_id"], name: "index_payments_on_subscription_id"
+    t.check_constraint "entry_type IN ('entrata', 'uscita')", name: "payments_entry_check"
+    t.check_constraint "method IN ('pos', 'contanti', 'bonifico')", name: "payments_method_check"
+    t.check_constraint "payment_type IN ('abbonamento', 'quota', 'altro')", name: "payments_type_check"
+    t.check_constraint "state IN ('pagato', 'non_pagato')", name: "payments_state_check"
+  end
+
   create_table "staffs", force: :cascade do |t|
     t.integer "user_id", null: false
     t.date "card_expiry_date"
@@ -36,6 +56,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_03_105122) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_staffs_on_user_id"
+  end
+
+  create_table "subscription_histories", force: :cascade do |t|
+    t.date "renewal_date"
+    t.date "old_end_date"
+    t.date "new_end_date"
+    t.string "action"
+    t.integer "subscription_id", null: false
+    t.integer "staff_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["staff_id"], name: "index_subscription_histories_on_staff_id"
+    t.index ["subscription_id"], name: "index_subscription_histories_on_subscription_id"
   end
 
   create_table "subscription_types", force: :cascade do |t|
@@ -75,7 +108,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_03_105122) do
     t.index ["legal_guardian_id"], name: "index_users_on_legal_guardian_id"
   end
 
+  add_foreign_key "payments", "staffs"
+  add_foreign_key "payments", "subscriptions"
   add_foreign_key "staffs", "users"
+  add_foreign_key "subscription_histories", "staffs"
+  add_foreign_key "subscription_histories", "subscriptions"
   add_foreign_key "subscriptions", "courses"
   add_foreign_key "subscriptions", "subscription_types"
   add_foreign_key "subscriptions", "users"

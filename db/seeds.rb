@@ -154,4 +154,23 @@ end
 
 puts "Staff Added"
 
+staff = Staff.all
+subscriptions = Subscription.all
+
+100.times do
+  Payment.create!(
+    amount: Faker::Commerce.price(range: 10..100),
+    date: Faker::Date.backward(days: 365),
+    method: ['pos', 'contanti', 'bonifico'].sample,
+    payment_type: ['abbonamento', 'quota', 'altro'].sample,
+    entry_type: ['uscita', 'entrata'].sample,
+    state: ['pagato', 'non_pagato'].sample,
+    note: Faker::Lorem.sentence,
+    subscription: subscriptions.sample,
+    staff: staff.sample
+  )
+end
+
+puts "Payments Added"
+
 puts "Seeding completed successfully!"
