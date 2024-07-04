@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  renewal_date: 2024-07-03
+  old_end_date: 2024-07-03
+  new_end_date: 2024-07-03
+  action: MyString
+  subscription: one
+  staff: one
+
+two:
+  renewal_date: 2024-07-03
+  old_end_date: 2024-07-03
+  new_end_date: 2024-07-03
+  action: MyString
+  subscription: two
+  staff: two

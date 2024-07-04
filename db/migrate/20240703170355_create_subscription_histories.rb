@@ -1,0 +1,14 @@
+class CreateSubscriptionHistories < ActiveRecord::Migration[7.1]
+  def change
+    create_table :subscription_histories do |t|
+      t.date :renewal_date
+      t.date :old_end_date
+      t.date :new_end_date
+      t.string :action
+      t.references :subscription, null: false, foreign_key: true
+      t.references :staff, foreign_key: true
+
+      t.timestamps
+    end
+  end
+end

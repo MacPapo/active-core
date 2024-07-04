@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @subscription_history %>
+
+<div>
+  <%= link_to "Edit this subscription history", edit_subscription_history_path(@subscription_history) %> |
+  <%= link_to "Back to subscription histories", subscription_histories_path %>
+
+  <%= button_to "Destroy this subscription history", @subscription_history, method: :delete %>
+</div>

@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Subscription histories</h1>
+
+<div id="subscription_histories">
+  <% @subscription_histories.each do |subscription_history| %>
+    <%= render subscription_history %>
+    <p>
+      <%= link_to "Show this subscription history", subscription_history %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New subscription history", new_subscription_history_path %>
