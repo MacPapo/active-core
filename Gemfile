@@ -15,6 +15,8 @@ gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 
+gem "devise", "~> 4.9"
+
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 
@@ -54,6 +56,9 @@ group :development, :test do
   gem "faker", "~> 3.4"
   gem "pry", "~> 0.14.2"
   gem "pry-rails", "~> 0.3.11"
+
+  gem "factory_bot_rails", "~> 6.4"
+  gem "rspec-rails", "~> 6.1"
 end
 
 group :development do
@@ -72,5 +77,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "devise", "~> 4.9"
