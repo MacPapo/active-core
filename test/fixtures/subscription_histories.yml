@@ -4,7 +4,7 @@ one:
   renewal_date: 2024-07-03
   old_end_date: 2024-07-03
   new_end_date: 2024-07-03
-  action: MyString
+  action: one
   subscription: one
   staff: one
 
@@ -12,6 +12,6 @@ two:
   renewal_date: 2024-07-03
   old_end_date: 2024-07-03
   new_end_date: 2024-07-03
-  action: MyString
+  action: one
   subscription: two
   staff: two

@@ -21,8 +21,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
   create_table "legal_guardians", force: :cascade do |t|
     t.string "name", null: false
     t.string "surname", null: false
-    t.string "email"
-    t.string "phone"
+    t.string "email", null: false
+    t.string "phone", null: false
     t.date "date_of_birth", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -31,10 +31,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
   create_table "payments", force: :cascade do |t|
     t.float "amount", null: false
     t.date "date", null: false
-    t.string "method", null: false
-    t.string "payment_type", null: false
-    t.string "entry_type", null: false
-    t.string "state", null: false
+    t.integer "method", null: false
+    t.integer "payment_type", null: false
+    t.integer "entry_type", null: false
+    t.integer "state", null: false
     t.text "note"
     t.integer "subscription_id"
     t.integer "staff_id", null: false
@@ -42,19 +42,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
     t.datetime "updated_at", null: false
     t.index ["staff_id"], name: "index_payments_on_staff_id"
     t.index ["subscription_id"], name: "index_payments_on_subscription_id"
-    t.check_constraint "entry_type IN ('entrata', 'uscita')", name: "payments_entry_check"
-    t.check_constraint "method IN ('pos', 'contanti', 'bonifico')", name: "payments_method_check"
-    t.check_constraint "payment_type IN ('abbonamento', 'quota', 'altro')", name: "payments_type_check"
-    t.check_constraint "state IN ('pagato', 'non_pagato')", name: "payments_state_check"
   end
 
   create_table "staffs", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.integer "role", default: 0
     t.date "card_expiry_date"
-    t.string "password"
-    t.string "role"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_staffs_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_staffs_on_reset_password_token", unique: true
     t.index ["user_id"], name: "index_staffs_on_user_id"
   end
 
@@ -62,7 +67,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
     t.date "renewal_date"
     t.date "old_end_date"
     t.date "new_end_date"
-    t.string "action"
+    t.integer "action", default: 0
     t.integer "subscription_id", null: false
     t.integer "staff_id"
     t.datetime "created_at", null: false
@@ -86,13 +91,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
     t.integer "user_id", null: false
     t.integer "course_id", null: false
     t.integer "subscription_type_id", null: false
-    t.string "state"
+    t.integer "state", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_subscriptions_on_course_id"
     t.index ["subscription_type_id"], name: "index_subscriptions_on_subscription_type_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
-    t.check_constraint "state IN ('attivo', 'scaduto', 'cancellato')", name: "state_check"
   end
 
   create_table "users", force: :cascade do |t|

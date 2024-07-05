@@ -105,7 +105,7 @@ subscription_types.each do |subscription_type|
       user: user,
       course: course,
       subscription_type: subscription_type,
-      state: ['attivo', 'scaduto', 'cancellato'].sample
+      state: [0, 1, 2].sample
     )
   end
 end
@@ -126,10 +126,11 @@ admin_user = User.create!(
 puts "Admin User Added"
 
 Staff.create!(
-  user: admin_user,
+  user: nil,
   card_expiry_date: nil,
+  email: 'admin@example.com',
   password: 'adminpassword',
-  role: 'admin'
+  role: 2
 )
 
 puts "Admin Staff Added"
@@ -147,8 +148,9 @@ puts "Admin Staff Added"
   Staff.create!(
     user: user,
     card_expiry_date: Faker::Date.forward(days: 365),
+    email: Faker::Internet.email,
     password: 'password',
-    role: ['collaboratore', 'volontario'].sample
+    role: [0, 1].sample
   )
 end
 
@@ -161,10 +163,10 @@ subscriptions = Subscription.all
   Payment.create!(
     amount: Faker::Commerce.price(range: 10..100),
     date: Faker::Date.backward(days: 365),
-    method: ['pos', 'contanti', 'bonifico'].sample,
-    payment_type: ['abbonamento', 'quota', 'altro'].sample,
-    entry_type: ['uscita', 'entrata'].sample,
-    state: ['pagato', 'non_pagato'].sample,
+    method: [0, 1, 2, 3].sample,
+    payment_type: [0, 1, 2].sample,
+    entry_type: [0, 1].sample,
+    state: [0, 1].sample,
     note: Faker::Lorem.sentence,
     subscription: subscriptions.sample,
     staff: staff.sample

@@ -6,7 +6,7 @@ one:
   user: one
   course: one
   subscription_type: one
-  state: MyString
+  state: one
 
 two:
   start: 2024-06-28
@@ -14,4 +14,4 @@ two:
   user: two
   course: two
   subscription_type: two
-  state: MyString
+  state: one

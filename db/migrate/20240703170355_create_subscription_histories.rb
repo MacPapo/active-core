@@ -4,7 +4,7 @@ class CreateSubscriptionHistories < ActiveRecord::Migration[7.1]
       t.date :renewal_date
       t.date :old_end_date
       t.date :new_end_date
-      t.string :action
+      t.integer :action, default: 0
       t.references :subscription, null: false, foreign_key: true
       t.references :staff, foreign_key: true
 

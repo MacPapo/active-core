@@ -6,11 +6,9 @@ class CreateSubscriptions < ActiveRecord::Migration[7.1]
       t.references :user, null: false, foreign_key: true
       t.references :course, null: false, foreign_key: true
       t.references :subscription_type, null: false, foreign_key: true
-      t.string :state
+      t.integer :state, default: 0
 
       t.timestamps
     end
-
-    add_check_constraint :subscriptions, "state IN ('attivo', 'scaduto', 'cancellato')", name: "state_check"
   end
 end
