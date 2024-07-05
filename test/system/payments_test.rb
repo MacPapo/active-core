@@ -21,7 +21,7 @@ class PaymentsTest < ApplicationSystemTestCase
     fill_in "Note", with: @payment.note
     fill_in "Payment type", with: @payment.payment_type
     fill_in "Staff", with: @payment.staff_id
-    fill_in "State", with: @payment.state
+    fill_in "Payed", with: @payment.payed
     fill_in "Subscription", with: @payment.subscription_id
     click_on "Create Payment"
 
@@ -40,7 +40,7 @@ class PaymentsTest < ApplicationSystemTestCase
     fill_in "Note", with: @payment.note
     fill_in "Payment type", with: @payment.payment_type
     fill_in "Staff", with: @payment.staff_id
-    fill_in "State", with: @payment.state
+    fill_in "Payed", with: @payment.payed
     fill_in "Subscription", with: @payment.subscription_id
     click_on "Update Payment"
 

@@ -15,7 +15,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_courses_on_name", unique: true
   end
 
   create_table "legal_guardians", force: :cascade do |t|
@@ -31,13 +30,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
   create_table "payments", force: :cascade do |t|
     t.float "amount", null: false
     t.date "date", null: false
-    t.integer "method", null: false
-    t.integer "payment_type", null: false
-    t.integer "entry_type", null: false
-    t.integer "state", null: false
+    t.integer "method", default: 0, null: false
+    t.integer "payment_type", default: 0, null: false
+    t.integer "entry_type", default: 0, null: false
+    t.boolean "payed", default: true, null: false
     t.text "note"
     t.integer "subscription_id"
-    t.integer "staff_id", null: false
+    t.integer "staff_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["staff_id"], name: "index_payments_on_staff_id"
@@ -82,7 +81,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
     t.float "cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["desc"], name: "index_subscription_types_on_desc", unique: true
   end
 
   create_table "subscriptions", force: :cascade do |t|

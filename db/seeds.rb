@@ -158,6 +158,7 @@ puts "Staff Added"
 
 staff = Staff.all
 subscriptions = Subscription.all
+Payment.destroy_all
 
 100.times do
   Payment.create!(
@@ -166,7 +167,7 @@ subscriptions = Subscription.all
     method: [0, 1, 2, 3].sample,
     payment_type: [0, 1, 2].sample,
     entry_type: [0, 1].sample,
-    state: [0, 1].sample,
+    payed: true,
     note: Faker::Lorem.sentence,
     subscription: subscriptions.sample,
     staff: staff.sample

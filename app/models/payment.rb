@@ -20,12 +20,5 @@ class Payment < ApplicationRecord
     self.entry_type ||= :entrata
   end
 
-  enum state: [:pagato, :non_pagato]
-  after_initialize :set_default_state, :if => :new_record?
-  def set_default_state
-    self.state ||= :pagato
-  end
-
-
-  validates :amount, :date, :method, :payment_type, :entry_type, :state, presence: true
+  validates :amount, :date, :method, :payment_type, :entry_type, :payed, presence: true
 end

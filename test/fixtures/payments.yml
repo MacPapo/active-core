@@ -6,7 +6,7 @@ one:
   method: one
   payment_type: one
   entry_type: one
-  state: one
+  payed: true
   note: MyText
   subscription: one
   staff: one
@@ -17,7 +17,7 @@ two:
   method: one
   payment_type: one
   entry_type: one
-  state: one
+  payed: false
   note: MyText
   subscription: two
   staff: two

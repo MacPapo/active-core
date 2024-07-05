@@ -17,7 +17,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create payment" do
     assert_difference("Payment.count") do
-      post payments_url, params: { payment: { amount: @payment.amount, date: @payment.date, entry_type: @payment.entry_type, method: @payment.method, note: @payment.note, payment_type: @payment.payment_type, staff_id: @payment.staff_id, state: @payment.state, subscription_id: @payment.subscription_id } }
+      post payments_url, params: { payment: { amount: @payment.amount, date: @payment.date, entry_type: @payment.entry_type, method: @payment.method, note: @payment.note, payment_type: @payment.payment_type, staff_id: @payment.staff_id, payed: @payment.payed, subscription_id: @payment.subscription_id } }
     end
 
     assert_redirected_to payment_url(Payment.last)
@@ -34,7 +34,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update payment" do
-    patch payment_url(@payment), params: { payment: { amount: @payment.amount, date: @payment.date, entry_type: @payment.entry_type, method: @payment.method, note: @payment.note, payment_type: @payment.payment_type, staff_id: @payment.staff_id, state: @payment.state, subscription_id: @payment.subscription_id } }
+    patch payment_url(@payment), params: { payment: { amount: @payment.amount, date: @payment.date, entry_type: @payment.entry_type, method: @payment.method, note: @payment.note, payment_type: @payment.payment_type, staff_id: @payment.staff_id, payed: @payment.payed, subscription_id: @payment.subscription_id } }
     assert_redirected_to payment_url(@payment)
   end
 
