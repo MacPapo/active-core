@@ -22,7 +22,7 @@ Staff.destroy_all
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
     email: Faker::Internet.email,
-    phone: Faker::PhoneNumber.cell_phone_in_e164,
+    phone: '+39 341 4488 932',
     date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60)
   )
 end
@@ -36,9 +36,9 @@ puts "LegalGuardians Added"
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
     email: Faker::Internet.email,
-    phone: Faker::PhoneNumber.cell_phone_in_e164,
+    phone: '+39 341 4488 933',
     date_of_birth: Faker::Date.birthday(min_age: 5, max_age: 17),
-    med_cert_exp_date: Faker::Date.forward(days: 365),
+    med_cert_issue_date: Faker::Date.forward(days: 365),
     legal_guardian: legal_guardian
   )
 end
@@ -51,9 +51,9 @@ puts "Minor Users Added"
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
     email: Faker::Internet.email,
-    phone: Faker::PhoneNumber.cell_phone_in_e164,
+    phone: '+39 341 4488 934',
     date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 100),
-    med_cert_exp_date: Faker::Date.forward(days: 365),
+    med_cert_issue_date: Faker::Date.forward(days: 365),
     legal_guardian: nil
   )
 end
@@ -118,9 +118,9 @@ admin_user = User.create!(
   name: 'Admin',
   surname: 'User',
   email: 'admin@example.com',
-  phone: Faker::PhoneNumber.cell_phone_in_e164,
+  phone: '+39 341 4488 935',
   date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60),
-  med_cert_exp_date: nil
+  med_cert_issue_date: nil
 )
 
 puts "Admin User Added"
@@ -140,9 +140,9 @@ puts "Admin Staff Added"
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
     email: Faker::Internet.email,
-    phone: Faker::PhoneNumber.cell_phone_in_e164,
+    phone: '+39 341 4488 936',
     date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 60),
-    med_cert_exp_date: nil
+    med_cert_issue_date: nil
   )
 
   Staff.create!(

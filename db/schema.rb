@@ -103,7 +103,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
     t.string "email"
     t.string "phone"
     t.date "date_of_birth", null: false
-    t.date "med_cert_exp_date"
+    t.date "med_cert_issue_date"
     t.integer "legal_guardian_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
