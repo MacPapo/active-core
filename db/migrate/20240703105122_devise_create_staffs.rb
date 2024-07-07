@@ -33,8 +33,7 @@ class DeviseCreateStaffs < ActiveRecord::Migration[7.1]
       # t.datetime :locked_at
 
       t.integer :role, default: 0
-      t.date :card_expiry_date
-      t.references :user, null: true, foreign_key: true
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps null: false
     end

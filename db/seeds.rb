@@ -71,11 +71,12 @@ puts "Courses Added"
 
 # Seed Subscription Types
 [
-  { desc: 'Basic', duration: 30, cost: 29.99 },
-  { desc: 'Standard', duration: 60, cost: 49.99 },
-  { desc: 'Premium', duration: 90, cost: 79.99 }
+  { plan: :one, desc: 'Basic', duration: 30, cost: 29.99 },
+  { plan: :half, desc: 'Standard', duration: 60, cost: 49.99 },
+  { plan: :year, desc: 'Premium', duration: 90, cost: 79.99 }
 ].each do |subscription_type_attrs|
   SubscriptionType.find_or_create_by!(
+    plan: subscription_type_attrs[:plan],
     desc: subscription_type_attrs[:desc],
     duration: subscription_type_attrs[:duration],
     cost: subscription_type_attrs[:cost]
@@ -127,7 +128,6 @@ puts "Admin User Added"
 
 Staff.create!(
   user: nil,
-  card_expiry_date: nil,
   email: 'admin@example.com',
   password: 'adminpassword',
   role: 2
@@ -147,7 +147,6 @@ puts "Admin Staff Added"
 
   Staff.create!(
     user: user,
-    card_expiry_date: Faker::Date.forward(days: 365),
     email: Faker::Internet.email,
     password: 'password',
     role: [0, 1].sample

@@ -15,6 +15,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_courses_on_name", unique: true
   end
 
   create_table "legal_guardians", force: :cascade do |t|
@@ -53,8 +54,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.integer "role", default: 0
-    t.date "card_expiry_date"
-    t.integer "user_id"
+    t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_staffs_on_email", unique: true
@@ -76,9 +76,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
   end
 
   create_table "subscription_types", force: :cascade do |t|
+    t.integer "plan", default: 0, null: false
     t.text "desc"
-    t.integer "duration"
-    t.float "cost"
+    t.integer "duration", null: false
+    t.float "cost", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
