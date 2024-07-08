@@ -5,6 +5,7 @@ class Staff < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   belongs_to :user
+  has_many :subscriptions, dependent: :nullify
   has_many :subscription_histories, dependent: :nullify
   has_many :payments, dependent: :nullify
 

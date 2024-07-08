@@ -1,12 +1,13 @@
 class CreateSubscriptions < ActiveRecord::Migration[7.1]
   def change
     create_table :subscriptions do |t|
-      t.date :start_date
-      t.date :end_date
+      t.date :start_date, null: false
+      t.date :end_date, null: false
       t.references :user, null: false, foreign_key: true
-      t.references :course, null: false, foreign_key: true
+      t.references :course, null: true, foreign_key: true
       t.references :subscription_type, null: false, foreign_key: true
-      t.integer :state, default: 0
+      t.references :staff, null: true, foreign_key: true
+      t.integer :state, default: 0, null: false
 
       t.timestamps
     end

@@ -3,7 +3,39 @@ require 'rails_helper'
 RSpec.describe Subscription, type: :model do
   let(:user) { create(:user) }
   let(:subscription_type) { create(:subscription_type) }
+  let(:subscription_type_quota) { create(:subscription_type, plan: :quota, desc: 'Quota Associativa', duration: 365, cost: 35) }
   let(:course) { create(:course) }
+
+  before do
+    user.subscriptions.create!(
+      start_date: Date.today,
+      subscription_type: subscription_type_quota,
+      state: :attivo
+    )
+  end
+
+  it 'allows course subscription with annual membership' do
+    course_subscription = user.subscriptions.build(
+      start_date: Date.today,
+      subscription_type: subscription_type,
+      course: course
+    )
+
+    expect(course_subscription).to be_valid
+  end
+
+  it 'does not allow course subscription without annual membership' do
+    user.subscriptions.destroy_all
+
+    course_subscription = user.subscriptions.build(
+      start_date: Date.today,
+      subscription_type: subscription_type,
+      course: course
+    )
+
+    expect(course_subscription).not_to be_valid
+    expect(course_subscription.errors[:base]).to include("You must have an active annual membership to enroll in a course.")
+  end
 
   it 'should be valid with all attributes' do
     sub = build(
@@ -15,7 +47,7 @@ RSpec.describe Subscription, type: :model do
     expect(sub).to be_valid
   end
 
-  it 'should be valid without start_date & end_date' do
+  it 'should be invalid without start_date & end_date' do
     sub = build(
       :subscription,
       user: user,
@@ -24,10 +56,10 @@ RSpec.describe Subscription, type: :model do
       start_date: nil,
       end_date: nil
     )
-    expect(sub).to be_valid
+    expect(sub).to be_invalid
   end
 
-  it 'should be invalid with start_date but without end_date' do
+  it 'should be valid with start_date but without end_date, end_date update automagically' do
     sub = build(
       :subscription,
       user: user,
@@ -36,7 +68,7 @@ RSpec.describe Subscription, type: :model do
       start_date: '2024-01-01',
       end_date: nil
     )
-    expect(sub).to be_invalid
+    expect(sub).to be_valid
   end
 
   it 'should be invalid with end_date but without start_date' do
@@ -58,7 +90,7 @@ RSpec.describe Subscription, type: :model do
       subscription_type: subscription_type,
       course: course
     )
-    expect(sub).to be_invalid
+    expect(sub).to be_valid
   end
 
   it 'should be invalid without subscription_type attribute' do
@@ -81,7 +113,7 @@ RSpec.describe Subscription, type: :model do
     expect(sub).to be_invalid
   end
 
-  it 'should be invalid if start_date > end_date' do
+  it 'should be valid if start_date > end_date, end_date update automagically' do
     sub1 = build(
       :subscription,
       user: user,
@@ -90,7 +122,7 @@ RSpec.describe Subscription, type: :model do
       start_date: '2024-01-02',
       end_date: '2024-01-01'
     )
-    expect(sub1).to be_invalid
+    expect(sub1).to be_valid
 
     sub2 = build(
       :subscription,
@@ -100,6 +132,6 @@ RSpec.describe Subscription, type: :model do
       start_date: '2024-01-02',
       end_date: '2024-01-02'
     )
-    expect(sub2).to be_invalid
+    expect(sub2).to be_valid
   end
 end

@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   belongs_to :legal_guardian, optional: true
   has_one :staff, dependent: :destroy
+  has_many :subscriptions, dependent: destroy
 
   validates :name, :surname, :date_of_birth, presence: true
   validates :legal_guardian, presence: true, if: :minor?
@@ -27,6 +28,13 @@ class User < ApplicationRecord
     return false unless med_cert_issue_date.present?
 
     Date.today < med_cert_issue_date + 1.year
+  end
+
+  def has_active_annual_membership?
+    annual_subscription_type = SubscriptionType.find_by(plan: :quota)
+    return false unless annual_subscription_type
+
+    subscriptions.where(subscription_type: annual_subscription_type, state: :attivo).exists?
   end
 
   private

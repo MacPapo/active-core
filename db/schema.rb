@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_08_141811) do
   create_table "courses", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -31,7 +31,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
   create_table "payments", force: :cascade do |t|
     t.float "amount", null: false
     t.date "date", null: false
-    t.integer "method", default: 0, null: false
+    t.integer "payment_method", default: 0, null: false
     t.integer "payment_type", default: 0, null: false
     t.integer "entry_type", default: 0, null: false
     t.boolean "payed", default: true, null: false
@@ -66,7 +66,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
     t.date "renewal_date"
     t.date "old_end_date"
     t.date "new_end_date"
-    t.integer "action", default: 0
+    t.integer "action", default: 0, null: false
     t.integer "subscription_id", null: false
     t.integer "staff_id"
     t.datetime "created_at", null: false
@@ -85,15 +85,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.date "start_date"
-    t.date "end_date"
+    t.date "start_date", null: false
+    t.date "end_date", null: false
     t.integer "user_id", null: false
-    t.integer "course_id", null: false
+    t.integer "course_id"
     t.integer "subscription_type_id", null: false
-    t.integer "state", default: 0
+    t.integer "staff_id"
+    t.integer "state", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_subscriptions_on_course_id"
+    t.index ["staff_id"], name: "index_subscriptions_on_staff_id"
     t.index ["subscription_type_id"], name: "index_subscriptions_on_subscription_type_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
@@ -117,6 +119,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
   add_foreign_key "subscription_histories", "staffs"
   add_foreign_key "subscription_histories", "subscriptions"
   add_foreign_key "subscriptions", "courses"
+  add_foreign_key "subscriptions", "staffs"
   add_foreign_key "subscriptions", "subscription_types"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "users", "legal_guardians"

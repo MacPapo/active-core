@@ -1,12 +1,11 @@
 class SubscriptionType < ApplicationRecord
   has_many :subscriptions
 
-  enum plan: [:half, :one, :three, :year]
+  enum plan: [:half, :one, :three, :year, :quota]
   after_initialize :set_default_plan, :if => :new_record?
   def set_default_plan
     self.plan ||= :one
   end
-
 
   validates :plan, :duration, :cost, presence: true
   validate :duration_bounderies, if: :duration_present?

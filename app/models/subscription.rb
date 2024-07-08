@@ -1,20 +1,26 @@
 class Subscription < ApplicationRecord
+  before_validation :set_end_date, on: :create
+
   belongs_to :user
-  belongs_to :course
+  belongs_to :staff
+  belongs_to :course, optional: true
   belongs_to :subscription_type
 
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, dependent: :nullify
 
-  enum state: [:attivo, :scaduto, :cancellato]
+  enum state: [:attivo, :scaduto]
   after_initialize :set_default_state, :if => :new_record?
   def set_default_state
     self.state ||= :attivo
   end
 
-  validates :state, presence: true
+  validates :start_date, :end_date, :subscription_type, :state, presence: true
   validate :start_date_geq_than_end_date
   validate :when_start_date_end_date_needed
+  validate :annual_membership_paid?, if: :course_subscription?
+
+  scope :active, -> { where(state: :active) }
 
   def start_date_geq_than_end_date
     if self.start_date.present? && self.end_date.present?
@@ -27,6 +33,22 @@ class Subscription < ApplicationRecord
       errors.add(:end_date, "when start_date, end_date needed")
     elsif !self.start_date.present? && self.end_date.present?
       errors.add(:start_date, "when end_date, start_date needed")
+    end
+  end
+
+  private
+
+  def set_end_date
+    self.end_date = start_date + subscription_type.duration.days if start_date && subscription_type
+  end
+
+  def course_subscription?
+    course.present?
+  end
+
+  def annual_membership_paid?
+    unless user && user.has_active_annual_membership?
+      errors.add(:base, "You must have an active annual membership to enroll in a course.")
     end
   end
 end
