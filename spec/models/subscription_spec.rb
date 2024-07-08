@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Subscription, type: :model do
   let(:user) { create(:user) }
+  let(:staff) { create(:staff, user: user) }
   let(:subscription_type) { create(:subscription_type) }
   let(:subscription_type_quota) { create(:subscription_type, plan: :quota, desc: 'Quota Associativa', duration: 365, cost: 35) }
   let(:course) { create(:course) }
@@ -10,6 +11,7 @@ RSpec.describe Subscription, type: :model do
     user.subscriptions.create!(
       start_date: Date.today,
       subscription_type: subscription_type_quota,
+      staff: staff,
       state: :attivo
     )
   end
@@ -18,6 +20,7 @@ RSpec.describe Subscription, type: :model do
     course_subscription = user.subscriptions.build(
       start_date: Date.today,
       subscription_type: subscription_type,
+      staff: staff,
       course: course
     )
 
@@ -30,6 +33,7 @@ RSpec.describe Subscription, type: :model do
     course_subscription = user.subscriptions.build(
       start_date: Date.today,
       subscription_type: subscription_type,
+      staff: staff,
       course: course
     )
 
@@ -42,6 +46,7 @@ RSpec.describe Subscription, type: :model do
       :subscription,
       user: user,
       subscription_type: subscription_type,
+      staff: staff,
       course: course
     )
     expect(sub).to be_valid
@@ -52,6 +57,7 @@ RSpec.describe Subscription, type: :model do
       :subscription,
       user: user,
       subscription_type: subscription_type,
+      staff: staff,
       course: course,
       start_date: nil,
       end_date: nil
@@ -64,6 +70,7 @@ RSpec.describe Subscription, type: :model do
       :subscription,
       user: user,
       subscription_type: subscription_type,
+      staff: staff,
       course: course,
       start_date: '2024-01-01',
       end_date: nil
@@ -76,6 +83,7 @@ RSpec.describe Subscription, type: :model do
       :subscription,
       user: user,
       subscription_type: subscription_type,
+      staff: staff,
       course: course,
       start_date: nil,
       end_date: '2024-01-01'
@@ -88,9 +96,10 @@ RSpec.describe Subscription, type: :model do
       :subscription,
       user: nil,
       subscription_type: subscription_type,
+      staff: staff,
       course: course
     )
-    expect(sub).to be_valid
+    expect(sub).not_to be_valid
   end
 
   it 'should be invalid without subscription_type attribute' do
@@ -98,6 +107,7 @@ RSpec.describe Subscription, type: :model do
       :subscription,
       user: user,
       subscription_type: nil,
+      staff: staff,
       course: course
     )
     expect(sub).to be_invalid
@@ -108,6 +118,7 @@ RSpec.describe Subscription, type: :model do
       :subscription,
       user: user,
       subscription_type: nil,
+      staff: staff,
       course: course
     )
     expect(sub).to be_invalid
@@ -118,6 +129,7 @@ RSpec.describe Subscription, type: :model do
       :subscription,
       user: user,
       subscription_type: subscription_type,
+      staff: staff,
       course: course,
       start_date: '2024-01-02',
       end_date: '2024-01-01'
@@ -128,6 +140,7 @@ RSpec.describe Subscription, type: :model do
       :subscription,
       user: user,
       subscription_type: subscription_type,
+      staff: staff,
       course: course,
       start_date: '2024-01-02',
       end_date: '2024-01-02'

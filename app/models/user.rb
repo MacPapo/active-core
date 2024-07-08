@@ -3,7 +3,7 @@ class User < ApplicationRecord
 
   belongs_to :legal_guardian, optional: true
   has_one :staff, dependent: :destroy
-  has_many :subscriptions, dependent: destroy
+  has_many :subscriptions, dependent: :destroy
 
   validates :name, :surname, :date_of_birth, presence: true
   validates :legal_guardian, presence: true, if: :minor?
