@@ -13,4 +13,20 @@ class Subscription < ApplicationRecord
   end
 
   validates :state, presence: true
+  validate :start_date_geq_than_end_date
+  validate :when_start_date_end_date_needed
+
+  def start_date_geq_than_end_date
+    if self.start_date.present? && self.end_date.present?
+      errors.add(:start_date, "can't be greater than end_date") if start_date >= end_date
+    end
+  end
+
+  def when_start_date_end_date_needed
+    if self.start_date.present? && !self.end_date.present?
+      errors.add(:end_date, "when start_date, end_date needed")
+    elsif !self.start_date.present? && self.end_date.present?
+      errors.add(:start_date, "when end_date, start_date needed")
+    end
+  end
 end

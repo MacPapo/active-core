@@ -101,8 +101,8 @@ subscription_types.each do |subscription_type|
     end_date = start_date + duration_in_days                   # Data di fine è `duration_in_days` giorni dopo la data di inizio
 
     Subscription.create!(
-      start: start_date,
-      end: end_date,
+      start_date: start_date,
+      end_date: end_date,
       user: user,
       course: course,
       subscription_type: subscription_type,

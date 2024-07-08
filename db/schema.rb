@@ -85,8 +85,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_191559) do
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.date "start"
-    t.date "end"
+    t.date "start_date"
+    t.date "end_date"
     t.integer "user_id", null: false
     t.integer "course_id", null: false
     t.integer "subscription_type_id", null: false
