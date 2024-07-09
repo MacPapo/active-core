@@ -3,7 +3,7 @@ class Subscription < ApplicationRecord
 
   belongs_to :user
   belongs_to :staff
-  belongs_to :course, optional: true
+  belongs_to :activity, optional: true
   belongs_to :subscription_type
 
   has_many :subscription_histories, dependent: :destroy
@@ -18,7 +18,7 @@ class Subscription < ApplicationRecord
   validates :start_date, :end_date, :subscription_type, :state, presence: true
   validate :start_date_geq_than_end_date
   validate :when_start_date_end_date_needed
-  validate :annual_membership_paid?, if: :course_subscription?
+  validate :annual_membership_paid?, if: :activity_subscription?
 
   scope :active, -> { where(state: :active) }
 
@@ -42,13 +42,13 @@ class Subscription < ApplicationRecord
     self.end_date = start_date + subscription_type.duration.days if start_date && subscription_type
   end
 
-  def course_subscription?
-    course.present?
+  def activity_subscription?
+    activity.present?
   end
 
   def annual_membership_paid?
     unless user && user.has_active_annual_membership?
-      errors.add(:base, "You must have an active annual membership to enroll in a course.")
+      errors.add(:base, "You must have an active annual membership to enroll in a activity.")
     end
   end
 end

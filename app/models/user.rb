@@ -5,7 +5,7 @@ class User < ApplicationRecord
   has_one :staff, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
 
-  validates :name, :surname, :date_of_birth, presence: true
+  validates :cf, :name, :surname, :date_of_birth, :affiliated, presence: true
   validates :legal_guardian, presence: true, if: :minor?
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid' }, allow_blank: true

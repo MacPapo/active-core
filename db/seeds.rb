@@ -9,7 +9,7 @@
 #   end
 
 # Clean up existing data to ensure idempotency
-Course.destroy_all
+Activity.destroy_all
 Subscription.destroy_all
 SubscriptionType.destroy_all
 LegalGuardian.destroy_all
@@ -60,14 +60,14 @@ end
 
 puts "Normal Users Added"
 
-# Seed Courses
+# Seed Activities
 30.times do
-  Course.create!(
+  Activity.create!(
     name: Faker::Sport.unique.sport
   )
 end
 
-puts "Courses Added"
+puts "Activities Added"
 
 # Seed Subscription Types
 [
@@ -86,7 +86,7 @@ end
 puts "SubscriptionTypes Added"
 
 users = User.all
-courses = Course.all
+activities = Activity.all
 subscription_types = SubscriptionType.all
 
 subscription_types.each do |subscription_type|
@@ -95,7 +95,7 @@ subscription_types.each do |subscription_type|
   # Calcola le date di inizio e fine in base alla durata del subscription_type
   100.times do
     user = users.sample
-    course = courses.sample
+    activity = activities.sample
 
     start_date = Faker::Date.backward(days: duration_in_days)  # Data di inizio è indietro di `duration_in_days` giorni
     end_date = start_date + duration_in_days                   # Data di fine è `duration_in_days` giorni dopo la data di inizio
@@ -104,7 +104,7 @@ subscription_types.each do |subscription_type|
       start_date: start_date,
       end_date: end_date,
       user: user,
-      course: course,
+      activity: activity,
       subscription_type: subscription_type,
       state: [0, 1, 2].sample
     )
@@ -112,7 +112,7 @@ subscription_types.each do |subscription_type|
 end
 
 puts "Subscriptions Added"
-puts "Updated Users with courses"
+puts "Updated Users with activities"
 
 # Seed Staff Members
 admin_user = User.create!(

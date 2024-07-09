@@ -5,7 +5,7 @@ RSpec.describe Subscription, type: :model do
   let(:staff) { create(:staff, user: user) }
   let(:subscription_type) { create(:subscription_type) }
   let(:subscription_type_quota) { create(:subscription_type, plan: :quota, desc: 'Quota Associativa', duration: 365, cost: 35) }
-  let(:course) { create(:course) }
+  let(:activity) { create(:activity) }
 
   before do
     user.subscriptions.create!(
@@ -16,29 +16,29 @@ RSpec.describe Subscription, type: :model do
     )
   end
 
-  it 'allows course subscription with annual membership' do
-    course_subscription = user.subscriptions.build(
+  it 'allows activity subscription with annual membership' do
+    activity_subscription = user.subscriptions.build(
       start_date: Date.today,
       subscription_type: subscription_type,
       staff: staff,
-      course: course
+      activity: activity
     )
 
-    expect(course_subscription).to be_valid
+    expect(activity_subscription).to be_valid
   end
 
-  it 'does not allow course subscription without annual membership' do
+  it 'does not allow activity subscription without annual membership' do
     user.subscriptions.destroy_all
 
-    course_subscription = user.subscriptions.build(
+    activity_subscription = user.subscriptions.build(
       start_date: Date.today,
       subscription_type: subscription_type,
       staff: staff,
-      course: course
+      activity: activity
     )
 
-    expect(course_subscription).not_to be_valid
-    expect(course_subscription.errors[:base]).to include("You must have an active annual membership to enroll in a course.")
+    expect(activity_subscription).not_to be_valid
+    expect(activity_subscription.errors[:base]).to include("You must have an active annual membership to enroll in a activity.")
   end
 
   it 'should be valid with all attributes' do
@@ -47,7 +47,7 @@ RSpec.describe Subscription, type: :model do
       user: user,
       subscription_type: subscription_type,
       staff: staff,
-      course: course
+      activity: activity
     )
     expect(sub).to be_valid
   end
@@ -58,7 +58,7 @@ RSpec.describe Subscription, type: :model do
       user: user,
       subscription_type: subscription_type,
       staff: staff,
-      course: course,
+      activity: activity,
       start_date: nil,
       end_date: nil
     )
@@ -71,7 +71,7 @@ RSpec.describe Subscription, type: :model do
       user: user,
       subscription_type: subscription_type,
       staff: staff,
-      course: course,
+      activity: activity,
       start_date: '2024-01-01',
       end_date: nil
     )
@@ -84,7 +84,7 @@ RSpec.describe Subscription, type: :model do
       user: user,
       subscription_type: subscription_type,
       staff: staff,
-      course: course,
+      activity: activity,
       start_date: nil,
       end_date: '2024-01-01'
     )
@@ -97,7 +97,7 @@ RSpec.describe Subscription, type: :model do
       user: nil,
       subscription_type: subscription_type,
       staff: staff,
-      course: course
+      activity: activity
     )
     expect(sub).not_to be_valid
   end
@@ -108,18 +108,18 @@ RSpec.describe Subscription, type: :model do
       user: user,
       subscription_type: nil,
       staff: staff,
-      course: course
+      activity: activity
     )
     expect(sub).to be_invalid
   end
 
-  it 'should be invalid without course attribute' do
+  it 'should be invalid without activity attribute' do
     sub = build(
       :subscription,
       user: user,
       subscription_type: nil,
       staff: staff,
-      course: course
+      activity: activity
     )
     expect(sub).to be_invalid
   end
@@ -130,7 +130,7 @@ RSpec.describe Subscription, type: :model do
       user: user,
       subscription_type: subscription_type,
       staff: staff,
-      course: course,
+      activity: activity,
       start_date: '2024-01-02',
       end_date: '2024-01-01'
     )
@@ -141,7 +141,7 @@ RSpec.describe Subscription, type: :model do
       user: user,
       subscription_type: subscription_type,
       staff: staff,
-      course: course,
+      activity: activity,
       start_date: '2024-01-02',
       end_date: '2024-01-02'
     )

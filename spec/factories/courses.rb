@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :course do
+  factory :activity do
     name { Faker::Sport.unique.sport }
   end
 end

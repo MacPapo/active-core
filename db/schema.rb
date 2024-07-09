@@ -11,11 +11,11 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2024_07_08_141811) do
-  create_table "courses", force: :cascade do |t|
+  create_table "activities", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_courses_on_name", unique: true
+    t.index ["name"], name: "index_activities_on_name", unique: true
   end
 
   create_table "legal_guardians", force: :cascade do |t|
@@ -88,25 +88,27 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_08_141811) do
     t.date "start_date", null: false
     t.date "end_date", null: false
     t.integer "user_id", null: false
-    t.integer "course_id"
+    t.integer "activity_id"
     t.integer "subscription_type_id", null: false
     t.integer "staff_id"
     t.integer "state", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["course_id"], name: "index_subscriptions_on_course_id"
+    t.index ["activity_id"], name: "index_subscriptions_on_activity_id"
     t.index ["staff_id"], name: "index_subscriptions_on_staff_id"
     t.index ["subscription_type_id"], name: "index_subscriptions_on_subscription_type_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "cf", null: false
     t.string "name", null: false
     t.string "surname", null: false
     t.string "email"
     t.string "phone"
     t.date "date_of_birth", null: false
     t.date "med_cert_issue_date"
+    t.boolean "affiliated", default: false, null: false
     t.integer "legal_guardian_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -118,7 +120,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_08_141811) do
   add_foreign_key "staffs", "users"
   add_foreign_key "subscription_histories", "staffs"
   add_foreign_key "subscription_histories", "subscriptions"
-  add_foreign_key "subscriptions", "courses"
+  add_foreign_key "subscriptions", "activities"
   add_foreign_key "subscriptions", "staffs"
   add_foreign_key "subscriptions", "subscription_types"
   add_foreign_key "subscriptions", "users"

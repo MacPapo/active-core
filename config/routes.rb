@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :staffs
   resources :subscriptions
   resources :subscription_types
-  resources :courses
+  resources :activities
   resources :users
   resources :legal_guardians
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
