@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   resources :subscription_histories
   resources :staffs
   resources :subscriptions
-  resources :subscription_types
   resources :activities
   resources :users
   resources :legal_guardians

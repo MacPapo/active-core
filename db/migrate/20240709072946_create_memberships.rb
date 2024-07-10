@@ -6,8 +6,8 @@ class CreateMemberships < ActiveRecord::Migration[7.1]
       t.float :cost, null: false, default: 35.0
       t.boolean :payed, default: false
 
-      t.references :subscription_type, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
+      t.references :staff, null: false, foreign_key: true
 
       t.timestamps
     end

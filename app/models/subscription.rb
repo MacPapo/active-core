@@ -3,8 +3,8 @@ class Subscription < ApplicationRecord
 
   belongs_to :user
   belongs_to :staff
-  belongs_to :activity, optional: true
-  belongs_to :plans_for_activities
+  belongs_to :activity
+  belongs_to :activity_plan
 
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :nullify

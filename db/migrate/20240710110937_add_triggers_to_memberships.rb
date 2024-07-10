@@ -5,8 +5,8 @@ class AddTriggersToMemberships < ActiveRecord::Migration[7.1]
       AFTER INSERT ON memberships
       FOR EACH ROW
       BEGIN
-        INSERT INTO membership_histories (start_date, end_date, action, membership_id, user_id, staff_id, created_at, updated_at)
-        VALUES (NEW.date, NULL, 0, NEW.id, NEW.user_id, NEW.staff_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+        INSERT INTO membership_histories (renewal_date, old_end_date, new_end_date, action, staff_id, created_at, updated_at)
+        VALUES (NEW.start_date, NULL, NEW.end_date, 0, NEW.staff_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
       END;
     SQL
 
@@ -15,8 +15,8 @@ class AddTriggersToMemberships < ActiveRecord::Migration[7.1]
       AFTER UPDATE OF end_date ON memberships
       FOR EACH ROW
       BEGIN
-        INSERT INTO membership_histories (start_date, end_date, action, membership_id, user_id, staff_id, created_at, updated_at)
-        VALUES (OLD.date, NEW.date, 1, NEW.id, NEW.user_id, NEW.staff_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+        INSERT INTO membership_histories (renewal_date, old_end_date, new_end_date, action, staff_id, created_at, updated_at)
+        VALUES (CURRENT_TIMESTAMP, OLD.end_date, NEW.end_date, 1, NEW.staff_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
       END;
     SQL
 
@@ -25,8 +25,8 @@ class AddTriggersToMemberships < ActiveRecord::Migration[7.1]
       AFTER DELETE ON memberships
       FOR EACH ROW
       BEGIN
-        INSERT INTO membership_histories (start_date, end_date, action, membership_id, user_id, staff_id, created_at, updated_at)
-        VALUES (OLD.date, OLD.end_date, 2, OLD.id, OLD.user_id, OLD.staff_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+        INSERT INTO membership_histories (renewal_date, old_end_date, new_end_date, action, staff_id, created_at, updated_at)
+        VALUES (CURRENT_TIMESTAMP, OLD.end_date, NULL, 2, OLD.staff_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
       END;
     SQL
   end
