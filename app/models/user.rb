@@ -2,14 +2,17 @@ class User < ApplicationRecord
   before_save :normalize_phone
 
   belongs_to :legal_guardian, optional: true
+
   has_one :staff, dependent: :destroy
+
   has_many :subscriptions, dependent: :destroy
+  has_many :payments, through: :subscriptions
 
   validates :cf, :name, :surname, :date_of_birth, :affiliated, presence: true
   validates :legal_guardian, presence: true, if: :minor?
-
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid' }, allow_blank: true
   validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }
+
   validate :med_cert_issue_date_cannot_be_in_future, if: :med_cert_present?
 
   def full_name

@@ -3,8 +3,7 @@ class CreateSubscriptionTypes < ActiveRecord::Migration[7.1]
     create_table :subscription_types do |t|
       t.integer :plan, default: 0, null: false
       t.text :desc
-      t.integer :duration, null: false
-      t.float :cost, null: false
+      t.integer :category, default: 0, null: false
 
       t.timestamps
     end

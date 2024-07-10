@@ -1,0 +1,2 @@
+module MembershipHistoriesHelper
+end

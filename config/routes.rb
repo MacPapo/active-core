@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :membership_histories
+  resources :memberships
   devise_for :staffs
   resources :payments
   resources :subscription_histories

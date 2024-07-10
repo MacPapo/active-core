@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Membership histories</h1>
+
+<div id="membership_histories">
+  <% @membership_histories.each do |membership_history| %>
+    <%= render membership_history %>
+    <p>
+      <%= link_to "Show this membership history", membership_history %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New membership history", new_membership_history_path %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_08_141811) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_10_110937) do
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -28,20 +28,61 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_08_141811) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "membership_histories", force: :cascade do |t|
+    t.integer "membership_id", null: false
+    t.integer "user_id", null: false
+    t.integer "staff_id"
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.integer "action", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["membership_id"], name: "index_membership_histories_on_membership_id"
+    t.index ["staff_id"], name: "index_membership_histories_on_staff_id"
+    t.index ["user_id"], name: "index_membership_histories_on_user_id"
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.date "date", null: false
+    t.boolean "active", default: false, null: false
+    t.float "cost", default: 35.0, null: false
+    t.boolean "payed", default: false
+    t.integer "subscription_type_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subscription_type_id"], name: "index_memberships_on_subscription_type_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
   create_table "payments", force: :cascade do |t|
     t.float "amount", null: false
     t.date "date", null: false
     t.integer "payment_method", default: 0, null: false
-    t.integer "payment_type", default: 0, null: false
     t.integer "entry_type", default: 0, null: false
     t.boolean "payed", default: true, null: false
     t.text "note"
     t.integer "subscription_id"
     t.integer "staff_id"
+    t.string "payable_type"
+    t.integer "payable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
     t.index ["staff_id"], name: "index_payments_on_staff_id"
     t.index ["subscription_id"], name: "index_payments_on_subscription_id"
+  end
+
+  create_table "plans_for_activities", force: :cascade do |t|
+    t.integer "activity_id", null: false
+    t.integer "subscription_type_id", null: false
+    t.integer "duration", null: false
+    t.float "cost", null: false
+    t.float "affilated_cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_plans_for_activities_on_activity_id"
+    t.index ["subscription_type_id"], name: "index_plans_for_activities_on_subscription_type_id"
   end
 
   create_table "staffs", force: :cascade do |t|
@@ -78,8 +119,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_08_141811) do
   create_table "subscription_types", force: :cascade do |t|
     t.integer "plan", default: 0, null: false
     t.text "desc"
-    t.integer "duration", null: false
-    t.float "cost", null: false
+    t.integer "category", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -89,14 +129,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_08_141811) do
     t.date "end_date", null: false
     t.integer "user_id", null: false
     t.integer "activity_id"
-    t.integer "subscription_type_id", null: false
+    t.integer "plan_for_activity_id", null: false
     t.integer "staff_id"
     t.integer "state", default: 0, null: false
+    t.boolean "payed", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["activity_id"], name: "index_subscriptions_on_activity_id"
+    t.index ["plan_for_activity_id"], name: "index_subscriptions_on_plan_for_activity_id"
     t.index ["staff_id"], name: "index_subscriptions_on_staff_id"
-    t.index ["subscription_type_id"], name: "index_subscriptions_on_subscription_type_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
@@ -115,14 +156,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_08_141811) do
     t.index ["legal_guardian_id"], name: "index_users_on_legal_guardian_id"
   end
 
+  add_foreign_key "membership_histories", "memberships"
+  add_foreign_key "membership_histories", "staffs"
+  add_foreign_key "membership_histories", "users"
+  add_foreign_key "memberships", "subscription_types"
+  add_foreign_key "memberships", "users"
   add_foreign_key "payments", "staffs"
   add_foreign_key "payments", "subscriptions"
   add_foreign_key "staffs", "users"
   add_foreign_key "subscription_histories", "staffs"
   add_foreign_key "subscription_histories", "subscriptions"
   add_foreign_key "subscriptions", "activities"
+  add_foreign_key "subscriptions", "plan_for_activities"
   add_foreign_key "subscriptions", "staffs"
-  add_foreign_key "subscriptions", "subscription_types"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "users", "legal_guardians"
 end

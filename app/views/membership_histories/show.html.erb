@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @membership_history %>
+
+<div>
+  <%= link_to "Edit this membership history", edit_membership_history_path(@membership_history) %> |
+  <%= link_to "Back to membership histories", membership_histories_path %>
+
+  <%= button_to "Destroy this membership history", @membership_history, method: :delete %>
+</div>
