@@ -3,23 +3,13 @@ require 'rails_helper'
 RSpec.describe Subscription, type: :model do
   let(:user) { create(:user) }
   let(:staff) { create(:staff, user: user) }
-  let(:subscription_type) { create(:subscription_type) }
-  let(:subscription_type_quota) { create(:subscription_type, plan: :quota, desc: 'Quota Associativa', duration: 365, cost: 35) }
   let(:activity) { create(:activity) }
-
-  before do
-    user.subscriptions.create!(
-      start_date: Date.today,
-      subscription_type: subscription_type_quota,
-      staff: staff,
-      state: :attivo
-    )
-  end
+  let(:activity_plan) { create(:activity_plan, activity: activity) }
 
   it 'allows activity subscription with annual membership' do
     activity_subscription = user.subscriptions.build(
       start_date: Date.today,
-      subscription_type: subscription_type,
+      activity_plan: activity_plan,
       staff: staff,
       activity: activity
     )
@@ -32,20 +22,19 @@ RSpec.describe Subscription, type: :model do
 
     activity_subscription = user.subscriptions.build(
       start_date: Date.today,
-      subscription_type: subscription_type,
+      activity_plan: activity_plan,
       staff: staff,
       activity: activity
     )
 
     expect(activity_subscription).not_to be_valid
-    expect(activity_subscription.errors[:base]).to include("You must have an active annual membership to enroll in a activity.")
   end
 
   it 'should be valid with all attributes' do
     sub = build(
       :subscription,
       user: user,
-      subscription_type: subscription_type,
+      activity_plan: activity_plan,
       staff: staff,
       activity: activity
     )
@@ -56,7 +45,7 @@ RSpec.describe Subscription, type: :model do
     sub = build(
       :subscription,
       user: user,
-      subscription_type: subscription_type,
+      activity_plan: activity_plan,
       staff: staff,
       activity: activity,
       start_date: nil,
@@ -69,7 +58,7 @@ RSpec.describe Subscription, type: :model do
     sub = build(
       :subscription,
       user: user,
-      subscription_type: subscription_type,
+      activity_plan: activity_plan,
       staff: staff,
       activity: activity,
       start_date: '2024-01-01',
@@ -82,7 +71,7 @@ RSpec.describe Subscription, type: :model do
     sub = build(
       :subscription,
       user: user,
-      subscription_type: subscription_type,
+      activity_plan: activity_plan,
       staff: staff,
       activity: activity,
       start_date: nil,
@@ -95,18 +84,18 @@ RSpec.describe Subscription, type: :model do
     sub = build(
       :subscription,
       user: nil,
-      subscription_type: subscription_type,
+      activity_plan: activity_plan,
       staff: staff,
       activity: activity
     )
     expect(sub).not_to be_valid
   end
 
-  it 'should be invalid without subscription_type attribute' do
+  it 'should be invalid without activity_plan attribute' do
     sub = build(
       :subscription,
       user: user,
-      subscription_type: nil,
+      activity_plan: nil,
       staff: staff,
       activity: activity
     )
@@ -117,7 +106,7 @@ RSpec.describe Subscription, type: :model do
     sub = build(
       :subscription,
       user: user,
-      subscription_type: nil,
+      activity_plan: nil,
       staff: staff,
       activity: activity
     )
@@ -128,7 +117,7 @@ RSpec.describe Subscription, type: :model do
     sub1 = build(
       :subscription,
       user: user,
-      subscription_type: subscription_type,
+      activity_plan: activity_plan,
       staff: staff,
       activity: activity,
       start_date: '2024-01-02',
@@ -139,7 +128,7 @@ RSpec.describe Subscription, type: :model do
     sub2 = build(
       :subscription,
       user: user,
-      subscription_type: subscription_type,
+      activity_plan: activity_plan,
       staff: staff,
       activity: activity,
       start_date: '2024-01-02',

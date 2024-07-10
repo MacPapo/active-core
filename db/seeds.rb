@@ -70,46 +70,46 @@ end
 puts "Activities Added"
 
 # Seed Subscription Types
-[
-  { plan: :one, desc: 'Basic', duration: 30, cost: 29.99 },
-  { plan: :half, desc: 'Standard', duration: 60, cost: 49.99 },
-  { plan: :year, desc: 'Premium', duration: 90, cost: 79.99 }
-].each do |subscription_type_attrs|
-  SubscriptionType.find_or_create_by!(
-    plan: subscription_type_attrs[:plan],
-    desc: subscription_type_attrs[:desc],
-    duration: subscription_type_attrs[:duration],
-    cost: subscription_type_attrs[:cost]
-  )
-end
+# TODO
+# [
+#   { plan: :one, desc: 'Basic', duration: 30, cost: 29.99 },
+#   { plan: :half, desc: 'Standard', duration: 60, cost: 49.99 },
+#   { plan: :year, desc: 'Premium', duration: 90, cost: 79.99 }
+# ].each do |subscription_type_attrs|
+#   SubscriptionType.find_or_create_by!(
+#     plan: subscription_type_attrs[:plan],
+#     desc: subscription_type_attrs[:desc],
+#     duration: subscription_type_attrs[:duration],
+#     cost: subscription_type_attrs[:cost]
+#   )
+# end
 
 puts "SubscriptionTypes Added"
 
 users = User.all
 activities = Activity.all
-subscription_types = SubscriptionType.all
 
-subscription_types.each do |subscription_type|
-  duration_in_days = subscription_type.duration
+# subscription_types.each do |subscription_type|
+#   duration_in_days = subscription_type.duration
 
-  # Calcola le date di inizio e fine in base alla durata del subscription_type
-  100.times do
-    user = users.sample
-    activity = activities.sample
+#   # Calcola le date di inizio e fine in base alla durata del subscription_type
+#   100.times do
+#     user = users.sample
+#     activity = activities.sample
 
-    start_date = Faker::Date.backward(days: duration_in_days)  # Data di inizio è indietro di `duration_in_days` giorni
-    end_date = start_date + duration_in_days                   # Data di fine è `duration_in_days` giorni dopo la data di inizio
+#     start_date = Faker::Date.backward(days: duration_in_days)  # Data di inizio è indietro di `duration_in_days` giorni
+#     end_date = start_date + duration_in_days                   # Data di fine è `duration_in_days` giorni dopo la data di inizio
 
-    Subscription.create!(
-      start_date: start_date,
-      end_date: end_date,
-      user: user,
-      activity: activity,
-      subscription_type: subscription_type,
-      state: [0, 1, 2].sample
-    )
-  end
-end
+#     Subscription.create!(
+#       start_date: start_date,
+#       end_date: end_date,
+#       user: user,
+#       activity: activity,
+#       subscription_type: subscription_type,
+#       state: [0, 1, 2].sample
+#     )
+#   end
+# end
 
 puts "Subscriptions Added"
 puts "Updated Users with activities"

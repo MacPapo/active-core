@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_one :staff, dependent: :destroy
 
+  has_one :membership, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_many :payments, through: :subscriptions
 
@@ -27,17 +28,14 @@ class User < ApplicationRecord
     med_cert_issue_date.present?
   end
 
+  def has_active_membership?
+    !membership.nil? && membership.active
+  end
+
   def med_cert_valid?
     return false unless med_cert_issue_date.present?
 
     Date.today < med_cert_issue_date + 1.year
-  end
-
-  def has_active_annual_membership?
-    annual_subscription_type = SubscriptionType.find_by(plan: :quota)
-    return false unless annual_subscription_type
-
-    subscriptions.where(subscription_type: annual_subscription_type, state: :attivo).exists?
   end
 
   private
