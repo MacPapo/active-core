@@ -9,7 +9,9 @@ RSpec.describe Payment, type: :model do
   let(:subscription) { create(:subscription, user: user, staff: staff, activity: activity, activity_plan: activity_plan) }
 
   before do
-    user.create_membership(staff: staff, date: '2024-01-01', active: true, payed: true)
+    user.create_membership(staff: staff, date: '2024-01-01')
+    payment = create(:payment, staff: staff, payable: user.membership)
+    user.reload_membership
   end
 
   it 'is valid with valid attributes' do
@@ -17,20 +19,24 @@ RSpec.describe Payment, type: :model do
     payment_2 = build(:payment, staff: staff, payable: membership)
     expect(payment_1).to be_valid
     expect(payment_2).to be_valid
+
+    expect(payment_2.amount).to eq(35.0)
   end
 
-  it 'is invalid without amount' do
+  it 'is valid without amount, amount selected automagically' do
     payment_1 = build(:payment, amount: nil, staff: staff, payable: subscription)
     payment_2 = build(:payment, amount: nil, staff: staff, payable: membership)
-    expect(payment_1).not_to be_valid
-    expect(payment_2).not_to be_valid
+    expect(payment_1).to be_valid
+    expect(payment_2).to be_valid
+
+    expect(payment_2.amount).to eq(35.0)
   end
 
-  it 'is invalid without date' do
+  it 'is valid without date, date added automagically' do
     payment_1 = build(:payment, date: nil, staff: staff, payable: subscription)
     payment_2 = build(:payment, date: nil, staff: staff, payable: membership)
-    expect(payment_1).not_to be_valid
-    expect(payment_2).not_to be_valid
+    expect(payment_1).to be_valid
+    expect(payment_2).to be_valid
   end
 
   it 'is invalid without payment_method' do

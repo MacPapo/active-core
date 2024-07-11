@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   before_save :normalize_phone
 
+  after_initialize :set_default_affiliated, if: :new_record?
+
   belongs_to :legal_guardian, optional: true
 
   has_one :staff, dependent: :destroy
@@ -9,7 +11,8 @@ class User < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   has_many :payments, through: :subscriptions
 
-  validates :cf, :name, :surname, :date_of_birth, :affiliated, presence: true
+  validates :cf, :name, :surname, :date_of_birth, presence: true
+  validates :affiliated, inclusion: { in: [ true, false ] }
   validates :legal_guardian, presence: true, if: :minor?
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid' }, allow_blank: true
   validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }
@@ -29,7 +32,7 @@ class User < ApplicationRecord
   end
 
   def has_active_membership?
-    !membership.nil? && membership.active
+    is_membership_active?
   end
 
   def med_cert_valid?
@@ -40,6 +43,10 @@ class User < ApplicationRecord
 
   private
 
+  def set_default_affiliated
+    self.affiliated ||= false
+  end
+
   def normalize_phone
     self.phone = Phonelib.parse(phone).full_e164.presence
   end
@@ -48,5 +55,9 @@ class User < ApplicationRecord
     if med_cert_issue_date > Date.today
       errors.add(:med_cert_issue_date, "can't be in the future!")
     end
+  end
+
+  def is_membership_active?
+    membership && membership.state.to_sym == :attivo
   end
 end

@@ -10,12 +10,12 @@ RSpec.describe User, type: :model do
 
   it 'should be invalid without name' do
     user = build(:user, name: nil)
-    expect(user).to be_invalid
+    expect(user).not_to be_valid
   end
 
   it 'should be invalid without surname' do
     user = build(:user, surname: nil)
-    expect(user).to be_invalid
+    expect(user).not_to be_valid
   end
 
   it 'should be valid without email' do
@@ -34,7 +34,7 @@ RSpec.describe User, type: :model do
       '1234@.it',
     ].each do |mail|
       user = build(:user, email: mail)
-      expect(user).to be_invalid
+      expect(user).not_to be_valid
     end
   end
 
@@ -51,7 +51,7 @@ RSpec.describe User, type: :model do
       '+39 341 5555 9322',
     ].each do |tell|
       legal_guardian = build(:legal_guardian, phone: tell)
-      expect(legal_guardian).to be_invalid
+      expect(legal_guardian).not_to be_valid
     end
   end
 
@@ -73,7 +73,7 @@ RSpec.describe User, type: :model do
     ].each do |issue_date|
       user = build(:user, med_cert_issue_date: issue_date)
 
-      expect(user).to be_invalid
+      expect(user).not_to be_valid
     end
   end
 
@@ -148,7 +148,7 @@ RSpec.describe User, type: :model do
       '2009-01-01',
     ].each do |birth|
       user = build(:user, date_of_birth: birth, legal_guardian: nil)
-      expect(user).to be_invalid
+      expect(user).not_to be_valid
     end
   end
 

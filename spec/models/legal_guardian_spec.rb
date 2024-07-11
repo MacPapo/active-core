@@ -8,17 +8,17 @@ RSpec.describe LegalGuardian, type: :model do
 
   it 'should be invalid without name' do
     legal_guardian = build(:legal_guardian, name: nil)
-    expect(legal_guardian).to be_invalid
+    expect(legal_guardian).not_to be_valid
   end
 
   it 'should be invalid without surname' do
     legal_guardian = build(:legal_guardian, surname: nil)
-    expect(legal_guardian).to be_invalid
+    expect(legal_guardian).not_to be_valid
   end
 
   it 'should be invalid without email' do
     legal_guardian = build(:legal_guardian, email: nil)
-    expect(legal_guardian).to be_invalid
+    expect(legal_guardian).not_to be_valid
   end
 
   it 'should be invalid with malformed email' do
@@ -32,13 +32,13 @@ RSpec.describe LegalGuardian, type: :model do
       '1234@.it',
     ].each do |mail|
       user = build(:legal_guardian, email: mail)
-      expect(user).to be_invalid
+      expect(user).not_to be_valid
     end
   end
 
   it 'should be invalid without phone' do
     legal_guardian = build(:legal_guardian, phone: nil)
-    expect(legal_guardian).to be_invalid
+    expect(legal_guardian).not_to be_valid
   end
 
   it 'should be invalid with malformed phone' do
@@ -49,7 +49,7 @@ RSpec.describe LegalGuardian, type: :model do
       '+39 341 5555 9322',
     ].each do |tell|
       legal_guardian = build(:legal_guardian, phone: tell)
-      expect(legal_guardian).to be_invalid
+      expect(legal_guardian).not_to be_valid
     end
   end
 
@@ -64,7 +64,7 @@ RSpec.describe LegalGuardian, type: :model do
       '2007-03-18',
     ].each do |date|
       legal_guardian = build(:legal_guardian, date_of_birth: date)
-      expect(legal_guardian).to be_invalid
+      expect(legal_guardian).not_to be_valid
     end
   end
 

@@ -14,4 +14,8 @@ class ActivityPlan < ApplicationRecord
   validates :activity, presence: true
   validates :plan, presence: true
   validates :cost, numericality: { greater_than: 0 }
+
+  def get_plan
+    self.plan.to_sym
+  end
 end

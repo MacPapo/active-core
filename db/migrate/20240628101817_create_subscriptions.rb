@@ -4,7 +4,6 @@ class CreateSubscriptions < ActiveRecord::Migration[7.1]
       t.date :start_date, null: false
       t.date :end_date, null: false
       t.integer :state, default: 0, null: false
-      t.boolean :payed, default: false
 
       t.references :user, null: false, foreign_key: true
       t.references :activity, null: true, foreign_key: true

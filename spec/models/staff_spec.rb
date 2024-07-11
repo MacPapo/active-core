@@ -5,7 +5,7 @@ RSpec.describe Staff, type: :model do
 
   it 'should be invalid without user reference' do
     staff = build(:staff)
-    expect(staff).to be_invalid
+    expect(staff).not_to be_valid
   end
 
   it 'should be valid with all attributes' do
@@ -15,7 +15,7 @@ RSpec.describe Staff, type: :model do
 
   it 'should be invalid without email' do
     staff = build(:staff, user: user, email: nil)
-    expect(staff).to be_invalid
+    expect(staff).not_to be_valid
   end
 
   it 'should be invalid with malformed email' do
@@ -29,23 +29,23 @@ RSpec.describe Staff, type: :model do
       '1234@.it',
     ].each do |mail|
       staff = build(:staff, user: user, email: mail)
-      expect(staff).to be_invalid
+      expect(staff).not_to be_valid
     end
   end
 
   it 'should be invalid without password' do
     staff = build(:staff, user: user, password: nil)
-    expect(staff).to be_invalid
+    expect(staff).not_to be_valid
   end
 
   it 'should be invalid with empty password' do
     staff = build(:staff, user: user, password: '')
-    expect(staff).to be_invalid
+    expect(staff).not_to be_valid
   end
 
   it 'should be invalid without role' do
     staff = build(:staff, user: user, role: nil)
-    expect(staff).to be_invalid
+    expect(staff).not_to be_valid
   end
 
   it 'should be valid with well formed role' do
