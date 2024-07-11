@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe ActivityPlan, type: :model do
   let(:activity) { create(:activity) }
-  let(:act_1) { create(:activity_plan, plan: :half_month, duration: 15, cost: 30, activity: activity) }
+  let(:act_1) { create(:activity_plan, plan: :half_month, cost: 30, activity: activity) }
   let(:act_2) { create(:activity_plan, activity: activity) }
-  let(:act_3) { create(:activity_plan, plan: :three_months, duration: 90, cost: 150, activity: activity) }
+  let(:act_3) { create(:activity_plan, plan: :three_months,  cost: 150, activity: activity) }
 
   it 'should be valid with all the attributes' do
     expect(act_2).to be_valid
@@ -19,11 +19,6 @@ RSpec.describe ActivityPlan, type: :model do
 
   it 'should be invalid without plan attribute' do
     act = build(:activity_plan, activity: activity, plan: nil)
-    expect(act).not_to be_valid
-  end
-
-  it 'should be invalid without duration attribute' do
-    act = build(:activity_plan, activity: activity, duration: nil)
     expect(act).not_to be_valid
   end
 

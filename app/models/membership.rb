@@ -6,4 +6,10 @@ class Membership < ApplicationRecord
   has_many :payments, as: :payable, dependent: :nullify
 
   validates :date, presence: true
+
+  COST = 35.0
+
+  def cost
+    COST
+  end
 end

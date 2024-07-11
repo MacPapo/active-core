@@ -8,6 +8,10 @@ RSpec.describe Payment, type: :model do
   let(:membership) { create(:membership, user: user, staff: staff) }
   let(:subscription) { create(:subscription, user: user, staff: staff, activity: activity, activity_plan: activity_plan) }
 
+  before do
+    user.create_membership(staff: staff, date: '2024-01-01', active: true, payed: true)
+  end
+
   it 'is valid with valid attributes' do
     payment_1 = build(:payment, staff: staff, payable: subscription)
     payment_2 = build(:payment, staff: staff, payable: membership)

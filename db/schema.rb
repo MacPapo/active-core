@@ -20,7 +20,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
 
   create_table "activity_plans", force: :cascade do |t|
     t.integer "plan", default: 0, null: false
-    t.integer "duration", null: false
     t.float "cost", null: false
     t.float "affiliated_cost"
     t.integer "activity_id", null: false
@@ -55,7 +54,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
   create_table "memberships", force: :cascade do |t|
     t.date "date", null: false
     t.boolean "active", default: false, null: false
-    t.float "cost", default: 35.0, null: false
     t.boolean "payed", default: false
     t.integer "user_id", null: false
     t.integer "staff_id", null: false

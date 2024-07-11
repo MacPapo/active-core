@@ -2,6 +2,7 @@ class ActivityPlan < ApplicationRecord
   belongs_to :activity
 
   enum plan: [
+         :one_entrance,
          :half_month,
          :one_month,
          :three_months,
@@ -12,6 +13,5 @@ class ActivityPlan < ApplicationRecord
 
   validates :activity, presence: true
   validates :plan, presence: true
-  validates :duration, numericality: { only_integer: true, greater_than: 0 }
   validates :cost, numericality: { greater_than: 0 }
 end

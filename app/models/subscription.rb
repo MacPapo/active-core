@@ -1,5 +1,6 @@
 class Subscription < ApplicationRecord
-  # before_validation :set_end_date, on: :create
+  before_validation :set_start_date, on: :create
+  before_validation :set_end_date, on: :create
 
   belongs_to :user
   belongs_to :staff
@@ -12,17 +13,51 @@ class Subscription < ApplicationRecord
   enum state: [:attivo, :scaduto]
   after_initialize :set_default_state, if: :new_record?
 
-  validates :start_date, :end_date, :state, presence: true
+  validates :start_date, :state, presence: true
   validate :annual_membership_paid?, if: :activity_subscription?
 
   scope :active, -> { where(state: :active) }
 
   private
 
+  def set_start_date
+    if start_date && activity_plan
+      plan = activity_plan.plan.to_sym
+      sdate = self.start_date.to_date
+
+      if (plan == :half_month && sdate.after?(sdate.at_beginning_of_month + 11.day))
+        self.start_date = self.start_date.beginning_of_month + 14.day
+      elsif (plan != :one_entrance)
+        self.start_date = self.start_date.beginning_of_month
+      end
+
+    end
+  end
+
   # TODO
-  # def set_end_date
-  #   self.end_date = start_date + nsubscription_type.duration.days if start_date && subscription_type
-  # end
+  def set_end_date
+    if start_date && activity_plan
+      self.end_date =
+        case activity_plan.plan.to_sym
+        when :one_entrance
+          start_date
+        when :half_month
+          if start_date == (start_date.beginning_of_month + 14.day)
+            start_date.at_end_of_month
+          else
+            start_date + 14.days
+          end
+        when :one_month, :one_month_one_lesson, :one_month_two_lessons
+          start_date.at_end_of_month
+        when :three_months
+          start_date.months_since(2).at_end_of_month
+        when :one_year
+          self.start_date.at_end_of_year
+        else
+          '1970-01-01'
+        end
+    end
+  end
 
   def set_default_state
     self.state ||= :attivo
