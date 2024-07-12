@@ -1,8 +1,7 @@
 class Staff < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   belongs_to :user
   has_many :subscriptions, dependent: :nullify
@@ -20,5 +19,9 @@ class Staff < ApplicationRecord
 
   def full_name
     self.user.full_name
+  end
+
+  def get_role
+    self.role.to_sym
   end
 end

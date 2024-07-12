@@ -13,6 +13,7 @@ class User < ApplicationRecord
 
   validates :cf, :name, :surname, :date_of_birth, presence: true
   validates :affiliated, inclusion: { in: [ true, false ] }
+
   validates :legal_guardian, presence: true, if: :minor?
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid' }, allow_blank: true
   validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }
@@ -25,6 +26,10 @@ class User < ApplicationRecord
 
   def minor?
     date_of_birth > 18.year.ago.to_date
+  end
+
+  def age
+    ((Time.zone.now - date_of_birth.to_time) / 1.year.seconds).floor
   end
 
   def med_cert_present?

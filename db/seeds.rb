@@ -9,9 +9,9 @@
 #   end
 
 # Clean up existing data to ensure idempotency
-Activity.destroy_all
-Subscription.destroy_all
-SubscriptionType.destroy_all
+# Activity.destroy_all
+# Subscription.destroy_all
+# SubscriptionType.destroy_all
 LegalGuardian.destroy_all
 User.destroy_all
 Staff.destroy_all
@@ -33,13 +33,14 @@ puts "LegalGuardians Added"
 40.times do
   legal_guardian = LegalGuardian.all.sample
   User.create!(
+    cf: Faker::Finance.vat_number,
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
     email: Faker::Internet.email,
     phone: '+39 341 4488 933',
     date_of_birth: Faker::Date.birthday(min_age: 5, max_age: 17),
-    med_cert_issue_date: Faker::Date.forward(days: 365),
-    legal_guardian: legal_guardian
+    med_cert_issue_date: nil,
+    legal_guardian: legal_guardian,
   )
 end
 
@@ -48,13 +49,15 @@ puts "Minor Users Added"
 # Seed Users without Legal Guardians
 20.times do
   User.create!(
+    cf: Faker::Finance.vat_number,
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
     email: Faker::Internet.email,
     phone: '+39 341 4488 934',
     date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 100),
-    med_cert_issue_date: Faker::Date.forward(days: 365),
-    legal_guardian: nil
+    med_cert_issue_date: nil,
+    legal_guardian: nil,
+    affiliated: false
   )
 end
 
@@ -84,10 +87,10 @@ puts "Activities Added"
 #   )
 # end
 
-puts "SubscriptionTypes Added"
+# puts "SubscriptionTypes Added"
 
-users = User.all
-activities = Activity.all
+# users = User.all
+# activities = Activity.all
 
 # subscription_types.each do |subscription_type|
 #   duration_in_days = subscription_type.duration
@@ -111,38 +114,42 @@ activities = Activity.all
 #   end
 # end
 
-puts "Subscriptions Added"
-puts "Updated Users with activities"
+# puts "Subscriptions Added"
+# puts "Updated Users with activities"
 
 # Seed Staff Members
 admin_user = User.create!(
+  cf: Faker::Finance.vat_number,
   name: 'Admin',
   surname: 'User',
   email: 'admin@example.com',
   phone: '+39 341 4488 935',
   date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60),
-  med_cert_issue_date: nil
+  med_cert_issue_date: nil,
+  affiliated: false
 )
 
 puts "Admin User Added"
 
 Staff.create!(
-  user: nil,
+  user: admin_user,
   email: 'admin@example.com',
   password: 'adminpassword',
-  role: 2
+  role: :admin
 )
 
 puts "Admin Staff Added"
 
 10.times do
   user = User.create!(
+    cf: Faker::Finance.vat_number,
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
     email: Faker::Internet.email,
     phone: '+39 341 4488 936',
     date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 60),
-    med_cert_issue_date: nil
+    med_cert_issue_date: nil,
+    affiliated: false
   )
 
   Staff.create!(
@@ -155,24 +162,24 @@ end
 
 puts "Staff Added"
 
-staff = Staff.all
-subscriptions = Subscription.all
-Payment.destroy_all
+# staff = Staff.all
+# subscriptions = Subscription.all
+# Payment.destroy_all
 
-100.times do
-  Payment.create!(
-    amount: Faker::Commerce.price(range: 10..100),
-    date: Faker::Date.backward(days: 365),
-    method: [0, 1, 2, 3].sample,
-    payment_type: [0, 1, 2].sample,
-    entry_type: [0, 1].sample,
-    payed: true,
-    note: Faker::Lorem.sentence,
-    subscription: subscriptions.sample,
-    staff: staff.sample
-  )
-end
+# 100.times do
+#   Payment.create!(
+#     amount: Faker::Commerce.price(range: 10..100),
+#     date: Faker::Date.backward(days: 365),
+#     method: [0, 1, 2, 3].sample,
+#     payment_type: [0, 1, 2].sample,
+#     entry_type: [0, 1].sample,
+#     payed: true,
+#     note: Faker::Lorem.sentence,
+#     subscription: subscriptions.sample,
+#     staff: staff.sample
+#   )
+# end
 
-puts "Payments Added"
+# puts "Payments Added"
 
 puts "Seeding completed successfully!"

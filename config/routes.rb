@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
+  devise_for :staffs
+
   resources :membership_histories
   resources :memberships
-  devise_for :staffs
   resources :payments
   resources :subscription_histories
   resources :staffs
@@ -16,5 +17,5 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "home#index"
 end

@@ -1,37 +1,49 @@
 <div id="<%= dom_id user %>">
-  <p>
-    <strong>Name:</strong>
-    <%= user.name %>
-  </p>
+    <p>
+        <strong>Codice Fiscale:</strong>
+        <%= user.cf %>
+    </p>
 
-  <p>
-    <strong>Surname:</strong>
-    <%= user.surname %>
-  </p>
+    <p>
+        <strong>Nome:</strong>
+        <%= user.name %>
+    </p>
 
-  <p>
-    <strong>Email:</strong>
-    <%= user.email %>
-  </p>
+    <p>
+        <strong>Cognome:</strong>
+        <%= user.surname %>
+    </p>
 
-  <p>
-    <strong>Phone:</strong>
-    <%= user.phone %>
-  </p>
+    <p>
+        <strong>Email:</strong>
+        <%= user.email.nil? ? 'Da inserire!' : user.email %>
+    </p>
 
-  <p>
-    <strong>Date of birth:</strong>
-    <%= user.date_of_birth %>
-  </p>
+    <p>
+        <strong>Cellulare:</strong>
+        <%= user.phone.nil? ? 'Da inserire!' : user.phone %>
+    </p>
 
-  <p>
-    <strong>Med cert exp date:</strong>
-    <%= user.med_cert_exp_date %>
-  </p>
+    <p>
+        <strong>Data di nascita:</strong>
+        <%= user.date_of_birth %>
+    </p>
 
-  <p>
-    <strong>Legal guardian:</strong>
-    <%= user.legal_guardian_id %>
-  </p>
+    <p>
+        <strong>Eta':</strong>
+        <%= user.age %> anni
+    </p>
+
+    <p>
+        <strong>Data rilascio certificato medico:</strong>
+        <%= user.med_cert_issue_date.nil? ? 'Da inserire!' : user.med_cert_issue_date %>
+    </p>
+
+    <% if user.minor? %>
+        <p>
+            <strong>Tutore legale:</strong>
+            <%= user.legal_guardian.nil? ? 'Da inserire!' : user.legal_guardian.full_name %>
+        </p>
+    <% end %>
 
 </div>
