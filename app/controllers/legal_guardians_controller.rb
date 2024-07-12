@@ -1,5 +1,5 @@
 class LegalGuardiansController < ApplicationController
-  before_action :set_legal_guardian, only: %i[ show edit update destroy ]
+  before_action :set_legal_guardian, only: %i[show edit update destroy]
 
   # GET /legal_guardians or /legal_guardians.json
   def index

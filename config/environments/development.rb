@@ -3,6 +3,14 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # RUBOCOP
+  config.generators.after_generate do |files|
+    parsable_files = files.filter { |file| file.end_with?('.rb') }
+    unless parsable_files.empty?
+      system("bundle exec rubocop -A --fail-level=E #{parsable_files.shelljoin}", exception: true)
+    end
+  end
+
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
