@@ -24,4 +24,36 @@ class Staff < ApplicationRecord
   def get_role
     self.role.to_sym
   end
+
+  def get_formatted_role
+    self.role.capitalize
+  end
+
+  def get_cf
+    self.user.cf
+  end
+
+  def get_phone
+    self.user.phone
+  end
+
+  def get_date_of_birth
+    self.user.date_of_birth.strftime("%d/%m/%Y")
+  end
+
+  def get_age
+    self.user.age
+  end
+
+  def get_med_cert
+    self.user.med_cert_issue_date
+  end
+
+  def is_med_cert_valid?
+    self.user.med_cert_valid?
+  end
+
+  def is_affiliated?
+    self.user.is_affiliated?
+  end
 end

@@ -1,5 +1,5 @@
 class ActivitiesController < ApplicationController
-  before_action :set_course, only: %i[ show edit update destroy ]
+  before_action :set_activity, only: %i[ show edit update destroy ]
 
   # GET /activities or /activities.json
   def index

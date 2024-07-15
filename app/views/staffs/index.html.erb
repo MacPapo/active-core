@@ -1,0 +1,12 @@
+<h1>
+    Membri dello Staff
+</h1>
+
+<div id="staffs">
+    <% @staffs.each do |staff| %>
+        <%= render staff %>
+        <p>
+            <%= link_to "Show this staff", staff %>
+        </p>
+    <% end %>
+</div>

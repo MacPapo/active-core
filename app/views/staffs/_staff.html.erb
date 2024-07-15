@@ -1,0 +1,64 @@
+<div id="<%= dom_id staff %>">
+    <p>
+        <strong>Codice Fiscale:</strong>
+        <%= staff.get_cf %>
+    </p>
+
+    <p>
+        <strong>Nome e Cognome</strong>
+        <%= staff.full_name %>
+    </p>
+
+    <p>
+        <strong>Email</strong>
+        <%= staff.email %>
+    </p>
+
+    <p>
+        <strong>Cellulare</strong>
+        <%= staff.get_phone %>
+    </p>
+
+    <p>
+        <strong>Data di nascita</strong>
+        <%= staff.get_date_of_birth %>
+    </p>
+
+    <p>
+        <strong>Età</strong>
+        <%= staff.get_age %>
+    </p>
+
+    <% if staff.get_role != :volontario %>
+        <p>
+            <strong>Data rilascio certificato medico</strong>
+            <%= staff.get_med_cert %>
+        </p>
+        <p>
+            <strong>Certificato medico valido?</strong>
+            <%= staff.is_med_cert_valid? %>
+        </p>
+    <% end %>
+
+    <p>
+        <strong>Affiliato</strong>
+        <%= staff.is_affiliated? %>
+    </p>
+
+    <% if current_staff.admin? %>
+        <p>
+            <strong>Ruolo</strong>
+            <%= staff.get_formatted_role %>
+        </p>
+
+        <!-- TODO -->
+        <p>
+            <strong>Current_sign_in_at</strong>
+            <%= staff.current_sign_in_at %>
+        </p>
+        <p>
+            <strong>Last_sign_in_at</strong>
+            <%= staff.last_sign_in_at %>
+        </p>
+    <% end %>
+</div>

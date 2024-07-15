@@ -46,6 +46,10 @@ class User < ApplicationRecord
     Date.today < med_cert_issue_date + 1.year
   end
 
+  def is_affiliated?
+    self.affiliated
+  end
+
   private
 
   def set_default_affiliated
