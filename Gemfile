@@ -29,6 +29,9 @@ gem "stimulus-rails"
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "cssbundling-rails"
 
+# Bundle and process JS
+gem "jsbundling-rails", "~> 1.3"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
@@ -46,6 +49,9 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Vaildate phone numbers
 gem "phonelib", "~> 0.8.9"
+
+# Add pagination to queries
+gem "pagy", "~> 8.6"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -82,5 +88,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "jsbundling-rails", "~> 1.3"
