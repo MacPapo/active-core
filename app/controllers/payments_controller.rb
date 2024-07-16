@@ -12,7 +12,7 @@ class PaymentsController < ApplicationController
 
   # GET /payments/new
   def new
-    @payment = Payment.new
+    @payment = Payment.new(payable_type: params[:payable_type], payable_id: params[:payable_id], staff_id: params[:staff_id])
   end
 
   # GET /payments/1/edit
@@ -25,7 +25,7 @@ class PaymentsController < ApplicationController
 
     respond_to do |format|
       if @payment.save
-        format.html { redirect_to payment_url(@payment), notice: "Payment was successfully created." }
+        format.html { redirect_to payment_url(@payment), notice: "Il pagamento e' stato registrato con successo." }
         format.json { render :show, status: :created, location: @payment }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -65,6 +65,6 @@ class PaymentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def payment_params
-      params.require(:payment).permit(:amount, :date, :method, :payment_type, :entry_type, :payed, :note, :subscription_id, :staff_id)
+      params.require(:payment).permit(:amount, :date, :payment_method, :payable_type, :payable_id, :entry_type, :payed, :note, :subscription_id, :staff_id)
     end
 end

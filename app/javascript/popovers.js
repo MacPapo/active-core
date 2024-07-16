@@ -1,4 +1,4 @@
-console.log('Loading popovers...')
+console.log('Loading popovers...')  // TODO delete me
 
 import * as bootstrap from "bootstrap"
 

@@ -52,7 +52,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
   end
 
   create_table "memberships", force: :cascade do |t|
-    t.date "date", null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
     t.integer "state", default: 0, null: false
     t.integer "user_id", null: false
     t.integer "staff_id", null: false

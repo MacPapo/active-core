@@ -12,7 +12,7 @@ class MembershipsController < ApplicationController
 
   # GET /memberships/new
   def new
-    @membership = Membership.new
+    @membership = Membership.new(user_id: params[:user_id], staff_id: params[:staff_id])
   end
 
   # GET /memberships/1/edit
@@ -25,7 +25,7 @@ class MembershipsController < ApplicationController
 
     respond_to do |format|
       if @membership.save
-        format.html { redirect_to membership_url(@membership), notice: "Membership was successfully created." }
+        format.html { redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id, staff_id: current_staff), notice: "La Quota associativa e' stata correttamente creata." }
         format.json { render :show, status: :created, location: @membership }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -65,6 +65,6 @@ class MembershipsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def membership_params
-      params.require(:membership).permit(:date, :active, :user_id)
+      params.require(:membership).permit(:start_date, :user_id, :staff_id)
     end
 end

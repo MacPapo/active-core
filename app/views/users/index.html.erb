@@ -7,39 +7,107 @@
             <th>Nome </th>
             <th>Cognome</th>
             <th>Data Nascita</th>
+            <th>Convenzionato</th>
             <th>Quota annuale</th>
             <th>Azioni</th>
         </tr>
         <% @users.each do |user| %>
             <tr>
+                <!-- Status -->
                 <td>
                     <span
-                        class="badge rounded-pill text-bg-<%= user.is_compliant? ? 'success' : 'warning' %>"
-                        <% unless user.is_compliant? %>
-                            data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="Email o Cellulare o Certificato medico mancanti"
+                        <% compliance = user.verify_compliance %>
+                        <% is_compliance = compliance[:status] %>
+                        type="button"
+                        class="badge rounded-pill text-bg-<%= is_compliance ? 'success' : 'warning' %>"
+                        <% unless is_compliance %>
+                            data-bs-toggle="popover"
+                            data-bs-placement="top"
+                            data-bs-content="<%= compliance[:errors].join(", ") %>"
                         <% end %>
                     >
-                        <% if user.is_compliant? %>
+                        <% if is_compliance %>
                             <i class="bi bi-person-fill-check"></i>
                         <% else %>
                             <i class="bi bi-person-fill-exclamation"></i>
                         <% end %>
                     </span>
                 </td>
+
+                <!-- Name -->
                 <td>
                     <%= user.name%>
                 </td>
+
+                <!-- Surname -->
                 <td>
                     <%= user.surname %>
                 </td>
+
+                <!-- Birth Day -->
                 <td>
                     <%= user.get_date_of_birth %>
                 </td>
+
+                <!-- Affiliated -->
                 <td>
-                    <span class="badge rounded-pill text-bg-<%= user.has_active_membership? ? 'success' : 'warning' %>">
-                        <%= user.has_active_membership? ? 'Attivo' : 'Scaduto' %>
-                    </span>
+                    <%= user.affiliated ? 'Si' : 'No' %>
                 </td>
+
+                <!-- Membership -->
+                <td>
+                    <% membership = user.verify_membership %>
+                    <% membership_status = membership[:status] %>
+                    <% days_til_renewal = membership[:days_til_renewal] %>
+                    <% membership_color = nil %>
+                    <% membership_phrase = nil %>
+                    <% case membership_status
+                       when 0 %>
+                        <% membership_color = 'danger' %>
+                        <% membership_phrase = 'Da Inserire' %>
+
+                        <span class="badge rounded-pill text-bg-<%= membership_color %>">
+                            <%= link_to new_membership_path(user_id: user.id, staff_id: current_staff) do %>
+                                <%= membership_phrase %>
+                            <% end %>
+                        </span>
+
+                    <% when 1 %>
+                        <% membership_color = 'info' %>
+                        <% membership_phrase = 'Da Pagare' %>
+
+                        <span class="badge rounded-pill text-bg-<%= membership_color %>">
+                            <%= link_to new_payment_path(payable_type: 'Membership', payable_id: user.membership.id, staff_id: current_staff) do %>
+                                <%= membership_phrase %>
+                            <% end %>
+                        </span>
+
+                    <% when 2 %>
+                        <% membership_color = 'warning' %>
+                        <% membership_phrase = 'Scaduto' %>
+
+                        <span class="badge rounded-pill text-bg-<%= membership_color %>">
+                            <%= link_to edit_membership_path(user.membership) do %>
+                                <%= membership_phrase %>
+                            <% end %>
+                        </span>
+
+                    <% else %>
+                        <% membership_color = 'success' %>
+                        <% membership_phrase = 'Attivo' %>
+
+                        <span class="badge rounded-pill text-bg-<%= membership_color %>">
+                            <%= membership_phrase %>
+                        </span>
+
+                    <% end %>
+
+                    <% if membership_status != 0 %>
+                        Giorni al Rinnovo: <%= days_til_renewal %>
+                    <% end %>
+                </td>
+
+                <!-- Action buttons -->
                 <td>
                     <%= link_to user_path(user), class: 'btn btn-primary' do %>
                         <i class="bi bi-eye-fill"></i>

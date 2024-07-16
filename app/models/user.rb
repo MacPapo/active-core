@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_one :staff, dependent: :destroy
 
   has_one :membership, dependent: :destroy
+  accepts_nested_attributes_for :membership
+
   has_many :subscriptions, dependent: :destroy
   has_many :payments, through: :subscriptions
 
@@ -15,7 +17,7 @@ class User < ApplicationRecord
   validates :affiliated, inclusion: { in: [ true, false ] }
 
   validates :legal_guardian, presence: true, if: :minor?
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid' }, allow_blank: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid', allow_blank: true }
   validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }
 
   validate :med_cert_issue_date_cannot_be_in_future, if: :med_cert_present?
@@ -44,8 +46,44 @@ class User < ApplicationRecord
     is_membership_active?
   end
 
-  def is_compliant?
-    self.email && self.phone unless self.minor? && self.legal_guardian
+  def verify_compliance
+    compliance = { status: true, errors: [] }
+
+    if self.minor? && self.legal_guardian
+
+      if self.med_cert_issue_date.nil?
+        compliance[:status] = false
+        compliance[:errors] << 'Certificato medico mancante'
+      end
+
+      return compliance
+    end
+
+    compliance[:status] = false unless self.email && self.phone && self.med_cert_issue_date
+
+    compliance[:errors] << 'Email mancante' if self.email.nil? || self.email.empty?
+    compliance[:errors] << 'Cellulare mancante' if self.phone.nil?
+    compliance[:errors] << 'Certificato medico mancante' if self.med_cert_issue_date.nil?
+
+    compliance
+  end
+
+  def verify_membership
+    status =
+      case self.membership
+      when nil
+        0
+      when self.membership.get_status == :inattivo
+        1
+      when self.membership.get_status == :scaduto
+        2
+      else
+        3
+      end
+    {
+      status: ,
+      days_til_renewal: self.membership.nil? ? nil : self.membership.get_num_of_days_til_renewal
+    }
   end
 
   def med_cert_valid?
@@ -75,6 +113,6 @@ class User < ApplicationRecord
   end
 
   def is_membership_active?
-    membership && membership.state.to_sym == :attivo
+    self.membership && self.membership.get_status == :attivo
   end
 end

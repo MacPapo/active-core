@@ -7,7 +7,7 @@ RSpec.describe Subscription, type: :model do
   let(:activity_plan) { create(:activity_plan, activity: activity) }
 
   before do
-    user.create_membership!(staff: staff, date: '2024-01-01')
+    user.create_membership!(staff: staff, start_date: '2024-01-01')
     payment = create(:payment, staff: staff, payable: user.membership)
     user.reload_membership
   end

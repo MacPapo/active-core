@@ -1,8 +1,8 @@
 class Payment < ApplicationRecord
-  before_validation :set_default_amount
+  after_initialize :set_default_date, if: :new_record?
+  after_initialize :set_default_amount, if: :new_record?
 
   after_save :activate_membership_or_subscription
-  after_initialize :set_default_date, if: :new_record?
 
   belongs_to :payable, polymorphic: true
   belongs_to :staff
@@ -20,16 +20,18 @@ class Payment < ApplicationRecord
   end
 
   def set_default_amount
+    p amount_handler
     self.amount ||= amount_handler
+    p self.amount
   end
 
   def amount_handler
-    case payable_type
+    case self.payable_type
     when "Membership"
-      membership = Membership.find(payable_id)
+      membership = Membership.find(self.payable_id)
       membership.cost
     when "Subscription"
-      subscription = Subscription.find(payable_id)
+      subscription = Subscription.find(self.payable_id)
       subscription.cost
     end
   end

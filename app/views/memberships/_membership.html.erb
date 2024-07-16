@@ -1,22 +1,17 @@
 <div id="<%= dom_id membership %>">
   <p>
-    <strong>Data:</strong>
-    <%= membership.date %>
+    <strong>Data Iscrizione:</strong>
+    <%= membership.start_date %>
   </p>
 
   <p>
-    <strong>Pagata:</strong>
-    <%= membership.payed %>
+    <strong>Data Scadenza:</strong>
+    <%= membership.end_date %>
   </p>
 
   <p>
-    <strong>Subscription type:</strong>
-    <%= membership.subscription_type_id %>
-  </p>
-
-  <p>
-    <strong>User:</strong>
-    <%= membership.user_id %>
+    <strong>Utente:</strong>
+    <%= membership.user.full_name %>
   </p>
 
 </div>

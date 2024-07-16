@@ -41,10 +41,9 @@
     <%= form.text_area :note %>
   </div>
 
-  <div>
-    <%= form.label :staff_id, style: "display: block" %>
-    <%= form.text_field :staff_id %>
-  </div>
+  <%= form.hidden_field :payable_type %>
+  <%= form.hidden_field :payable_id %>
+  <%= form.hidden_field :staff_id %>
 
   <div>
     <%= form.submit %>

@@ -5,30 +5,18 @@
 
       <ul>
         <% membership.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+            <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :date, style: "display: block" %>
-    <%= form.date_field :date %>
-  </div>
+  <%= form.hidden_field :user_id %>
+  <%= form.hidden_field :staff_id %>
 
   <div>
-    <%= form.label :active, style: "display: block" %>
-    <%= form.check_box :active %>
-  </div>
-
-  <div>
-    <%= form.label :subscription_type_id, style: "display: block" %>
-    <%= form.text_field :subscription_type_id %>
-  </div>
-
-  <div>
-    <%= form.label :user_id, style: "display: block" %>
-    <%= form.text_field :user_id %>
+    <%= form.label :start_date, style: "display: block" %>
+    <%= form.date_field :start_date %>
   </div>
 
   <div>

@@ -12,6 +12,11 @@
   <% end %>
 
   <div>
+    <%= form.label :cf, style: "display: block" %>
+    <%= form.text_field :cf %>
+  </div>
+
+  <div>
     <%= form.label :name, style: "display: block" %>
     <%= form.text_field :name %>
   </div>
@@ -37,13 +42,13 @@
   </div>
 
   <div>
-    <%= form.label :med_cert_exp_date, style: "display: block" %>
-    <%= form.date_field :med_cert_exp_date %>
+    <%= form.label :med_cert_issue_date, style: "display: block" %>
+    <%= form.date_field :med_cert_issue_date %>
   </div>
 
   <div>
-    <%= form.label :legal_guardian_id, style: "display: block" %>
-    <%= form.text_field :legal_guardian_id %>
+      <%= form.label :legal_guardian_id, style: "display: block" %>
+      <%= form.text_field :legal_guardian_id %>
   </div>
 
   <div>
