@@ -23,97 +23,23 @@
                     <%= link_to "ASD Querini Fit", users_path, { class: 'navbar-brand list-group-item list-group-item-action py-2 ripple', "aria-current" => true } %>
 
                     <%= link_to users_path,  class: 'list-group-item list-group-item-action py-2 ri' do %>
-                        Utenti <i class="bi bi-airplane"></i>
+                        <i class="bi bi-people-fill"></i> Utenti
                     <% end %>
 
-                    <%= link_to users_path,  class: 'list-group-item list-group-item-action py-2' do %>
-                        Staff <i class="bi bi-airplane"></i>
+                    <%= link_to staffs_path,  class: 'list-group-item list-group-item-action py-2' do %>
+                        <i class="bi bi-person-workspace"></i> Staff
                     <% end %>
 
-                    <%= link_to users_path,  class: 'list-group-item list-group-item-action py-2' do %>
-                        Attivit <i class="bi bi-airplane"></i>
-                    <% end %>
-
-                    <%= link_to users_path,  class: 'list-group-item list-group-item-action py-2' do %>
-                        Sas <i class="bi bi-airplane"></i>
+                    <%= link_to activities_path,  class: 'list-group-item list-group-item-action py-2' do %>
+                        <i class="bi bi-activity"></i> Attività
                     <% end %>
 
                 </div>
+
+                <!-- TODO -->
+                <%= button_to "logout", destroy_staff_session_path, method: :delete, class: 'btn btn-outline-danger' %>
+
             </div>
         </nav>
     </div>
 <% end %>
-
-<nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary">
-    <div class="container-fluid">
-
-
-        <% if staff_signed_in? %>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav mx-auto">
-
-                    <!-- Utenti -->
-                    <li class="nav-item dropdown">
-                        <%= link_to 'Utenti', users_path, { class: 'nav-link dropdown-toggle', role: 'button', 'data-bs-toggle' => 'dropdown', 'aria-expanded' => false } %>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <%= link_to 'Lista utenti', users_path, class: 'dropdown-item' %>
-                            </li>
-                            <hr/>
-                            <li>
-                                <%= link_to 'Crea utente', new_user_path, class: 'dropdown-item' %>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Tutori legali -->
-                    <li class="nav-item">
-                        <%= link_to 'Tutori Legali', legal_guardians_path, class: 'nav-link' %>
-                    </li>
-
-                    <!-- Staff -->
-                    <% if current_staff.admin? %>
-                        <li class="nav-item dropdown">
-                            <%= link_to 'Staff', staffs_path, { class: 'nav-link dropdown-toggle', role: 'button', 'data-bs-toggle' => 'dropdown', 'aria-expanded' => false } %>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <%= link_to 'Lista staff', staffs_path, class: 'dropdown-item' %>
-                                </li>
-                                <hr/>
-                                <li>
-                                    <%= link_to 'Crea staff', new_staff_path, class: 'dropdown-item' %>
-                                </li>
-                            </ul>
-                        </li>
-                    <% end %>
-
-                    <!-- Attività -->
-                    <li class="nav-item dropdown">
-                        <%= link_to 'Attività', users_path, { class: 'nav-link dropdown-toggle', role: 'button', 'data-bs-toggle' => 'dropdown', 'aria-expanded' => false } %>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <%= link_to 'Lista attività', activities_path, class: 'dropdown-item' %>
-                            </li>
-
-                            <% if current_staff.admin? %>
-                                <hr/>
-                                <li>
-                                    <%= link_to 'Crea attività', new_activity_path, class: 'dropdown-item' %>
-                                </li>
-                            <% end %>
-                        </ul>
-                    </li>
-
-                </ul>
-
-                <div class="d-flex">
-                    <%= button_to "logout", destroy_staff_session_path, method: :delete, class: 'btn btn-outline-danger' %>
-                </div>
-            </div>
-        <% end %>
-    </div>
-</nav>

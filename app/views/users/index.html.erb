@@ -1,15 +1,62 @@
-<p style="color: green"><%= notice %></p>
-
 <h1>Utenti</h1>
 
 <div id="users">
-    <% @users.each do |user| %>
-        <%= render user %>
-        <p>
-            <%= link_to "Show this user", user %>
-        </p>
-    <% end %>
+    <table class="table">
+        <tr>
+            <th>Stato</th>
+            <th>Nome </th>
+            <th>Cognome</th>
+            <th>Data Nascita</th>
+            <th>Quota annuale</th>
+            <th>Azioni</th>
+        </tr>
+        <% @users.each do |user| %>
+            <tr>
+                <td>
+                    <span
+                        class="badge rounded-pill text-bg-<%= user.is_compliant? ? 'success' : 'warning' %>"
+                        <% unless user.is_compliant? %>
+                            data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="Email o Cellulare o Certificato medico mancanti"
+                        <% end %>
+                    >
+                        <% if user.is_compliant? %>
+                            <i class="bi bi-person-fill-check"></i>
+                        <% else %>
+                            <i class="bi bi-person-fill-exclamation"></i>
+                        <% end %>
+                    </span>
+                </td>
+                <td>
+                    <%= user.name%>
+                </td>
+                <td>
+                    <%= user.surname %>
+                </td>
+                <td>
+                    <%= user.get_date_of_birth %>
+                </td>
+                <td>
+                    <span class="badge rounded-pill text-bg-<%= user.has_active_membership? ? 'success' : 'warning' %>">
+                        <%= user.has_active_membership? ? 'Attivo' : 'Scaduto' %>
+                    </span>
+                </td>
+                <td>
+                    <%= link_to user_path(user), class: 'btn btn-primary' do %>
+                        <i class="bi bi-eye-fill"></i>
+                    <% end %>
+
+                    <%= link_to edit_user_path(user), class: 'btn btn-warning' do %>
+                        <i class="bi bi-pencil-fill"></i>
+                    <% end %>
+
+                    <%= link_to user_path(user), class: 'btn btn-danger', method: :destroy do %>
+                        <i class="bi bi-trash3-fill"></i>
+                    <% end %>
+                </td>
+            </tr>
+        <% end %>
+    </table>
+    <%== pagy_bootstrap_nav(@pagy) %>
 </div>
-<%== pagy_bootstrap_nav(@pagy) %>
 
 <%= link_to "New user", new_user_path %>

@@ -25,7 +25,11 @@ class User < ApplicationRecord
   end
 
   def minor?
-    date_of_birth > 18.year.ago.to_date
+    self.date_of_birth && self.date_of_birth > 18.year.ago.to_date
+  end
+
+  def get_date_of_birth
+    self.date_of_birth.strftime('%d/%m/%Y')
   end
 
   def age
@@ -38,6 +42,10 @@ class User < ApplicationRecord
 
   def has_active_membership?
     is_membership_active?
+  end
+
+  def is_compliant?
+    self.email && self.phone unless self.minor? && self.legal_guardian
   end
 
   def med_cert_valid?
