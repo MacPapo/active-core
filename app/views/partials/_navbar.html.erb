@@ -1,8 +1,52 @@
+<style>
+ .sidebar {
+     height: 100vh;
+     width: 250px;
+     position: fixed;
+     top: 0;
+     left: 0;
+     background-color: #f8f9fa;
+     padding-top: 20px;
+ }
+ .content {
+     margin-left: 250px;
+     padding: 20px;
+ }
+</style>
+
+<% if staff_signed_in? %>
+    <div class="sidebar">
+        <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+            <div class="position-sticky">
+                <div class="list-group list-group-flush mx-3 mt-4">
+
+                    <%= link_to "ASD Querini Fit", users_path, { class: 'navbar-brand list-group-item list-group-item-action py-2 ripple', "aria-current" => true } %>
+
+                    <%= link_to users_path,  class: 'list-group-item list-group-item-action py-2 ri' do %>
+                        Utenti <i class="bi bi-airplane"></i>
+                    <% end %>
+
+                    <%= link_to users_path,  class: 'list-group-item list-group-item-action py-2' do %>
+                        Staff <i class="bi bi-airplane"></i>
+                    <% end %>
+
+                    <%= link_to users_path,  class: 'list-group-item list-group-item-action py-2' do %>
+                        Attivit <i class="bi bi-airplane"></i>
+                    <% end %>
+
+                    <%= link_to users_path,  class: 'list-group-item list-group-item-action py-2' do %>
+                        Sas <i class="bi bi-airplane"></i>
+                    <% end %>
+
+                </div>
+            </div>
+        </nav>
+    </div>
+<% end %>
+
 <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary">
     <div class="container-fluid">
-        <div class="navbar-brand">
-            <%= link_to "ASD Querini Fit", users_path, class: 'text-decoration-none text-muted fw-bold' %>
-        </div>
+
 
         <% if staff_signed_in? %>
 
