@@ -18,6 +18,8 @@ class User < ApplicationRecord
 
   validates :legal_guardian, presence: true, if: :minor?
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid', allow_blank: true }
+  normalizes :email, with: -> { _1.strip.downcase }
+
   validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }
 
   validate :med_cert_issue_date_cannot_be_in_future, if: :med_cert_present?

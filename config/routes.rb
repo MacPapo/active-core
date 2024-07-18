@@ -1,15 +1,19 @@
 Rails.application.routes.draw do
   devise_for :staffs
 
-  resources :membership_histories
+  authenticated :staff, -> { _1.admin? } do
+    resources :legal_guardians
+    resources :membership_histories
+    resources :subscription_histories
+  end
+
   resources :memberships
   resources :payments
-  resources :subscription_histories
   resources :staffs
   resources :subscriptions
   resources :activities
   resources :users
-  resources :legal_guardians
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

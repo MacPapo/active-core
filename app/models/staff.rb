@@ -10,6 +10,7 @@ class Staff < ApplicationRecord
 
   validates :email, :password, :role, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid' }
+  normalizes :email, with: -> { _1.strip.downcase }
 
   enum role: [:collaboratore, :volontario, :admin]
   after_initialize :set_default_role, if: :new_record?

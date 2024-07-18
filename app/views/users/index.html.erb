@@ -8,7 +8,7 @@
             <th>Cognome</th>
             <th>Data Nascita</th>
             <th>Convenzionato</th>
-            <th>Quota annuale</th>
+            <th>Quota Associativa</th>
             <th>Azioni</th>
         </tr>
         <% @users.each do |user| %>
@@ -62,25 +62,25 @@
                     <% membership_color = nil %>
                     <% membership_phrase = nil %>
                     <% case membership_status
-                       when 0 %>
+                    when 0 %>
                         <% membership_color = 'danger' %>
                         <% membership_phrase = 'Da Inserire' %>
 
-                        <span class="badge rounded-pill text-bg-<%= membership_color %>">
-                            <%= link_to new_membership_path(user_id: user.id, staff_id: current_staff) do %>
-                                <%= membership_phrase %>
-                            <% end %>
-                        </span>
+                        <%= button_to "#{membership_phrase}",
+                                      new_membership_path,
+                                      params: { user_id: user.id, staff_id: current_staff },
+                                      method: :get,
+                                      class: "btn badge rounded-pill text-bg-#{membership_color}" %>
 
                     <% when 1 %>
                         <% membership_color = 'info' %>
                         <% membership_phrase = 'Da Pagare' %>
 
-                        <span class="badge rounded-pill text-bg-<%= membership_color %>">
-                            <%= link_to new_payment_path(payable_type: 'Membership', payable_id: user.membership.id, staff_id: current_staff) do %>
-                                <%= membership_phrase %>
-                            <% end %>
-                        </span>
+                        <%= button_to "#{membership_phrase}",
+                                      new_payment_path,
+                                      params: { payable_type: 'Membership', payable_id: user.membership.id, staff_id: current_staff },
+                                      method: :get,
+                                      class: "btn badge rounded-pill text-bg-#{membership_color}" %>
 
                     <% when 2 %>
                         <% membership_color = 'warning' %>
@@ -92,13 +92,19 @@
                             <% end %>
                         </span>
 
+                        <%= button_to "#{membership_phrase}",
+                                      edit_membership_path(user.membership),
+                                      method: :put,
+                                      class: "btn badge rounded-pill text-bg-#{membership_color}" %>
+
                     <% else %>
                         <% membership_color = 'success' %>
                         <% membership_phrase = 'Attivo' %>
 
-                        <span class="badge rounded-pill text-bg-<%= membership_color %>">
-                            <%= membership_phrase %>
-                        </span>
+                        <%= button_to "#{membership_phrase}",
+                                      membership_path(user.membership),
+                                      method: :get,
+                                      class: "btn badge rounded-pill text-bg-#{membership_color}" %>
 
                     <% end %>
 

@@ -5,6 +5,8 @@ class LegalGuardian < ApplicationRecord
 
   validates :name, :surname, :email, :phone, :date_of_birth, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid' }
+  normalizes :email, with: -> { _1.strip.downcase }
+
   validates :phone, phone: { possible: true, types: [:fixed_or_mobile] }
   validate :is_an_eligible_legal_guardian
 
