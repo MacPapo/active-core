@@ -11,13 +11,19 @@
     </head>
 
     <body>
-        <%= render "partials/navbar" %>
 
-        <div class="content">
-            <p class="notice"><%= notice %></p>
-            <p class="alert"><%= alert %></p>
-            <%= yield %>
-        </div>
+        <% if staff_signed_in? %>
+            <div class="d-flex">
+                <%= render "partials/sidebar" %>
+
+                <div class="content flex-grow-1 p-3">
+                    <p class="notice"><%= notice %></p>
+                    <p class="alert"><%= alert %></p>
+
+                    <%= yield %>
+                </div>
+            </div>
+        <% end %>
 
     </body>
 </html>

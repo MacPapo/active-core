@@ -1,4 +1,9 @@
-<h1>Utenti</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Utenti</h1>
+    <%= link_to new_user_path, class: 'btn btn-success' do %>
+        <i class="bi bi-person-fill-add"></i> Aggiungi Utente
+    <% end %>
+</div>
 
 <div id="users">
     <table class="table">
@@ -123,5 +128,3 @@
     </table>
     <%== pagy_bootstrap_nav(@pagy) %>
 </div>
-
-<%= link_to "New user", new_user_path %>
