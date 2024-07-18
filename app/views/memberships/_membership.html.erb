@@ -1,17 +1,25 @@
 <div id="<%= dom_id membership %>">
-  <p>
-    <strong>Data Iscrizione:</strong>
-    <%= membership.start_date %>
-  </p>
+  <div class="card">
+      <div class="card-header">
+          Quota Associativa
+      </div>
+      <div class="card-body">
+          <h5 class="card-title"><%= membership.user.full_name %></h5>
+          <p class="card-text">
+              <p>
+                  <strong>Data Iscrizione:</strong>
+                  <%= membership.start_date %>
+              </p>
 
-  <p>
-    <strong>Data Scadenza:</strong>
-    <%= membership.end_date %>
-  </p>
+              <p>
+                  <strong>Data Scadenza:</strong>
+                  <%= membership.end_date %>
+              </p>
+          </p>
+      </div>
+      <div class="card-footer text-body-secondary">
+          Creata il: <%= membership.created_at %> Aggiornata il: <%= membership.updated_at %>
+      </div>
 
-  <p>
-    <strong>Utente:</strong>
-    <%= membership.user.full_name %>
-  </p>
-
+  </div>
 </div>

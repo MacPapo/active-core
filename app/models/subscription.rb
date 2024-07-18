@@ -2,7 +2,7 @@ class Subscription < ApplicationRecord
   before_validation :set_start_date, on: :create
   before_validation :set_end_date, on: :create
 
-  after_initialize :set_default_state, if: :new_record?
+  after_initialize :set_default_status, if: :new_record?
 
   belongs_to :user
   belongs_to :staff
@@ -12,25 +12,25 @@ class Subscription < ApplicationRecord
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :nullify
 
-  enum state: [:inattivo, :attivo, :scaduto]
+  enum status: [:inattivo, :attivo, :scaduto]
 
   validates :start_date, :activity, :activity_plan, :user, :staff, presence: true
   validate :annual_membership_paid?, if: :activity_subscription?
 
-  scope :active, -> { where(state: :attivo) }
+  scope :active, -> { where(status: :attivo) }
 
   def cost
     self.activity_plan.cost
   end
 
   def get_status
-    self.state.to_sym
+    self.status.to_sym
   end
 
   private
 
-  def set_default_state
-    self.state ||= :inattivo
+  def set_default_status
+    self.status ||= :inattivo
   end
 
   def set_start_date

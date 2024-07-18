@@ -1,8 +1,10 @@
 class Membership < ApplicationRecord
-  before_validation :set_end_date, on: :create
+  before_validation :set_end_date
 
-  after_initialize :set_default_state, if: :new_record?
+  after_initialize :set_default_status, if: :new_record?
   after_initialize :set_default_date, if: :new_record?
+
+  after_save :validate_status
 
   belongs_to :user
   belongs_to :staff
@@ -10,7 +12,7 @@ class Membership < ApplicationRecord
   has_many :membership_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :nullify
 
-  enum state: [:inattivo, :attivo, :scaduto]
+  enum status: [:inattivo, :attivo, :scaduto]
 
   validates :start_date, presence: true
 
@@ -21,7 +23,7 @@ class Membership < ApplicationRecord
   end
 
   def get_status
-    self.state.to_sym
+    self.status.to_sym
   end
 
   def get_num_of_days_til_renewal
@@ -34,8 +36,8 @@ class Membership < ApplicationRecord
 
   private
 
-  def set_default_state
-    self.state ||= :inattivo
+  def set_default_status
+    self.status ||= :inattivo
   end
 
   def set_default_date
@@ -45,5 +47,9 @@ class Membership < ApplicationRecord
   def set_end_date
     numeric_next_year = ->(date) { (date + 1.year).year }
     self.end_date = Date.new(numeric_next_year.call(self.start_date), 9, 1)
+  end
+
+  def validate_status
+    ValidateMembershipStatusJob.perform_later
   end
 end

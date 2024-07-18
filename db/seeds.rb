@@ -109,7 +109,7 @@ puts "Activities Added"
 #       user: user,
 #       activity: activity,
 #       subscription_type: subscription_type,
-#       state: [0, 1, 2].sample
+#       status: [0, 1, 2].sample
 #     )
 #   end
 # end

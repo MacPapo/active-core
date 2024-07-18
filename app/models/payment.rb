@@ -37,15 +37,13 @@ class Payment < ApplicationRecord
   end
 
   def activate_membership_or_subscription
-    if self.payed
       case payable_type
       when "Membership"
         membership = Membership.find(payable_id)
-        membership.update(state: :attivo)
+        membership.update(status: self.payed ? :attivo : :inattivo)
       when "Subscription"
         subscription = Subscription.find(payable_id)
-        subscription.update(state: :attivo)
+        subscription.update(status: self.payed ? :attivo : :inattivo)
       end
-    end
   end
 end

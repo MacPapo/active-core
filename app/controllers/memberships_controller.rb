@@ -23,27 +23,19 @@ class MembershipsController < ApplicationController
   def create
     @membership = Membership.new(membership_params)
 
-    respond_to do |format|
-      if @membership.save
-        format.html { redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id, staff_id: current_staff), notice: "La Quota associativa e' stata correttamente creata." }
-        format.json { render :show, status: :created, location: @membership }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @membership.errors, status: :unprocessable_entity }
-      end
+    if @membership.save
+      redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id, staff_id: current_staff), notice: "La Quota associativa e' stata correttamente creata."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /memberships/1 or /memberships/1.json
   def update
-    respond_to do |format|
-      if @membership.update(membership_params)
-        format.html { redirect_to membership_url(@membership), notice: "Membership was successfully updated." }
-        format.json { render :show, status: :ok, location: @membership }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @membership.errors, status: :unprocessable_entity }
-      end
+    if @membership.update(membership_params)
+      redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id, staff_id: current_staff), notice: "La Quota associativa e' stata correttamente aggiornata."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 

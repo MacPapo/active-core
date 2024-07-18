@@ -71,17 +71,23 @@ class User < ApplicationRecord
   end
 
   def verify_membership
+    membership = self.membership
+
     status =
-      case self.membership
+      case membership&.get_status
       when nil
         0
-      when self.membership.get_status == :inattivo
+      when :inattivo
         1
-      when self.membership.get_status == :scaduto
+      when :scaduto
         2
-      else
+      when :attivo
         3
+      else
+        p membership.get_status
+        -1
       end
+
     {
       status: ,
       days_til_renewal: self.membership.nil? ? nil : self.membership.get_num_of_days_til_renewal

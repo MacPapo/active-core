@@ -86,15 +86,9 @@
                         <% membership_color = 'warning' %>
                         <% membership_phrase = 'Scaduto' %>
 
-                        <span class="badge rounded-pill text-bg-<%= membership_color %>">
-                            <%= link_to edit_membership_path(user.membership) do %>
-                                <%= membership_phrase %>
-                            <% end %>
-                        </span>
-
                         <%= button_to "#{membership_phrase}",
                                       edit_membership_path(user.membership),
-                                      method: :put,
+                                      method: :get,
                                       class: "btn badge rounded-pill text-bg-#{membership_color}" %>
 
                     <% else %>

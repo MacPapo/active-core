@@ -1,25 +1,26 @@
 <%= form_with(model: membership) do |form| %>
-  <% if membership.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(membership.errors.count, "error") %> prohibited this membership from being saved:</h2>
+    <% if membership.errors.any? %>
+        <div style="color: red">
+            <h2><%= pluralize(membership.errors.count, "error") %> prohibited this membership from being saved:</h2>
 
-      <ul>
-        <% membership.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+            <ul>
+                <% membership.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <%= form.hidden_field :user_id %>
+    <%= form.hidden_field :staff_id %>
+
+    <div>
+        <% start_date_phrase = @membership.id ? 'Data Rinnovo' : 'Data Iscrizione' %>
+        <%= form.label :start_date, "#{start_date_phrase}", style: "display: block" %>
+        <%= form.date_field :start_date %>
     </div>
-  <% end %>
 
-  <%= form.hidden_field :user_id %>
-  <%= form.hidden_field :staff_id %>
-
-  <div>
-    <%= form.label :start_date, style: "display: block" %>
-    <%= form.date_field :start_date %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
+    <div>
+        <%= form.submit %>
+    </div>
 <% end %>
