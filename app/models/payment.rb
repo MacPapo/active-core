@@ -1,6 +1,8 @@
 class Payment < ApplicationRecord
   after_initialize :set_default_date, if: :new_record?
-  after_initialize :set_default_amount, if: :new_record?
+
+  # Delayed because self.payable_type is not present after_initialize in tests
+  before_validation :set_default_amount, if: :new_record?
 
   after_save :activate_membership_or_subscription
 
@@ -20,9 +22,7 @@ class Payment < ApplicationRecord
   end
 
   def set_default_amount
-    p amount_handler
     self.amount ||= amount_handler
-    p self.amount
   end
 
   def amount_handler

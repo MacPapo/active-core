@@ -138,6 +138,26 @@ Staff.create!(
   role: :admin
 )
 
+normal_user = User.create!(
+  cf: Faker::Finance.vat_number,
+  name: 'Normal',
+  surname: 'User',
+  email: 'normal@example.com',
+  phone: '+39 342 4488 935',
+  date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60),
+  med_cert_issue_date: nil,
+  affiliated: false
+)
+
+puts "Normal User Added"
+
+Staff.create!(
+  user: normal_user,
+  email: 'normal@example.com',
+  password: 'normalpassword',
+  role: :collaboratore
+)
+
 puts "Admin Staff Added"
 
 10.times do

@@ -1,51 +1,50 @@
 <%= form_with(model: payment) do |form| %>
   <% if payment.errors.any? %>
-    <div style="color: red">
+    <div id="error_explanation">
       <h2><%= pluralize(payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
-
       <ul>
-        <% payment.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% payment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :amount, style: "display: block" %>
-    <%= form.text_field :amount %>
+  <div class="field">
+    <%= form.label :amount %>
+    <%= form.number_field :amount, value: payment.amount %>
   </div>
 
-  <div>
-    <%= form.label :date, style: "display: block" %>
-    <%= form.date_field :date %>
+  <div class="field">
+    <%= form.label :date %>
+    <%= form.date_select :date, default: payment.date %>
   </div>
 
-  <div>
-    <%= form.label :payment_method, style: "display: block" %>
-    <%= form.text_field :payment_method %>
+  <div class="field">
+    <%= form.label :payment_method %>
+    <%= form.select :payment_method, Payment.payment_methods.keys.map { |method| [method.humanize, method] }, selected: payment.payment_method %>
   </div>
 
-  <div>
-    <%= form.label :entry_type, style: "display: block" %>
-    <%= form.text_field :entry_type %>
+  <div class="field">
+    <%= form.label :entry_type %>
+    <%= form.select :entry_type, Payment.entry_types.keys.map { |type| [type.humanize, type] }, selected: payment.entry_type %>
   </div>
 
-  <div>
-    <%= form.label :payed, style: "display: block" %>
-    <%= form.text_field :payed %>
+  <div class="field">
+    <%= form.label :payed %>
+    <%= form.check_box :payed, checked: payment.payed %>
   </div>
 
-  <div>
-    <%= form.label :note, style: "display: block" %>
-    <%= form.text_area :note %>
+  <div class="field">
+    <%= form.label :note %>
+    <%= form.text_area :note, value: payment.note %>
   </div>
 
   <%= form.hidden_field :payable_type %>
   <%= form.hidden_field :payable_id %>
   <%= form.hidden_field :staff_id %>
 
-  <div>
-    <%= form.submit %>
+  <div class="actions">
+      <%= form.submit %>
   </div>
 <% end %>

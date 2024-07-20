@@ -12,18 +12,25 @@
 
     <body>
 
-        <% if staff_signed_in? %>
-            <div class="d-flex">
-                <%= render "partials/sidebar" %>
+        <div class="d-flex">
+            <!-- Sidebar -->
+            <%= render "partials/sidebar" %>
 
-                <div class="content flex-grow-1 p-3">
-                    <p class="notice"><%= notice %></p>
-                    <p class="alert"><%= alert %></p>
+            <!-- Content -->
+            <div class="content flex-grow-1 p-3">
 
-                    <%= yield %>
-                </div>
+                <% flash.each do |type, msg| %>
+                    <div class="alert alert-<%= type == 'alert' ? 'warning' : 'success' %> alert-dismissible fade show" role="alert">
+                        <%= msg %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                <% end %>
+
+                <!-- Contents -->
+                <%= yield %>
             </div>
-        <% end %>
+        </div>
 
     </body>
 </html>

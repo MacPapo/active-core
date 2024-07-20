@@ -13,6 +13,7 @@ class PaymentsController < ApplicationController
   # GET /payments/new
   def new
     @payment = Payment.new(payable_type: params[:payable_type], payable_id: params[:payable_id], staff_id: params[:staff_id])
+    @payment.amount = @payment.send(:amount_handler) if @payment.amount.nil?
   end
 
   # GET /payments/1/edit
