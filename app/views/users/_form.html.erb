@@ -1,62 +1,72 @@
 <%= form_with(model: user) do |form| %>
-  <% if user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+    <% if user.errors.any? %>
+        <div style="color: red">
+            <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
 
-      <ul>
-        <% user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+            <ul>
+                <% user.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div>
+        <%= form.label :cf, 'Codice Fiscale', class: 'form-label' %>
+        <%= form.text_field :cf, class: 'form-control' %>
     </div>
-  <% end %>
 
-  <div>
-    <%= form.label :cf, 'Codice Fiscale', style: "display: block" %>
-    <%= form.text_field :cf %>
-  </div>
+    <div>
+        <%= form.label :name, 'Nome', class: 'form-label' %>
+        <%= form.text_field :name, required: true, class: 'form-control' %>
+    </div>
 
-  <div>
-    <%= form.label :name, 'Nome', style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
+    <div>
+        <%= form.label :surname, 'Cognome', class: 'form-label' %>
+        <%= form.text_field :surname, required: true, class: 'form-control' %>
+    </div>
 
-  <div>
-    <%= form.label :surname, 'Cognome', style: "display: block" %>
-    <%= form.text_field :surname %>
-  </div>
+    <div>
+        <%= form.label :email, class: 'form-label' %>
+        <%= form.text_field :email, class: 'form-control' %>
+    </div>
 
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
-  </div>
+    <div>
+        <%= form.label :phone, 'Cellulare', class: 'form-label' %>
+        <%= form.text_field :phone, class: 'form-control' %>
+    </div>
 
-  <div>
-    <%= form.label :phone, 'Cellulare', style: "display: block" %>
-    <%= form.text_field :phone %>
-  </div>
+    <div>
+        <%= form.label :date_of_birth, 'Data di Nascita', class: 'form-label' %>
+        <%= form.date_field :date_of_birth, class: 'form-control' %>
+    </div>
 
-  <div>
-    <%= form.label :date_of_birth, 'Data di Nascita', style: "display: block" %>
-    <%= form.date_field :date_of_birth %>
-  </div>
+    <div>
+        <%= form.label :med_cert_issue_date, 'Data rilascio certificato medico', class: 'form-label' %>
+        <%= form.date_field :med_cert_issue_date, class: 'form-control' %>
+    </div>
 
-  <div>
-    <%= form.label :med_cert_issue_date, 'Data rilascio certificato medico', style: "display: block" %>
-    <%= form.date_field :med_cert_issue_date %>
-  </div>
+    <div>
+        <%= form.label :affiliated, 'Convenzionato', class: 'form-check-label' %>
+        <%= form.check_box :affiliated, class: 'form-check-input' %>
+    </div>
 
-  <div>
-    <%= form.label :affiliated, 'Convenzionato', style: "display: block" %>
-    <%= form.check_box :affiliated %>
-  </div>
+    <div>
+        <%= form.label :legal_guardian_id, 'Tutore Legale', class: 'form-label' %>
+        <%= form.text_field :legal_guardian_id %>
+    </div>
 
-  <div>
-      <%= form.label :legal_guardian_id, 'Tutore Legale', style: "display: block" %>
-      <%= form.text_field :legal_guardian_id %>
-  </div>
 
-  <div>
-    <%= form.submit %>
-  </div>
+    <label for="exampleDataList" class="form-label">Datalist example</label>
+    <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+    <datalist id="datalistOptions">
+        <% LegalGuardian.all.pluck(:id, :name, :surname).each do |id, name, surname| %>
+            <option value="<%= "#{name} #{surname}" %>">
+        <% end %>
+    </datalist>
+
+
+    <div>
+        <%= form.submit %>
+    </div>
 <% end %>

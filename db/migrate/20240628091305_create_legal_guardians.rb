@@ -9,5 +9,11 @@ class CreateLegalGuardians < ActiveRecord::Migration[7.1]
 
       t.timestamps
     end
+
+    add_index :legal_guardians, :email, unique: true
+    add_index :legal_guardians, :name
+    add_index :legal_guardians, :surname
+    add_index :legal_guardians, :phone
+    add_index :legal_guardians, :date_of_birth
   end
 end

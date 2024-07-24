@@ -36,6 +36,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.date "date_of_birth", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["date_of_birth"], name: "index_legal_guardians_on_date_of_birth"
+    t.index ["email"], name: "index_legal_guardians_on_email", unique: true
+    t.index ["name"], name: "index_legal_guardians_on_name"
+    t.index ["phone"], name: "index_legal_guardians_on_phone"
+    t.index ["surname"], name: "index_legal_guardians_on_surname"
   end
 
   create_table "membership_histories", force: :cascade do |t|
@@ -61,7 +66,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.integer "staff_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["end_date"], name: "index_memberships_on_end_date"
     t.index ["staff_id"], name: "index_memberships_on_staff_id"
+    t.index ["start_date"], name: "index_memberships_on_start_date"
+    t.index ["status"], name: "index_memberships_on_status"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
@@ -77,8 +85,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.integer "payable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_payments_on_created_at"
+    t.index ["date"], name: "index_payments_on_date"
+    t.index ["entry_type"], name: "index_payments_on_entry_type"
     t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
+    t.index ["payed"], name: "index_payments_on_payed"
+    t.index ["payment_method"], name: "index_payments_on_payment_method"
     t.index ["staff_id"], name: "index_payments_on_staff_id"
+    t.index ["updated_at"], name: "index_payments_on_updated_at"
   end
 
   create_table "staffs", force: :cascade do |t|
@@ -96,6 +110,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_staffs_on_email", unique: true
     t.index ["reset_password_token"], name: "index_staffs_on_reset_password_token", unique: true
+    t.index ["role"], name: "index_staffs_on_role"
     t.index ["user_id"], name: "index_staffs_on_user_id"
   end
 
@@ -140,7 +155,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.integer "legal_guardian_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["cf"], name: "index_users_on_cf", unique: true
+    t.index ["date_of_birth"], name: "index_users_on_date_of_birth"
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["legal_guardian_id"], name: "index_users_on_legal_guardian_id"
+    t.index ["name"], name: "index_users_on_name"
+    t.index ["phone"], name: "index_users_on_phone"
+    t.index ["surname"], name: "index_users_on_surname"
   end
 
   add_foreign_key "activity_plans", "activities"

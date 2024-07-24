@@ -42,5 +42,6 @@ class DeviseCreateStaffs < ActiveRecord::Migration[7.1]
     add_index :staffs, :reset_password_token, unique: true
     # add_index :staffs, :confirmation_token,   unique: true
     # add_index :staffs, :unlock_token,         unique: true
+    add_index :staffs, :role
   end
 end

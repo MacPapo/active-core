@@ -17,11 +17,11 @@ User.destroy_all
 Staff.destroy_all
 
 # Seed LegalGuardians
-10.times do
+10000.times do
   LegalGuardian.create!(
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
-    email: Faker::Internet.email,
+    email: Faker::Internet.unique.email,
     phone: '+39 341 4488 932',
     date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60)
   )
@@ -36,7 +36,7 @@ puts "LegalGuardians Added"
     cf: Faker::Finance.vat_number,
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
-    email: Faker::Internet.email,
+    email: Faker::Internet.unique.email,
     phone: '+39 341 4488 933',
     date_of_birth: Faker::Date.birthday(min_age: 5, max_age: 17),
     med_cert_issue_date: nil,
@@ -52,7 +52,7 @@ puts "Minor Users Added"
     cf: Faker::Finance.vat_number,
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
-    email: Faker::Internet.email,
+    email: Faker::Internet.unique.email,
     phone: '+39 341 4488 934',
     date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 100),
     med_cert_issue_date: nil,
@@ -165,7 +165,7 @@ puts "Admin Staff Added"
     cf: Faker::Finance.vat_number,
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
-    email: Faker::Internet.email,
+    email: Faker::Internet.unique.email,
     phone: '+39 341 4488 936',
     date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 60),
     med_cert_issue_date: nil,
@@ -174,7 +174,7 @@ puts "Admin Staff Added"
 
   Staff.create!(
     user: user,
-    email: Faker::Internet.email,
+    email: Faker::Internet.unique.email,
     password: 'password',
     role: [0, 1].sample
   )

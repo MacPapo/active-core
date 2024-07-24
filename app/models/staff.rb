@@ -4,9 +4,11 @@ class Staff < ApplicationRecord
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   belongs_to :user
-  has_many :subscriptions, dependent: :nullify
-  has_many :subscription_histories, dependent: :nullify
-  has_many :payments, dependent: :nullify
+
+  has_many :memberships, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
+  has_many :subscription_payments, through: :subscriptions
+  has_many :membership_payments, through: :membership
 
   validates :email, :password, :role, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid' }

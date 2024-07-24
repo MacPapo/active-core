@@ -9,7 +9,8 @@ class User < ApplicationRecord
   has_one :membership, dependent: :destroy
 
   has_many :subscriptions, dependent: :destroy
-  has_many :payments, through: :subscriptions
+  has_many :subscription_payments, through: :subscriptions
+  has_many :membership_payments, through: :membership
 
   validates :name, :surname, :date_of_birth, presence: true
   validates :affiliated, inclusion: { in: [ true, false ] }

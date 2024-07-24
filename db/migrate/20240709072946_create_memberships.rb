@@ -10,5 +10,9 @@ class CreateMemberships < ActiveRecord::Migration[7.1]
 
       t.timestamps
     end
+
+    add_index :memberships, :start_date
+    add_index :memberships, :end_date
+    add_index :memberships, :status
   end
 end
