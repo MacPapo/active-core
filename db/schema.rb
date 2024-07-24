@@ -43,12 +43,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.date "old_end_date"
     t.date "new_end_date"
     t.integer "action", default: 0, null: false
+    t.integer "user_id", null: false
     t.integer "membership_id", null: false
     t.integer "staff_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["membership_id"], name: "index_membership_histories_on_membership_id"
     t.index ["staff_id"], name: "index_membership_histories_on_staff_id"
+    t.index ["user_id"], name: "index_membership_histories_on_user_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -144,6 +146,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
   add_foreign_key "activity_plans", "activities"
   add_foreign_key "membership_histories", "memberships"
   add_foreign_key "membership_histories", "staffs"
+  add_foreign_key "membership_histories", "users"
   add_foreign_key "memberships", "staffs"
   add_foreign_key "memberships", "users"
   add_foreign_key "payments", "staffs"

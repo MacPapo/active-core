@@ -15,6 +15,11 @@
                   <strong>Data Scadenza:</strong>
                   <%= membership.end_date %>
               </p>
+
+              <p>
+                  <strong>Giorni alla scadenza:</strong>
+                  <%= membership.get_num_of_days_til_renewal %>
+              </p>
           </p>
       </div>
       <div class="card-footer text-body-secondary">

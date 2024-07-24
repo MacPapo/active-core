@@ -35,6 +35,11 @@
     </p>
 
     <p>
+        <strong>Convenzionato:</strong>
+        <%= user.affiliated ? 'Si' : 'No' %>
+    </p>
+
+    <p>
         <strong>Data rilascio certificato medico:</strong>
         <%= user.med_cert_issue_date.nil? ? 'Da inserire!' : user.med_cert_issue_date %>
     </p>

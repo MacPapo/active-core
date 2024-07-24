@@ -36,6 +36,7 @@ class Payment < ApplicationRecord
     end
   end
 
+  # TODO undo activation if payment is destroyed
   def activate_membership_or_subscription
       case payable_type
       when "Membership"

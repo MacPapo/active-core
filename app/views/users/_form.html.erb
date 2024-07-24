@@ -47,6 +47,11 @@
   </div>
 
   <div>
+    <%= form.label :affiliated, 'Convenzionato', style: "display: block" %>
+    <%= form.check_box :affiliated %>
+  </div>
+
+  <div>
       <%= form.label :legal_guardian_id, 'Tutore Legale', style: "display: block" %>
       <%= form.text_field :legal_guardian_id %>
   </div>

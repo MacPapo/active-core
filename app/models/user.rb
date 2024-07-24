@@ -6,14 +6,12 @@ class User < ApplicationRecord
   belongs_to :legal_guardian, optional: true
 
   has_one :staff, dependent: :destroy
-
   has_one :membership, dependent: :destroy
-  accepts_nested_attributes_for :membership
 
   has_many :subscriptions, dependent: :destroy
   has_many :payments, through: :subscriptions
 
-  validates :cf, :name, :surname, :date_of_birth, presence: true
+  validates :name, :surname, :date_of_birth, presence: true
   validates :affiliated, inclusion: { in: [ true, false ] }
 
   validates :legal_guardian, presence: true, if: :minor?
@@ -53,9 +51,11 @@ class User < ApplicationRecord
 
     if self.minor? && self.legal_guardian
 
-      if self.med_cert_issue_date.nil?
+      if self.med_cert_issue_date.nil? || (self.cf.nil? || self.cf.empty?)
         compliance[:status] = false
-        compliance[:errors] << 'Certificato medico mancante'
+
+        compliance[:errors] << 'Certificato medico mancante' if self.med_cert_issue_date.nil?
+        compliance[:errors] << 'Codice fiscale mancante' if self.cf.nil? || self.cf.empty?
       end
 
       return compliance
@@ -63,6 +63,7 @@ class User < ApplicationRecord
 
     compliance[:status] = false unless self.email && self.phone && self.med_cert_issue_date
 
+    compliance[:errors] << 'Codice fiscale mancante' if self.cf.nil? || self.cf.empty?
     compliance[:errors] << 'Email mancante' if self.email.nil? || self.email.empty?
     compliance[:errors] << 'Cellulare mancante' if self.phone.nil?
     compliance[:errors] << 'Certificato medico mancante' if self.med_cert_issue_date.nil?
@@ -123,4 +124,7 @@ class User < ApplicationRecord
   def is_membership_active?
     self.membership && self.membership.get_status == :attivo
   end
+
+  # TODO create a job that search all the users that are no longer minors and
+  # have a legal_guardian attached and nullify the relation.
 end

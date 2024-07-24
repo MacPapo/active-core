@@ -10,7 +10,7 @@ class Membership < ApplicationRecord
   belongs_to :staff
 
   has_many :membership_histories, dependent: :destroy
-  has_many :payments, as: :payable, dependent: :nullify
+  has_many :payments, as: :payable, dependent: :destroy
 
   enum status: [:inattivo, :attivo, :scaduto]
 

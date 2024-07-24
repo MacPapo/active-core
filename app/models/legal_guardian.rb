@@ -29,4 +29,7 @@ class LegalGuardian < ApplicationRecord
   def normalize_phone
     self.phone = Phonelib.parse(phone).full_e164.presence
   end
+
+  # TODO create a job that search all legal_guardians without users and deletes
+  # them
 end

@@ -17,6 +17,8 @@ class MembershipsController < ApplicationController
 
   # GET /memberships/1/edit
   def edit
+    @membership = Membership.find(params[:id])
+    @membership.start_date = Date.today
   end
 
   # POST /memberships or /memberships.json

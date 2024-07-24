@@ -20,6 +20,7 @@ class AddTriggersToSubscriptions < ActiveRecord::Migration[7.1]
       END;
     SQL
 
+    # TODO set after update on discarded_at (gem Discard)
     execute <<-SQL
       CREATE TRIGGER after_subscription_delete
       AFTER DELETE ON subscriptions
