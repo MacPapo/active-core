@@ -17,7 +17,7 @@ User.destroy_all
 Staff.destroy_all
 
 # Seed LegalGuardians
-10000.times do
+1000.times do
   LegalGuardian.create!(
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,

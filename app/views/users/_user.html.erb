@@ -1,54 +1,126 @@
-<div id="<%= dom_id user %>">
-    <p>
-        <strong>Codice Fiscale:</strong>
-        <%= user.cf %>
-    </p>
+<div class="card" id="<%= dom_id user %>">
+    <div class="card-header">
+        <h1 class="card-title">Dettagli Utente</h1>
+    </div>
+    <div class="card-body">
 
-    <p>
-        <strong>Nome:</strong>
-        <%= user.name %>
-    </p>
+        <!-- Personal Data -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <h5 class="card-subtitle mb-2">
+                    Nome e Cognome:
+                </h5>
+                <p class="card-text">
+                    <%= user.full_name %>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h5 class="card-subtitle mb-2">
+                    Data di Nascita:
+                </h5>
+                <p class="card-text">
+                    <%= user.date_of_birth %> (<%= user.age %> anni)
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h5 class="card-subtitle mb-2">
+                    Codice Fiscale
+                </h5>
+                <p class="card-text">
+                    <%= user.cf %>
+                </p>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <h5 class="card-subtitle mb-2">
+                    Email:
+                </h5>
+                <p class="card-text">
+                    <%= user.email.nil? ? 'Da inserire!' : user.email %>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h5 class="card-subtitle mb-2">
+                    Numero di Telefono:
+                </h5>
+                <p class="card-text">
+                    <%= user.phone.nil? ? 'Da inserire!' : user.phone %>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h5 class="card-subtitle mb-2">
+                    Utente convenzionato:
+                </h5>
+                <% affiliated = user.affiliated %>
+                <span class="badge text-bg-<%= affiliated ? 'success' : 'warning' %>"><%= affiliated ? 'Si' : 'No' %></span>
+            </div>
+        </div>
 
-    <p>
-        <strong>Cognome:</strong>
-        <%= user.surname %>
-    </p>
+        <% if user.membership %>
+            <hr/>
 
-    <p>
-        <strong>Email:</strong>
-        <%= user.email.nil? ? 'Da inserire!' : user.email %>
-    </p>
+            <!-- TODO restile this card and add the buttons to renew the memb -->
+            <div>
+                <h5 class="card-subtitle-mb-3">
+                    Data Iscrizione alla palestra:
+                </h5>
+                <% membership = user.membership %>
+                <p class="cart-text">
+                    <% start_date = membership.start_date %>
+                    <% end_date = membership.end_date %>
 
-    <p>
-        <strong>Cellulare:</strong>
-        <%= user.phone.nil? ? 'Da inserire!' : user.phone %>
-    </p>
+                    <% days = membership.get_num_of_days_til_renewal %>
+                    <%= "Data iscrizione: #{start_date} (#{days} #{days == 1 ? 'giorno' : 'giorni' } alla scadenza)" %>
+                    <%= "Data fine: #{end_date}" %>
 
-    <p>
-        <strong>Data di nascita:</strong>
-        <%= user.date_of_birth %>
-    </p>
+                    <%= "status: #{membership.status}" %>
+                </p>
+            </div>
+        <% end %>
 
-    <p>
-        <strong>Eta':</strong>
-        <%= user.age %> anni
-    </p>
+        <hr/>
 
-    <p>
-        <strong>Convenzionato:</strong>
-        <%= user.affiliated ? 'Si' : 'No' %>
-    </p>
+        <!-- Cert med -->
+        <div>
+            <h5 class="card-subtitle-mb-3">
+                Data rilascio certificato medico:
+            </h5>
+            <p class="cart-text">
+                <% start_date = user.med_cert_issue_date %>
 
-    <p>
-        <strong>Data rilascio certificato medico:</strong>
-        <%= user.med_cert_issue_date.nil? ? 'Da inserire!' : user.med_cert_issue_date %>
-    </p>
+                <% if start_date.nil? %>
+                    <span class="badge text-bg-warning">Da inserire!</span>
+                <% else %>
+                    <% days = user.get_num_of_days_til_med_cert_expire %>
+                    <%= "#{start_date} (#{days} #{days == 1 ? 'giorno' : 'giorni' } alla scadenza)" %>
+                <% end %>
+            </p>
+        </div>
 
-    <% if user.minor? %>
-        <p>
-            <strong>Tutore legale:</strong>
-            <%= user.legal_guardian.nil? ? 'Da inserire!' : user.legal_guardian.full_name %>
-        </p>
-    <% end %>
+        <% if user.legal_guardian %>
+            <hr/>
 
+            <!-- Legal Guardian -->
+            <div>
+                <% lg = user.legal_guardian %>
+                <h5 class="card-subtitle-mb-3">
+                    Tutore Legale:
+                </h5>
+                <div class="list-group">
+                    <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'list-group-item list-group-item-action' %>
+                </div>
+            </div>
+        <% end %>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer bg-light">
+        <div class="d-flex justify-content-end">
+            <%= link_to "Modifica questo utente", edit_user_path(user), class: 'btn btn-warning me-2' %>
+            <%#= link_to "Back to users", users_path %>
+            <%= button_to "Elimina questo utente", user, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>
+        </div>
+    </div>
 </div>
