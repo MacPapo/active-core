@@ -8,13 +8,16 @@ class Subscription < ApplicationRecord
   belongs_to :staff
   belongs_to :activity
   belongs_to :activity_plan
+  belongs_to :open_subscription, class_name: 'Subscription', optional: true
+
+  has_one :linked_subscription, class_name: 'Subscription', foreign_key: :open_subscription_id, dependent: :nullify
 
   has_many :subscription_histories, dependent: :destroy
-  has_many :payments, as: :payable, dependent: :nullify
+  has_many :payments, as: :payable, dependent: :destroy
 
   enum status: [:inattivo, :attivo, :scaduto]
 
-  validates :start_date, :activity, :activity_plan, :user, :staff, presence: true
+  validates :start_date, :activity, :activity_plan, :open, :user, :staff, presence: true
   validate :annual_membership_paid?, if: :activity_subscription?
 
   scope :active, -> { where(status: :attivo) }
@@ -25,6 +28,37 @@ class Subscription < ApplicationRecord
 
   def get_status
     self.status.to_sym
+  end
+
+  def self.create_open_subscription(user, staff, course_activity, course_plan, open_activity, open_plan, start_date, end_date)
+    return false if course_activity.name.downcase == "sala pesi"
+
+    transaction do
+      course_subscription = create!(
+        user: user,
+        activity: course_activity,
+        activity_plan: course_plan,
+        staff: staff,
+        start_date: start_date,
+        open: true
+      )
+
+      open_subscription = create!(
+        user: user,
+        activity: open_activity,
+        activity_plan: open_plan,
+        staff: staff, # Supponiamo che sia assegnato il primo staff disponibile
+        start_date: start_date,
+        open: true,
+        open_subscription_id: course_subscription.id
+      )
+
+      course_subscription.update!(open_subscription: open_subscription)
+
+      [course_subscription, open_subscription]
+    end
+  rescue ActiveRecord::RecordInvalid => e
+    false
   end
 
   private
