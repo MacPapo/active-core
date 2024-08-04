@@ -1,12 +1,47 @@
-<h1>Attività</h1>
-
-<div id="activities">
-  <% @activities.each do |activity| %>
-    <%= render activity %>
-    <p>
-      <%= link_to "Show this activity", activity %>
-    </p>
-  <% end %>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Attività</h1>
+    <%= link_to new_activity_path, class: 'btn btn-success' do %>
+    <i class="bi bi-activity"></i> Aggiungi Attività
+    <% end %>
 </div>
 
-<%= link_to "New activity", new_activity_path %>
+<div id="activities">
+    <table class="table">
+        <tr>
+            <th>Nome</th>
+            <th>Numero partecipanti</th>
+            <th>Azioni</th>
+        </tr>
+        <% @activities.each do |activity| %>
+        <tr>
+            <!-- Name -->
+            <td>
+                <%= activity.name %>
+            </td>
+
+            <!-- TODO Number  -->
+            <td>
+                2
+            </td>
+
+            <!-- Action buttons -->
+            <td>
+                <%= link_to activity_path(activity), class: 'btn btn-primary' do %>
+                    <i class="bi bi-eye-fill"></i>
+                <% end %>
+
+                <%= link_to edit_activity_path(activity), class: 'btn btn-warning' do %>
+                    <i class="bi bi-pencil-fill"></i>
+                <% end %>
+
+                <% if current_staff.admin? %>
+                    <%= button_to activity_path(activity), class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+                    <i class="bi bi-trash3-fill"></i>
+                  <% end %>
+                <% end %>
+            </td>
+        </tr>
+        <% end %>
+    </table>
+    <%== pagy_bootstrap_nav(@pagy) %>
+</div>
