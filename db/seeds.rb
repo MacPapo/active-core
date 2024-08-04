@@ -65,10 +65,27 @@ puts "Normal Users Added"
 
 # Seed Activities
 30.times do
-  Activity.create!(
+  ac = Activity.create!(
     name: Faker::Sport.unique.sport
   )
+
+  ActivityPlan.create!(
+    plan: :one_month,
+    activity: ac,
+    cost: 55.0
+  )
 end
+
+# Seed 'sala pesi'
+sala = Activity.create!(
+  name: 'Sala pesi'
+)
+
+ActivityPlan.create!(
+  plan: :one_month,
+  activity: sala,
+  cost: 55.0
+)
 
 puts "Activities Added"
 
