@@ -13,9 +13,11 @@
 ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
+    t.integer "num_participants", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_activities_on_name", unique: true
+    t.index ["num_participants"], name: "index_activities_on_num_participants"
   end
 
   create_table "activity_plans", force: :cascade do |t|

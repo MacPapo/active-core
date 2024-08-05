@@ -27,7 +27,7 @@ class ActivityPlan < ApplicationRecord
       "1/2 Mese"
     when "one_month"
       "1 Mese"
-    when "three_month"
+    when "three_months"
       "3 Mesi"
     when "one_year"
       "1 Anno"

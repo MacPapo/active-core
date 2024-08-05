@@ -24,8 +24,14 @@
                     Numero partecipanti
                 </h5>
                 <p class="card-text">
-                    2/30
-                    <%# activity.number %>
+                    <!-- TODO calculate only active sub -->
+                    <% partecipants = activity.subscriptions %>
+                    <% npartecipants = activity.num_participants %>
+
+                    <% if partecipants %>
+                        <% plen = partecipants.length %>
+                        <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
+                    <% end %>
                 </p>
             </div>
         </div>
@@ -65,14 +71,14 @@
 
                                     <!-- Cost -->
                                     <td>
-                                        <%= plan.cost %> €
+                                        € <%= plan.cost %>
                                     </td>
 
                                     <!-- Affiliated cost -->
                                     <td>
                                         <% cst = plan.affiliated_cost %>
                                         <% if cst %>
-                                            <%= cst %> €
+                                            € <%= cst %>
                                         <% end %>
                                     </td>
 

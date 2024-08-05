@@ -21,7 +21,14 @@
 
             <!-- TODO Number  -->
             <td>
-                2
+                <!-- TODO calculate only active sub -->
+                <% partecipants = activity.subscriptions %>
+                <% npartecipants = activity.num_participants %>
+
+                <% if partecipants %>
+                    <% plen = partecipants.length %>
+                    <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
+                <% end %>
             </td>
 
             <!-- Action buttons -->

@@ -12,17 +12,26 @@
     <% end %>
 
     <div>
-        <%= form.label :plan, style: "display: block" %>
-        <%= form.text_field :plan %>
+        <%= form.label :plan, 'Piano', style: "display: block" %>
+        <%= form.select :plan,
+            [
+                ["1 Entrata", :one_entrance],
+                ["1/2 Mese", :half_month],
+                ["1 Mese", :one_month],
+                ["1 Mese, 1 volta a settimana", :one_month_one_lesson],
+                ["1 Mese, 2 volta a settimana", :one_month_two_lessons],
+                ["3 Mesi", :three_months],
+                ["1 Anno", :one_year],
+            ] %>
     </div>
 
     <div>
-        <%= form.label :cost, style: "display: block" %>
+        <%= form.label :cost, 'Costo', style: "display: block" %>
         <%= form.text_field :cost %>
     </div>
 
     <div>
-        <%= form.label :affiliated_cost, style: "display: block" %>
+        <%= form.label :affiliated_cost, 'Costo convenzionato', style: "display: block" %>
         <%= form.text_field :affiliated_cost %>
     </div>
 
