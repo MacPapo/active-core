@@ -24,7 +24,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     respond_to do |format|
       if @user.save
-        format.html { redirect_to new_membership_path(user_id: @user.id, staff_id: current_staff), notice: "L'utente e' stato correttamente creato." }
+        format.html { redirect_to new_membership_path(user_id: @user.id, staff_id: current_staff), notice: "L'utente è stato correttamente creato." }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +39,7 @@ class UsersController < ApplicationController
       p user_params
       res = @user.update(user_params)
       if res
-        format.html { redirect_to user_url(@user), notice: "L'utente e' stato correttamente aggiornato." }
+        format.html { redirect_to user_url(@user), notice: "L'utente è stato correttamente aggiornato." }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -53,7 +53,7 @@ class UsersController < ApplicationController
     @user.destroy!
 
     respond_to do |format|
-      format.html { redirect_to users_url, notice: "L'utente e' stato correttamente eliminato." }
+      format.html { redirect_to users_url, notice: "L'utente è stato correttamente eliminato." }
       format.json { head :no_content }
     end
   end

@@ -1,0 +1,34 @@
+<%= form_with(model: activity_plan) do |form| %>
+    <% if activity_plan.errors.any? %>
+        <div style="color: red">
+            <h2><%= pluralize(activity_plan.errors.count, "error") %> prohibited this activity_plan from being saved:</h2>
+
+            <ul>
+                <% activity_plan.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div>
+        <%= form.label :plan, style: "display: block" %>
+        <%= form.text_field :plan %>
+    </div>
+
+    <div>
+        <%= form.label :cost, style: "display: block" %>
+        <%= form.text_field :cost %>
+    </div>
+
+    <div>
+        <%= form.label :affiliated_cost, style: "display: block" %>
+        <%= form.text_field :affiliated_cost %>
+    </div>
+
+    <%= form.hidden_field :activity_id %>
+
+    <div>
+        <%= form.submit %>
+    </div>
+<% end %>

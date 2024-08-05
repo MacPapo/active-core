@@ -131,8 +131,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.date "start_date", null: false
     t.date "end_date", null: false
     t.integer "status", default: 0, null: false
+    t.boolean "open", default: false
     t.integer "user_id", null: false
-    t.integer "activity_id"
+    t.integer "activity_id", null: false
     t.integer "activity_plan_id", null: false
     t.integer "staff_id", null: false
     t.datetime "created_at", null: false

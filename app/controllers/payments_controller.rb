@@ -26,7 +26,7 @@ class PaymentsController < ApplicationController
 
     respond_to do |format|
       if @payment.save
-        format.html { redirect_to payment_url(@payment), notice: "Il pagamento e' stato registrato con successo." }
+        format.html { redirect_to payment_url(@payment), notice: "Il pagamento è stato registrato con successo." }
         format.json { render :show, status: :created, location: @payment }
       else
         format.html { render :new, status: :unprocessable_entity }

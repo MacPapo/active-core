@@ -17,7 +17,7 @@ class Subscription < ApplicationRecord
 
   enum status: [:inattivo, :attivo, :scaduto]
 
-  validates :start_date, :activity, :activity_plan, :open, :user, :staff, presence: true
+  validates :start_date, :activity, :activity_plan, :user, :staff, presence: true
   validate :annual_membership_paid?, if: :activity_subscription?
 
   scope :active, -> { where(status: :attivo) }

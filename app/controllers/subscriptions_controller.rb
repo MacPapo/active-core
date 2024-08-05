@@ -43,7 +43,7 @@ class SubscriptionsController < ApplicationController
       )
 
       if course_subscription && open_subscription
-        redirect_to new_payment_path(payable_type: 'Subscription', payable_id: course_subscription.id, staff: current_staff), notice: "L'iscrizione e' andata a buon fine."
+        redirect_to new_payment_path(payable_type: 'Subscription', payable_id: course_subscription.id, staff: current_staff), notice: "L'iscrizione è andata a buon fine."
       else
         render :new, status: :unprocessable_entity
       end
@@ -53,7 +53,7 @@ class SubscriptionsController < ApplicationController
       @subscription = Subscription.new(subscription_params)
 
       if @subscription.save
-        redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription.id, staff: current_staff), notice: "L'iscrizione e' andata a buon fine."
+        redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription.id, staff: current_staff), notice: "L'iscrizione è andata a buon fine."
       else
         render :new, status: :unprocessable_entity
       end

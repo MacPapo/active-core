@@ -2,16 +2,18 @@ Rails.application.routes.draw do
   devise_for :staffs
 
   authenticated :staff, -> { _1.admin? } do
-    resources :legal_guardians
+    # TODO delete this
     resources :membership_histories
     resources :subscription_histories
   end
 
   resources :memberships
+  resources :legal_guardians
   resources :payments
   resources :staffs
   resources :subscriptions
   resources :activities
+  resources :activity_plans
   resources :users
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

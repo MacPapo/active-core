@@ -26,7 +26,7 @@ class MembershipsController < ApplicationController
     @membership = Membership.new(membership_params)
 
     if @membership.save
-      redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id, staff_id: current_staff), notice: "La Quota associativa e' stata correttamente creata."
+      redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id, staff_id: current_staff), notice: "La Quota associativa è stata correttamente creata."
     else
       render :new, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class MembershipsController < ApplicationController
   # PATCH/PUT /memberships/1 or /memberships/1.json
   def update
     if @membership.update(membership_params)
-      redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id, staff_id: current_staff), notice: "La Quota associativa e' stata correttamente aggiornata."
+      redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id, staff_id: current_staff), notice: "La Quota associativa è stata correttamente aggiornata."
     else
       render :edit, status: :unprocessable_entity
     end
