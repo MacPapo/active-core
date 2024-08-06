@@ -1,20 +1,20 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="mb-0">Utenti</h1>
+    <h1 class="mb-0"><%= t 'global.user' %></h1>
     <%= link_to new_user_path, class: 'btn btn-success' do %>
-        <i class="bi bi-person-fill-add"></i> Aggiungi Utente
+        <i class="bi bi-person-fill-add"></i> <%= t '.add_user' %>
     <% end %>
 </div>
 
 <div id="users">
     <table class="table">
         <tr>
-            <th>Stato</th>
-            <th>Nome </th>
-            <th>Cognome</th>
-            <th>Data Nascita</th>
-            <th>Convenzionato</th>
-            <th>Quota Associativa</th>
-            <th>Azioni</th>
+            <th><%= t 'global.table.status' %></th>
+            <th><%= t 'global.table.name' %></th>
+            <th><%= t 'global.table.surname' %></th>
+            <th><%= t 'global.table.birth' %></th>
+            <th><%= t 'global.table.affiliated' %></th>
+            <th><%= t 'global.table.membership' %></th>
+            <th><%= t 'global.table.action' %></th>
         </tr>
         <% @users.each do |user| %>
             <tr>

@@ -13,17 +13,17 @@
             <!-- Sidebar Links -->
             <div class="list-group list-group-flush">
                 <%= link_to users_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                    <i class="bi bi-people-fill me-2"></i> Utenti
+                    <i class="bi bi-people-fill me-2"></i> <%= t('global.user') %>
                 <% end %>
 
                 <% if current_staff && current_staff.admin? %>
                     <%= link_to staffs_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                        <i class="bi bi-person-workspace me-2"></i> Staff
+                        <i class="bi bi-person-workspace me-2"></i> <%= t('global.staff') %>
                     <% end %>
                 <% end %>
 
                 <%= link_to activities_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                    <i class="bi bi-activity me-2"></i> Attività
+                    <i class="bi bi-activity me-2"></i> <%= t('global.activity') %>
                 <% end %>
             </div>
         </div>

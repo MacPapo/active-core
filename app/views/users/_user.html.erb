@@ -1,15 +1,15 @@
 <div class="card" id="<%= dom_id user %>">
     <div class="card-header">
-        <h1 class="card-title">Dettagli Utente</h1>
+        <h1 class="card-title"><%= t '.user_detail' %></h1>
     </div>
     <div class="card-body">
-        <h3 class="card-subtitle mb-4">Anagrafica</h3>
+        <h3 class="card-subtitle mb-4"><%= t '.personal_data' %></h3>
 
         <!-- Personal Data -->
         <div class="row mb-4">
             <div class="col-md-4">
                 <h5 class="card-subtitle mb-2">
-                    Nome e Cognome:
+                    <%= t '.name_surname' %>
                 </h5>
                 <p class="card-text">
                     <%= user.full_name %>
@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-4">
                 <h5 class="card-subtitle mb-2">
-                    Data di Nascita:
+                    <%= t '.birth' %>
                 </h5>
                 <p class="card-text">
                     <%= user.date_of_birth %> (<%= user.age %> anni)
@@ -25,7 +25,7 @@
             </div>
             <div class="col-md-4">
                 <h5 class="card-subtitle mb-2">
-                    Codice Fiscale
+                    <%= t '.cf' %>
                 </h5>
                 <p class="card-text">
                     <%= user.cf %>
@@ -43,7 +43,7 @@
             </div>
             <div class="col-md-4">
                 <h5 class="card-subtitle mb-2">
-                    Numero di Telefono:
+                    <%= t '.phone' %>
                 </h5>
                 <p class="card-text">
                     <%= user.phone.nil? ? 'Da inserire!' : user.phone %>
@@ -51,11 +51,47 @@
             </div>
             <div class="col-md-4">
                 <h5 class="card-subtitle mb-2">
-                    Utente convenzionato:
+                    <%= t '.affiliated' %>
                 </h5>
                 <% affiliated = user.affiliated %>
                 <span class="badge text-bg-<%= affiliated ? 'success' : 'warning' %>"><%= affiliated ? 'Si' : 'No' %></span>
             </div>
+        </div>
+
+        <% if user.legal_guardian %>
+
+            <!-- Legal Guardian -->
+            <div>
+                <% lg = user.legal_guardian %>
+                <h3 class="card-subtitle mb-4">
+                    <%= t '.legal_guardian' %>
+                </h3>
+
+                <!-- TODO -->
+                <div class="list-group">
+                    <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'list-group-item list-group-item-action' %>
+                </div>
+            </div>
+        <% end %>
+
+        <hr/>
+
+        <!-- Cert med -->
+        <div>
+            <h3 class="card-subtitle mb-3">
+                <%= t '.med_cert' %>
+            </h3>
+            <p class="cart-text">
+                <% start_date = user.med_cert_issue_date %>
+
+                <% if start_date.nil? %>
+                    <span class="badge text-bg-warning"><%= t '.to_be_inserted' %></span>
+                <% else %>
+                    <!-- TODO pluralize -->
+                    <% days = user.get_num_of_days_til_med_cert_expire %>
+                    <%= "#{start_date} (#{days} #{days == 1 ? 'giorno' : 'giorni' } alla scadenza)" %>
+                <% end %>
+            </p>
         </div>
 
         <hr/>
@@ -63,7 +99,7 @@
         <!-- TODO restyle this card and add the buttons to renew the memb -->
         <div>
             <h3 class="card-subtitle mb-4">
-                Quota associativa:
+                <%= t '.membership' %>
             </h3>
 
             <% membership = user.membership %>
@@ -74,7 +110,7 @@
                     <div class="row mb-4">
                         <div class="col-md-4">
                             <h5 class="card-subtitle mb-2">
-                                Data inizio:
+                                <%= t '.start_date' %>
                             </h5>
                             <p class="card-text">
                                 <%= membership.start_date %>
@@ -82,7 +118,7 @@
                         </div>
                         <div class="col-md-4">
                             <h5 class="card-subtitle mb-2">
-                                Data scadenza:
+                                <%= t '.end_date' %>
                             </h5>
                             <p class="card-text">
                                 <% days_til_ren = membership.get_num_of_days_til_renewal %>
@@ -91,65 +127,27 @@
                         </div>
                         <div class="col-md-4">
                             <h5 class="card-subtitle mb-2">
-                                Codice Fiscale
+                                <%= t '.status' %>
                             </h5>
                             <p class="card-text">
-                                <%= user.cf %>
+                                <%= membership.status.humanize %>
                             </p>
                         </div>
                     </div>
-
-
-
-                    <%= "status: #{membership.status}" %>
                 </p>
 
             <% else %>
-                DIOCAN
+                <%= t '.to_be_inserted' %>
             <% end %>
 
         </div>
-
-        <hr/>
-
-        <!-- Cert med -->
-        <div>
-            <h5 class="card-subtitle mb-3">
-                Data rilascio certificato medico:
-            </h5>
-            <p class="cart-text">
-                <% start_date = user.med_cert_issue_date %>
-
-                <% if start_date.nil? %>
-                    <span class="badge text-bg-warning">Da inserire!</span>
-                <% else %>
-                    <% days = user.get_num_of_days_til_med_cert_expire %>
-                    <%= "#{start_date} (#{days} #{days == 1 ? 'giorno' : 'giorni' } alla scadenza)" %>
-                <% end %>
-            </p>
-        </div>
-
-        <% if user.legal_guardian %>
-            <hr/>
-
-            <!-- Legal Guardian -->
-            <div>
-                <% lg = user.legal_guardian %>
-                <h5 class="card-subtitle mb-3">
-                    Tutore Legale:
-                </h5>
-                <div class="list-group">
-                    <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'list-group-item list-group-item-action' %>
-                </div>
-            </div>
-        <% end %>
 
         <!-- Subscriptions -->
         <hr/>
 
         <div>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Iscrizioni</h5>
+                <h3 class="mb-0"><%= t '.subs' %></h3>
                 <%= link_to new_subscription_path(user_id: user, staff_id: current_staff), class: 'btn btn-success' do %>
                     <i class="bi bi-plus-circle-fill"></i> Aggiungi Iscrizione
                 <% end %>
@@ -157,13 +155,13 @@
             <% if user.subscriptions.length > 0 %>
                 <table class="table">
                     <tr>
-                        <th>Nome Attività</th>
-                        <th>Piano</th>
-                        <th>Data Inizio</th>
-                        <th>Data Scadenza</th>
-                        <th>OPEN</th>
-                        <th>Stato</th>
-                        <th>Azioni</th>
+                        <th><%= t 'global.table.activity' %></th>
+                        <th><%= t 'global.table.plan' %></th>
+                        <th><%= t 'global.table.start_date' %></th>
+                        <th><%= t 'global.table.end_date' %></th>
+                        <th><%= t 'global.table.open' %></th>
+                        <th><%= t 'global.table.status' %></th>
+                        <th><%= t 'global.table.action' %></th>
                     </tr>
                     <% user.subscriptions.each do |subscription| %>
                         <tr>
@@ -211,7 +209,10 @@
                                 <% end %>
 
                                 <% if current_staff.admin? %>
-                                    <%= button_to subscription_path(subscription), class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+                                    <%= button_to subscription_path(subscription),
+                                                  class: 'btn btn-danger',
+                                                  method: :delete,
+                                                  data: { turbo_confirm: "#{t('.del_sub')}" }, form: {style: 'display:inline-block;'} do %>
                                         <i class="bi bi-trash3-fill"></i>
                                     <% end %>
                                 <% end %>
@@ -221,7 +222,7 @@
                 </table>
 
             <% else %>
-                Nessuna iscrizione effettuata
+                <%= t '.no_subs' %>
             <% end %>
         </div>
 

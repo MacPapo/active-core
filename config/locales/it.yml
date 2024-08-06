@@ -1,0 +1,41 @@
+it:
+  global:
+    user: "Utenti"
+    staff: "Collaboratori"
+    activity: "Attività"
+
+    table:
+      activity: "Attività"
+      status: "Stato"
+      name: "Nome"
+      surname: "Cognome"
+      birth: "Data di Nascita"
+      affiliated: "Convenzionato"
+      membership: "Quota Associativa"
+      action: "Azioni"
+      plan: "Piano"
+      start_date: "Data inizio"
+      end_date: "Data scadenza"
+      open: "OPEN"
+
+  users:
+    index:
+      add_user: "Aggiungi Utente"
+    user:
+      user_detail: "Dettagli Utente"
+      personal_data: "Anagrafica"
+      name_surname: "Nome e Cognome:"
+      birth: "Data di Nascita:"
+      cf: "Codice Fiscale"
+      phone: "Numero di Telefono:"
+      affiliated: "Utente convenzionato:"
+      membership: "Quota Associativa"
+      to_be_inserted: "Da inserire"
+      status: "Stato"
+      start_date: "Data inizio:"
+      end_date: "Data scadenza:"
+      legal_guardian: "Tutore Legale"
+      med_cert: "Data rilascio certificato medico"
+      subs: "Iscrizioni"
+      del_sub: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile"
+      no_subs: "Nessuna iscrizione effettuata"
