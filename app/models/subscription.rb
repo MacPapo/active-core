@@ -8,7 +8,9 @@ class Subscription < ApplicationRecord
   belongs_to :staff
   belongs_to :activity
   belongs_to :activity_plan
-  belongs_to :open_activity, class_name: 'Activity', optional: true
+
+  # OPEN SUB
+  belongs_to :linked_subscription, class_name: 'Subscription', optional: true
 
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
@@ -31,6 +33,10 @@ class Subscription < ApplicationRecord
 
   def get_status
     self.status.to_sym
+  end
+
+  def open?
+    self.open
   end
 
   private

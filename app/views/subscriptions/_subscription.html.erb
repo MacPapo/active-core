@@ -1,27 +1,36 @@
 <div id="<%= dom_id subscription %>">
   <p>
-    <strong>Start:</strong>
-    <%= subscription.start %>
+    <strong>Data Inizio:</strong>
+    <%= subscription.start_date %>
   </p>
 
   <p>
-    <strong>End:</strong>
-    <%= subscription.end %>
+    <strong>Data Fine:</strong>
+    <%= subscription.end_date %>
   </p>
 
   <p>
-    <strong>User:</strong>
-    <%= subscription.user_id %>
+    <strong>Nome e cognome:</strong>
+    <%= subscription.user.full_name %>
   </p>
 
   <p>
-    <strong>Activity:</strong>
-    <%= subscription.activity_id %>
+    <strong>Attività:</strong>
+    <%= subscription.activity.name %>
   </p>
 
   <p>
-    <strong>Subscription type:</strong>
-    <%= subscription.subscription_type_id %>
+    <strong>Piano per questa attività:</strong>
+    <%= subscription.activity_plan.humanize_plan %>
+  </p>
+
+  <p>
+      <strong>OPEN:</strong>
+      <%= subscription.open %>
+  </p>
+  <p>
+      <strong>OPEN ACTV:</strong>
+      <%= subscription.linked_subscription %>
   </p>
 
   <p>

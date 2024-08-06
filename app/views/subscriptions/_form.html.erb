@@ -24,12 +24,12 @@
 
     <div>
         <%= form.label :activity_id, style: "display: block" %>
-        <%= form.collection_select :activity_id, Activity.all, :id, :name, { prompt: '' }, { data: { action: "change->plan#updatePlans" } } %>
+        <%= form.collection_select :activity_id, @activities, :id, :name, prompt: "Seleziona una Attività" %>
     </div>
 
     <div class="my-5">
         <%= form.label :activity_plan_id %>
-        <%= form.collection_select :activity_plan_id, ActivityPlan.none, :id, :title, {prompt: ''}, {data: {plan_target: 'plan'}} %>
+        <%= form.collection_select :activity_plan_id, @activity_plans, :id, :plan, prompt: "Seleziona un Piano per questa Attività" %>
     </div>
 
     <div>
@@ -37,8 +37,8 @@
         <%= form.check_box :open, class: 'form-check-input' %>
     </div>
 
-    <%= form.hidden_field :user_id %>
-    <%= form.hidden_field :staff_id %>
+    <%= form.hidden_field :user_id, value: @user.id %>
+    <%= form.hidden_field :staff_id, value: current_staff.id %>
 
     <div>
         <%= form.submit %>

@@ -9,7 +9,7 @@
 #   end
 
 # Clean up existing data to ensure idempotency
-# Activity.destroy_all
+Activity.destroy_all
 # Subscription.destroy_all
 # SubscriptionType.destroy_all
 LegalGuardian.destroy_all
@@ -66,7 +66,8 @@ puts "Normal Users Added"
 # Seed Activities
 30.times do
   ac = Activity.create!(
-    name: Faker::Sport.unique.sport
+    name: Faker::Sport.unique.sport,
+    num_participants: 30
   )
 
   ActivityPlan.create!(
@@ -78,7 +79,8 @@ end
 
 # Seed 'sala pesi'
 sala = Activity.create!(
-  name: 'Sala pesi'
+  name: 'SALA PESI',
+  num_participants: 99
 )
 
 ActivityPlan.create!(

@@ -1,5 +1,8 @@
 class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: %i[ show edit update destroy ]
+  before_action :set_user, only: %i[ edit update new create ]
+  before_action :set_staff, only: %i[ edit update new create ]
+  before_action :set_activities_and_plans, only: %i[ edit new update create]
 
   # GET /subscriptions
   def index
@@ -12,7 +15,7 @@ class SubscriptionsController < ApplicationController
 
   # GET /subscriptions/new
   def new
-    @subscription = Subscription.new
+    @subscription = @user.subscriptions.build
   end
 
   # GET /subscriptions/1/edit
@@ -21,42 +24,16 @@ class SubscriptionsController < ApplicationController
 
   # POST /subscriptions
   def create
-    # TODO update this
-    user = User.find(subscription_params[:user_id])
-    activity = Activity.find(subscription_params[:activity_id])
-    activity_plan = ActivityPlan.find(subscription_params[:activity_plan_id])
 
-    p subscription_params[:open]
-    if subscription_params[:open] == 'true'
-      open_activity = Activity.find_by(name: 'Sala Pesi')
-      open_plan = open_activity.activity_plans.find_by(plan: :one_month)
+    @subscription = @user.subscriptions.build(subscription_params)
+    # @subscription.staff = @staff TODO
 
-      course_subscription, open_subscription = Subscription.create_open_subscription(
-        user,
-        current_staff,
-        activity,
-        activity_plan,
-        open_activity,
-        open_plan,
-        subscription_params[:start_date],
-        subscription_params[:end_date]
-      )
+    if @subscription.save
+      create_open_subscription if @subscription.open?
 
-      if course_subscription && open_subscription
-        redirect_to new_payment_path(payable_type: 'Subscription', payable_id: course_subscription.id, staff: current_staff), notice: "L'iscrizione è andata a buon fine."
-      else
-        render :new, status: :unprocessable_entity
-      end
-
+      redirect_to @user, notice: 'Subscription was successfully created.'
     else
-
-      @subscription = Subscription.new(subscription_params)
-
-      if @subscription.save
-        redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription.id, staff: current_staff), notice: "L'iscrizione è andata a buon fine."
-      else
-        render :new, status: :unprocessable_entity
-      end
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -71,19 +48,67 @@ class SubscriptionsController < ApplicationController
 
   # DELETE /subscriptions/1
   def destroy
+    if @subscription.open? && @subscription.linked_subscription
+      lsub = @subscription.linked_subscription
+      lsub.update(linked_subscription_id: nil)
+      @subscription.update(linked_subscription_id: nil)
+      lsub.destroy!
+    end
+
     @subscription.destroy!
 
     redirect_to subscriptions_url, notice: "Subscription was successfully destroyed."
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_subscription
-      @subscription = Subscription.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_subscription
+    @subscription = Subscription.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def subscription_params
-      params.require(:subscription).permit(:start_date, :end_date, :user_id, :staff_id, :activity_id, :activity_plan_id, :open)
+  def set_user
+    @user = User.find(params[:user_id] || subscription_params[:user_id])
+  end
+
+  def set_staff
+    @staff = Staff.find(params[:staff_id] || subscription_params[:staff_id])
+  end
+
+  def set_activities_and_plans
+    @activities = Activity.all
+    @activity_plans = ActivityPlan.all
+  end
+
+  def create_open_subscription
+    Subscription.transaction do
+      weight_room_activity = Activity.find_by(name: 'SALA PESI')
+      weight_room_plan = weight_room_activity.activity_plans.find_by(plan: :one_month)
+
+      p @subscription
+      linked_subscription = @user.subscriptions.build(
+        activity: weight_room_activity,
+        activity_plan: weight_room_plan,
+        start_date: @subscription.start_date,
+        staff: @subscription.staff,
+        open: true,
+        linked_subscription: @subscription
+      )
+
+      p linked_subscription
+
+      if linked_subscription.save
+        @subscription.update(linked_subscription: linked_subscription)
+      else
+        @subscription.destroy
+        render :new, status: :unprocessable_entity
+      end
     end
+  rescue ActiveRecord::Rollback
+    render :new, status: :unprocessable_entity
+  end
+
+  # Only allow a list of trusted parameters through.
+  def subscription_params
+    params.require(:subscription).permit(:start_date, :end_date, :user_id, :staff_id, :activity_id, :activity_plan_id, :open)
+  end
 end
