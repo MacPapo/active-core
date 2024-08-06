@@ -55,9 +55,10 @@ class SubscriptionsController < ApplicationController
       lsub.destroy!
     end
 
+    user = @subscription.user
     @subscription.destroy!
 
-    redirect_to subscriptions_url, notice: "Subscription was successfully destroyed."
+    redirect_to user_url(user), notice: "Subscription was successfully destroyed."
   end
 
   private
@@ -84,7 +85,6 @@ class SubscriptionsController < ApplicationController
       weight_room_activity = Activity.find_by(name: 'SALA PESI')
       weight_room_plan = weight_room_activity.activity_plans.find_by(plan: :one_month)
 
-      p @subscription
       linked_subscription = @user.subscriptions.build(
         activity: weight_room_activity,
         activity_plan: weight_room_plan,
@@ -93,8 +93,6 @@ class SubscriptionsController < ApplicationController
         open: true,
         linked_subscription: @subscription
       )
-
-      p linked_subscription
 
       if linked_subscription.save
         @subscription.update(linked_subscription: linked_subscription)

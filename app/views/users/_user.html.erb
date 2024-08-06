@@ -3,6 +3,7 @@
         <h1 class="card-title">Dettagli Utente</h1>
     </div>
     <div class="card-body">
+        <h3 class="card-subtitle mb-4">Anagrafica</h3>
 
         <!-- Personal Data -->
         <div class="row mb-4">
@@ -57,33 +58,63 @@
             </div>
         </div>
 
-        <% if user.membership %>
-            <hr/>
+        <hr/>
 
-            <!-- TODO restile this card and add the buttons to renew the memb -->
-            <div>
-                <h5 class="card-subtitle-mb-3">
-                    Data Iscrizione alla palestra:
-                </h5>
-                <% membership = user.membership %>
+        <!-- TODO restyle this card and add the buttons to renew the memb -->
+        <div>
+            <h3 class="card-subtitle mb-4">
+                Quota associativa:
+            </h3>
+
+            <% membership = user.membership %>
+            <% if membership %>
+
                 <p class="cart-text">
-                    <% start_date = membership.start_date %>
-                    <% end_date = membership.end_date %>
 
-                    <% days = membership.get_num_of_days_til_renewal %>
-                    <%= "Data iscrizione: #{start_date} (#{days} #{days == 1 ? 'giorno' : 'giorni' } alla scadenza)" %>
-                    <%= "Data fine: #{end_date}" %>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <h5 class="card-subtitle mb-2">
+                                Data inizio:
+                            </h5>
+                            <p class="card-text">
+                                <%= membership.start_date %>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5 class="card-subtitle mb-2">
+                                Data scadenza:
+                            </h5>
+                            <p class="card-text">
+                                <% days_til_ren = membership.get_num_of_days_til_renewal %>
+                                <%= membership.end_date %> (<%= pluralize(days_til_ren, 'giorno') %>)
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5 class="card-subtitle mb-2">
+                                Codice Fiscale
+                            </h5>
+                            <p class="card-text">
+                                <%= user.cf %>
+                            </p>
+                        </div>
+                    </div>
+
+
 
                     <%= "status: #{membership.status}" %>
                 </p>
-            </div>
-        <% end %>
+
+            <% else %>
+                DIOCAN
+            <% end %>
+
+        </div>
 
         <hr/>
 
         <!-- Cert med -->
         <div>
-            <h5 class="card-subtitle-mb-3">
+            <h5 class="card-subtitle mb-3">
                 Data rilascio certificato medico:
             </h5>
             <p class="cart-text">
@@ -104,7 +135,7 @@
             <!-- Legal Guardian -->
             <div>
                 <% lg = user.legal_guardian %>
-                <h5 class="card-subtitle-mb-3">
+                <h5 class="card-subtitle mb-3">
                     Tutore Legale:
                 </h5>
                 <div class="list-group">
@@ -113,9 +144,90 @@
             </div>
         <% end %>
 
+        <!-- Subscriptions -->
+        <hr/>
+
+        <div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Iscrizioni</h5>
+                <%= link_to new_subscription_path(user_id: user, staff_id: current_staff), class: 'btn btn-success' do %>
+                    <i class="bi bi-plus-circle-fill"></i> Aggiungi Iscrizione
+                <% end %>
+            </div>
+            <% if user.subscriptions.length > 0 %>
+                <table class="table">
+                    <tr>
+                        <th>Nome Attività</th>
+                        <th>Piano</th>
+                        <th>Data Inizio</th>
+                        <th>Data Scadenza</th>
+                        <th>OPEN</th>
+                        <th>Stato</th>
+                        <th>Azioni</th>
+                    </tr>
+                    <% user.subscriptions.each do |subscription| %>
+                        <tr>
+                            <% activity = subscription.activity %>
+                            <% activity_plan = subscription.activity_plan %>
+
+                            <!-- Name -->
+                            <td>
+                                <%= activity.name %>
+                            </td>
+
+                            <!-- Plan -->
+                            <td>
+                                <%= activity_plan.humanize_plan %>
+                            </td>
+
+                            <!-- Start date -->
+                            <td>
+                                <%= subscription.start_date %>
+                            </td>
+
+                            <!-- End date -->
+                            <td>
+                                <%= subscription.end_date %>
+                            </td>
+
+                            <!-- OPEN? -->
+                            <td>
+                                <%= subscription.open? ? 'SI' : 'NO' %>
+                            </td>
+
+                            <!-- STATUS -->
+                            <td>
+                                <%= subscription.status %>
+                            </td>
+
+                            <!-- Action buttons -->
+                            <td>
+                                <%= link_to subscription_path(subscription), class: 'btn btn-primary' do %>
+                                    <i class="bi bi-eye-fill"></i>
+                                <% end %>
+
+                                <%= link_to edit_subscription_path(subscription), class: 'btn btn-warning' do %>
+                                    <i class="bi bi-pencil-fill"></i>
+                                <% end %>
+
+                                <% if current_staff.admin? %>
+                                    <%= button_to subscription_path(subscription), class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+                                        <i class="bi bi-trash3-fill"></i>
+                                    <% end %>
+                                <% end %>
+                            </td>
+                        </tr>
+                    <% end %>
+                </table>
+
+            <% else %>
+                Nessuna iscrizione effettuata
+            <% end %>
+        </div>
+
     </div>
 
-    <!-- Footer -->
+    <!-- Card Footer -->
     <div class="card-footer bg-light">
         <div class="d-flex justify-content-end">
             <%= link_to "Modifica questo utente", edit_user_path(user), class: 'btn btn-warning me-2' %>
