@@ -8,6 +8,7 @@ class CreateSubscriptions < ActiveRecord::Migration[7.1]
 
       t.references :user          , null: false, foreign_key: true
       t.references :activity      , null: false, foreign_key: true
+      t.references :open_activity , null: true,  foreign_key: true
       t.references :activity_plan , null: false, foreign_key: true
       t.references :staff         , null: false, foreign_key: true
 
