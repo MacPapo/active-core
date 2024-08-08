@@ -17,14 +17,12 @@
             <%= render "partials/sidebar" %>
 
             <!-- Content -->
-            <div class="content flex-grow-1 p-3">
-
+            <div class="content flex-grow-1 p-3" style="margin-left: 180px;">
                 <% flash.each do |type, msg| %>
                     <div class="alert alert-<%= type == 'alert' ? 'warning' : 'success' %> alert-dismissible fade show" role="alert">
                         <%= msg %>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-
                 <% end %>
 
                 <!-- Contents -->

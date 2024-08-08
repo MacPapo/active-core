@@ -1,8 +1,7 @@
 <%= form_with(model: activity_plan) do |form| %>
     <% if activity_plan.errors.any? %>
         <div style="color: red">
-            <h2><%= pluralize(activity_plan.errors.count, "error") %> prohibited this activity_plan from being saved:</h2>
-
+            <h2><%= t('global.forms.messages.errors', count: activity_plan.errors.count) %></h2>
             <ul>
                 <% activity_plan.errors.each do |error| %>
                     <li><%= error.full_message %></li>
@@ -12,7 +11,7 @@
     <% end %>
 
     <div>
-        <%= form.label :plan, 'Piano', style: "display: block" %>
+        <%= form.label :plan, style: "display: block" %>
         <%= form.select :plan,
             [
                 ["1 Entrata", :one_entrance],
@@ -26,12 +25,12 @@
     </div>
 
     <div>
-        <%= form.label :cost, 'Costo', style: "display: block" %>
+        <%= form.label :cost, style: "display: block" %>
         <%= form.text_field :cost %>
     </div>
 
     <div>
-        <%= form.label :affiliated_cost, 'Costo convenzionato', style: "display: block" %>
+        <%= form.label :affiliated_cost, style: "display: block" %>
         <%= form.text_field :affiliated_cost %>
     </div>
 

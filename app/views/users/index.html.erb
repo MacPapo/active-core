@@ -14,6 +14,7 @@
             <th><%= t 'global.table.birth' %></th>
             <th><%= t 'global.table.affiliated' %></th>
             <th><%= t 'global.table.membership' %></th>
+            <th><%= t 'global.table.activities' %></th>
             <th><%= t 'global.table.action' %></th>
         </tr>
         <% @users.each do |user| %>
@@ -107,6 +108,20 @@
 
                     <% end %>
 
+                </td>
+
+                <!-- Activities -->
+                <td>
+                    <!-- TODO -->
+                    <% subs = user.subscriptions %>
+                    <% subs.each do |sub| %>
+                        <% ac = sub.activity %>
+                        <%= button_to "#{ac.name}",
+                                      subscription_path(sub),
+                                      method: :get,
+                                      class: "btn badge rounded-pill text-bg-#{sub.open? ? 'secondary' : 'info' }"
+                        %>
+                    <% end %>
                 </td>
 
                 <!-- Action buttons -->

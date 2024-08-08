@@ -1,7 +1,7 @@
 <%= form_with(model: user) do |form| %>
     <% if user.errors.any? %>
         <div style="color: red">
-            <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+            <h2><%= t('global.forms.messages.errors', count: user.errors.count) %></h2>
 
             <ul>
                 <% user.errors.each do |error| %>
@@ -12,17 +12,17 @@
     <% end %>
 
     <div>
-        <%= form.label :cf, 'Codice Fiscale', class: 'form-label' %>
+        <%= form.label :cf, class: 'form-label' %>
         <%= form.text_field :cf, class: 'form-control' %>
     </div>
 
     <div>
-        <%= form.label :name, 'Nome', class: 'form-label' %>
+        <%= form.label :name, class: 'form-label' %>
         <%= form.text_field :name, required: true, class: 'form-control' %>
     </div>
 
     <div>
-        <%= form.label :surname, 'Cognome', class: 'form-label' %>
+        <%= form.label :surname, class: 'form-label' %>
         <%= form.text_field :surname, required: true, class: 'form-control' %>
     </div>
 
@@ -32,27 +32,27 @@
     </div>
 
     <div>
-        <%= form.label :phone, 'Cellulare', class: 'form-label' %>
+        <%= form.label :phone, class: 'form-label' %>
         <%= form.text_field :phone, class: 'form-control' %>
     </div>
 
     <div>
-        <%= form.label :date_of_birth, 'Data di Nascita', class: 'form-label' %>
+        <%= form.label :date_of_birth, class: 'form-label' %>
         <%= form.date_field :date_of_birth, class: 'form-control' %>
     </div>
 
     <div>
-        <%= form.label :med_cert_issue_date, 'Data rilascio certificato medico', class: 'form-label' %>
+        <%= form.label :med_cert_issue_date, class: 'form-label' %>
         <%= form.date_field :med_cert_issue_date, class: 'form-control' %>
     </div>
 
     <div>
-        <%= form.label :affiliated, 'Convenzionato', class: 'form-check-label' %>
+        <%= form.label :affiliated, class: 'form-check-label' %>
         <%= form.check_box :affiliated, class: 'form-check-input' %>
     </div>
 
     <div>
-        <%= form.label :legal_guardian_id, 'Tutore Legale', class: 'form-label' %>
+        <%= form.label :legal_guardian_id, class: 'form-label' %>
         <%= form.text_field :legal_guardian_id %>
     </div>
 

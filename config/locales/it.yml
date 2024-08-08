@@ -1,8 +1,83 @@
 it:
+
+  activerecord:
+    models:
+      user: "Utente"
+      legal_guardian: "Tutore Legale"
+      activity: "Attività"
+      activity_plan: "Piani per l'attività"
+      membership: "Quota Associativa"
+      subscription: "Iscrizione"
+      payemnt: "Pagamento"
+      staff: "Collaboratore"
+
+    attributes:
+      user:
+        cf: "Codice Fiscale"
+        name: "Nome"
+        surname: "Cognome"
+        email: "Email"
+        phone: "Numero di Telefono"
+        date_of_birth: "Data di Nascita"
+        med_cert_issue_date: "Data rilascio del Certificato Medico"
+        affiliated: "Convenzionato"
+        legal_guardian: "Tutore Legale"
+
+      legal_guardian:
+        name: "Nome"
+        surname: "Cognome"
+        email: "Email"
+        phone: "Numero di Telefono"
+        date_of_birth: "Data di Nascita"
+
+      activity:
+        name: "Nome Attività"
+        num_participants: "Numero massimo di partecipanti"
+
+      activity_plan:
+        plan: "Piano di iscrizione"
+        cost: "Costo"
+        affiliated_cost: "Costo per utenti Convenzionati"
+        activity: "Attività"
+
+      subscription:
+        start_date: "Data inizio"
+        end_date: "Data scadenza"
+        status: "Stato"
+        open: "Piano OPEN"
+        user: "Utente"
+        activity: "Attività"
+        activity_plan: "Piano per l'Attività"
+        staff: "Collaboratore"
+        linked_subscription: "Attività collegata (OPEN)"
+
+      subscription:
+        start_date: "Data inizio"
+        end_date: "Data scadenza"
+        status: "Stato"
+        user: "Utente"
+        staff: "Collaboratore"
+
+      payment:
+        amount: "Ammontare"
+        date: "Data pagamento"
+        payment_method: "Metodo di pagamento"
+        entry_type: "Tipo Movimento"
+        payed: "Pagato"
+        note: "Note eventuali"
+        staff: "Collaboratore"
+
   global:
     user: "Utenti"
     staff: "Collaboratori"
     activity: "Attività"
+    del_sub: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile"
+
+    forms:
+      messages:
+        errors:
+          one: "un errore ha proibito il salvataggio"
+          other: "%{count} errori hanno proibito il salvataggio"
 
     table:
       activity: "Attività"
@@ -12,6 +87,7 @@ it:
       birth: "Data di Nascita"
       affiliated: "Convenzionato"
       membership: "Quota Associativa"
+      activities: "Attività"
       action: "Azioni"
       plan: "Piano"
       start_date: "Data inizio"
@@ -37,5 +113,8 @@ it:
       legal_guardian: "Tutore Legale"
       med_cert: "Data rilascio certificato medico"
       subs: "Iscrizioni"
-      del_sub: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile"
       no_subs: "Nessuna iscrizione effettuata"
+
+  activities:
+    show:
+      no_subs: "Ancora nessun partecipante per questa Attività"

@@ -1,0 +1,87 @@
+<table class="table">
+    <tr>
+        <% if actv  %>
+            <th><%= t 'global.table.name' %></th>
+            <th><%= t 'global.table.surname' %></th>
+        <% else %>
+            <th><%= t 'global.table.activity' %></th>
+        <% end %>
+        <th><%= t 'global.table.plan' %></th>
+        <th><%= t 'global.table.start_date' %></th>
+        <th><%= t 'global.table.end_date' %></th>
+        <th><%= t 'global.table.open' %></th>
+        <th><%= t 'global.table.status' %></th>
+        <th><%= t 'global.table.action' %></th>
+    </tr>
+    <% subscriptions.each do |subscription| %>
+        <tr>
+
+            <% activity = subscription.activity %>
+            <% plan = subscription.activity_plan %>
+
+            <% if actv %>
+                <% user = subscription.user %>
+
+                <!-- User Name -->
+                <td>
+                    <%= user.name %>
+                </td>
+
+                <!-- User Surname -->
+                <td>
+                    <%= user.surname %>
+                </td>
+            <% else %>
+                <!-- Activity Name -->
+                <td>
+                    <%= activity.name %>
+                </td>
+            <% end %>
+
+            <!-- Plan -->
+            <td>
+                <%= plan.humanize_plan %>
+            </td>
+
+            <!-- Start date -->
+            <td>
+                <%= subscription.start_date %>
+            </td>
+
+            <!-- End date -->
+            <td>
+                <%= subscription.end_date %> (<%= pluralize(subscription.days_til_renewal, "giorno") %>)
+            </td>
+
+            <!-- OPEN? -->
+            <td>
+                <%= subscription.open? ? 'SI' : 'NO' %>
+            </td>
+
+            <!-- STATUS -->
+            <td>
+                <%= subscription.status %>
+            </td>
+
+            <!-- Action buttons -->
+            <td>
+                <%= link_to subscription_path(subscription), class: 'btn btn-primary' do %>
+                    <i class="bi bi-eye-fill"></i>
+                <% end %>
+
+                <%= link_to edit_subscription_path(subscription), class: 'btn btn-warning' do %>
+                    <i class="bi bi-pencil-fill"></i>
+                <% end %>
+
+                <% if current_staff.admin? %>
+                    <%= button_to subscription_path(subscription),
+                                  class: 'btn btn-danger',
+                                  method: :delete,
+                                  data: { turbo_confirm: "#{t('global.del_sub')}" }, form: {style: 'display:inline-block;'} do %>
+                        <i class="bi bi-trash3-fill"></i>
+                    <% end %>
+                <% end %>
+            </td>
+        </tr>
+    <% end %>
+</table>

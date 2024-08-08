@@ -1,1 +1,12 @@
 <%= render @activity %>
+
+<br/>
+
+<% if @activity.subscriptions && @activity.subscriptions.length > 0 %>
+    <%= render 'subscriptions/subscriptions_table',
+               subscriptions: @activity.subscriptions,
+               actv: true
+    %>
+<% else %>
+    <%= t '.no_subs' %>
+<% end %>

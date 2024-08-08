@@ -39,6 +39,12 @@ class Subscription < ApplicationRecord
     self.open
   end
 
+  def days_til_renewal
+    return -1 if self.start_date.nil? || self.end_date.nil?
+
+    (self.end_date - Date.today).to_i
+  end
+
   private
 
   def set_default_status
