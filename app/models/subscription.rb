@@ -23,12 +23,25 @@ class Subscription < ApplicationRecord
 
   scope :active, -> { where(status: :attivo) }
 
+  OPEN_COST = 30.0
+
   def cost
     self.activity_plan.cost
   end
 
   def affiliated_cost
     self.activity_plan.affiliated_cost
+  end
+
+  def get_cost
+    acost =
+      if self.user.affiliated? && affiliated_cost
+        affiliated_cost
+      else
+        cost
+      end
+
+    open? ? acost + OPEN_COST : acost
   end
 
   def get_status

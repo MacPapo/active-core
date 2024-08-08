@@ -42,7 +42,7 @@
 
   <%= form.hidden_field :payable_type %>
   <%= form.hidden_field :payable_id %>
-  <%= form.hidden_field :staff_id %>
+  <%= form.hidden_field :staff_id, value: current_staff.id %>
 
   <div class="actions">
       <%= form.submit %>

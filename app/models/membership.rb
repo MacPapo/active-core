@@ -16,10 +16,10 @@ class Membership < ApplicationRecord
 
   validates :start_date, presence: true
 
-  COST = 35.0
+  MEMBERSHIP_COST = 35.0
 
-  def cost
-    COST
+  def get_cost
+    MEMBERSHIP_COST
   end
 
   def get_status

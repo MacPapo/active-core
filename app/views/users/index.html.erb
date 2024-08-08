@@ -74,7 +74,7 @@
 
                         <%= button_to "#{membership_phrase}",
                                       new_membership_path,
-                                      params: { user_id: user.id, staff_id: current_staff },
+                                      params: { user_id: user.id },
                                       method: :get,
                                       class: "btn badge rounded-pill text-bg-#{membership_color}" %>
 
@@ -84,7 +84,7 @@
 
                         <%= button_to "#{membership_phrase}",
                                       new_payment_path,
-                                      params: { payable_type: 'Membership', payable_id: user.membership.id, staff_id: current_staff },
+                                      params: { payable_type: 'Membership', payable_id: user.membership.id },
                                       method: :get,
                                       class: "btn badge rounded-pill text-bg-#{membership_color}" %>
 

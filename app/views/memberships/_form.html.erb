@@ -11,15 +11,15 @@
         </div>
     <% end %>
 
-    <%= form.hidden_field :user_id %>
-    <%= form.hidden_field :staff_id %>
-
     <div>
         <!-- TODO i18n -->
         <% start_date_phrase = @membership.id ? 'Data Rinnovo' : 'Data Iscrizione' %>
         <%= form.label :start_date, "#{start_date_phrase}", style: "display: block" %>
         <%= form.date_field :start_date %>
     </div>
+
+    <%= form.hidden_field :user_id, value: @user.id %>
+    <%= form.hidden_field :staff_id, value: current_staff.id %>
 
     <div>
         <%= form.submit %>

@@ -25,17 +25,6 @@ class Payment < ApplicationRecord
     self.amount ||= amount_handler
   end
 
-  def amount_handler
-    case self.payable_type
-    when "Membership"
-      membership = Membership.find(self.payable_id)
-      membership.cost
-    when "Subscription"
-      subscription = Subscription.find(self.payable_id)
-      subscription.cost
-    end
-  end
-
   # TODO undo activation if payment is destroyed
   def activate_membership_or_subscription
       case payable_type

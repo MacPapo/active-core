@@ -31,6 +31,10 @@ class User < ApplicationRecord
     self.date_of_birth && self.date_of_birth > 18.year.ago.to_date
   end
 
+  def affiliated?
+    self.affiliated
+  end
+
   def get_date_of_birth
     self.date_of_birth.strftime('%d/%m/%Y')
   end

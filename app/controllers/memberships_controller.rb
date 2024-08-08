@@ -1,18 +1,19 @@
 class MembershipsController < ApplicationController
   before_action :set_membership, only: %i[ show edit update destroy ]
+  before_action :set_user, only: %i[ edit new ]
 
-  # GET /memberships or /memberships.json
+  # GET /memberships
   def index
     @memberships = Membership.all
   end
 
-  # GET /memberships/1 or /memberships/1.json
+  # GET /memberships/1
   def show
   end
 
   # GET /memberships/new
   def new
-    @membership = Membership.new(user_id: params[:user_id], staff_id: params[:staff_id])
+    @membership = @user.build_membership
   end
 
   # GET /memberships/1/edit
@@ -21,18 +22,19 @@ class MembershipsController < ApplicationController
     @membership.start_date = Date.today
   end
 
-  # POST /memberships or /memberships.json
+  # POST /memberships
   def create
-    @membership = Membership.new(membership_params)
+    retrive_user(membership_params[:user_id])
+    @membership = @user.build_membership(membership_params)
 
     if @membership.save
-      redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id, staff_id: current_staff), notice: "La Quota associativa è stata correttamente creata."
+      redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id), notice: "La Quota associativa è stata correttamente creata."
     else
       render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /memberships/1 or /memberships/1.json
+  # PATCH/PUT /memberships/1
   def update
     if @membership.update(membership_params)
       redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id, staff_id: current_staff), notice: "La Quota associativa è stata correttamente aggiornata."
@@ -41,20 +43,25 @@ class MembershipsController < ApplicationController
     end
   end
 
-  # DELETE /memberships/1 or /memberships/1.json
+  # DELETE /memberships/1
   def destroy
     @membership.destroy!
 
-    respond_to do |format|
-      format.html { redirect_to memberships_url, notice: "Membership was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to memberships_url, notice: "Membership was successfully destroyed."
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_membership
       @membership = Membership.find(params[:id])
+    end
+
+    def set_user
+      @user = User.find(params[:user_id])
+    end
+
+    def retrive_user(id)
+      @user = User.find(id)
     end
 
     # Only allow a list of trusted parameters through.
