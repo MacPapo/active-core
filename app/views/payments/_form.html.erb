@@ -1,50 +1,57 @@
 <%= form_with(model: payment) do |form| %>
-  <% if payment.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= t('global.forms.messages.errors', count: payment.errors.count) %></h2>
-      <ul>
-        <% payment.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+    <% if payment.errors.any? %>
+        <div id="error_explanation">
+            <h2><%= t('global.forms.messages.errors', count: payment.errors.count) %></h2>
+            <ul>
+                <% payment.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :date, class: 'form-label' %>
+                <%= form.date_field :date, default: payment.date, class: 'form-control' %>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :amount, class: 'form-label' %>
+                <%= form.number_field :amount, value: payment.amount, class: 'form-control', step: 'any' %>
+            </div>
+        </div>
     </div>
-  <% end %>
 
-  <div class="field">
-    <%= form.label :amount %>
-    <%= form.number_field :amount, value: payment.amount %>
-  </div>
+    <div class="mb-3">
+        <%= form.label :payment_method, class: 'form-label' %>
+        <%= form.select :payment_method, Payment.humanize_payment_methods, {}, { class: 'form-select', selected: payment.payment_method } %>
+    </div>
 
-  <div class="field">
-    <%= form.label :date %>
-    <%= form.date_select :date, default: payment.date %>
-  </div>
+    <% if current_staff.admin? %>
+        <div class="mb-3">
+            <%= form.label :entry_type, class: 'form-label' %>
+            <%= form.select :entry_type, Payment.humanize_entry_types, {}, { class: 'form-select', selected: payment.entry_type } %>
+        </div>
+    <% end %>
 
-  <div class="field">
-    <%= form.label :payment_method %>
-    <%= form.select :payment_method, Payment.payment_methods.keys.map { |method| [method.humanize, method] }, selected: payment.payment_method %>
-  </div>
+    <div class="form-check mb-3">
+        <%= form.check_box :payed, checked: payment.payed, class: 'form-check-input' %>
+        <%= form.label :payed, class: 'form-check-label' %>
+    </div>
 
-  <div class="field">
-    <%= form.label :entry_type %>
-    <%= form.select :entry_type, Payment.entry_types.keys.map { |type| [type.humanize, type] }, selected: payment.entry_type %>
-  </div>
+    <div class="mb-3">
+        <%= form.label :note, class: 'form-label' %>
+        <%= form.text_area :note, value: payment.note, class: 'form-control' %>
+    </div>
 
-  <div class="field">
-    <%= form.label :payed %>
-    <%= form.check_box :payed, checked: payment.payed %>
-  </div>
+    <%= form.hidden_field :payable_type %>
+    <%= form.hidden_field :payable_id %>
+    <%= form.hidden_field :staff_id, value: current_staff.id %>
 
-  <div class="field">
-    <%= form.label :note %>
-    <%= form.text_area :note, value: payment.note %>
-  </div>
-
-  <%= form.hidden_field :payable_type %>
-  <%= form.hidden_field :payable_id %>
-  <%= form.hidden_field :staff_id, value: current_staff.id %>
-
-  <div class="actions">
-      <%= form.submit %>
-  </div>
+    <div class="actions">
+        <%= form.submit class: 'btn btn-success w-100' %>
+    </div>
 <% end %>

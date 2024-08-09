@@ -19,24 +19,13 @@ class ActivityPlan < ApplicationRecord
     self.plan.to_sym
   end
 
-  def humanize_plan
-    case self.plan
-    when "one_entrance"
-      "1 Entrata"
-    when "half_month"
-      "1/2 Mese"
-    when "one_month"
-      "1 Mese"
-    when "three_months"
-      "3 Mesi"
-    when "one_year"
-      "1 Anno"
-    when "one_month_one_lesson"
-      "1 Mese, 1 volta a settimana"
-    when "one_month_two_lessons"
-      "1 Mese, 2 volte a settimana"
-    else
-      "Non definito"
+  def self.humanize_plans
+    plans.keys.map do |key|
+      [I18n.t("activemodel.enums.activity_plan.plan.#{key}"), key]
     end
+  end
+
+  def humanize_plan
+    I18n.t("activemodel.enums.activity_plan.plan.#{self.plan}")
   end
 end

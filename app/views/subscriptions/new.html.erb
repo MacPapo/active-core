@@ -1,9 +1,9 @@
-<h1>New subscription</h1>
+<div class="card">
+    <div class="card-header">
+        <h1><%= t '.title' %></h1>
+    </div>
 
-<%= render "form", subscription: @subscription %>
-
-<br>
-
-<div>
-  <%= link_to "Back to subscriptions", subscriptions_path %>
+    <div class="card-body">
+        <%= render "form", subscription: @subscription %>
+    </div>
 </div>

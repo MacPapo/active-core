@@ -1,9 +1,9 @@
-<h1>New activity</h1>
+<div class="card">
+    <div class="card-header">
+        <h1><%= t '.title' %></h1>
+    </div>
 
-<%= render "form", activity: @activity %>
-
-<br>
-
-<div>
-  <%= link_to "Back to activities", activities_path %>
+    <div class="card-body">
+        <%= render "form", activity: @activity %>
+    </div>
 </div>

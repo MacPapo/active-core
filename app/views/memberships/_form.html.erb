@@ -11,17 +11,16 @@
         </div>
     <% end %>
 
-    <div>
-        <!-- TODO i18n -->
-        <% start_date_phrase = @membership.id ? 'Data Rinnovo' : 'Data Iscrizione' %>
-        <%= form.label :start_date, "#{start_date_phrase}", style: "display: block" %>
-        <%= form.date_field :start_date %>
+    <div class="mb-3">
+        <%= form.label :start_date, class: 'form-label' %>
+        <%= form.date_field :start_date, class: 'form-control', data: { describedby: 'dateHelp' }, autofocus: true %>
+        <div id="dateHelp" class="form-text"><%= t '.date_help' %></div>
     </div>
 
     <%= form.hidden_field :user_id, value: @user.id %>
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 
     <div>
-        <%= form.submit %>
+        <%= form.submit class: 'btn btn-success w-100' %>
     </div>
 <% end %>

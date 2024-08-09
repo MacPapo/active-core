@@ -10,33 +10,28 @@
         </div>
     <% end %>
 
-    <div>
-        <%= form.label :plan, style: "display: block" %>
-        <%= form.select :plan,
-            [
-                ["1 Entrata", :one_entrance],
-                ["1/2 Mese", :half_month],
-                ["1 Mese", :one_month],
-                ["1 Mese, 1 volta a settimana", :one_month_one_lesson],
-                ["1 Mese, 2 volta a settimana", :one_month_two_lessons],
-                ["3 Mesi", :three_months],
-                ["1 Anno", :one_year],
-            ] %>
+    <div class="row mb-3">
+        <div>
+            <%= form.label :plan, class: 'form-label' %>
+            <%= form.select :plan, ActivityPlan.humanize_plans, {}, { class: 'form-select' } %>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <%= form.label :cost, class: 'form-label' %>
+            <%= form.number_field :cost, class: 'form-control', step: 'any', autofocus: true %>
+        </div>
+
+        <div class="col">
+            <%= form.label :affiliated_cost, class: 'form-label' %>
+            <%= form.number_field :affiliated_cost, class: 'form-control' %>
+        </div>
+
+        <%= form.hidden_field :activity_id %>
     </div>
 
     <div>
-        <%= form.label :cost, style: "display: block" %>
-        <%= form.text_field :cost %>
-    </div>
-
-    <div>
-        <%= form.label :affiliated_cost, style: "display: block" %>
-        <%= form.text_field :affiliated_cost %>
-    </div>
-
-    <%= form.hidden_field :activity_id %>
-
-    <div>
-        <%= form.submit %>
+        <%= form.submit class: 'btn btn-success w-100' %>
     </div>
 <% end %>

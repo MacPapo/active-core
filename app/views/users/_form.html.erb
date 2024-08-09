@@ -11,62 +11,68 @@
         </div>
     <% end %>
 
-    <div>
+    <div class="mb-3">
         <%= form.label :cf, class: 'form-label' %>
         <%= form.text_field :cf, class: 'form-control' %>
     </div>
 
-    <div>
-        <%= form.label :name, class: 'form-label' %>
-        <%= form.text_field :name, required: true, class: 'form-control' %>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :name, class: 'form-label' %>
+                <%= form.text_field :name, required: true, autofocus: true, class: 'form-control' %>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :surname, class: 'form-label' %>
+                <%= form.text_field :surname, required: true, class: 'form-control' %>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <%= form.label :surname, class: 'form-label' %>
-        <%= form.text_field :surname, required: true, class: 'form-control' %>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :date_of_birth, class: 'form-label' %>
+                <%= form.date_field :date_of_birth, class: 'form-control' %>
+            </div>
+        </div>
+        <div class="col">
+            <!-- TODO align center -->
+            <div class="form-check mb-3">
+                <%= form.check_box :affiliated, class: 'form-check-input' %>
+                <%= form.label :affiliated, class: 'form-check-label' %>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <%= form.label :email, class: 'form-label' %>
-        <%= form.text_field :email, class: 'form-control' %>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :email, class: 'form-label' %>
+                <%= form.text_field :email, class: 'form-control' %>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :phone, class: 'form-label' %>
+                <%= form.text_field :phone, class: 'form-control' %>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <%= form.label :phone, class: 'form-label' %>
-        <%= form.text_field :phone, class: 'form-control' %>
-    </div>
-
-    <div>
-        <%= form.label :date_of_birth, class: 'form-label' %>
-        <%= form.date_field :date_of_birth, class: 'form-control' %>
-    </div>
-
-    <div>
+    <div class="mb-3">
         <%= form.label :med_cert_issue_date, class: 'form-label' %>
         <%= form.date_field :med_cert_issue_date, class: 'form-control' %>
     </div>
 
-    <div>
-        <%= form.label :affiliated, class: 'form-check-label' %>
-        <%= form.check_box :affiliated, class: 'form-check-input' %>
-    </div>
-
-    <div>
+    <div class="mb-3">
         <%= form.label :legal_guardian_id, class: 'form-label' %>
-        <%= form.text_field :legal_guardian_id %>
+        <%= form.collection_select :legal_guardian_id, LegalGuardian.all, :id, :full_name, {}, { prompt: true, class: 'form-select' } %>
     </div>
 
-
-    <label for="exampleDataList" class="form-label">Datalist example</label>
-    <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
-    <datalist id="datalistOptions">
-        <% LegalGuardian.all.pluck(:id, :name, :surname).each do |id, name, surname| %>
-            <option value="<%= "#{name} #{surname}" %>">
-        <% end %>
-    </datalist>
-
-
-    <div>
-        <%= form.submit %>
+    <div class="actions">
+        <%= form.submit class: 'btn btn-success w-100' %>
     </div>
 <% end %>

@@ -1,5 +1,25 @@
 it:
 
+  activemodel:
+    enums:
+      payment:
+        payment_method:
+          pos: "POS"
+          contanti: "Contanti"
+          bonifico: "Bonifico"
+        entry_type:
+          entrata: "Entrata"
+          uscita: "Uscita"
+      activity_plan:
+        plan:
+          one_entrance: "1 Entrata"
+          half_month: "1/2 Mese"
+          one_month: "1 Mese"
+          three_months: "3 Mesi"
+          one_year: "1 Anno"
+          one_month_one_lesson: "1 Mese, 1 volta a settimana"
+          one_month_two_lessons: "1 Mese, 2 volte a settimana"
+
   activerecord:
     models:
       user: "Utente"
@@ -8,7 +28,7 @@ it:
       activity_plan: "Piani per l'attività"
       membership: "Quota Associativa"
       subscription: "Iscrizione"
-      payemnt: "Pagamento"
+      payment: "Pagamento"
       staff: "Collaboratore"
 
     attributes:
@@ -22,6 +42,7 @@ it:
         med_cert_issue_date: "Data rilascio del Certificato Medico"
         affiliated: "Convenzionato"
         legal_guardian: "Tutore Legale"
+        legal_guardian_id: "Tutore Legale"
 
       legal_guardian:
         name: "Nome"
@@ -51,12 +72,25 @@ it:
         staff: "Collaboratore"
         linked_subscription: "Attività collegata (OPEN)"
 
+      membership:
+        start_date: "Data inizio"
+        end_date: "Data scadenza"
+        status: "Stato"
+        user: "Utente"
+        staff: "Collaboratore"
+
       subscription:
         start_date: "Data inizio"
         end_date: "Data scadenza"
         status: "Stato"
         user: "Utente"
         staff: "Collaboratore"
+        activity: "Attività"
+        activity_plan: "Piano per questa Attività"
+
+        # TODO
+        activity_id: "Attività"
+        activity_plan_id: "Piano per questa Attività"
 
       payment:
         amount: "Ammontare"
@@ -115,6 +149,30 @@ it:
       subs: "Iscrizioni"
       no_subs: "Nessuna iscrizione effettuata"
 
+  memberships:
+    form:
+      date_help: "La DATA INIZIO si riferisce alla data in cui si vuole registrare la quota associativa."
+    new:
+      title: "Inserimento Quota Associativa"
+
   activities:
     show:
       no_subs: "Ancora nessun partecipante per questa Attività"
+    new:
+      title: "Inserimento Nuova Attività"
+
+  activity_plans:
+    new:
+      title: "Inserimento di un Nuovo Piano per questa Attività"
+
+  payments:
+    new:
+      title: "Inserimento di un Nuovo Pagamento"
+
+  subscriptions:
+    new:
+      title: "Inserimento di una Nuova Iscrizione"
+
+  users:
+    new:
+      title: "Inserimento di un Nuovo Utente"

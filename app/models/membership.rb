@@ -1,7 +1,6 @@
 class Membership < ApplicationRecord
   before_validation :set_end_date
 
-  after_initialize :set_default_status, if: :new_record?
   after_initialize :set_default_date, if: :new_record?
 
   after_save :validate_status
@@ -12,7 +11,7 @@ class Membership < ApplicationRecord
   has_many :membership_histories , dependent: :destroy
   has_many :payments             , as: :payable, dependent: :destroy
 
-  enum status: [:inattivo, :attivo, :scaduto]
+  enum :status, [ :inattivo, :attivo, :scaduto ], default: :inattivo
 
   validates :start_date, presence: true
 
@@ -35,10 +34,6 @@ class Membership < ApplicationRecord
   end
 
   private
-
-  def set_default_status
-    self.status ||= :inattivo
-  end
 
   def set_default_date
     self.start_date ||= Date.today

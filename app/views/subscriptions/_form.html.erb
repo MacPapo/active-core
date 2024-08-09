@@ -10,36 +10,45 @@
         </div>
     <% end %>
 
-    <div>
-        <%= form.label :start_date, style: "display: block" %>
-        <%= form.date_field :start_date %>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :start_date, class: 'form-label' %>
+                <%= form.date_field :start_date, class: 'form-control' %>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :end_date, class: 'form-label' %>
+                <%= form.date_field :end_date, class: 'form-control' %>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <%= form.label :end_date, style: "display: block" %>
-        <%= form.date_field :end_date %>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :activity_id, class: 'form-label' %>
+                <%= form.collection_select :activity_id, @activities, :id, :name, {}, { class: 'form-select' } %>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :activity_plan_id, class: 'form-label' %>
+                <%= form.collection_select :activity_plan_id, @activity_plans, :id, :plan, {}, { class: 'form-select' } %>
+            </div>
+        </div>
     </div>
 
-
-    <div>
-        <%= form.label :activity_id, style: "display: block" %>
-        <%= form.collection_select :activity_id, @activities, :id, :name, prompt: "Seleziona una Attività" %>
-    </div>
-
-    <div class="my-5">
-        <%= form.label :activity_plan_id %>
-        <%= form.collection_select :activity_plan_id, @activity_plans, :id, :plan, prompt: "Seleziona un Piano per questa Attività" %>
-    </div>
-
-    <div>
-        <%= form.label :open, 'Open', class: 'form-check-label' %>
+    <div class="form-check mb-3">
         <%= form.check_box :open, class: 'form-check-input' %>
+        <%= form.label :open, 'Open', class: 'form-check-label' %>
     </div>
 
     <%= form.hidden_field :user_id, value: @user.id %>
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 
-    <div>
-        <%= form.submit %>
+    <div class="actions">
+        <%= form.submit class: 'btn btn-success w-100' %>
     </div>
 <% end %>

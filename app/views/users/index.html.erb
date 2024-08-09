@@ -135,7 +135,11 @@
                     <% end %>
 
                     <% if current_staff.admin? %>
-                        <%= button_to user_path(user), class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+                        <%= button_to user_path(user),
+                                      class: 'btn btn-danger',
+                                      method: :delete,
+                                      data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" },
+                                      form: {style: 'display:inline-block;'} do %>
                             <i class="bi bi-trash3-fill"></i>
                         <% end %>
                     <% end %>
