@@ -168,10 +168,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.datetime "updated_at", null: false
     t.index ["cf"], name: "index_users_on_cf", unique: true
     t.index ["date_of_birth"], name: "index_users_on_date_of_birth"
-    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["legal_guardian_id"], name: "index_users_on_legal_guardian_id"
     t.index ["name"], name: "index_users_on_name"
-    t.index ["phone"], name: "index_users_on_phone"
     t.index ["surname"], name: "index_users_on_surname"
   end
 

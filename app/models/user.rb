@@ -12,11 +12,11 @@ class User < ApplicationRecord
   has_many :subscription_payments , through: :subscriptions
   has_many :membership_payments   , through: :membership
 
-  validates :name, :surname, :date_of_birth, presence: true
+  validates :cf, :name, :surname, :date_of_birth, presence: true
   validates :affiliated, inclusion: { in: [ true, false ] }
 
   validates :legal_guardian, presence: true, if: :minor?
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid', allow_blank: true }
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   normalizes :email, with: -> { _1.strip.downcase }
 
   validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }

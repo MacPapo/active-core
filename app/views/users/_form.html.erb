@@ -13,14 +13,14 @@
 
     <div class="mb-3">
         <%= form.label :cf, class: 'form-label' %>
-        <%= form.text_field :cf, class: 'form-control' %>
+        <%= form.text_field :cf, required: true, autofocus: true, class: 'form-control' %>
     </div>
 
     <div class="row">
         <div class="col">
             <div class="mb-3">
                 <%= form.label :name, class: 'form-label' %>
-                <%= form.text_field :name, required: true, autofocus: true, class: 'form-control' %>
+                <%= form.text_field :name, required: true, class: 'form-control' %>
             </div>
         </div>
         <div class="col">

@@ -1,5 +1,4 @@
 it:
-
   activemodel:
     enums:
       payment:
@@ -129,6 +128,8 @@ it:
       open: "OPEN"
 
   users:
+    new:
+      title: "Inserimento di un Nuovo Utente"
     index:
       add_user: "Aggiungi Utente"
     user:
@@ -172,7 +173,3 @@ it:
   subscriptions:
     new:
       title: "Inserimento di una Nuova Iscrizione"
-
-  users:
-    new:
-      title: "Inserimento di un Nuovo Utente"
