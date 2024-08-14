@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration[7.1]
       t.string     :surname        , null: false
       t.string     :email
       t.string     :phone
-      t.date       :date_of_birth  , null: false
+      t.date       :birth_day  , null: false
       t.date       :med_cert_issue_date
       t.boolean    :affiliated     , default: false, null: false
       t.references :legal_guardian , null: true, foreign_key: true
@@ -17,6 +17,6 @@ class CreateUsers < ActiveRecord::Migration[7.1]
     add_index :users, :cf, unique: true
     add_index :users, :name
     add_index :users, :surname
-    add_index :users, :date_of_birth
+    add_index :users, :birth_day
   end
 end

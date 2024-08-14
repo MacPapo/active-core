@@ -1,10 +1,20 @@
-<h1>Editing user</h1>
+<div class="card">
+    <div class="card-header">
+        <h1><%= t '.title' %></h1>
+    </div>
 
-<%= render "form", user: @user %>
+    <div class="card-body">
+        <%= render "form", user: @user %>
+    </div>
 
-<br>
+    <div class="card-footer">
+        <!-- TODO align right -->
+        <%= link_to @user, class: 'btn btn-primary' do %>
+            <i class="bi bi-eye-fill"></i>
+        <% end %>
 
-<div>
-  <%= link_to "Show this user", @user %> |
-  <%= link_to "Back to users", users_path %>
+        <%= link_to users_path, class: 'btn btn-danger' do %>
+            <i class="bi bi-trash3-fill"></i>
+        <% end %>
+    </div>
 </div>

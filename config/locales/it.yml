@@ -37,7 +37,7 @@ it:
         surname: "Cognome"
         email: "Email"
         phone: "Numero di Telefono"
-        date_of_birth: "Data di Nascita"
+        birth_day: "Data di Nascita"
         med_cert_issue_date: "Data rilascio del Certificato Medico"
         affiliated: "Convenzionato"
         legal_guardian: "Tutore Legale"
@@ -48,7 +48,7 @@ it:
         surname: "Cognome"
         email: "Email"
         phone: "Numero di Telefono"
-        date_of_birth: "Data di Nascita"
+        birth_day: "Data di Nascita"
 
       activity:
         name: "Nome Attività"
@@ -106,6 +106,13 @@ it:
     activity: "Attività"
     del_sub: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile"
 
+    errors:
+      med_date_future: "non può essere nel Futuro"
+      no_mail: "Email Mancante"
+      no_phone: "Cellulare Mancante"
+      no_med: "Certificato Medico Mancante"
+      no_mem: "L'utente deve avere pagato la Quota Associativa per essere iscritto a questa Attività"
+
     forms:
       messages:
         errors:
@@ -130,6 +137,8 @@ it:
   users:
     new:
       title: "Inserimento di un Nuovo Utente"
+    edit:
+      title: "Aggiornamento dell'Utente"
     index:
       add_user: "Aggiungi Utente"
     user:

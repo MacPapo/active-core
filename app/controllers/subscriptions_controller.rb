@@ -3,7 +3,6 @@ class SubscriptionsController < ApplicationController
   before_action :set_user, only: %i[ edit update new create ]
   before_action :set_staff, only: %i[ edit update new create ]
   before_action :set_activities_and_plans, only: %i[ edit new update create]
-  before_action :delete_linked_sub, only: [:destroy]
 
   # GET /subscriptions
   def index
@@ -67,15 +66,6 @@ class SubscriptionsController < ApplicationController
 
   def set_staff
     @staff = Staff.find(params[:staff_id] || subscription_params[:staff_id])
-  end
-
-  def delete_linked_sub
-    return unless @subscription.open? && @subscription.linked_subscription
-
-    lsub = @subscription.linked_subscription
-    lsub.update(linked_subscription_id: nil)
-    @subscription.update(linked_subscription_id: nil)
-    lsub.destroy!
   end
 
   def set_activities_and_plans

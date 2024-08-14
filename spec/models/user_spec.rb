@@ -126,7 +126,7 @@ RSpec.describe User, type: :model do
       '2008-03-18',
       '2007-03-18',
     ].each do |date|
-      user = build(:user, date_of_birth: date)
+      user = build(:user, birth_day: date)
       expect(user).to be_minor
     end
   end
@@ -136,7 +136,7 @@ RSpec.describe User, type: :model do
       '1990-03-18',
       '1980-03-18',
     ].each do |date|
-      user = build(:user, date_of_birth: date)
+      user = build(:user, birth_day: date)
       expect(user).not_to be_minor
     end
   end
@@ -147,7 +147,7 @@ RSpec.describe User, type: :model do
       '2008-01-01',
       '2009-01-01',
     ].each do |birth|
-      user = build(:user, date_of_birth: birth, legal_guardian: nil)
+      user = build(:user, birth_day: birth, legal_guardian: nil)
       expect(user).not_to be_valid
     end
   end
@@ -158,7 +158,7 @@ RSpec.describe User, type: :model do
       '1980-01-01',
       '1970-01-01',
     ].each do |birth|
-      user = build(:user, date_of_birth: birth, legal_guardian: nil)
+      user = build(:user, birth_day: birth, legal_guardian: nil)
       expect(user).to be_valid
     end
   end
@@ -169,7 +169,7 @@ RSpec.describe User, type: :model do
       '2008-01-01',
       '2009-01-01',
     ].each do |birth|
-      user = build(:user, date_of_birth: birth, legal_guardian: legal_guardian)
+      user = build(:user, birth_day: birth, legal_guardian: legal_guardian)
       expect(user).to be_valid
     end
   end

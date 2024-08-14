@@ -5,7 +5,7 @@ class CreateLegalGuardians < ActiveRecord::Migration[7.1]
       t.string :surname       , null: false
       t.string :email         , null: false
       t.string :phone         , null: false
-      t.date   :date_of_birth , null: false
+      t.date   :birth_day , null: false
 
       t.timestamps
     end
@@ -14,6 +14,6 @@ class CreateLegalGuardians < ActiveRecord::Migration[7.1]
     add_index :legal_guardians, :name
     add_index :legal_guardians, :surname
     add_index :legal_guardians, :phone
-    add_index :legal_guardians, :date_of_birth
+    add_index :legal_guardians, :birth_day
   end
 end

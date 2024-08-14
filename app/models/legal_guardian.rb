@@ -1,10 +1,12 @@
 class LegalGuardian < ApplicationRecord
   before_save :normalize_phone
 
+  # after_save :delete_all_lg_without_users
+
   has_many :users, dependent: :nullify
 
-  validates :name, :surname, :email, :phone, :date_of_birth, presence: true
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid' }
+  validates :name, :surname, :email, :phone, :birth_day, presence: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   normalizes :email, with: -> { _1.strip.downcase }
 
   validates :phone, phone: { possible: true, types: [:fixed_or_mobile] }
@@ -15,7 +17,7 @@ class LegalGuardian < ApplicationRecord
   end
 
   def minor?
-    date_of_birth > 18.year.ago.to_date
+    birth_day > 18.year.ago.to_date
   end
 
   private
@@ -30,6 +32,7 @@ class LegalGuardian < ApplicationRecord
     self.phone = Phonelib.parse(phone).full_e164.presence
   end
 
-  # TODO create a job that search all legal_guardians without users and deletes
-  # them
+  def delete_all_lg_without_users
+    DeleteStaleLegalGuardiansJob.perform_later
+  end
 end

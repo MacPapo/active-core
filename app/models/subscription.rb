@@ -4,6 +4,8 @@ class Subscription < ApplicationRecord
 
   after_initialize :set_default_status, if: :new_record?
 
+  before_destroy :delete_linked_subscription
+
   belongs_to :user
   belongs_to :staff
   belongs_to :activity
@@ -83,13 +85,23 @@ class Subscription < ApplicationRecord
     end
   end
 
+  def delete_linked_subscription
+    p linked_subscription
+
+    if linked_subscription.present?
+      linked_subscription.update(linked_subscription_id: nil)
+      linked_subscription.subscription_histories.delete_all
+      linked_subscription.delete
+    end
+  end
+
   def activity_subscription?
     activity.present?
   end
 
   def annual_membership_paid?
     unless user && user.has_active_membership?
-      errors.add(:base, "You must have an active annual membership to enroll in an activity.")
+      errors.add(:base, I18n.t('global.errors.no_mem'))
     end
   end
 

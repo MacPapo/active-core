@@ -23,7 +23,7 @@ Staff.destroy_all
     surname: Faker::Name.last_name,
     email: Faker::Internet.unique.email,
     phone: '+39 341 4488 932',
-    date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60)
+    birth_day: Faker::Date.birthday(min_age: 30, max_age: 60)
   )
 end
 
@@ -38,7 +38,7 @@ puts "LegalGuardians Added"
     surname: Faker::Name.last_name,
     email: Faker::Internet.unique.email,
     phone: '+39 341 4488 933',
-    date_of_birth: Faker::Date.birthday(min_age: 5, max_age: 17),
+    birth_day: Faker::Date.birthday(min_age: 5, max_age: 17),
     med_cert_issue_date: nil,
     legal_guardian: legal_guardian,
   )
@@ -54,7 +54,7 @@ puts "Minor Users Added"
     surname: Faker::Name.last_name,
     email: Faker::Internet.unique.email,
     phone: '+39 341 4488 934',
-    date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 100),
+    birth_day: Faker::Date.birthday(min_age: 18, max_age: 100),
     med_cert_issue_date: nil,
     legal_guardian: nil,
     affiliated: false
@@ -143,7 +143,7 @@ admin_user = User.create!(
   surname: 'User',
   email: 'admin@example.com',
   phone: '+39 341 4488 935',
-  date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60),
+  birth_day: Faker::Date.birthday(min_age: 30, max_age: 60),
   med_cert_issue_date: nil,
   affiliated: false
 )
@@ -163,7 +163,7 @@ normal_user = User.create!(
   surname: 'User',
   email: 'normal@example.com',
   phone: '+39 342 4488 935',
-  date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60),
+  birth_day: Faker::Date.birthday(min_age: 30, max_age: 60),
   med_cert_issue_date: nil,
   affiliated: false
 )
@@ -186,7 +186,7 @@ puts "Admin Staff Added"
     surname: Faker::Name.last_name,
     email: Faker::Internet.unique.email,
     phone: '+39 341 4488 936',
-    date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 60),
+    birth_day: Faker::Date.birthday(min_age: 18, max_age: 60),
     med_cert_issue_date: nil,
     affiliated: false
   )

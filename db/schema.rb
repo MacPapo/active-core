@@ -35,10 +35,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.string "surname", null: false
     t.string "email", null: false
     t.string "phone", null: false
-    t.date "date_of_birth", null: false
+    t.date "birth_day", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["date_of_birth"], name: "index_legal_guardians_on_date_of_birth"
+    t.index ["birth_day"], name: "index_legal_guardians_on_birth_day"
     t.index ["email"], name: "index_legal_guardians_on_email", unique: true
     t.index ["name"], name: "index_legal_guardians_on_name"
     t.index ["phone"], name: "index_legal_guardians_on_phone"
@@ -160,14 +160,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.string "surname", null: false
     t.string "email"
     t.string "phone"
-    t.date "date_of_birth", null: false
+    t.date "birth_day", null: false
     t.date "med_cert_issue_date"
     t.boolean "affiliated", default: false, null: false
     t.integer "legal_guardian_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["birth_day"], name: "index_users_on_birth_day"
     t.index ["cf"], name: "index_users_on_cf", unique: true
-    t.index ["date_of_birth"], name: "index_users_on_date_of_birth"
     t.index ["legal_guardian_id"], name: "index_users_on_legal_guardian_id"
     t.index ["name"], name: "index_users_on_name"
     t.index ["surname"], name: "index_users_on_surname"

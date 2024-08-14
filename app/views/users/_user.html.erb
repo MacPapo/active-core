@@ -20,7 +20,7 @@
                     <%= t '.birth' %>
                 </h5>
                 <p class="card-text">
-                    <%= user.date_of_birth %> (<%= user.age %> anni)
+                    <%= user.birth_day %> (<%= user.age %> anni)
                 </p>
             </div>
             <div class="col-md-4">
@@ -168,6 +168,7 @@
     <!-- Card Footer -->
     <div class="card-footer bg-light">
         <div class="d-flex justify-content-end">
+            <!-- TODO translate -->
             <%= link_to "Modifica questo utente", edit_user_path(user), class: 'btn btn-warning me-2' %>
             <%#= link_to "Back to users", users_path %>
             <%= button_to "Elimina questo utente", user, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>

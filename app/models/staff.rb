@@ -40,8 +40,8 @@ class Staff < ApplicationRecord
     self.user.phone
   end
 
-  def get_date_of_birth
-    self.user.date_of_birth.strftime("%d/%m/%Y")
+  def get_birth_day
+    self.user.birth_day.strftime("%d/%m/%Y")
   end
 
   def get_age

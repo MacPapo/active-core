@@ -63,7 +63,7 @@ RSpec.describe LegalGuardian, type: :model do
       '2008-03-18',
       '2007-03-18',
     ].each do |date|
-      legal_guardian = build(:legal_guardian, date_of_birth: date)
+      legal_guardian = build(:legal_guardian, birth_day: date)
       expect(legal_guardian).not_to be_valid
     end
   end
@@ -73,7 +73,7 @@ RSpec.describe LegalGuardian, type: :model do
       '1990-03-18',
       '1980-03-18',
     ].each do |date|
-      legal_guardian = build(:legal_guardian, date_of_birth: date)
+      legal_guardian = build(:legal_guardian, birth_day: date)
       expect(legal_guardian).to be_valid
     end
   end

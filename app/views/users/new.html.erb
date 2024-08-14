@@ -6,4 +6,15 @@
     <div class="card-body">
         <%= render "form", user: @user %>
     </div>
+
+    <div class="card-footer">
+        <!-- TODO align right -->
+        <%= link_to @user, class: 'btn btn-primary' do %>
+            <i class="bi bi-eye-fill"></i>
+        <% end %>
+
+        <%= link_to users_path, class: 'btn btn-danger' do %>
+            <i class="bi bi-trash3-fill"></i>
+        <% end %>
+    </div>
 </div>

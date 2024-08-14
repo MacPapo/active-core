@@ -3,16 +3,16 @@ class User < ApplicationRecord
 
   after_initialize :set_default_affiliated, if: :new_record?
 
+  # after_save :detach_lg_unless_minor, unless: :minor?
+
   belongs_to :legal_guardian, optional: true
 
   has_one :staff      , dependent: :destroy
   has_one :membership , dependent: :destroy
 
   has_many :subscriptions         , dependent: :destroy
-  has_many :subscription_payments , through: :subscriptions
-  has_many :membership_payments   , through: :membership
 
-  validates :cf, :name, :surname, :date_of_birth, presence: true
+  validates :cf, :name, :surname, :birth_day, presence: true
   validates :affiliated, inclusion: { in: [ true, false ] }
 
   validates :legal_guardian, presence: true, if: :minor?
@@ -28,19 +28,19 @@ class User < ApplicationRecord
   end
 
   def minor?
-    self.date_of_birth && self.date_of_birth > 18.year.ago.to_date
+    self.birth_day && self.birth_day > 18.year.ago.to_date
   end
 
   def affiliated?
     self.affiliated
   end
 
-  def get_date_of_birth
-    self.date_of_birth.strftime('%d/%m/%Y')
+  def get_birth_day
+    self.birth_day.strftime('%d/%m/%Y')
   end
 
   def age
-    ((Time.zone.now - date_of_birth.to_time) / 1.year.seconds).floor
+    ((Time.zone.now - birth_day.to_time) / 1.year.seconds).floor
   end
 
   def med_cert_present?
@@ -59,6 +59,7 @@ class User < ApplicationRecord
   end
 
   def verify_compliance
+    # TODO rework this
     compliance = { status: true, errors: [] }
 
     if self.minor? && self.legal_guardian
@@ -66,8 +67,7 @@ class User < ApplicationRecord
       if self.med_cert_issue_date.nil? || (self.cf.nil? || self.cf.empty?)
         compliance[:status] = false
 
-        compliance[:errors] << 'Certificato medico mancante' if self.med_cert_issue_date.nil?
-        compliance[:errors] << 'Codice fiscale mancante' if self.cf.nil? || self.cf.empty?
+        compliance[:errors] << I18n.t('global.errors.no_med') if self.med_cert_issue_date.nil?
       end
 
       return compliance
@@ -75,10 +75,9 @@ class User < ApplicationRecord
 
     compliance[:status] = false unless self.email && self.phone && self.med_cert_issue_date
 
-    compliance[:errors] << 'Codice fiscale mancante' if self.cf.nil? || self.cf.empty?
-    compliance[:errors] << 'Email mancante' if self.email.nil? || self.email.empty?
-    compliance[:errors] << 'Cellulare mancante' if self.phone.nil?
-    compliance[:errors] << 'Certificato medico mancante' if self.med_cert_issue_date.nil?
+    compliance[:errors] << I18n.t('global.errors.no_email') if self.email.nil? || self.email.empty?
+    compliance[:errors] << I18n.t('global.errors.no_phone') if self.phone.nil?
+    compliance[:errors] << I18n.t('global.errors.no_med') if self.med_cert_issue_date.nil?
 
     compliance
   end
@@ -129,7 +128,7 @@ class User < ApplicationRecord
 
   def med_cert_issue_date_cannot_be_in_future
     if med_cert_issue_date > Date.today
-      errors.add(:med_cert_issue_date, "can't be in the future!")
+      errors.add(:med_cert_issue_date, I18n.t('global.errors.med_date_future'))
     end
   end
 
@@ -137,6 +136,7 @@ class User < ApplicationRecord
     self.membership && self.membership.get_status == :attivo
   end
 
-  # TODO create a job that search all the users that are no longer minors and
-  # have a legal_guardian attached and nullify the relation.
+  def detach_lg_unless_minor
+    DetachLegalGuardiansJob.perform_later
+  end
 end

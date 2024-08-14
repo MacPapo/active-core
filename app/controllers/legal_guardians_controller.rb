@@ -65,6 +65,6 @@ class LegalGuardiansController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def legal_guardian_params
-      params.require(:legal_guardian).permit(:name, :surname, :email, :phone, :date_of_birth)
+      params.require(:legal_guardian).permit(:name, :surname, :email, :phone, :birth_day)
     end
 end
