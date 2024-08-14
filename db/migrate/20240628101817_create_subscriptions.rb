@@ -11,8 +11,6 @@ class CreateSubscriptions < ActiveRecord::Migration[7.1]
       t.references :activity_plan       , null: false, foreign_key: true
       t.references :staff               , null: false, foreign_key: true
 
-      t.references :linked_subscription , null: true,  foreign_key: { to_table: :subscriptions }
-
       t.timestamps
     end
   end

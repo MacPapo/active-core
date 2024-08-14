@@ -25,12 +25,10 @@ class SubscriptionsController < ApplicationController
   # POST /subscriptions
   def create
     @subscription = @user.subscriptions.build(subscription_params)
-    # @subscription.staff = @staff TODO
 
     if @subscription.save
       create_open_subscription if @subscription.open?
 
-      # redirect_to @user, notice: 'Subscription was successfully created.'
       redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription)
     else
       render :new, status: :unprocessable_entity
@@ -74,22 +72,36 @@ class SubscriptionsController < ApplicationController
   end
 
   def create_open_subscription
+    p 'sto creando'
     Subscription.transaction do
       weight_room_activity = Activity.find_by(name: 'SALA PESI')
       weight_room_plan = weight_room_activity.activity_plans.find_by(plan: :one_month)
 
-      linked_subscription = @user.subscriptions.build(
+      open_subscription = @user.subscriptions.build(
+        staff: @staff,
         activity: weight_room_activity,
         activity_plan: weight_room_plan,
-        start_date: @subscription.start_date,
-        staff: @subscription.staff,
-        open: true,
-        linked_subscription: @subscription
+        start_date: subscription_params[:start_date],
+        open: true
       )
 
-      if linked_subscription.save
-        @subscription.update(linked_subscription: linked_subscription)
+      if open_subscription.save
+
+        linked_subscription = LinkedSubscription.build(
+          subscription: @subscription,
+          linked_subscription: open_subscription
+        )
+
+        if linked_subscription.save
+          @subscription.update(linked_subscription: linked_subscription)
+        else
+          p 'distruggo'
+          @subscription.destroy
+          render :new, status: :unprocessable_entity
+        end
+
       else
+        p 'distruggo'
         @subscription.destroy
         render :new, status: :unprocessable_entity
       end

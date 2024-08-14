@@ -11,8 +11,7 @@ class Subscription < ApplicationRecord
   belongs_to :activity
   belongs_to :activity_plan
 
-  # OPEN SUB
-  belongs_to :linked_subscription, class_name: 'Subscription', optional: true
+  has_one :linked_subscription, class_name: 'LinkedSubscription', foreign_key: :subscription_id, dependent: :destroy
 
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
@@ -86,12 +85,8 @@ class Subscription < ApplicationRecord
   end
 
   def delete_linked_subscription
-    p linked_subscription
-
     if linked_subscription.present?
-      linked_subscription.update(linked_subscription_id: nil)
-      linked_subscription.subscription_histories.delete_all
-      linked_subscription.delete
+      linked_subscription.destroy
     end
   end
 

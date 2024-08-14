@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_14_151748) do
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
     t.integer "num_participants", default: 0, null: false
@@ -43,6 +43,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.index ["name"], name: "index_legal_guardians_on_name"
     t.index ["phone"], name: "index_legal_guardians_on_phone"
     t.index ["surname"], name: "index_legal_guardians_on_surname"
+  end
+
+  create_table "linked_subscriptions", force: :cascade do |t|
+    t.integer "subscription_id", null: false
+    t.integer "linked_subscription_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["linked_subscription_id"], name: "index_linked_subscriptions_on_linked_subscription_id"
+    t.index ["subscription_id"], name: "index_linked_subscriptions_on_subscription_id"
   end
 
   create_table "membership_histories", force: :cascade do |t|
@@ -144,12 +153,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
     t.integer "activity_id", null: false
     t.integer "activity_plan_id", null: false
     t.integer "staff_id", null: false
-    t.integer "linked_subscription_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["activity_id"], name: "index_subscriptions_on_activity_id"
     t.index ["activity_plan_id"], name: "index_subscriptions_on_activity_plan_id"
-    t.index ["linked_subscription_id"], name: "index_subscriptions_on_linked_subscription_id"
     t.index ["staff_id"], name: "index_subscriptions_on_staff_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
@@ -174,6 +181,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
   end
 
   add_foreign_key "activity_plans", "activities"
+  add_foreign_key "linked_subscriptions", "subscriptions"
+  add_foreign_key "linked_subscriptions", "subscriptions", column: "linked_subscription_id"
   add_foreign_key "membership_histories", "memberships"
   add_foreign_key "membership_histories", "staffs"
   add_foreign_key "membership_histories", "users"
@@ -189,7 +198,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_10_152000) do
   add_foreign_key "subscriptions", "activities"
   add_foreign_key "subscriptions", "activity_plans"
   add_foreign_key "subscriptions", "staffs"
-  add_foreign_key "subscriptions", "subscriptions", column: "linked_subscription_id"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "users", "legal_guardians"
 end
