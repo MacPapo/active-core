@@ -166,6 +166,8 @@ it:
       title: "Inserimento Quota Associativa"
 
   activities:
+    index:
+      title: "Attività"
     show:
       no_subs: "Ancora nessun partecipante per questa Attività"
     new:
@@ -176,8 +178,29 @@ it:
       title: "Inserimento di un Nuovo Piano per questa Attività"
 
   payments:
+    index:
+      title: "Pagamenti"
+      id: "ID transazione"
+      date: "Data"
+      payable_type: "Causale"
+      amount: "Ammonatare"
+      payment_method: "Metodo"
+      entry_type: "Tipo Transazione"
+      note: "Note"
+      staff: "Collaboratore"
+      action: "Azioni"
     new:
       title: "Inserimento di un Nuovo Pagamento"
+    payment:
+      payment_detail: "Dettagli Pagamento"
+      payment_info: "Informazioni"
+      amount: "Ammonatare"
+      date: "Data Pagamento"
+      method: "Metodo di Pagamento"
+      payable_type: "Tipo di Pagamento"
+      entry_type: "Tipo di Transazione"
+      note: "Note eventuali"
+      staff: "Collaboratore che ha Registrato questa Transazione"
 
   subscriptions:
     new:

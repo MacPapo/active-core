@@ -1,12 +1,98 @@
-<h1>Payments</h1>
+<h1 class="mb-0">
+    <%= t '.title' %>
+</h1>
 
 <div id="payments">
-  <% @payments.each do |payment| %>
-    <%= render payment %>
-    <p>
-      <%= link_to "Show this payment", payment %>
-    </p>
-  <% end %>
-</div>
+    <table class="table">
+        <tr>
+            <th>
+                <%= t '.id' %>
+            </th>
+            <th>
+                <%= t '.date' %>
+            </th>
+            <th>
+                <%= t '.payable_type' %>
+            </th>
+            <th>
+                <%= t '.amount' %>
+            </th>
+            <th>
+                <%= t '.payment_method' %>
+            </th>
+            <th>
+                <%= t '.entry_type' %>
+            </th>
+            <th>
+                <%= t '.note' %>
+            </th>
+            <th>
+                <%= t '.staff' %>
+            </th>
+            <th>
+                <%= t '.action' %>
+            </th>
+        </tr>
+        <% @payments.each do |payment| %>
+            <tr>
 
-<%= link_to "New payment", new_payment_path %>
+                <!-- ID -->
+                <td>
+                    <%= payment.id %>
+                </td>
+
+                <!-- Date -->
+                <td>
+                    <%= payment.date %>
+                </td>
+
+                <!-- Payable Type -->
+                <td>
+                    <%= payment.payable_type %>
+                </td>
+
+                <!-- Amount -->
+                <td>
+                    <%= payment.amount %>
+                </td>
+
+                <!-- Payment Method -->
+                <td>
+                    <%= payment.payment_method %>
+                </td>
+
+                <!-- Entry Type -->
+                <td>
+                    <%= payment.entry_type %>
+                </td>
+
+                <!-- Note -->
+                <td>
+                    <%= payment.note %>
+                </td>
+
+                <!-- Staff -->
+                <% staff = payment.staff %>
+                <td>
+                    <%= staff.full_name %>
+                </td>
+
+                <!-- Action buttons -->
+                <td>
+                    <%= link_to payment, class: 'btn btn-primary' do %>
+                        <i class="bi bi-eye-fill"></i>
+                    <% end %>
+
+                    <%= link_to edit_payment_path(payment), class: 'btn btn-warning' do %>
+                        <i class="bi bi-pencil-fill"></i>
+                    <% end %>
+
+                    <% if current_staff.admin? %>
+                        <%= button_to payment, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+                            <i class="bi bi-trash3-fill"></i>
+                        <% end %>
+                    <% end %>
+                </td>
+
+        <% end %>
+    </table>

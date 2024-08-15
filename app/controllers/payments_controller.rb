@@ -1,6 +1,6 @@
 class PaymentsController < ApplicationController
   before_action :set_payment, only: %i[ show edit update destroy ]
-  before_action :set_entity, only: [ :edit, :new ]
+  before_action :set_entity, only: %i[ edit new ]
 
   # GET /payments
   def index
@@ -13,7 +13,7 @@ class PaymentsController < ApplicationController
 
   # GET /payments/new
   def new
-    @payment = @entity.nil? ? Payment.new : @entity.payments.build
+    @payment = @entity.nil? ? Payment.build : @entity.payments.build
     @payment.amount = @entity.nil? ? 0.0 : @entity.get_cost
   end
 
@@ -23,7 +23,7 @@ class PaymentsController < ApplicationController
 
   # POST /payments
   def create
-    @payment = Payment.new(payment_params)
+    @payment = Payment.build(payment_params)
 
     if @payment.save
       redirect_to payment_url(@payment), notice: "Il pagamento è stato registrato con successo."

@@ -1,42 +1,95 @@
-<div id="<%= dom_id payment %>">
-  <p>
-    <strong>Amount:</strong>
-    <%= payment.amount %>
-  </p>
+<div class="card" id="<%= dom_id payment %>">
+    <div class="card-header">
+        <h1 class="card-title">
+            <%= t '.payment_detail' %>
+        </h1>
+    </div>
+    <div class="card-body">
+        <h3 class="card-subtitle mb-4">
+            <%= t '.payment_info' %>
+        </h3>
 
-  <p>
-    <strong>Date:</strong>
-    <%= payment.date %>
-  </p>
+        <div class="row mb-4">
+            <div class="col">
+                <h5 class="card-subtitle mb-2">
+                    <%= t '.amount' %>
+                </h5>
+                <div class="card-text">
+                    <%= payment.amount %>
+                </div>
+            </div>
+            <div class="col">
+                <h5 class="card-subtitle mb-2">
+                    <%= t '.date' %>
+                </h5>
+                <div class="card-text">
+                    <%= payment.date %>
+                </div>
+            </div>
+        </div>
 
-  <p>
-    <strong>Method:</strong>
-    <%= payment.payment_method %>
-  </p>
+        <div class="row mb-4">
+            <div class="col">
+                <h5 class="card-subtitle mb-2">
+                    <%= t '.method' %>
+                </h5>
+                <div class="card-text">
+                    <%= payment.payment_method %>
+                </div>
+            </div>
+            <div class="col">
+                <h5 class="card-subtitle mb-2">
+                    <%= t '.payable_type' %>
+                </h5>
+                <div class="card-text">
+                    <%= payment.payable_type %>
+                </div>
+            </div>
+        </div>
 
-  <p>
-    <strong>Payment type:</strong>
-    <%= payment.payable_type %>
-  </p>
+        <div class="row mb-4">
+            <div class="col">
+                <h5 class="card-subtitle mb-2">
+                    <%= t '.entry_type' %>
+                </h5>
+                <div class="card-text">
+                    <%= payment.entry_type %>
+                </div>
+            </div>
+        </div>
 
-  <p>
-    <strong>Entry type:</strong>
-    <%= payment.entry_type %>
-  </p>
+        <div class="row mb-4">
+            <div class="col">
+                <h5 class="card-subtitle mb-2">
+                    <%= t '.note' %>
+                </h5>
+                <div class="card-text">
+                    <%= payment.note %>
+                </div>
+            </div>
+        </div>
 
-  <p>
-    <strong>Payed:</strong>
-    <%= payment.payed %>
-  </p>
+        <hr/>
 
-  <p>
-    <strong>Note:</strong>
-    <%= payment.note %>
-  </p>
+        <div class="row mb-4">
+            <% staff = payment.staff %>
+            <div class="col">
+                <h5 class="card-subtitle mb-4">
+                    <%= t '.staff' %>
+                </h5>
+                <div class="list-group">
+                    <%= link_to "#{staff.full_name}",  staff, class: 'list-group-item list-group-item-action' %>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <p>
-    <strong>Staff:</strong>
-    <%= payment.staff_id %>
-  </p>
-
+    <!-- Card Footer -->
+    <div class="card-footer bg-light">
+        <div class="d-flex justify-content-end">
+            <!-- TODO translate -->
+            <%= link_to "Edit", edit_payment_path(payment), class: 'btn btn-warning me-2' %>
+            <%= button_to "Elimina questo payment", payment, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>
+        </div>
+    </div>
 </div>

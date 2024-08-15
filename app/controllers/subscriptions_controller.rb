@@ -95,13 +95,11 @@ class SubscriptionsController < ApplicationController
         if linked_subscription.save
           @subscription.update(linked_subscription: linked_subscription)
         else
-          p 'distruggo'
           @subscription.destroy
           render :new, status: :unprocessable_entity
         end
 
       else
-        p 'distruggo'
         @subscription.destroy
         render :new, status: :unprocessable_entity
       end
