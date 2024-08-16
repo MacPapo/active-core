@@ -67,12 +67,12 @@ class Subscription < ApplicationRecord
 
   def set_start_date
     if start_date && activity_plan
-      plan = activity_plan.get_plan
+      plan = activity_plan
       sdate = self.start_date.to_date
 
-      if (plan == :half_month && sdate.after?(sdate.at_beginning_of_month + 11.day))
+      if (plan.half_month? && sdate.after?(sdate.at_beginning_of_month + 11.day))
         self.start_date = self.start_date.beginning_of_month + 14.day
-      elsif (plan != :one_entrance)
+      elsif (!plan.one_entrance?)
         self.start_date = self.start_date.beginning_of_month
       end
     end

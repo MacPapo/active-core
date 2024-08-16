@@ -1,11 +1,12 @@
 class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: %i[ show edit update destroy ]
-  # before_action :set_user, only: %i[ edit update new create ]
   before_action :set_activity, only: %i[ edit update new create ]
+  before_action :set_users, only: %i[ edit update new create ]
+
 
   # GET /subscriptions
   def index
-    @subscriptions = Subscription.all
+    @subscriptions = Subscription.all.load_async
   end
 
   # GET /subscriptions/1
@@ -18,7 +19,6 @@ class SubscriptionsController < ApplicationController
     @subscription.start_date = Date.today
 
     @plans = @activity.activity_plans
-    @users = User.all
   end
 
   # GET /subscriptions/1/edit
@@ -69,13 +69,22 @@ class SubscriptionsController < ApplicationController
     @activity = Activity.find(params[:activity_id] || subscription_params[:activity_id])
   end
 
+  def set_users
+    @users = User
+               .joins(:membership)
+               .where('membership.status' => :active)
+               .where.not(id: Subscription.where(activity: @activity).select(:user_id))
+               .load_async
+  end
+
   def create_open_subscription
     Subscription.transaction do
       weight_room_activity = Activity.find_by(name: 'SALA PESI')
       weight_room_plan = weight_room_activity.activity_plans.find_by(plan: :one_month)
 
-      open_subscription = @user.subscriptions.build(
-        staff: @staff,
+      open_subscription = Subscription.build(
+        user_id: subscription_params[:user_id],
+        staff_id: subscription_params[:staff_id],
         activity: weight_room_activity,
         activity_plan: weight_room_plan,
         start_date: subscription_params[:start_date],
@@ -86,7 +95,7 @@ class SubscriptionsController < ApplicationController
 
         linked_subscription = LinkedSubscription.build(
           subscription: @subscription,
-          linked_subscription: open_subscription
+          open_subscription: open_subscription
         )
 
         if linked_subscription.save

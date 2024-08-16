@@ -35,10 +35,6 @@ class User < ApplicationRecord
     self.affiliated
   end
 
-  def get_birth_day
-    self.birth_day.strftime('%d/%m/%Y')
-  end
-
   def age
     ((Time.zone.now - birth_day.to_time) / 1.year.seconds).floor
   end
@@ -55,7 +51,7 @@ class User < ApplicationRecord
   end
 
   def has_active_membership?
-    user.membership&.active?
+    self.membership&.active?
   end
 
   def verify_compliance

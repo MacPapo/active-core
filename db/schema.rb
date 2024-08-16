@@ -47,10 +47,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_14_151748) do
 
   create_table "linked_subscriptions", force: :cascade do |t|
     t.integer "subscription_id", null: false
-    t.integer "linked_subscription_id", null: false
+    t.integer "open_subscription_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["linked_subscription_id"], name: "index_linked_subscriptions_on_linked_subscription_id"
+    t.index ["open_subscription_id"], name: "index_linked_subscriptions_on_open_subscription_id"
     t.index ["subscription_id"], name: "index_linked_subscriptions_on_subscription_id"
   end
 
@@ -182,7 +182,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_14_151748) do
 
   add_foreign_key "activity_plans", "activities"
   add_foreign_key "linked_subscriptions", "subscriptions"
-  add_foreign_key "linked_subscriptions", "subscriptions", column: "linked_subscription_id"
+  add_foreign_key "linked_subscriptions", "subscriptions", column: "open_subscription_id"
   add_foreign_key "membership_histories", "memberships"
   add_foreign_key "membership_histories", "staffs"
   add_foreign_key "membership_histories", "users"

@@ -1,6 +1,6 @@
 class MembershipsController < ApplicationController
   before_action :set_membership, only: %i[ show edit update destroy ]
-  before_action :set_user, only: %i[ edit new ]
+  before_action :set_user, only: %i[ edit new create ]
 
   # GET /memberships
   def index
@@ -57,7 +57,7 @@ class MembershipsController < ApplicationController
     end
 
     def set_user
-      @user = User.find(params[:user_id])
+      @user = User.find(params[:user_id] || membership_params[:user_id])
     end
 
     # Only allow a list of trusted parameters through.

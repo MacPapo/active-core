@@ -20,6 +20,10 @@ class Staff < ApplicationRecord
     self.user.full_name
   end
 
+  def birth_day
+    self.user.birth_day
+  end
+
   def get_role
     self.role.to_sym
   end
@@ -34,10 +38,6 @@ class Staff < ApplicationRecord
 
   def get_phone
     self.user.phone
-  end
-
-  def get_birth_day
-    self.user.birth_day.strftime("%d/%m/%Y")
   end
 
   def get_age
