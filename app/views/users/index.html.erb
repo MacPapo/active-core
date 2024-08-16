@@ -90,10 +90,11 @@
 
                     <% when 2 %>
                         <% membership_color = 'warning' %>
-                        <% membership_phrase = 'Scaduto' %>
+                        <% membership_phrase = 'Expired' %>
 
                         <%= button_to "#{membership_phrase}",
                                       edit_membership_path(user.membership),
+                                      params: { user_id: user },
                                       method: :get,
                                       class: "btn badge rounded-pill text-bg-#{membership_color}" %>
 

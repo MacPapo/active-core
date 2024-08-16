@@ -1,8 +1,7 @@
 class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: %i[ show edit update destroy ]
-  before_action :set_user, only: %i[ edit update new create ]
-  before_action :set_staff, only: %i[ edit update new create ]
-  before_action :set_activities_and_plans, only: %i[ edit new update create]
+  # before_action :set_user, only: %i[ edit update new create ]
+  before_action :set_activity, only: %i[ edit update new create ]
 
   # GET /subscriptions
   def index
@@ -15,7 +14,11 @@ class SubscriptionsController < ApplicationController
 
   # GET /subscriptions/new
   def new
-    @subscription = @user.subscriptions.build
+    @subscription = Subscription.build
+    @subscription.start_date = Date.today
+
+    @plans = @activity.activity_plans
+    @users = User.all
   end
 
   # GET /subscriptions/1/edit
@@ -24,7 +27,7 @@ class SubscriptionsController < ApplicationController
 
   # POST /subscriptions
   def create
-    @subscription = @user.subscriptions.build(subscription_params)
+    @subscription = Subscription.build(subscription_params)
 
     if @subscription.save
       create_open_subscription if @subscription.open?
@@ -62,17 +65,11 @@ class SubscriptionsController < ApplicationController
     @user = User.find(params[:user_id] || subscription_params[:user_id])
   end
 
-  def set_staff
-    @staff = Staff.find(params[:staff_id] || subscription_params[:staff_id])
-  end
-
-  def set_activities_and_plans
-    @activities = Activity.all
-    @activity_plans = ActivityPlan.all
+  def set_activity
+    @activity = Activity.find(params[:activity_id] || subscription_params[:activity_id])
   end
 
   def create_open_subscription
-    p 'sto creando'
     Subscription.transaction do
       weight_room_activity = Activity.find_by(name: 'SALA PESI')
       weight_room_plan = weight_room_activity.activity_plans.find_by(plan: :one_month)

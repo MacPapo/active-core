@@ -1,7 +1,7 @@
 class ActivityPlan < ApplicationRecord
   belongs_to :activity
 
-  enum plan: [
+  enum :plan, [
          :one_entrance,
          :half_month,
          :one_month,
@@ -9,7 +9,7 @@ class ActivityPlan < ApplicationRecord
          :one_year,
          :one_month_one_lesson,
          :one_month_two_lessons
-       ]
+       ], default: :one_month
 
   validates :activity, presence: true
   validates :plan, presence: true

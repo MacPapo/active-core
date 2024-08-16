@@ -11,7 +11,7 @@ class Membership < ApplicationRecord
   has_many :membership_histories , dependent: :destroy
   has_many :payments             , as: :payable, dependent: :destroy
 
-  enum :status, [ :inattivo, :attivo, :scaduto ], default: :inattivo
+  enum :status, [ :inactive, :active, :expired ], default: :inactive
 
   validates :start_date, presence: true
 

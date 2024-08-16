@@ -51,7 +51,7 @@ RSpec.describe Staff, type: :model do
   it 'should be valid with well formed role' do
     [
       :admin,
-      :collaboratore,
+      :contributor,
       :volontario
     ].each do |role|
       staff = build(:staff, user: user, role: role)

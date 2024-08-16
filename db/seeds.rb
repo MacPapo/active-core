@@ -174,7 +174,7 @@ Staff.create!(
   user: normal_user,
   email: 'normal@example.com',
   password: 'normalpassword',
-  role: :collaboratore
+  role: :contributor
 )
 
 puts "Admin Staff Added"

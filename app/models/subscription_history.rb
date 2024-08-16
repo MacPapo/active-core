@@ -3,5 +3,5 @@ class SubscriptionHistory < ApplicationRecord
   belongs_to :subscription
   belongs_to :staff
 
-  enum action: [:creazione, :rinnovo, :cancellazione]
+  enum :action, [ :creation, :renewal, :cancellation ]
 end

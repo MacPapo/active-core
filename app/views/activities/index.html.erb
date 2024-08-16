@@ -32,6 +32,15 @@
                     <% plen = partecipants.length %>
                     <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
                 <% end %>
+
+                <!-- Add users to activity -->
+                <%= button_to new_subscription_path,
+                              class: 'btn btn-success',
+                              method: :get,
+                              params: { activity_id: activity } do
+                %>
+                    <i class="bi bi-person-plus-fill"></i>
+                <% end %>
             </td>
 
             <!-- Action buttons -->

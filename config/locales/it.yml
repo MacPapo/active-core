@@ -4,11 +4,11 @@ it:
       payment:
         payment_method:
           pos: "POS"
-          contanti: "Contanti"
-          bonifico: "Bonifico"
+          cash: "Contanti"
+          bank_transfer: "Bonifico"
         entry_type:
-          entrata: "Entrata"
-          uscita: "Uscita"
+          income: "Entrata"
+          expense: "Uscita"
       activity_plan:
         plan:
           one_entrance: "1 Entrata"

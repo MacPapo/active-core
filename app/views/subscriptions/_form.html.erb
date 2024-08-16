@@ -28,14 +28,14 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                <%= form.label :activity_id, class: 'form-label' %>
-                <%= form.collection_select :activity_id, @activities, :id, :name, {}, { class: 'form-select' } %>
+                <%= form.label :user_id, class: 'form-label' %>
+                <%= form.collection_select :user_id, @users, :id, :full_name, {}, { class: 'form-select' } %>
             </div>
         </div>
         <div class="col">
             <div class="mb-3">
                 <%= form.label :activity_plan_id, class: 'form-label' %>
-                <%= form.collection_select :activity_plan_id, @activity_plans, :id, :plan, {}, { class: 'form-select' } %>
+                <%= form.collection_select :activity_plan_id, @plans, :id, :plan, {}, { class: 'form-select' } %>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
         <%= form.label :open, 'Open', class: 'form-check-label' %>
     </div>
 
-    <%= form.hidden_field :user_id, value: @user.id %>
+    <%= form.hidden_field :activity_id, value: @activity.id %>
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 
     <div class="actions">

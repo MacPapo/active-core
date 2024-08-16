@@ -21,7 +21,7 @@ RSpec.describe Subscription, type: :model do
     )
 
     expect(activity_subscription).to be_valid
-    expect(activity_subscription.get_status).to eq(:inattivo)
+    expect(activity_subscription.get_status).to eq(:inactive)
   end
 
   it 'does not allow activity subscription without annual membership' do
@@ -161,7 +161,7 @@ RSpec.describe Subscription, type: :model do
       expect(sub.start_date).to eq(date)
       expect(sub.end_date).to eq(date)
 
-      expect(sub.get_status).to eq(:inattivo)
+      expect(sub.get_status).to eq(:inactive)
     end
 
     # Test Half Month
@@ -191,7 +191,7 @@ RSpec.describe Subscription, type: :model do
       payment = create(:payment, staff: staff, payable: sub)
       sub.reload
 
-      expect(sub.get_status).to eq(:attivo)
+      expect(sub.get_status).to eq(:active)
     end
 
     # Test One Month
@@ -219,7 +219,7 @@ RSpec.describe Subscription, type: :model do
       payment = create(:payment, staff: staff, payable: sub)
       sub.reload
 
-      expect(sub.get_status).to eq(:attivo)
+      expect(sub.get_status).to eq(:active)
     end
 
         # Test One Month One Lesson
@@ -247,7 +247,7 @@ RSpec.describe Subscription, type: :model do
       payment = create(:payment, staff: staff, payable: sub)
       sub.reload
 
-      expect(sub.get_status).to eq(:attivo)
+      expect(sub.get_status).to eq(:active)
     end
 
     # Test One Month Two Lesson
@@ -275,7 +275,7 @@ RSpec.describe Subscription, type: :model do
       payment = create(:payment, staff: staff, payable: sub)
       sub.reload
 
-      expect(sub.get_status).to eq(:attivo)
+      expect(sub.get_status).to eq(:active)
     end
 
     # Test Three Months
@@ -325,7 +325,7 @@ RSpec.describe Subscription, type: :model do
     end
   end
 
-  it 'should be :inattivo if payment not completed, :attivo if payment completed' do
+  it 'should be :inactive if payment not completed, :active if payment completed' do
     sub = create(:subscription,
                  user: user,
                  staff: staff,
@@ -337,11 +337,11 @@ RSpec.describe Subscription, type: :model do
     payment = create(:payment, staff: staff, payed: false, payable: sub)
     sub.reload
 
-    expect(sub.get_status).to eq(:inattivo)
+    expect(sub.get_status).to eq(:inactive)
 
     payment.update(payed: true)
     sub.reload
 
-    expect(sub.get_status).to eq(:attivo)
+    expect(sub.get_status).to eq(:active)
   end
 end

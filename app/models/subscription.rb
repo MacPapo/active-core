@@ -16,13 +16,13 @@ class Subscription < ApplicationRecord
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
 
-  enum status: [:inattivo, :attivo, :scaduto]
+  enum :status, [ :inactive, :active, :expired ]
 
   validates :start_date, :activity, :activity_plan, :user, :staff, presence: true
   validates :open, inclusion: { in: [true, false] }
   validate :annual_membership_paid?, if: :activity_subscription?
 
-  scope :active, -> { where(status: :attivo) }
+  scope :active, -> { where(status: :active) }
 
   OPEN_COST = 30.0
 
@@ -62,7 +62,7 @@ class Subscription < ApplicationRecord
   private
 
   def set_default_status
-    self.status ||= :inattivo
+    self.status ||= :inactive
   end
 
   def set_start_date

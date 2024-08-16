@@ -24,10 +24,10 @@ class MembershipsController < ApplicationController
 
   # POST /memberships
   def create
-    retrive_user(membership_params[:user_id])
     @membership = @user.build_membership(membership_params)
 
     if @membership.save
+      # TODO translate
       redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id), notice: "La Quota associativa è stata correttamente creata."
     else
       render :new, status: :unprocessable_entity
@@ -58,10 +58,6 @@ class MembershipsController < ApplicationController
 
     def set_user
       @user = User.find(params[:user_id])
-    end
-
-    def retrive_user(id)
-      @user = User.find(id)
     end
 
     # Only allow a list of trusted parameters through.

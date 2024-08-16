@@ -6,8 +6,8 @@ class Payment < ApplicationRecord
   belongs_to :payable, polymorphic: true
   belongs_to :staff
 
-  enum :payment_method, [ :pos, :contanti, :bonifico ], default: :contanti
-  enum :entry_type, [ :entrata, :uscita ], default: :entrata
+  enum :payment_method, [ :pos, :cash, :bank_transfer ], default: :cash
+  enum :entry_type, [ :income, :expense ], default: :income
 
   validates :payment_method, :entry_type, :payable, :staff, presence: true
   validates :payed, inclusion: { in: [ true, false ] }
@@ -37,10 +37,10 @@ class Payment < ApplicationRecord
     case payable_type
     when "Membership"
       membership = Membership.find(payable_id)
-      membership.attivo!
+      membership.active!
     when "Subscription"
       subscription = Subscription.find(payable_id)
-      subscription.attivo!
+      subscription.active!
     end
   end
 end

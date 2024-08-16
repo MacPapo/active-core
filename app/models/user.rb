@@ -55,7 +55,7 @@ class User < ApplicationRecord
   end
 
   def has_active_membership?
-    is_membership_active?
+    user.membership&.active?
   end
 
   def verify_compliance
@@ -89,11 +89,11 @@ class User < ApplicationRecord
       case membership&.get_status
       when nil
         0
-      when :inattivo
+      when :inactive
         1
-      when :scaduto
+      when :expired
         2
-      when :attivo
+      when :active
         3
       else
         p membership.get_status
@@ -130,10 +130,6 @@ class User < ApplicationRecord
     if med_cert_issue_date > Date.today
       errors.add(:med_cert_issue_date, I18n.t('global.errors.med_date_future'))
     end
-  end
-
-  def is_membership_active?
-    self.membership && self.membership.get_status == :attivo
   end
 
   def detach_lg_unless_minor

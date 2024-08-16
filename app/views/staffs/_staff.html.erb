@@ -29,7 +29,7 @@
         <%= staff.get_age %>
     </p>
 
-    <% if staff.get_role != :volontario %>
+    <% unless staff.volunteer? %>
         <p>
             <strong>Data rilascio certificato medico</strong>
             <%= staff.get_med_cert %>
