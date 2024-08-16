@@ -19,9 +19,11 @@
                 <h5 class="card-subtitle mb-2">
                     <%= t '.birth' %>
                 </h5>
-                <p class="card-text">
-                    <%= user.birth_day %> (<%= user.age %> anni)
-                </p>
+                <% if user.birth_day %>
+                    <p class="card-text">
+                        <%= user.birth_day %> (<%= user.age %> anni)
+                    </p>
+                <% end %>
             </div>
             <div class="col-md-4">
                 <h5 class="card-subtitle mb-2">

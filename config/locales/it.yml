@@ -108,7 +108,8 @@ it:
 
     errors:
       med_date_future: "non può essere nel Futuro"
-      no_mail: "Email Mancante"
+      no_email: "Email Mancante"
+      no_birth_date: "Data di Nascita Mancante"
       no_phone: "Cellulare Mancante"
       no_med: "Certificato Medico Mancante"
       no_mem: "L'utente deve avere pagato la Quota Associativa per essere iscritto a questa Attività"

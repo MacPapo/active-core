@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :waitlists
   devise_for :staffs
 
   authenticated :staff, -> { _1.admin? } do

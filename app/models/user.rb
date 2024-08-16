@@ -5,14 +5,15 @@ class User < ApplicationRecord
 
   # after_save :detach_lg_unless_minor, unless: :minor?
 
-  belongs_to :legal_guardian, optional: true
+  belongs_to :legal_guardian , optional: true
 
-  has_one :staff      , dependent: :destroy
-  has_one :membership , dependent: :destroy
+  has_one    :staff          , dependent: :destroy
+  has_one    :membership     , dependent: :destroy
 
-  has_many :subscriptions         , dependent: :destroy
+  has_many   :subscriptions , dependent: :destroy
+  has_many   :waitlists     , dependent: :destroy
 
-  validates :cf, :name, :surname, :birth_day, presence: true
+  validates :name, :surname, presence: true
   validates :affiliated, inclusion: { in: [ true, false ] }
 
   validates :legal_guardian, presence: true, if: :minor?

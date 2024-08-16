@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_14_151748) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_16_141541) do
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
     t.integer "num_participants", default: 0, null: false
@@ -162,22 +162,30 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_14_151748) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "cf", null: false
+    t.string "cf"
     t.string "name", null: false
     t.string "surname", null: false
     t.string "email"
     t.string "phone"
-    t.date "birth_day", null: false
+    t.date "birth_day"
     t.date "med_cert_issue_date"
     t.boolean "affiliated", default: false, null: false
     t.integer "legal_guardian_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["birth_day"], name: "index_users_on_birth_day"
-    t.index ["cf"], name: "index_users_on_cf", unique: true
     t.index ["legal_guardian_id"], name: "index_users_on_legal_guardian_id"
     t.index ["name"], name: "index_users_on_name"
     t.index ["surname"], name: "index_users_on_surname"
+  end
+
+  create_table "waitlists", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "activity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_waitlists_on_activity_id"
+    t.index ["user_id"], name: "index_waitlists_on_user_id"
   end
 
   add_foreign_key "activity_plans", "activities"
@@ -200,4 +208,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_14_151748) do
   add_foreign_key "subscriptions", "staffs"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "users", "legal_guardians"
+  add_foreign_key "waitlists", "activities"
+  add_foreign_key "waitlists", "users"
 end

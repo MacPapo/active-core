@@ -40,7 +40,9 @@
                                 <i class="bi bi-person-plus-fill"></i>
                             <% end %>
                         <% else %>
-                            <!-- WAITLIST -->
+                            <%= link_to new_waitlist_path(activity_id: activity), class: 'btn btn-info' do %>
+                                <i class="bi bi-telephone-plus-fill"></i>
+                            <% end %>
                         <% end %>
                     </div>
                 </td>
