@@ -1,12 +1,12 @@
 class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: %i[ show edit update destroy ]
-  before_action :set_activity, only: %i[ edit update new create ]
+  before_action :set_activity, only: %i[ new create ]
   before_action :set_users, only: %i[ edit update new create ]
 
 
   # GET /subscriptions
   def index
-    @subscriptions = Subscription.all.load_async
+    @pagy, @subscriptions = pagy(Subscription.all.load_async)
   end
 
   # GET /subscriptions/1
@@ -23,6 +23,8 @@ class SubscriptionsController < ApplicationController
 
   # GET /subscriptions/1/edit
   def edit
+    @activity = @subscription.activity
+    @plans = @activity.activity_plans
   end
 
   # POST /subscriptions
@@ -58,11 +60,8 @@ class SubscriptionsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_subscription
+    p Subscription.find(params[:id])
     @subscription = Subscription.find(params[:id])
-  end
-
-  def set_user
-    @user = User.find(params[:user_id] || subscription_params[:user_id])
   end
 
   def set_activity
@@ -92,14 +91,13 @@ class SubscriptionsController < ApplicationController
       )
 
       if open_subscription.save
-
         linked_subscription = LinkedSubscription.build(
           subscription: @subscription,
           open_subscription: open_subscription
         )
 
         if linked_subscription.save
-          @subscription.update(linked_subscription: linked_subscription)
+          # @subscription.update(linked_subscription: linked_subscription)
         else
           @subscription.destroy
           render :new, status: :unprocessable_entity

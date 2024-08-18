@@ -29,6 +29,7 @@ it:
       subscription: "Iscrizione"
       payment: "Pagamento"
       staff: "Collaboratore"
+      waitlist: "Lista di Attesa"
 
     attributes:
       user:
@@ -71,6 +72,11 @@ it:
         staff: "Collaboratore"
         linked_subscription: "Attività collegata (OPEN)"
 
+      waitlist:
+        name: "Nome"
+        surname: "Cognome"
+        phone: "Numero di Cellulare"
+
       membership:
         start_date: "Data inizio"
         end_date: "Data scadenza"
@@ -83,6 +89,7 @@ it:
         end_date: "Data scadenza"
         status: "Stato"
         user: "Utente"
+        user_id: "Utente"
         staff: "Collaboratore"
         activity: "Attività"
         activity_plan: "Piano per questa Attività"
@@ -104,6 +111,7 @@ it:
     user: "Utenti"
     staff: "Collaboratori"
     activity: "Attività"
+    subscription: "Iscrizioni"
     del_sub: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile"
 
     errors:
@@ -128,12 +136,17 @@ it:
       birth: "Data di Nascita"
       affiliated: "Convenzionato"
       membership: "Quota Associativa"
-      activities: "Attività"
+      activity: "Attività"
       action: "Azioni"
       plan: "Piano"
+      cost: "Costo"
+      id: "ID"
+      affiliated_cost: "Costo Convenzionati"
       start_date: "Data inizio"
       end_date: "Data scadenza"
       open: "OPEN"
+      duration: "Durata"
+      updated_at: "Data Ultimo Aggiornamento"
 
   users:
     new:
@@ -169,7 +182,14 @@ it:
   activities:
     index:
       title: "Attività"
+    activity:
+      title: "Dettagli Attività"
+      name: "Nome attività"
+      num_participants: "Numero partecipanti"
+      plans: "Piani per questa attività"
+      add_plan: "Aggiungi Piano per l'attività"
     show:
+      list_users: "Lista utenti iscritti"
       no_subs: "Ancora nessun partecipante per questa Attività"
     new:
       title: "Inserimento Nuova Attività"
@@ -204,5 +224,11 @@ it:
       staff: "Collaboratore che ha Registrato questa Transazione"
 
   subscriptions:
+    index:
+      title: "Iscrizioni"
     new:
       title: "Inserimento di una Nuova Iscrizione"
+
+  waitlists:
+    new:
+      title: "Inserimento in Lista di Attesa"

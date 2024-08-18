@@ -1,12 +1,114 @@
-<h1>Subscriptions</h1>
+<h1 class="mb-3">
+    <%= t '.title' %>
+</h1>
 
 <div id="subscriptions">
-  <% @subscriptions.each do |subscription| %>
-    <%= render subscription %>
-    <p>
-      <%= link_to "Show this subscription", subscription %>
-    </p>
-  <% end %>
-</div>
+    <table class="table table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>
+                    <%= t 'global.table.id' %>
+                </th>
+                <th>
+                    <%= t 'global.table.updated_at' %>
+                </th>
+                <th>
+                    <%= t 'global.table.name' %>
+                </th>
+                <th>
+                    <%= t 'global.table.surname' %>
+                </th>
+                <th>
+                    <%= t 'global.table.activity' %>
+                </th>
+                <th>
+                    <%= t 'global.table.open' %>
+                </th>
+                <th>
+                    <%= t 'global.table.activity' %>
+                </th>
+                <th>
+                    <%= t 'global.table.duration' %>
+                </th>
+                <th>
+                    <%= t 'global.table.action' %>
+                </th>
+            </tr>
+        </thead>
 
-<%= link_to "New subscription", new_subscription_path %>
+        <tbody class="table-group-divider">
+
+            <% @subscriptions.each do |subscription| %>
+
+                <tr>
+
+                    <!-- ID -->
+                    <th scope="row">
+                        <%= subscription.id %>
+                    </th>
+
+                    <!-- Updated At -->
+                    <td>
+                        <%= subscription.updated_at %>
+                    </td>
+
+                    <!-- Name -->
+                    <% user = subscription.user %>
+                    <td>
+                        <%= user.name %>
+                    </td>
+
+                    <!-- Surname -->
+                    <td>
+                        <%= user.surname %>
+                    </td>
+
+                    <!-- Activity -->
+                    <% activity = subscription.activity %>
+                    <% plan = subscription.activity_plan %>
+                    <td>
+                        <%= activity.name %>
+                    </td>
+
+                    <!-- OPEN -->
+                    <td>
+                        <%= subscription.open %>
+                    </td>
+
+                    <!-- ActivityPlan -->
+                    <td>
+                        <%= plan.humanize_plan %>
+                    </td>
+
+                    <!-- Duration -->
+                    <td>
+                        <%= subscription.start_date %> - <%= subscription.end_date %>
+                    </td>
+
+                    <!-- Action -->
+                    <td>
+                        <%= link_to subscription, class: 'btn btn-primary' do %>
+                            <i class="bi bi-eye-fill"></i>
+                        <% end %>
+
+                        <%= link_to edit_subscription_path(subscription), class: 'btn btn-warning' do %>
+                            <i class="bi bi-pencil-fill"></i>
+                        <% end %>
+
+                        <% if current_staff.admin? %>
+                            <%= button_to subscription,
+                                          class: 'btn btn-danger',
+                                          method: :delete,
+                                          data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" },
+                                          form: {style: 'display:inline-block;'} do %>
+                                <i class="bi bi-trash3-fill"></i>
+                            <% end %>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+
+    </table>
+    <%== pagy_bootstrap_nav(@pagy) %>
+</div>

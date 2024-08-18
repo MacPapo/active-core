@@ -148,12 +148,7 @@
         <hr/>
 
         <div>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="mb-0"><%= t '.subs' %></h3>
-                <%= link_to new_subscription_path(user_id: user, staff_id: current_staff), class: 'btn btn-success' do %>
-                    <i class="bi bi-plus-circle-fill"></i> Aggiungi Iscrizione
-                <% end %>
-            </div>
+            <h3 class="mb-3"><%= t '.subs' %></h3>
             <% if user.subscriptions.length > 0 %>
                 <%= render 'subscriptions/subscriptions_table',
                            subscriptions: user.subscriptions,

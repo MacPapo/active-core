@@ -13,7 +13,7 @@
     <div class="row mb-3">
         <div>
             <%= form.label :plan, class: 'form-label' %>
-            <%= form.select :plan, ActivityPlan.humanize_plans, {}, { class: 'form-select' } %>
+            <%= form.select :plan, @plans, {}, { class: 'form-select' } %>
         </div>
     </div>
 

@@ -1,12 +1,12 @@
 class ActivitiesController < ApplicationController
   before_action :set_activity, only: %i[ show edit update destroy ]
 
-  # GET /activities or /activities.json
+  # GET /activities
   def index
-    @pagy, @activities = pagy(Activity.all)
+    @pagy, @activities = pagy(Activity.all.load_async)
   end
 
-  # GET /activities/1 or /activities/1.json
+  # GET /activities/1
   def show
   end
 
@@ -19,42 +19,31 @@ class ActivitiesController < ApplicationController
   def edit
   end
 
-  # POST /activities or /activities.json
+  # POST /activities
   def create
     @activity = Activity.new(activity_params)
 
-    respond_to do |format|
-      if @activity.save
-        format.html { redirect_to activity_url(@activity), notice: "Activity was successfully created." }
-        format.json { render :show, status: :created, location: @activity }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @activity.errors, status: :unprocessable_entity }
-      end
+    if @activity.save
+      redirect_to activity_url(@activity), notice: "Activity was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /activities/1 or /activities/1.json
+  # PATCH/PUT /activities/1
   def update
-    respond_to do |format|
-      if @activity.update(activity_params)
-        format.html { redirect_to activity_url(@activity), notice: "Activity was successfully updated." }
-        format.json { render :show, status: :ok, location: @activity }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @activity.errors, status: :unprocessable_entity }
-      end
+    if @activity.update(activity_params)
+      format.html { redirect_to activity_url(@activity), notice: "Activity was successfully updated." }
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /activities/1 or /activities/1.json
+  # DELETE /activities/1
   def destroy
     @activity.destroy!
 
-    respond_to do |format|
-      format.html { redirect_to activities_url, notice: "Activity was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to activities_url, notice: "Activity was successfully destroyed."
   end
 
   private

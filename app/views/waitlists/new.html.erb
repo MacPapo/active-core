@@ -1,9 +1,9 @@
-<h1>New waitlist</h1>
+<div class="card">
+    <div class="card-header">
+        <h1><%= t '.title' %></h1>
+    </div>
 
-<%= render "form", waitlist: @waitlist %>
-
-<br>
-
-<div>
-  <%= link_to "Back to waitlists", waitlists_path %>
+    <div class="card-body">
+        <%= render "form", waitlist: @waitlist %>
+    </div>
 </div>

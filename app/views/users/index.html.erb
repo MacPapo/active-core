@@ -6,147 +6,153 @@
 </div>
 
 <div id="users">
-    <table class="table">
-        <tr>
-            <th><%= t 'global.table.status' %></th>
-            <th><%= t 'global.table.name' %></th>
-            <th><%= t 'global.table.surname' %></th>
-            <th><%= t 'global.table.birth' %></th>
-            <th><%= t 'global.table.affiliated' %></th>
-            <th><%= t 'global.table.membership' %></th>
-            <th><%= t 'global.table.activities' %></th>
-            <th><%= t 'global.table.action' %></th>
-        </tr>
-        <% @users.each do |user| %>
+    <table class="table table-hover">
+        <thead class="table-light">
             <tr>
-                <!-- Status -->
-                <td>
-                    <span
-                        <% compliance = user.verify_compliance %>
-                        <% is_compliance = compliance[:status] %>
-                        type="button"
-                        class="badge rounded-pill text-bg-<%= is_compliance ? 'success' : 'warning' %>"
-                        <% unless is_compliance %>
-                            data-bs-toggle="popover"
-                            data-bs-placement="top"
-                            data-bs-content="<%= compliance[:errors].join(", ") %>"
-                        <% end %>
-                    >
-                        <% if is_compliance %>
-                            <i class="bi bi-person-fill-check"></i>
-                        <% else %>
-                            <i class="bi bi-person-fill-exclamation"></i>
-                        <% end %>
-                    </span>
-                </td>
-
-                <!-- Name -->
-                <td>
-                    <%= user.name%>
-                </td>
-
-                <!-- Surname -->
-                <td>
-                    <%= user.surname %>
-                </td>
-
-                <!-- Birth Day -->
-                <td>
-                    <%= user.birth_day %>
-                </td>
-
-                <!-- Affiliated -->
-                <td>
-                    <%= user.affiliated ? 'Si' : 'No' %>
-                </td>
-
-                <!-- Membership -->
-                <td>
-                    <% membership = user.verify_membership %>
-                    <% membership_status = membership[:status] %>
-                    <% days_til_renewal = membership[:days_til_renewal] %>
-                    <% membership_color = nil %>
-                    <% membership_phrase = nil %>
-                    <% case membership_status
-                    when 0 %>
-                        <% membership_color = 'danger' %>
-                        <% membership_phrase = 'Da Inserire' %>
-
-                        <%= button_to "#{membership_phrase}",
-                                      new_membership_path,
-                                      params: { user_id: user.id },
-                                      method: :get,
-                                      class: "btn badge rounded-pill text-bg-#{membership_color}" %>
-
-                    <% when 1 %>
-                        <% membership_color = 'info' %>
-                        <% membership_phrase = 'Da Pagare' %>
-
-                        <%= button_to "#{membership_phrase}",
-                                      new_payment_path,
-                                      params: { payable_type: 'Membership', payable_id: user.membership.id },
-                                      method: :get,
-                                      class: "btn badge rounded-pill text-bg-#{membership_color}" %>
-
-                    <% when 2 %>
-                        <% membership_color = 'warning' %>
-                        <% membership_phrase = 'Expired' %>
-
-                        <%= button_to "#{membership_phrase}",
-                                      edit_membership_path(user.membership),
-                                      params: { user_id: user },
-                                      method: :get,
-                                      class: "btn badge rounded-pill text-bg-#{membership_color}" %>
-
-                    <% else %>
-                        <% membership_color = 'success' %>
-                        <% membership_phrase = 'Attivo' %>
-
-                        <%= button_to "#{membership_phrase}",
-                                      membership_path(user.membership),
-                                      method: :get,
-                                      class: "btn badge rounded-pill text-bg-#{membership_color}" %>
-
-                    <% end %>
-
-                </td>
-
-                <!-- Activities -->
-                <td>
-                    <!-- TODO -->
-                    <% subs = user.subscriptions %>
-                    <% subs.each do |sub| %>
-                        <% ac = sub.activity %>
-                        <%= button_to "#{ac.name}",
-                                      subscription_path(sub),
-                                      method: :get,
-                                      class: "btn badge rounded-pill text-bg-#{sub.open? ? 'secondary' : 'info' }"
-                        %>
-                    <% end %>
-                </td>
-
-                <!-- Action buttons -->
-                <td>
-                    <%= link_to user_path(user), class: 'btn btn-primary' do %>
-                        <i class="bi bi-eye-fill"></i>
-                    <% end %>
-
-                    <%= link_to edit_user_path(user), class: 'btn btn-warning' do %>
-                        <i class="bi bi-pencil-fill"></i>
-                    <% end %>
-
-                    <% if current_staff.admin? %>
-                        <%= button_to user_path(user),
-                                      class: 'btn btn-danger',
-                                      method: :delete,
-                                      data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" },
-                                      form: {style: 'display:inline-block;'} do %>
-                            <i class="bi bi-trash3-fill"></i>
-                        <% end %>
-                    <% end %>
-                </td>
+                <th><%= t 'global.table.status' %></th>
+                <th><%= t 'global.table.name' %></th>
+                <th><%= t 'global.table.surname' %></th>
+                <th><%= t 'global.table.birth' %></th>
+                <th><%= t 'global.table.affiliated' %></th>
+                <th><%= t 'global.table.membership' %></th>
+                <th><%= t 'global.table.activity' %></th>
+                <th><%= t 'global.table.action' %></th>
             </tr>
-        <% end %>
+        </thead>
+
+        <tbody class="table-group-divider">
+            <% @users.each do |user| %>
+
+                <tr>
+                    <!-- Status -->
+                    <td>
+                        <span
+                            <% compliance = user.verify_compliance %>
+                            <% is_compliance = compliance[:status] %>
+                            type="button"
+                            class="badge rounded-pill text-bg-<%= is_compliance ? 'success' : 'warning' %>"
+                            <% unless is_compliance %>
+                                data-bs-toggle="popover"
+                                data-bs-placement="top"
+                                data-bs-content="<%= compliance[:errors].join(", ") %>"
+                            <% end %>
+                        >
+                            <% if is_compliance %>
+                                <i class="bi bi-person-fill-check"></i>
+                            <% else %>
+                                <i class="bi bi-person-fill-exclamation"></i>
+                            <% end %>
+                        </span>
+                    </td>
+
+                    <!-- Name -->
+                    <td>
+                        <%= user.name%>
+                    </td>
+
+                    <!-- Surname -->
+                    <td>
+                        <%= user.surname %>
+                    </td>
+
+                    <!-- Birth Day -->
+                    <td>
+                        <%= user.birth_day %>
+                    </td>
+
+                    <!-- Affiliated -->
+                    <td>
+                        <%= user.affiliated ? 'Si' : 'No' %>
+                    </td>
+
+                    <!-- Membership -->
+                    <td>
+                        <% membership = user.verify_membership %>
+                        <% membership_status = membership[:status] %>
+                        <% days_til_renewal = membership[:days_til_renewal] %>
+                        <% membership_color = nil %>
+                        <% membership_phrase = nil %>
+                        <% case membership_status
+                        when 0 %>
+                            <% membership_color = 'danger' %>
+                            <% membership_phrase = 'Da Inserire' %>
+
+                            <%= button_to "#{membership_phrase}",
+                                          new_membership_path,
+                                          params: { user_id: user.id },
+                                          method: :get,
+                                          class: "btn badge rounded-pill text-bg-#{membership_color}" %>
+
+                        <% when 1 %>
+                            <% membership_color = 'info' %>
+                            <% membership_phrase = 'Da Pagare' %>
+
+                            <%= button_to "#{membership_phrase}",
+                                          new_payment_path,
+                                          params: { payable_type: 'Membership', payable_id: user.membership.id },
+                                          method: :get,
+                                          class: "btn badge rounded-pill text-bg-#{membership_color}" %>
+
+                        <% when 2 %>
+                            <% membership_color = 'warning' %>
+                            <% membership_phrase = 'Expired' %>
+
+                            <%= button_to "#{membership_phrase}",
+                                          edit_membership_path(user.membership),
+                                          params: { user_id: user },
+                                          method: :get,
+                                          class: "btn badge rounded-pill text-bg-#{membership_color}" %>
+
+                        <% else %>
+                            <% membership_color = 'success' %>
+                            <% membership_phrase = 'Attivo' %>
+
+                            <%= button_to "#{membership_phrase}",
+                                          membership_path(user.membership),
+                                          method: :get,
+                                          class: "btn badge rounded-pill text-bg-#{membership_color}" %>
+
+                        <% end %>
+
+                    </td>
+
+                    <!-- Activities -->
+                    <td>
+                        <!-- TODO -->
+                        <% subs = user.subscriptions %>
+                        <% subs.each do |sub| %>
+                            <% ac = sub.activity %>
+                            <%= button_to "#{ac.name}",
+                                          subscription_path(sub),
+                                          method: :get,
+                                          class: "btn badge rounded-pill text-bg-#{sub.open? ? 'secondary' : 'info' }"
+                            %>
+                        <% end %>
+                    </td>
+
+                    <!-- Action buttons -->
+                    <td>
+                        <%= link_to user, class: 'btn btn-primary' do %>
+                            <i class="bi bi-eye-fill"></i>
+                        <% end %>
+
+                        <%= link_to edit_user_path(user), class: 'btn btn-warning' do %>
+                            <i class="bi bi-pencil-fill"></i>
+                        <% end %>
+
+                        <% if current_staff.admin? %>
+                            <%= button_to user_path(user),
+                                          class: 'btn btn-danger',
+                                          method: :delete,
+                                          data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" },
+                                          form: {style: 'display:inline-block;'} do %>
+                                <i class="bi bi-trash3-fill"></i>
+                            <% end %>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
     </table>
     <%== pagy_bootstrap_nav(@pagy) %>
 </div>

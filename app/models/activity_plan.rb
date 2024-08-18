@@ -19,8 +19,8 @@ class ActivityPlan < ApplicationRecord
     self.plan.to_sym
   end
 
-  def self.humanize_plans
-    plans.keys.map do |key|
+  def self.humanize_plans(keys=plans.keys)
+    keys.map do |key|
       [I18n.t("activemodel.enums.activity_plan.plan.#{key}"), key]
     end
   end

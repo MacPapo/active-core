@@ -1,43 +1,43 @@
 <%= form_with(model: waitlist) do |form| %>
-  <% if waitlist.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(waitlist.errors.count, "error") %> prohibited this waitlist from being saved:</h2>
+    <% if waitlist.errors.any? %>
+        <div style="color: red">
+            <h2><%= t('global.forms.messages.errors', count: waitlist.errors.count) %></h2>
 
-      <ul>
-        <% waitlist.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+            <ul>
+                <% waitlist.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :name, class: 'form-label' %>
+                <%= form.text_field :name, required: true, class: 'form-control' %>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :surname, class: 'form-label' %>
+                <%= form.text_field :surname, required: true, class: 'form-control' %>
+            </div>
+        </div>
     </div>
-  <% end %>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :phone, class: 'form-label' %>
+                <%= form.text_field :phone, class: 'form-control' %>
+            </div>
+        </div>
+    </div>
 
+    <%= form.hidden_field :activity_id, value: @activity.id %>
 
-  <div class="row">
-      <div class="col">
-          <div class="mb-3">
-              <%= form.label :name, class: 'form-label' %>
-              <%= form.text_field :name, required: true, class: 'form-control' %>
-          </div>
-      </div>
-      <div class="col">
-          <div class="mb-3">
-              <%= form.label :surname, class: 'form-label' %>
-              <%= form.text_field :surname, required: true, class: 'form-control' %>
-          </div>
-      </div>
-  </div>
-  <div class="row">
-      <div class="col">
-          <div class="mb-3">
-              <%= form.label :phone, class: 'form-label' %>
-              <%= form.text_field :phone, class: 'form-control' %>
-          </div>
-      </div>
-  </div>
-
-  <%= form.hidden_field :activity_id, value: @activity.id %>
-
-  <div>
-    <%= form.submit %>
-  </div>
+    <div>
+        <%= form.submit %>
+    </div>
 <% end %>
