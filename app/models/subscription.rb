@@ -4,14 +4,13 @@ class Subscription < ApplicationRecord
 
   after_initialize :set_default_status, if: :new_record?
 
-  before_destroy :delete_linked_subscription
-
   belongs_to :user
   belongs_to :staff
   belongs_to :activity
   belongs_to :activity_plan
 
-  has_one :linked_subscription, class_name: 'LinkedSubscription', foreign_key: :subscription_id, dependent: :destroy
+  has_one :normal_subscription, class_name: 'Subscription', foreign_key: "open_subscription_id", dependent: :destroy
+  belongs_to :open_subscription, class_name: 'Subscription', optional: true, dependent: :destroy
 
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
@@ -19,7 +18,6 @@ class Subscription < ApplicationRecord
   enum :status, [ :inactive, :active, :expired ]
 
   validates :start_date, :activity, :activity_plan, :user, :staff, presence: true
-  validates :open, inclusion: { in: [true, false] }
   validate :annual_membership_paid?, if: :activity_subscription?
 
   scope :active, -> { where(status: :active) }
@@ -42,7 +40,7 @@ class Subscription < ApplicationRecord
         cost
       end
 
-    open? ? acost + OPEN_COST : acost
+    self.open? ? acost + OPEN_COST : acost
   end
 
   def get_status
@@ -50,7 +48,8 @@ class Subscription < ApplicationRecord
   end
 
   def open?
-    self.open
+    p self.open_subscription.present?
+    self.open_subscription.present?
   end
 
   def days_til_renewal
@@ -81,12 +80,6 @@ class Subscription < ApplicationRecord
   def set_end_date
     if start_date && activity_plan
       self.end_date = plan_handler(activity_plan)
-    end
-  end
-
-  def delete_linked_subscription
-    if linked_subscription.present?
-      linked_subscription.destroy
     end
   end
 

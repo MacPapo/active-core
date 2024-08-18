@@ -41,8 +41,10 @@
     </div>
 
     <div class="form-check mb-3">
-        <%= form.check_box :open, class: 'form-check-input' %>
-        <%= form.label :open, 'Open', class: 'form-check-label' %>
+        <%= label_tag do %>
+            <%= check_box_tag(:open, class: 'form-check-input') %>
+            OPEN
+        <% end %>
     </div>
 
     <%= form.hidden_field :activity_id, value: @activity.id %>

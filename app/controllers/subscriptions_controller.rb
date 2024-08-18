@@ -32,7 +32,7 @@ class SubscriptionsController < ApplicationController
     @subscription = Subscription.build(subscription_params)
 
     if @subscription.save
-      create_open_subscription if @subscription.open?
+      create_open_subscription if params[:open]
 
       redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription)
     else
@@ -60,7 +60,6 @@ class SubscriptionsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_subscription
-    p Subscription.find(params[:id])
     @subscription = Subscription.find(params[:id])
   end
 
@@ -87,22 +86,12 @@ class SubscriptionsController < ApplicationController
         activity: weight_room_activity,
         activity_plan: weight_room_plan,
         start_date: subscription_params[:start_date],
-        open: true
       )
 
+      open_subscription.normal_subscription = @subscription
+
       if open_subscription.save
-        linked_subscription = LinkedSubscription.build(
-          subscription: @subscription,
-          open_subscription: open_subscription
-        )
-
-        if linked_subscription.save
-          # @subscription.update(linked_subscription: linked_subscription)
-        else
-          @subscription.destroy
-          render :new, status: :unprocessable_entity
-        end
-
+        @subscription.update(open_subscription_id: open_subscription.id)
       else
         @subscription.destroy
         render :new, status: :unprocessable_entity
@@ -114,6 +103,6 @@ class SubscriptionsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def subscription_params
-    params.require(:subscription).permit(:start_date, :end_date, :user_id, :staff_id, :activity_id, :activity_plan_id, :open)
+    params.require(:subscription).permit(:start_date, :end_date, :user_id, :staff_id, :activity_id, :activity_plan_id)
   end
 end

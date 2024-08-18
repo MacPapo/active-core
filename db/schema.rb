@@ -45,28 +45,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_16_141541) do
     t.index ["surname"], name: "index_legal_guardians_on_surname"
   end
 
-  create_table "linked_subscriptions", force: :cascade do |t|
-    t.integer "subscription_id", null: false
-    t.integer "open_subscription_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["open_subscription_id"], name: "index_linked_subscriptions_on_open_subscription_id"
-    t.index ["subscription_id"], name: "index_linked_subscriptions_on_subscription_id"
-  end
-
   create_table "membership_histories", force: :cascade do |t|
     t.date "renewal_date"
     t.date "old_end_date"
     t.date "new_end_date"
     t.integer "action", default: 0, null: false
-    t.integer "user_id", null: false
     t.integer "membership_id", null: false
-    t.integer "staff_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["membership_id"], name: "index_membership_histories_on_membership_id"
-    t.index ["staff_id"], name: "index_membership_histories_on_staff_id"
-    t.index ["user_id"], name: "index_membership_histories_on_user_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -130,33 +117,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_16_141541) do
     t.date "old_end_date"
     t.date "new_end_date"
     t.integer "action", default: 0, null: false
-    t.integer "user_id", null: false
     t.integer "subscription_id", null: false
-    t.integer "activity_id", null: false
-    t.integer "activity_plan_id", null: false
-    t.integer "staff_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["activity_id"], name: "index_subscription_histories_on_activity_id"
-    t.index ["activity_plan_id"], name: "index_subscription_histories_on_activity_plan_id"
-    t.index ["staff_id"], name: "index_subscription_histories_on_staff_id"
     t.index ["subscription_id"], name: "index_subscription_histories_on_subscription_id"
-    t.index ["user_id"], name: "index_subscription_histories_on_user_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
     t.date "start_date", null: false
     t.date "end_date", null: false
     t.integer "status", default: 0, null: false
-    t.boolean "open", default: false
     t.integer "user_id", null: false
     t.integer "activity_id", null: false
     t.integer "activity_plan_id", null: false
     t.integer "staff_id", null: false
+    t.integer "open_subscription_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["activity_id"], name: "index_subscriptions_on_activity_id"
     t.index ["activity_plan_id"], name: "index_subscriptions_on_activity_plan_id"
+    t.index ["open_subscription_id"], name: "index_subscriptions_on_open_subscription_id"
     t.index ["staff_id"], name: "index_subscriptions_on_staff_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
@@ -189,23 +169,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_16_141541) do
   end
 
   add_foreign_key "activity_plans", "activities"
-  add_foreign_key "linked_subscriptions", "subscriptions"
-  add_foreign_key "linked_subscriptions", "subscriptions", column: "open_subscription_id"
   add_foreign_key "membership_histories", "memberships"
-  add_foreign_key "membership_histories", "staffs"
-  add_foreign_key "membership_histories", "users"
   add_foreign_key "memberships", "staffs"
   add_foreign_key "memberships", "users"
   add_foreign_key "payments", "staffs"
   add_foreign_key "staffs", "users"
-  add_foreign_key "subscription_histories", "activities"
-  add_foreign_key "subscription_histories", "activity_plans"
-  add_foreign_key "subscription_histories", "staffs"
   add_foreign_key "subscription_histories", "subscriptions"
-  add_foreign_key "subscription_histories", "users"
   add_foreign_key "subscriptions", "activities"
   add_foreign_key "subscriptions", "activity_plans"
   add_foreign_key "subscriptions", "staffs"
+  add_foreign_key "subscriptions", "subscriptions", column: "open_subscription_id"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "users", "legal_guardians"
   add_foreign_key "waitlists", "activities"

@@ -42,8 +42,8 @@ class Payment < ApplicationRecord
       subscription = Subscription.find(payable_id)
       subscription.active!
 
-      if subscription.open && subscription.linked_subscription
-        subscription.linked_subscription.open_subscription&.active!
+      if subscription.open?
+        subscription.open_subscription&.active!
       end
     end
   end

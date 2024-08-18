@@ -6,11 +6,7 @@ class CreateSubscriptionHistories < ActiveRecord::Migration[7.1]
       t.date       :new_end_date
       t.integer    :action        , default: 0, null: false
 
-      t.references :user          , null: false, foreign_key: true
       t.references :subscription  , null: false, foreign_key: true
-      t.references :activity      , null: false, foreign_key: true
-      t.references :activity_plan , null: false, foreign_key: true
-      t.references :staff         , null: true, foreign_key: true
 
       t.timestamps
     end

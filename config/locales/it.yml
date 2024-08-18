@@ -70,7 +70,7 @@ it:
         activity: "Attività"
         activity_plan: "Piano per l'Attività"
         staff: "Collaboratore"
-        linked_subscription: "Attività collegata (OPEN)"
+        open_subscription: "Attività collegata (OPEN)"
 
       waitlist:
         name: "Nome"
