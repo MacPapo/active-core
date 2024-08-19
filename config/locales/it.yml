@@ -154,7 +154,11 @@ it:
     edit:
       title: "Aggiornamento dell'Utente"
     index:
+      title: "Utenti"
       add_user: "Aggiungi Utente"
+      users:
+        one: "%{count} registrato"
+        other: "%{count} registrati"
     user:
       user_detail: "Dettagli Utente"
       personal_data: "Anagrafica"
@@ -212,6 +216,8 @@ it:
       action: "Azioni"
     new:
       title: "Inserimento di un Nuovo Pagamento"
+    edit:
+      title: "Modifica dei dati Pagamento"
     payment:
       payment_detail: "Dettagli Pagamento"
       payment_info: "Informazioni"

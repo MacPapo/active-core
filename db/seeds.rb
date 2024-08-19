@@ -30,7 +30,7 @@ end
 puts "LegalGuardians Added"
 
 # Seed Users with Legal Guardians
-40.times do
+1000.times do
   legal_guardian = LegalGuardian.all.sample
   User.create!(
     cf: Faker::Finance.vat_number,
@@ -47,7 +47,7 @@ end
 puts "Minor Users Added"
 
 # Seed Users without Legal Guardians
-20.times do
+10000.times do
   User.create!(
     cf: Faker::Finance.vat_number,
     name: Faker::Name.first_name,

@@ -48,8 +48,7 @@ class Subscription < ApplicationRecord
   end
 
   def open?
-    p self.open_subscription.present?
-    self.open_subscription.present?
+    self.open_subscription.present? || self.normal_subscription.present?
   end
 
   def days_til_renewal

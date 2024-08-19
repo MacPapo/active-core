@@ -3,7 +3,11 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @pagy, @users = pagy(User.all)
+    @pagy, @users = pagy(
+      User
+        .all
+        .includes(:membership, :subscriptions, :legal_guardian)
+    )
   end
 
   # GET /users/1
