@@ -1,6 +1,7 @@
-<h1 class="mb-3">
-    <%= t '.title' %>
-</h1>
+<div class="d-flex align-items-center mb-3">
+  <h1 class="me-2"><%= t '.title' %></h1>
+  <span>(<%= t('.registered', count: @pagy.count) %>)</span>
+</div>
 
 <div id="subscriptions">
     <table class="table table-hover">
@@ -13,7 +14,8 @@
                 <th><%= t 'global.table.activity' %></th>
                 <th><%= t 'global.table.open' %></th>
                 <th><%= t 'global.table.plan' %></th>
-                <th><%= t 'global.table.duration' %></th>
+                <th><%= t 'global.table.start_date' %></th>
+		<th><%= t 'global.table.end_date' %></th>
                 <th><%= t 'global.table.action' %></th>
             </tr>
         </thead>
@@ -64,8 +66,12 @@
 
                     <!-- Duration -->
                     <td>
-                        <%= subscription.start_date %> - <%= subscription.end_date %>
+                        <%= subscription.start_date %>
                     </td>
+
+		    <td>
+		      <%= subscription.end_date %>
+		    </td>		    
 
                     <!-- Action -->
                     <td>

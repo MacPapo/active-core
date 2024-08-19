@@ -1,98 +1,108 @@
-<h1 class="mb-0">
-    <%= t '.title' %>
-</h1>
+<div class="d-flex align-items-center mb-3">
+  <h1 class="me-2"><%= t '.title' %></h1>
+  <span>(<%= t('.registered', count: @pagy.count) %>)</span>
+</div>
 
 <div id="payments">
-    <table class="table">
-        <tr>
-            <th>
-                <%= t '.id' %>
-            </th>
-            <th>
-                <%= t '.date' %>
-            </th>
-            <th>
-                <%= t '.payable_type' %>
-            </th>
-            <th>
-                <%= t '.amount' %>
-            </th>
-            <th>
-                <%= t '.payment_method' %>
-            </th>
-            <th>
-                <%= t '.entry_type' %>
-            </th>
-            <th>
-                <%= t '.note' %>
-            </th>
-            <th>
-                <%= t '.staff' %>
-            </th>
-            <th>
-                <%= t '.action' %>
-            </th>
-        </tr>
-        <% @payments.each do |payment| %>
-            <tr>
+  <table class="table table-hover">
+    <thead class="table-light">
+      
+      <tr>
+        <th>
+          <%= t '.id' %>
+        </th>
+        <th>
+          <%= t '.date' %>
+        </th>
+        <th>
+          <%= t '.payable_type' %>
+        </th>
+        <th>
+          <%= t '.amount' %>
+        </th>
+        <th>
+          <%= t '.payment_method' %>
+        </th>
+        <th>
+          <%= t '.entry_type' %>
+        </th>
+        <th>
+          <%= t '.note' %>
+        </th>
+        <th>
+          <%= t '.staff' %>
+        </th>
+        <th>
+          <%= t '.action' %>
+        </th>
+      </tr>
+    </thead>
 
-                <!-- ID -->
-                <td>
-                    <%= payment.id %>
-                </td>
+    <tbody class="table-group-divider">
+      
+      <% @payments.each do |payment| %>
+      <tr>
 
-                <!-- Date -->
-                <td>
-                    <%= payment.date %>
-                </td>
+	<!-- ID -->
+	<th scope="row">
+          <%= payment.id %>
+	</th>
 
-                <!-- Payable Type -->
-                <td>
-                    <%= payment.payable_type %>
-                </td>
+	<!-- Date -->
+	<td>
+          <%= payment.date %>
+	</td>
 
-                <!-- Amount -->
-                <td>
-                    <%= payment.amount %>
-                </td>
+	<!-- Payable Type -->
+	<td>
+          <%= payment.payable_type %>
+	</td>
 
-                <!-- Payment Method -->
-                <td>
-                    <%= payment.payment_method %>
-                </td>
+	<!-- Amount -->
+	<td>
+          <%= payment.amount %>
+	</td>
 
-                <!-- Entry Type -->
-                <td>
-                    <%= payment.entry_type %>
-                </td>
+	<!-- Payment Method -->
+	<td>
+          <%= payment.payment_method %>
+	</td>
 
-                <!-- Note -->
-                <td>
-                    <%= payment.note %>
-                </td>
+	<!-- Entry Type -->
+	<td>
+          <%= payment.entry_type %>
+	</td>
 
-                <!-- Staff -->
-                <% staff = payment.staff %>
-                <td>
-                    <%= staff.full_name %>
-                </td>
+	<!-- Note -->
+	<td>
+          <%= payment.note %>
+	</td>
 
-                <!-- Action buttons -->
-                <td>
-                    <%= link_to payment, class: 'btn btn-primary' do %>
-                        <i class="bi bi-eye-fill"></i>
-                    <% end %>
+	<!-- Staff -->
+	<% staff = payment.staff %>
+	<td>
+          <%= staff.full_name %>
+	</td>
 
-                    <%= link_to edit_payment_path(payment), class: 'btn btn-warning' do %>
-                        <i class="bi bi-pencil-fill"></i>
-                    <% end %>
+	<!-- Action buttons -->
+	<td>
+          <%= link_to payment, class: 'btn btn-primary' do %>
+          <i class="bi bi-eye-fill"></i>
+          <% end %>
 
-                    <% if current_staff.admin? %>
-                        <%= button_to payment, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
-                            <i class="bi bi-trash3-fill"></i>
-                        <% end %>
-                    <% end %>
-                </td>
+          <%= link_to edit_payment_path(payment), class: 'btn btn-warning' do %>
+          <i class="bi bi-pencil-fill"></i>
+          <% end %>
 
-        <% end %>
-    </table>
+          <% if current_staff.admin? %>
+          <%= button_to payment, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+          <i class="bi bi-trash3-fill"></i>
+          <% end %>
+          <% end %>
+	</td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%== pagy_bootstrap_nav(@pagy) %>
+</div>

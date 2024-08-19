@@ -119,10 +119,6 @@ it:
     membership: "Quote"
     del_sub: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile"
 
-    registered:
-      one: "%{count} registrato"
-      other: "%{count} registrati"
-
     errors:
       med_date_future: "non può essere nel Futuro"
       no_email: "Email Mancante"
@@ -155,7 +151,6 @@ it:
       start_date: "Data inizio"
       end_date: "Data scadenza"
       open: "OPEN"
-      duration: "Durata"
       updated_at: "Data Ultimo Aggiornamento"
 
   users:
@@ -166,9 +161,9 @@ it:
     index:
       title: "Utenti"
       add_user: "Aggiungi Utente"
-      users:
-        one: "%{count} registrato"
-        other: "%{count} registrati"
+      registered:
+        one: "%{count} utente registrato"
+        other: "%{count} utenti registrati"
     user:
       user_detail: "Dettagli Utente"
       personal_data: "Anagrafica"
@@ -190,6 +185,9 @@ it:
   activities:
     index:
       title: "Attività"
+      registered:
+        one: "%{count} attività registrate"
+        other: "%{count} attività registrate"
     activity:
       title: "Dettagli Attività"
       name: "Nome attività"
@@ -218,6 +216,9 @@ it:
       note: "Note"
       staff: "Collaboratore"
       action: "Azioni"
+      registered:
+        one: "%{count} pagamenti registrati"
+        other: "%{count} pagamenti registrati"
     new:
       title: "Inserimento di un Nuovo Pagamento"
     edit:
@@ -234,13 +235,20 @@ it:
       staff: "Collaboratore che ha Registrato questa Transazione"
 
   staffs:
+
     index:
       title: "Collaboratori"
       add_staff: "Aggiungi Collaboratore"
+      registered:
+        one: "%{count} collaboratori registrati"
+        other: "%{count} collaboratori registrati"
 
   subscriptions:
     index:
       title: "Iscrizioni"
+      registered:
+        one: "%{count} iscrizioni registrate"
+        other: "%{count} iscrizioni registrate"
     new:
       title: "Inserimento di una Nuova Iscrizione"
 
@@ -249,6 +257,9 @@ it:
       date_help: "La DATA INIZIO si riferisce alla data in cui si vuole registrare la quota associativa."
     index:
       title: "Quote Associative"
+      registered:
+        one: "%{count} quota associativa registrata"
+        other: "%{count} quote associative registrate"
     new:
       title: "Inserimento di una Quota Associativa"
 

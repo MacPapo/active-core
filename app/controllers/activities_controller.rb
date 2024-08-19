@@ -37,7 +37,7 @@ class ActivitiesController < ApplicationController
   # PATCH/PUT /activities/1
   def update
     if @activity.update(activity_params)
-      format.html { redirect_to activity_url(@activity), notice: "Activity was successfully updated." }
+      redirect_to activity_url(@activity), notice: "Activity was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end

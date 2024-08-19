@@ -8,8 +8,6 @@ class DetachLegalGuardiansJob < ApplicationJob
                         .joins(:legal_guardian)
                         .where("? - users.birth_day >= 18", Date.today)
 
-    users_to_update.find_each do |user|
-      user.update(legal_guardian: nil)
-    end
+    users_to_update.update_all(legal_guardian: nil)
   end
 end

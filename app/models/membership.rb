@@ -3,7 +3,8 @@ class Membership < ApplicationRecord
 
   after_initialize :set_default_date, if: :new_record?
 
-  after_save :validate_status
+  after_save    :validate_status
+  after_destroy :cleanup_subs
 
   belongs_to :user
   belongs_to :staff
@@ -46,5 +47,9 @@ class Membership < ApplicationRecord
 
   def validate_status
     ValidateMembershipStatusJob.perform_later
+  end
+
+  def cleanup_subs
+    AfterDeleteMembershipCleanupSubsJob.perform_later
   end
 end

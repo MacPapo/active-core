@@ -44,6 +44,10 @@ class Staff < ApplicationRecord
     self.user.birth_day
   end
 
+  def age
+    self.user.age
+  end
+
   # TODO rework
   def get_role
     self.role.to_sym
@@ -51,6 +55,10 @@ class Staff < ApplicationRecord
 
   def get_cf
     self.user.cf
+  end
+
+  def get_email
+    self.user.email
   end
 
   def get_phone

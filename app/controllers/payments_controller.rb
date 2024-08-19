@@ -4,7 +4,12 @@ class PaymentsController < ApplicationController
 
   # GET /payments
   def index
-    @payments = Payment.all
+    @pagy, @payments = pagy(
+      Payment
+        .all
+        .includes(:staff)
+        .load_async
+    )
   end
 
   # GET /payments/1

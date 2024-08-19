@@ -4,6 +4,9 @@ class DeleteStaleLegalGuardiansJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    LegalGuardian.where.missing(:users).delete_all
+    LegalGuardian
+      .where
+      .missing(:users)
+      .delete_all
   end
 end

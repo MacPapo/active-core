@@ -1,6 +1,7 @@
-<h1 class="mb-3">
-    <%= t '.title' %>
-</h1>
+<div class="d-flex align-items-center mb-3">
+  <h1 class="me-2"><%= t '.title' %></h1>
+  <span>(<%= t('.registered', count: @pagy.count) %>)</span>
+</div>
 
 <div id="memberships">
 
@@ -11,7 +12,8 @@
                 <th><%= t 'global.table.updated_at' %></th>
                 <th><%= t 'global.table.name' %></th>
                 <th><%= t 'global.table.surname' %></th>
-                <th><%= t 'global.table.duration' %></th>
+                <th><%= t 'global.table.start_date' %></th>
+		<th><%= t 'global.table.end_date' %></th>
                 <th><%= t 'global.table.action' %></th>
             </tr>
         </thead>
@@ -40,9 +42,14 @@
                         <%= user.surname %>
                     </td>
 
-                    <!-- Duration -->
+                    <!-- Start Date -->
                     <td>
-                        <%= membership.start_date %> - <%= membership.end_date %>
+                        <%= membership.start_date %>
+                    </td>
+
+		    <!-- End Date -->
+                    <td>
+                        <%= membership.end_date %>
                     </td>
 
                     <!-- Action -->
