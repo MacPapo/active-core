@@ -6,7 +6,12 @@ class SubscriptionsController < ApplicationController
 
   # GET /subscriptions
   def index
-    @pagy, @subscriptions = pagy(Subscription.all.load_async)
+    @pagy, @subscriptions = pagy(
+      Subscription
+        .all
+        .includes(:user, :activity, :activity_plan)
+        .load_async
+    )
   end
 
   # GET /subscriptions/1

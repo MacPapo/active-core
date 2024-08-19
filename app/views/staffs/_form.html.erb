@@ -12,16 +12,21 @@
     <% end %>
 
     <div>
-        <%= form.label :email, style: "display: block" %>
-        <%= form.text_field :email %>
+        <%= form.label :nickname, class: 'form-label' %>
+        <%= form.text_field :nickname, class: 'form-control' %>
     </div>
 
     <div>
-        <%= form.label :role, style: "display: block" %>
-        <%= form.text_field :role %>
+        <%= form.label :password, class: 'form-label' %>
+        <%= form.password_field :password, class: 'form-control' %>
     </div>
 
     <div>
-        <%= form.submit %>
+        <%= form.label :role, class: 'form-label' %>
+        <%= form.select :role, @roles, {}, { class: 'form-select' } %>
+    </div>
+
+    <div class="actions">
+        <%= form.submit class: 'btn btn-success w-100' %>
     </div>
 <% end %>

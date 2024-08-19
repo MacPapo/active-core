@@ -17,7 +17,7 @@ User.destroy_all
 Staff.destroy_all
 
 # Seed LegalGuardians
-1000.times do
+100.times do
   LegalGuardian.create!(
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
@@ -30,7 +30,7 @@ end
 puts "LegalGuardians Added"
 
 # Seed Users with Legal Guardians
-1000.times do
+100.times do
   legal_guardian = LegalGuardian.all.sample
   User.create!(
     cf: Faker::Finance.vat_number,
@@ -47,7 +47,7 @@ end
 puts "Minor Users Added"
 
 # Seed Users without Legal Guardians
-10000.times do
+100.times do
   User.create!(
     cf: Faker::Finance.vat_number,
     name: Faker::Name.first_name,
@@ -152,7 +152,7 @@ puts "Admin User Added"
 
 Staff.create!(
   user: admin_user,
-  email: 'admin@example.com',
+  nickname: 'admin',
   password: 'adminpassword',
   role: :admin
 )
@@ -172,7 +172,7 @@ puts "Normal User Added"
 
 Staff.create!(
   user: normal_user,
-  email: 'normal@example.com',
+  nickname: 'normal',
   password: 'normalpassword',
   role: :contributor
 )
@@ -193,7 +193,7 @@ puts "Admin Staff Added"
 
   Staff.create!(
     user: user,
-    email: Faker::Internet.unique.email,
+    nickname: Faker::Internet.username(specifier: 5..10),
     password: 'password',
     role: [0, 1].sample
   )

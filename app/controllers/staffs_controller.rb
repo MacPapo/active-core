@@ -1,49 +1,46 @@
 class StaffsController < ApplicationController
   before_action :set_staff, only: %i[ show edit update destroy ]
+  before_action :set_roles, only: %i[ new edit ]
 
-  # GET /staffs or /staffs.json
+  # GET /staffs
   def index
-    @staffs = Staff.all
+    @pagy, @staffs = pagy(
+      Staff
+        .all
+        .includes(:user)
+    )
   end
 
-  # GET /staffs/1 or /staffs/1.json
+  # GET /staffs/1
   def show
   end
 
   # GET /staffs/new
   def new
-    @staff = Staff.new
+    @staff = Staff.build
   end
 
   # GET /staffs/1/edit
   def edit
   end
 
-  # POST /staffs or /staffs.json
+  # POST /staffs
   def create
     @staff = Staff.new(staff_params)
 
-    respond_to do |format|
-      if @staff.save
-        format.html { redirect_to staff_url(@staff), notice: "Staff was successfully created." }
-        format.json { render :show, status: :created, location: @staff }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @staff.errors, status: :unprocessable_entity }
-      end
+    if @staff.save
+      redirect_to staff_url(@staff), notice: "Staff was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /staffs/1 or /staffs/1.json
   def update
-    respond_to do |format|
-      if @staff.update(staff_params)
-        format.html { redirect_to staff_url(@staff), notice: "Staff was successfully updated." }
-        format.json { render :show, status: :ok, location: @staff }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @staff.errors, status: :unprocessable_entity }
-      end
+    if @staff.update(staff_params)
+      redirect_to staff_url(@staff), notice: "Staff was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -51,10 +48,7 @@ class StaffsController < ApplicationController
   def destroy
     @staff.destroy!
 
-    respond_to do |format|
-      format.html { redirect_to staffs_url, notice: "Staff was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to staffs_url, notice: "Staff was successfully destroyed."
   end
 
   private
@@ -63,8 +57,12 @@ class StaffsController < ApplicationController
       @staff = Staff.find(params[:id])
     end
 
+    def set_roles
+      @roles = Staff.roles.keys
+    end
+
     # Only allow a list of trusted parameters through.
     def staff_params
-      params.require(:staff).permit(:user_id, :password, :role)
+      params.require(:staff).permit(:user_id, :nickname, :password, :role)
     end
 end

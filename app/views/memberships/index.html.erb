@@ -1,12 +1,75 @@
-<h1>Memberships</h1>
+<h1 class="mb-3">
+    <%= t '.title' %>
+</h1>
 
 <div id="memberships">
-  <% @memberships.each do |membership| %>
-    <%= render membership %>
-    <p>
-      <%= link_to "Show this membership", membership %>
-    </p>
-  <% end %>
-</div>
 
-<%= link_to "New membership", new_membership_path %>
+    <table class="table table-hover">
+        <thead class="table-light">
+            <tr>
+                <th><%= t 'global.table.id' %></th>
+                <th><%= t 'global.table.updated_at' %></th>
+                <th><%= t 'global.table.name' %></th>
+                <th><%= t 'global.table.surname' %></th>
+                <th><%= t 'global.table.duration' %></th>
+                <th><%= t 'global.table.action' %></th>
+            </tr>
+        </thead>
+
+        <tbody class="table-group-divider">
+            <% @memberships.each do |membership| %>
+                <tr>
+                    <!-- ID -->
+                    <th scope="row">
+                        <%= membership.id %>
+                    </th>
+
+                    <!-- Updated At -->
+                    <td>
+                        <%= membership.updated_at %>
+                    </td>
+
+                    <!-- Name -->
+                    <% user = membership.user %>
+                    <td>
+                        <%= user.name %>
+                    </td>
+
+                    <!-- Surname -->
+                    <td>
+                        <%= user.surname %>
+                    </td>
+
+                    <!-- Duration -->
+                    <td>
+                        <%= membership.start_date %> - <%= membership.end_date %>
+                    </td>
+
+                    <!-- Action -->
+                    <td>
+                        <%= link_to membership, class: 'btn btn-primary' do %>
+                            <i class="bi bi-eye-fill"></i>
+                        <% end %>
+
+                        <%= link_to edit_membership_path(membership, user_id: user.id), class: 'btn btn-warning' do %>
+                            <i class="bi bi-pencil-fill"></i>
+                        <% end %>
+
+                        <% if current_staff.admin? %>
+                            <!-- TODO translate -->
+                            <%= button_to membership,
+                                          class: 'btn btn-danger',
+                                          method: :delete,
+                                          data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" },
+                                          form: {style: 'display:inline-block;'} do %>
+                                <i class="bi bi-trash3-fill"></i>
+                            <% end %>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+
+    <%== pagy_bootstrap_nav(@pagy) %>
+</div>

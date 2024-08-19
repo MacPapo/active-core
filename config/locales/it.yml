@@ -44,6 +44,10 @@ it:
         legal_guardian: "Tutore Legale"
         legal_guardian_id: "Tutore Legale"
 
+      staff:
+        nickname: "Nickname"
+        password: "Password"
+
       legal_guardian:
         name: "Nome"
         surname: "Cognome"
@@ -112,7 +116,12 @@ it:
     staff: "Collaboratori"
     activity: "Attività"
     subscription: "Iscrizioni"
+    membership: "Quote"
     del_sub: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile"
+
+    registered:
+      one: "%{count} registrato"
+      other: "%{count} registrati"
 
     errors:
       med_date_future: "non può essere nel Futuro"
@@ -141,6 +150,7 @@ it:
       plan: "Piano"
       cost: "Costo"
       id: "ID"
+      role: "Ruolo"
       affiliated_cost: "Costo Convenzionati"
       start_date: "Data inizio"
       end_date: "Data scadenza"
@@ -176,12 +186,6 @@ it:
       med_cert: "Data rilascio certificato medico"
       subs: "Iscrizioni"
       no_subs: "Nessuna iscrizione effettuata"
-
-  memberships:
-    form:
-      date_help: "La DATA INIZIO si riferisce alla data in cui si vuole registrare la quota associativa."
-    new:
-      title: "Inserimento Quota Associativa"
 
   activities:
     index:
@@ -229,11 +233,24 @@ it:
       note: "Note eventuali"
       staff: "Collaboratore che ha Registrato questa Transazione"
 
+  staffs:
+    index:
+      title: "Collaboratori"
+      add_staff: "Aggiungi Collaboratore"
+
   subscriptions:
     index:
       title: "Iscrizioni"
     new:
       title: "Inserimento di una Nuova Iscrizione"
+
+  memberships:
+    form:
+      date_help: "La DATA INIZIO si riferisce alla data in cui si vuole registrare la quota associativa."
+    index:
+      title: "Quote Associative"
+    new:
+      title: "Inserimento di una Quota Associativa"
 
   waitlists:
     new:

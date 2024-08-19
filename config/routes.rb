@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  resources :waitlists
   devise_for :staffs
+  resources :waitlists
 
   authenticated :staff, -> { _1.admin? } do
     # TODO delete this

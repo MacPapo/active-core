@@ -13,22 +13,27 @@
     <body>
 
         <div class="d-flex">
-            <!-- Sidebar -->
-            <%= render "partials/sidebar" %>
+            <% if staff_signed_in? %>
+                <!-- Sidebar -->
+                <%= render "partials/sidebar" %>
 
-            <!-- Content -->
-            <div class="content flex-grow-1 p-3" style="margin-left: 180px;">
-                <% flash.each do |type, msg| %>
-                    <div class="alert alert-<%= type == 'alert' ? 'warning' : 'success' %> alert-dismissible fade show" role="alert">
-                        <%= msg %>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                <% end %>
+                <!-- Content -->
+                <div class="container flex-grow-1 p-3" style="margin-left: 180px;">
+            <% else %>
+                <div class="container p-3">
+            <% end %>
 
-                <!-- Contents -->
-                <%= yield %>
-            </div>
+            <% flash.each do |type, msg| %>
+                <div class="alert alert-<%= type == 'alert' ? 'warning' : 'success' %> alert-dismissible fade show" role="alert">
+                    <%= msg %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% end %>
+
+            <!-- Contents -->
+            <%= yield %>
+                </div>
+
         </div>
-
     </body>
 </html>

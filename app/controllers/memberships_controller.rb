@@ -4,7 +4,12 @@ class MembershipsController < ApplicationController
 
   # GET /memberships
   def index
-    @memberships = Membership.all
+    @pagy, @memberships = pagy(
+      Membership
+        .all
+        .includes(:user)
+        .load_async
+    )
   end
 
   # GET /memberships/1

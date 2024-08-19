@@ -29,12 +29,21 @@
                 <%= link_to subscriptions_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
                     <i class="bi bi-clipboard-data-fill me-2"></i> <%= t('global.subscription') %>
                 <% end %>
+
+                <%= link_to memberships_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
+                    <i class="bi bi-pie-chart-fill me-2"></i> <%= t('global.membership') %>
+                <% end %>
             </div>
         </div>
     </nav>
 
     <!-- Bottone di logout -->
     <div class="mt-4">
+        <p class="text-center">
+            <%= link_to current_staff, class: 'link-offset-2 link-underline link-underline-opacity-0 link-info mb-2' do %>
+                <i class="bi bi-person-badge-fill"></i> <%= current_staff.nickname %>
+            <% end %>
+        </p>
         <%= button_to "Logout", destroy_staff_session_path, method: :delete, class: 'btn btn-outline-danger w-100' %>
     </div>
 </div>

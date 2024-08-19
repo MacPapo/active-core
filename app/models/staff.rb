@@ -1,35 +1,52 @@
+# frozen_string_literal: true
+
 class Staff < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :recoverable, :rememberable, :validatable
-
+  # :confirmable, :lockable, and :omniauthable
+  devise :database_authenticatable, :timeoutable, :trackable, :authentication_keys => [:nickname]
   belongs_to :user
 
   has_many :memberships, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
+
   has_many :subscription_payments, through: :subscriptions
   has_many :membership_payments, through: :membership
 
-  validates :email, :password, :role, presence: true
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'is invalid' }
-  normalizes :email, with: -> { _1.strip.downcase }
+  validates :nickname, :password, :role, presence: true
 
   enum :role, [ :contributor, :volunteer, :admin ], default: :contributor
+
+  def email_required?
+    false
+  end
+
+  def email_changed?
+    false
+  end
+
+  def will_save_change_to_email?
+    false
+  end
 
   def full_name
     self.user.full_name
   end
 
-  def birth_day
+  def get_name
+    self.user.name
+  end
+
+  def get_surname
+    self.user.surname
+  end
+
+  def get_birth_day
     self.user.birth_day
   end
 
+  # TODO rework
   def get_role
     self.role.to_sym
-  end
-
-  def get_formatted_role
-    self.role.capitalize
   end
 
   def get_cf
@@ -38,10 +55,6 @@ class Staff < ApplicationRecord
 
   def get_phone
     self.user.phone
-  end
-
-  def get_age
-    self.user.age
   end
 
   def get_med_cert

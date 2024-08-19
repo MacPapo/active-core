@@ -7,6 +7,7 @@ class UsersController < ApplicationController
       User
         .all
         .includes(:membership, :subscriptions, :legal_guardian)
+        .load_async
     )
   end
 
@@ -45,12 +46,6 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    # TODO fix problem with OPEN
-
-    @user.subscriptions.each do |subscription|
-      subscription.destroy
-    end
-
     @user.destroy!
 
     redirect_to users_url, notice: "L'utente è stato correttamente eliminato."

@@ -3,7 +3,11 @@ class ActivitiesController < ApplicationController
 
   # GET /activities
   def index
-    @pagy, @activities = pagy(Activity.all.load_async)
+    @pagy, @activities = pagy(
+      Activity
+        .all
+        .includes(:subscriptions)
+        .load_async)
   end
 
   # GET /activities/1
