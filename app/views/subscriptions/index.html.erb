@@ -33,7 +33,7 @@
 
                     <!-- Updated At -->
                     <td>
-                        <%= subscription.updated_at %>
+		        <%= l subscription.updated_at %> (<%= distance_of_time_in_words_to_now subscription.updated_at %>) 
                     </td>
 
                     <!-- Name -->
@@ -64,13 +64,14 @@
                         <%= plan.humanize_plan %>
                     </td>
 
-                    <!-- Duration -->
+                    <!-- Start Date -->
                     <td>
-                        <%= subscription.start_date %>
+                        <%= l subscription.start_date %>
                     </td>
 
+		    <!-- End Date -->
 		    <td>
-		      <%= subscription.end_date %>
+		      <%= l subscription.end_date %>
 		    </td>		    
 
                     <!-- Action -->

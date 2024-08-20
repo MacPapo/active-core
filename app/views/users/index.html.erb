@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div class="d-flex align-items-center">
-        <h1 class="mb-0 me-2"><%= t '.title' %></h1>
+        <h1 class="mb-0 me-2"><%= User.model_name.human(count: 2) %></h1>
         <span>(<%= t('.registered', count: @pagy.count) %>)</span>
     </div>
 
@@ -62,7 +62,7 @@
 
                     <!-- Birth Day -->
                     <td>
-                        <%= user.birth_day %>
+                        <%= user.birth_day ? l(user.birth_day, format: :default) : nil %>
                     </td>
 
                     <!-- Affiliated -->

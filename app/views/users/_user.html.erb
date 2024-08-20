@@ -21,7 +21,7 @@
                 </h5>
                 <% if user.birth_day %>
                     <p class="card-text">
-                        <%= user.birth_day %> (<%= user.age %> anni)
+                        <%= l user.birth_day %> (<%= t 'datetime.distance_in_words.x_years', count: user.age %>)
                     </p>
                 <% end %>
             </div>
@@ -56,7 +56,7 @@
                     <%= t '.affiliated' %>
                 </h5>
                 <% affiliated = user.affiliated %>
-                <span class="badge text-bg-<%= affiliated ? 'success' : 'warning' %>"><%= affiliated ? 'Si' : 'No' %></span>
+                <span class="badge text-bg-<%= affiliated ? 'success' : 'warning' %>"><%= t affiliated %></span>
             </div>
         </div>
 
@@ -85,13 +85,13 @@
             </h3>
             <p class="cart-text">
                 <% start_date = user.med_cert_issue_date %>
+		<% end_date = user.med_cert_exp_date %>
 
                 <% if start_date.nil? %>
                     <span class="badge text-bg-warning"><%= t '.to_be_inserted' %></span>
                 <% else %>
-                    <!-- TODO pluralize -->
                     <% days = user.get_num_of_days_til_med_cert_expire %>
-                    <%= "#{start_date} (#{days} #{days == 1 ? 'giorno' : 'giorni' } alla scadenza)" %>
+                    <%= l start_date, format: :default %> - <%= l end_date, format: :default %> (<%= t 'datetime.distance_in_words.x_days', count: user.get_num_of_days_til_med_cert_expire %>)
                 <% end %>
             </p>
         </div>
@@ -115,7 +115,7 @@
                                 <%= t '.start_date' %>
                             </h5>
                             <p class="card-text">
-                                <%= membership.start_date %>
+                                <%= l membership.start_date, format: :default %>
                             </p>
                         </div>
                         <div class="col-md-4">
@@ -124,7 +124,7 @@
                             </h5>
                             <p class="card-text">
                                 <% days_til_ren = membership.get_num_of_days_til_renewal %>
-                                <%= membership.end_date %> (<%= pluralize(days_til_ren, 'giorno') %>)
+                                <%= l membership.end_date, format: :default %> (<%= t 'datetime.distance_in_words.x_days', count: days_til_ren %>)
                             </p>
                         </div>
                         <div class="col-md-4">

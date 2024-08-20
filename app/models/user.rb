@@ -44,6 +44,10 @@ class User < ApplicationRecord
     med_cert_issue_date.present?
   end
 
+  def med_cert_exp_date
+    med_cert_present? ? med_cert_issue_date + 1.year : nil
+  end
+
   def get_num_of_days_til_med_cert_expire
     return -1 if med_cert_issue_date.nil?
 

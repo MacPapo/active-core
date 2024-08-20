@@ -38,27 +38,27 @@
                 </td>
             <% end %>
 
-            <!-- Plan -->
+            <!-- TODO i18n Plan -->
             <td>
                 <%= plan.humanize_plan %>
             </td>
 
             <!-- Start date -->
             <td>
-                <%= subscription.start_date %>
+                <%= l subscription.start_date %>
             </td>
 
             <!-- End date -->
             <td>
-                <%= subscription.end_date %> (<%= pluralize(subscription.days_til_renewal, "giorno") %>)
+                <%= l subscription.end_date %> (<%= t 'datetime.distance_in_words.x_days', count: subscription.days_til_renewal %>)
             </td>
 
             <!-- OPEN? -->
             <td>
-                <%= subscription.open? ? 'SI' : 'NO' %>
+                <%= t subscription.open? %>
             </td>
 
-            <!-- STATUS -->
+            <!-- TODO STATUS -->
             <td>
                 <%= subscription.status %>
             </td>

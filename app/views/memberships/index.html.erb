@@ -28,7 +28,7 @@
 
                     <!-- Updated At -->
                     <td>
-                        <%= membership.updated_at %>
+                        <%= l membership.updated_at %> (<%= distance_of_time_in_words_to_now membership.updated_at %>) 
                     </td>
 
                     <!-- Name -->
@@ -44,12 +44,12 @@
 
                     <!-- Start Date -->
                     <td>
-                        <%= membership.start_date %>
+                        <%= l membership.start_date %>
                     </td>
 
 		    <!-- End Date -->
                     <td>
-                        <%= membership.end_date %>
+                        <%= l membership.end_date %>
                     </td>
 
                     <!-- Action -->

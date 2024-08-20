@@ -42,12 +42,12 @@
 
                     <!-- Birth Day -->
                     <td>
-                        <%= staff.get_birth_day %>
+                        <%= l staff.get_birth_day %>
                     </td>
 
                     <!-- Role -->
                     <td>
-                        <%= staff.get_role %>
+                        <%= Staff.human_attribute_name("role.#{staff.get_role.downcase}") %>
                     </td>
 
                     <td>

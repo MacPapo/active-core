@@ -26,7 +26,7 @@
                 </h5>
                 <% if staff.get_birth_day %>
                     <p class="card-text">
-                        <%= staff.get_birth_day %> (<%= t('.age', count: staff.age) %>)
+                        <%= l staff.get_birth_day %> (<%= t 'datetime.distance_in_words.x_years', count: staff.age %>)
                     </p>
                 <% end %>
             </div>
@@ -60,7 +60,7 @@
                 <h5 class="card-subtitle mb-2">
                     <%= t '.affiliated' %>
                 </h5>
-                <span class="badge text-bg-<%= staff.is_affiliated? ? 'success' : 'warning' %>"><%= staff.is_affiliated? ? 'Si' : 'No' %></span>
+                <span class="badge text-bg-<%= staff.is_affiliated? ? 'success' : 'warning' %>"><%= t staff.is_affiliated? %></span>
             </div>
         </div>
 
@@ -77,9 +77,7 @@
                 <% if start_date.nil? %>
                     <span class="badge text-bg-warning"><%= t '.to_be_inserted' %></span>
                 <% else %>
-                    <!-- TODO pluralize -->
-                    <% days = staff.user.get_num_of_days_til_med_cert_expire %>
-                    <%= "#{start_date} (#{days} #{days == 1 ? 'giorno' : 'giorni' } alla scadenza)" %>
+                    <%= l start_date %> (<%= distance_of_time_in_words_to_now staff.user.med_cert_exp_date %>)
                 <% end %>
             </p>
         </div>
@@ -91,11 +89,11 @@
         <!-- TODO -->
         <p>
           <strong>Current_sign_in_at</strong>
-          <%= staff.current_sign_in_at %>
+          <%= l staff.current_sign_in_at %>
         </p>
         <p>
           <strong>Last_sign_in_at</strong>
-          <%= staff.last_sign_in_at %>
+          <%= l staff.last_sign_in_at %>
         </p>
 	<% end %>
     </div>

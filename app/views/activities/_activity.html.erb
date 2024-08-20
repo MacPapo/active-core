@@ -75,22 +75,21 @@
                             <% plans.each do |plan| %>
                                 <tr>
 
-                                    <!-- Plan -->
+                                    <!-- TODO Plan -->
                                     <td>
-                                        <%= plan.humanize_plan %>
+                                        <%= ActivityPlan.plan.plam.downcase %>
                                     </td>
 
                                     <!-- Cost -->
                                     <td>
-                                        <!-- TODO i18n € -->
-                                        € <%= plan.cost %>
+					<%= number_to_currency plan.cost %>
                                     </td>
 
                                     <!-- Affiliated cost -->
                                     <td>
                                         <% cst = plan.affiliated_cost %>
                                         <% if cst %>
-                                            € <%= cst %>
+                                            <%= number_to_currency cst %>
                                         <% end %>
                                     </td>
 

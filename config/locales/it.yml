@@ -1,4 +1,7 @@
 it:
+  true: "Si"
+  false: "No"
+  
   activemodel:
     enums:
       payment:
@@ -21,16 +24,31 @@ it:
 
   activerecord:
     models:
-      user: "Utente"
-      legal_guardian: "Tutore Legale"
+      user:
+        one: "Utente"
+        other: "Utenti"
+      legal_guardian:
+        one: "Tutore Legale"
+        other: "Tutori Legali"
       activity: "Attività"
-      activity_plan: "Piani per l'attività"
-      membership: "Quota Associativa"
-      subscription: "Iscrizione"
-      payment: "Pagamento"
-      staff: "Collaboratore"
-      waitlist: "Lista di Attesa"
-
+      activity_plan:
+        one: "Piano per l'attività"
+        other: "Piani per l'attività"
+      membership:
+        one: "Quota Associativa"
+        other: "Quote Associative"
+      subscription:
+        one: "Iscrizione"
+        other: "Iscrizioni"
+      payment:
+        one: "Pagamento"
+        other: "Pagamenti"
+      staff:
+        one: "Collaboratore"
+        other: "Collaboratori"
+      waitlist:
+        one: "Lista di Attesa"
+        other: "Liste di Attesa"
     attributes:
       user:
         cf: "Codice Fiscale"
@@ -43,10 +61,11 @@ it:
         affiliated: "Convenzionato"
         legal_guardian: "Tutore Legale"
         legal_guardian_id: "Tutore Legale"
+      staff/role:
+          admin: "Amministratore"
+          contributor: "Collaboratore"
+          volunteer: "Volontario"
 
-      staff:
-        nickname: "Nickname"
-        password: "Password"
 
       legal_guardian:
         name: "Nome"
@@ -64,6 +83,14 @@ it:
         cost: "Costo"
         affiliated_cost: "Costo per utenti Convenzionati"
         activity: "Attività"
+      activity_plan/plan:
+        one_entrance: "1 Entrata"
+        half_month: "1/2 Mese"
+        one_month: "1 Mese"
+        three_months: "3 Mesi"
+        one_year: "1 Anno"
+        one_month_one_lesson: "1 Mese, 1 volta a settimana"
+        one_month_two_lessons: "1 Mese, 2 volte a settimana"
 
       subscription:
         start_date: "Data inizio"

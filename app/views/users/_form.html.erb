@@ -35,7 +35,7 @@
         <div class="col">
             <div class="mb-3">
                 <%= form.label :birth_day, class: 'form-label' %>
-                <%= form.date_field :birth_day, class: 'form-control' %>
+                <%= form.date_field :birth_day, min: 90.year.ago, max: 2.year.ago, class: 'form-control' %>
             </div>
         </div>
         <div class="col">
