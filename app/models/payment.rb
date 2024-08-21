@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Payment Model
 class Payment < ApplicationRecord
   after_initialize :set_default_date, if: :new_record?
 
@@ -6,17 +9,11 @@ class Payment < ApplicationRecord
   belongs_to :payable, polymorphic: true
   belongs_to :staff
 
-  enum :payment_method, [ :pos, :cash, :bank_transfer ], default: :cash
-  enum :entry_type, [ :income, :expense ], default: :income
+  enum :payment_method, %i[pos cash bank_transfer], default: :cash
+  enum :entry_type, %i[income expense], default: :income
 
   validates :payment_method, :entry_type, :payable, :staff, presence: true
-  validates :payed, inclusion: { in: [ true, false ] }
-
-  private
-
-  def set_default_date
-    self.date ||= Date.today
-  end
+  validates :payed, inclusion: { in: [true, false] }
 
   def self.humanize_payment_methods
     payment_methods.keys.map do |key|
@@ -30,21 +27,25 @@ class Payment < ApplicationRecord
     end
   end
 
+  private
+
+  def set_default_date
+    self.date ||= Time.zone.today
+  end
+
   # TODO undo activation if payment is destroyed
   def activate_membership_or_subscription
-    return unless self.payed
+    return unless payed
 
     case payable_type
-    when "Membership"
+    when 'Membership'
       membership = Membership.find(payable_id)
       membership.active!
-    when "Subscription"
+    when 'Subscription'
       subscription = Subscription.find(payable_id)
       subscription.active!
 
-      if subscription.open?
-        subscription.open_subscription&.active!
-      end
+      subscription.open_subscription&.active! if subscription.open?
     end
   end
 end

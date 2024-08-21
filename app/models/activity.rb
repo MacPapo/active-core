@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
+# Activity Model
 class Activity < ApplicationRecord
-  has_many :subscriptions  , dependent: :destroy
-  has_many :waitlists      , dependent: :destroy
-  has_many :activity_plans , dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
+  has_many :waitlists, dependent: :destroy
+  has_many :activity_plans, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
   validates :num_participants, presence: true

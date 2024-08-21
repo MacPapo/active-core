@@ -1,7 +1,8 @@
 it:
+  empty: "Da Inserire"
   true: "Si"
   false: "No"
-  
+
   activemodel:
     enums:
       payment:
@@ -114,6 +115,10 @@ it:
         status: "Stato"
         user: "Utente"
         staff: "Collaboratore"
+      membership/status:
+        inactive: "Inattivo"
+        active: "Attivo"
+        expired: "Scaduto"
 
       subscription:
         start_date: "Data inizio"

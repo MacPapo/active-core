@@ -67,82 +67,27 @@
 
                     <!-- Affiliated -->
                     <td>
-                        <%= user.affiliated ? 'Si' : 'No' %>
+                        <%= t user.affiliated %>
                     </td>
 
                     <!-- Membership -->
                     <td>
-                        <% membership = user.verify_membership %>
-                        <% membership_status = membership[:status] %>
-                        <% days_til_renewal = membership[:days_til_renewal] %>
-                        <% membership_color = nil %>
-                        <% membership_phrase = nil %>
-                        <% case membership_status
-                        when 0 %>
-                            <% membership_color = 'danger' %>
-                            <% membership_phrase = 'Da Inserire' %>
+                        <% presenter = MembershipPresenter.new(user.membership) %>
 
-                            <%= button_to "#{membership_phrase}",
-                                          new_membership_path,
-                                          params: { user_id: user.id },
-                                          method: :get,
-                                          class: "btn badge rounded-pill text-bg-#{membership_color}" %>
-
-                        <% when 1 %>
-                            <% membership_color = 'info' %>
-                            <% membership_phrase = 'Da Pagare' %>
-
-                            <%= button_to "#{membership_phrase}",
-                                          new_payment_path,
-                                          params: { payable_type: 'Membership', payable_id: user.membership.id },
-                                          method: :get,
-                                          class: "btn badge rounded-pill text-bg-#{membership_color}" %>
-
-                        <% when 2 %>
-                            <% membership_color = 'warning' %>
-                            <% membership_phrase = 'Expired' %>
-
-                            <%= button_to "#{membership_phrase}",
-                                          edit_membership_path(user.membership),
-                                          params: { user_id: user },
-                                          method: :get,
-                                          class: "btn badge rounded-pill text-bg-#{membership_color}" %>
-
-                        <% else %>
-                            <% membership_color = 'success' %>
-                            <% membership_phrase = 'Attivo' %>
-
-                            <%= button_to "#{membership_phrase}",
-                                          membership_path(user.membership),
-                                          method: :get,
-                                          class: "btn badge rounded-pill text-bg-#{membership_color}" %>
-
+                        <%= link_to presenter.appropriate_path(user), class: "btn badge rounded-pill text-bg-#{presenter.css_color}" do %>
+                            <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
                         <% end %>
-
                     </td>
 
                     <!-- Activities -->
                     <td>
                         <% subs = user.subscriptions.where.missing(:normal_subscription) %>
                         <% subs.each do |sub| %>
-                            <% ac = sub.activity&.name %>
-                            <% op = sub.open_subscription&.activity&.name %>
-                            <% btn_text = op ? "#{ac} + #{op}" : "#{ac}" %>
-                            <% btn_color =
-                                          case
-                                            when sub.active?
-                                                'success'
-                                            when sub.inactive?
-                                                'info'
-                                            else
-                                                'warning'
-                                           end
-                            %>
-                            <%= button_to btn_text,
-                                          renew_subscription_path(sub),
-                                          method: :get,
-                                          class: "btn badge rounded-pill text-bg-#{ btn_color }"
-                            %>
+                            <% presenter = SubscriptionPresenter.new(sub) %>
+
+                            <%= link_to presenter.appropriate_path(user), class: "btn badge rounded-pill text-bg-#{ presenter.css_color }" do %>
+                              <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
+                            <% end %>
                         <% end %>
                     </td>
 

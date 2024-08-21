@@ -24,9 +24,9 @@
                 <h5 class="card-subtitle mb-2">
                     <%= t '.birth' %>
                 </h5>
-                <% if staff.get_birth_day %>
+                <% if staff.birth_day %>
                     <p class="card-text">
-                        <%= l staff.get_birth_day %> (<%= t 'datetime.distance_in_words.x_years', count: staff.age %>)
+                        <%= l staff.birth_day %> (<%= t 'datetime.distance_in_words.x_years', count: staff.age %>)
                     </p>
                 <% end %>
             </div>
@@ -35,7 +35,7 @@
                     <%= t '.cf' %>
                 </h5>
                 <p class="card-text">
-                    <%= staff.get_cf %>
+                    <%= staff.cf %>
                 </p>
             </div>
         </div>
@@ -45,7 +45,7 @@
                     Email:
                 </h5>
                 <p class="card-text">
-                    <%= staff.get_email.nil? ? 'Da inserire!' : staff.get_email %>
+                    <%= staff.email.blank? ? 'Da inserire!' : staff.email %>
                 </p>
             </div>
             <div class="col-md-4">
@@ -53,14 +53,14 @@
                     <%= t '.phone' %>
                 </h5>
                 <p class="card-text">
-                    <%= staff.get_phone.nil? ? 'Da inserire!' : staff.get_phone %>
+                    <%= staff.phone.blank? ? 'Da inserire!' : staff.phone %>
                 </p>
             </div>
             <div class="col-md-4">
                 <h5 class="card-subtitle mb-2">
                     <%= t '.affiliated' %>
                 </h5>
-                <span class="badge text-bg-<%= staff.is_affiliated? ? 'success' : 'warning' %>"><%= t staff.is_affiliated? %></span>
+                <span class="badge text-bg-<%= staff.affiliated? ? 'success' : 'warning' %>"><%= t staff.affiliated? %></span>
             </div>
         </div>
 

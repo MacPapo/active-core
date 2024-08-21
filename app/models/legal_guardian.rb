@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
+# LegalGuardian Model
 class LegalGuardian < ApplicationRecord
+  # TODO rework
   before_save :normalize_phone
 
   # after_save :delete_all_lg_without_users
@@ -10,22 +14,26 @@ class LegalGuardian < ApplicationRecord
   normalizes :email, with: -> { _1.strip.downcase }
 
   validates :phone, phone: { possible: true, types: [:fixed_or_mobile] }
-  validate :is_an_eligible_legal_guardian
+  validate :an_eligible_legal_guardian?
 
   def full_name
-    "#{self.name} #{self.surname}"
+    "#{name} #{surname}"
   end
 
   def minor?
-    birth_day > 18.year.ago.to_date
+    birth_day && age.years > 18.years
+  end
+
+  def age
+    ((Time.zone.now - birth_day.to_time) / 1.year.seconds).floor
   end
 
   private
 
-  def is_an_eligible_legal_guardian
-    if minor?
-      errors.add(:legal_guardian, "must not be a minor!")
-    end
+  def an_eligible_legal_guardian?
+    return unless minor?
+
+    errors.add(:legal_guardian, 'must not be a minor!')
   end
 
   def normalize_phone

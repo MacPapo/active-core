@@ -19,7 +19,7 @@ class PaymentsController < ApplicationController
   # GET /payments/new
   def new
     @payment = @entity.nil? ? Payment.build : @entity.payments.build
-    @payment.amount = @entity.nil? ? 0.0 : @entity.get_cost
+    @payment.amount = @entity.nil? ? 0.0 : @entity.cost
   end
 
   # GET /payments/1/edit

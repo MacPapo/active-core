@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
+# Membership Model
 class Membership < ApplicationRecord
-  before_validation :set_end_date
+  before_validation :set_end_date_if_blank
 
   after_initialize :set_default_date, if: :new_record?
 
@@ -9,40 +12,46 @@ class Membership < ApplicationRecord
   belongs_to :user
   belongs_to :staff
 
-  has_many :membership_histories , dependent: :destroy
-  has_many :payments             , as: :payable, dependent: :destroy
+  has_many :membership_histories, dependent: :destroy
+  has_many :payments, as: :payable, dependent: :destroy
 
-  enum :status, [ :inactive, :active, :expired ], default: :inactive
+  enum :status, %i[inactive active expired], default: :inactive
 
   validates :start_date, presence: true
 
   MEMBERSHIP_COST = 35.0
 
-  def get_cost
+  def cost
     MEMBERSHIP_COST
   end
 
+  # TODO
   def get_status
     self.status.to_sym
   end
 
-  def get_num_of_days_til_renewal
-    (renewal_date - Date.today).to_i
+  def humanize_status(status=self.status)
+    Membership.human_attribute_name("status.#{status}")
+  end
+
+  def num_of_days_til_renewal
+    (renewal_date - Time.zone.today).to_i
   end
 
   def renewal_date
-    self.end_date
+    end_date
   end
 
   private
 
   def set_default_date
-    self.start_date ||= Date.today
+    self.start_date ||= Time.zone.today
   end
 
-  def set_end_date
-    numeric_next_year = ->(date) { (date + 1.year).year }
-    self.end_date = Date.new(numeric_next_year.call(self.start_date), 9, 1)
+  def set_end_date_if_blank
+    return unless end_date.blank? && start_date.present?
+
+    self.end_date = Date.new((self.start_date + 1.year).year, 9, 1)
   end
 
   def validate_status

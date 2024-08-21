@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
+# Staff Model
 class Staff < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
-  devise :database_authenticatable, :timeoutable, :trackable, :authentication_keys => [:nickname]
+  devise :database_authenticatable, :timeoutable, :trackable, authentication_keys: [:nickname]
   belongs_to :user
 
   has_many :memberships, dependent: :destroy
@@ -14,7 +15,11 @@ class Staff < ApplicationRecord
 
   validates :nickname, :password, :role, presence: true
 
-  enum :role, [ :contributor, :volunteer, :admin ], default: :contributor
+  enum :role, %i[contributor volunteer admin], default: :contributor
+
+  delegate :cf, :full_name, :name, :surname, 'med_cert_valid?',
+           :age, :email, :phone, :birth_day, 'affiliated?',
+           :med_cert_issue_date, :med_cert_exp_date, to: :user
 
   def email_required?
     false
@@ -28,52 +33,8 @@ class Staff < ApplicationRecord
     false
   end
 
-  def full_name
-    self.user.full_name
-  end
-
-  def get_name
-    self.user.name
-  end
-
-  def get_surname
-    self.user.surname
-  end
-
-  def get_birth_day
-    self.user.birth_day
-  end
-
-  def age
-    self.user.age
-  end
-
   # TODO rework
   def get_role
-    self.role.to_sym
-  end
-
-  def get_cf
-    self.user.cf
-  end
-
-  def get_email
-    self.user.email
-  end
-
-  def get_phone
-    self.user.phone
-  end
-
-  def get_med_cert
-    self.user.med_cert_issue_date
-  end
-
-  def is_med_cert_valid?
-    self.user.med_cert_valid?
-  end
-
-  def is_affiliated?
-    self.user.is_affiliated?
+    role.to_sym
   end
 end

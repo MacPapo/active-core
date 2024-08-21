@@ -1,15 +1,12 @@
+# frozen_string_literal: true
+
+# ActivityPlan Model
 class ActivityPlan < ApplicationRecord
   belongs_to :activity
 
-  enum :plan, [
-         :one_entrance,
-         :half_month,
-         :one_month,
-         :three_months,
-         :one_year,
-         :one_month_one_lesson,
-         :one_month_two_lessons
-       ], default: :one_month
+  enum :plan, %i[one_entrance half_month one_month
+                 three_months one_year one_month_one_lesson
+                 one_month_two_lesson ], default: :one_month
 
   validates :activity, presence: true
   validates :plan, presence: true
@@ -27,6 +24,6 @@ class ActivityPlan < ApplicationRecord
   end
 
   def humanize_plan
-    ActivityPlan.human_attribute_name("plan.#{self.plan}")
+    ActivityPlan.human_attribute_name("plan.#{plan}")
   end
 end
