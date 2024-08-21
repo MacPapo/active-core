@@ -12,10 +12,16 @@ Rails.application.routes.draw do
   resources :legal_guardians
   resources :payments
   resources :staffs
-  resources :subscriptions
   resources :activities
   resources :activity_plans
   resources :users
+
+  resources :subscriptions do
+    member do
+      get   :renew
+      patch :renew_update
+    end
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

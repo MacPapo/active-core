@@ -1,8 +1,7 @@
 class Subscription < ApplicationRecord
-  before_validation :set_start_date, on: :create
-  before_validation :set_end_date, on: :create
-
-  after_initialize :set_default_status, if: :new_record?
+  # TODO remove this!
+  before_validation :set_start_date
+  before_validation :set_end_date_if_blank
 
   belongs_to :user
   belongs_to :staff
@@ -15,7 +14,7 @@ class Subscription < ApplicationRecord
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
 
-  enum :status, [ :inactive, :active, :expired ]
+  enum :status, [ :inactive, :active, :expired ], default: :inactive
 
   validates :start_date, :activity, :activity_plan, :user, :staff, presence: true
   validate :annual_membership_paid?, if: :activity_subscription?
@@ -59,12 +58,8 @@ class Subscription < ApplicationRecord
 
   private
 
-  def set_default_status
-    self.status ||= :inactive
-  end
-
   def set_start_date
-    if start_date && activity_plan
+    if self.start_date && self.activity_plan
       plan = activity_plan
       sdate = self.start_date.to_date
 
@@ -76,8 +71,8 @@ class Subscription < ApplicationRecord
     end
   end
 
-  def set_end_date
-    if start_date && activity_plan
+  def set_end_date_if_blank
+    if self.end_date.blank? && self.start_date.present? && activity_plan
       self.end_date = plan_handler(activity_plan)
     end
   end

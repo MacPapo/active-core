@@ -1,4 +1,4 @@
-<%= form_with(model: subscription) do |form| %>
+<%= form_with(model: subscription, url: renew_update_subscription_path(@subscription), method: :patch) do |form| %>
     <% if subscription.errors.any? %>
         <div style="color: red">
             <h2><%= t('global.forms.messages.errors', count: subscription.errors.count) %></h2>
@@ -28,12 +28,6 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                <%= form.label :user_id, class: 'form-label' %>
-                <%= form.collection_select :user_id, @users, :id, :full_name, {}, { class: 'form-select' } %>
-            </div>
-        </div>
-        <div class="col">
-            <div class="mb-3">
                 <%= form.label :activity_plan_id, class: 'form-label' %>
                 <%= form.collection_select :activity_plan_id, @plans, :id, :humanize_plan, {}, { class: 'form-select' } %>
             </div>
@@ -47,6 +41,7 @@
         <% end %>
     </div>
 
+    <%= form.hidden_field :user_id, value: @user.id %>
     <%= form.hidden_field :activity_id, value: @activity.id %>
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 

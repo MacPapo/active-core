@@ -52,7 +52,7 @@
 
                     <!-- Name -->
                     <td>
-                        <%= user.name%>
+                        <%= user.name %>
                     </td>
 
                     <!-- Surname -->
@@ -123,14 +123,25 @@
 
                     <!-- Activities -->
                     <td>
-                        <!-- TODO -->
-                        <% subs = user.subscriptions %>
+                        <% subs = user.subscriptions.where.missing(:normal_subscription) %>
                         <% subs.each do |sub| %>
-                            <% ac = sub.activity %>
-                            <%= button_to "#{ac.name}",
-                                          subscription_path(sub),
+                            <% ac = sub.activity&.name %>
+                            <% op = sub.open_subscription&.activity&.name %>
+                            <% btn_text = op ? "#{ac} + #{op}" : "#{ac}" %>
+                            <% btn_color =
+                                          case
+                                            when sub.active?
+                                                'success'
+                                            when sub.inactive?
+                                                'info'
+                                            else
+                                                'warning'
+                                           end
+                            %>
+                            <%= button_to btn_text,
+                                          renew_subscription_path(sub),
                                           method: :get,
-                                          class: "btn badge rounded-pill text-bg-#{sub.open? ? 'secondary' : 'info' }"
+                                          class: "btn badge rounded-pill text-bg-#{ btn_color }"
                             %>
                         <% end %>
                     </td>

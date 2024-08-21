@@ -1,7 +1,9 @@
 class SubscriptionsController < ApplicationController
-  before_action :set_subscription, only: %i[ show edit update destroy ]
+  before_action :set_subscription, only: %i[ show edit renew renew_update update destroy ]
   before_action :set_activity, only: %i[ new create ]
   before_action :set_users, only: %i[ edit update new create ]
+
+  after_action :update_open, only: %i[ edit renew_update ]
 
 
   # GET /subscriptions
@@ -45,6 +47,26 @@ class SubscriptionsController < ApplicationController
     end
   end
 
+  # GET /subscriptions/1/renew
+  def renew
+    @subscription.start_date = Date.today
+    @subscription.end_date = ""
+
+    @activity = @subscription.activity
+    @plans = @activity.activity_plans
+    @user = User.find(@subscription.user.id)
+  end
+
+  # PATCH/PUT /subscriptions/1
+  def renew_update
+    if @subscription.update(subscription_params)
+      @subscription.inactive!
+      redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription.id), notice: "L'abbonamento è stato aggiornato correttamente, per attivarlo procedi al pagamento"
+    else
+      rendere :renew, status: :unprocessable_entity
+    end
+  end
+
   # PATCH/PUT /subscriptions/1
   def update
     if @subscription.update(subscription_params)
@@ -78,6 +100,39 @@ class SubscriptionsController < ApplicationController
                .where('membership.status' => :active)
                .where.not(id: Subscription.where(activity: @activity).select(:user_id))
                .load_async
+  end
+
+  def update_open
+    if params[:open]
+      @subscription.open? ? renew_open_subscription : create_open_subscription
+    elsif @subscription.open?
+      open = @subscription.open_subscription
+      @subscription.update(open_subscription: nil)
+      open.update(normal_subscription: nil)
+      open.destroy
+    end
+  end
+
+  def renew_open_subscription
+    Subscription.transaction do
+      sub = @subscription
+      open = @subscription.open_subscription
+
+      open.inactive!
+      open.start_date = sub.start_date
+      open.end_date = sub.end_date
+
+      if open.save!
+        @subscription.update!(open_subscription: open)
+      else
+        render :new, status: :unprocessable_entity
+        raise ActiveRecord::Rollback, "Open subscription update failed"
+      end
+    end
+  rescue ActiveRecord::RecordInvalid => e
+    # Cattura l'errore di validazione e fornisci un feedback
+    logger.error "Failed to renew open subscription: #{e.record.errors.full_messages.join(', ')}"
+    render :new, status: :unprocessable_entity
   end
 
   def create_open_subscription
