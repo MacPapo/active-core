@@ -21,7 +21,7 @@ class LegalGuardian < ApplicationRecord
   end
 
   def minor?
-    birth_day && age.years > 18.years
+    birth_day && age.years < 18.years
   end
 
   def age

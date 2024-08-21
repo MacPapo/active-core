@@ -57,11 +57,4 @@ RSpec.describe Payment, type: :model do
     expect(payment_1).not_to be_valid
     expect(payment_2).not_to be_valid
   end
-
-  it 'is invalid without payed status' do
-    payment_1 = build(:payment, payed: nil, staff: staff, payable: subscription)
-    payment_2 = build(:payment, payed: nil, staff: staff, payable: membership)
-    expect(payment_1).not_to be_valid
-    expect(payment_2).not_to be_valid
-  end
 end

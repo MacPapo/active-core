@@ -35,7 +35,7 @@ class User < ApplicationRecord
   end
 
   def minor?
-    birth_day && age.years > 18.years
+    birth_day && age.years < 18.years
   end
 
   def affiliated?
@@ -65,8 +65,8 @@ class User < ApplicationRecord
     membership&.active?
   end
 
+  # TODO rework this
   def verify_compliance
-    # TODO rework this
     compliance = { status: true, errors: [] }
 
     if self.minor? && self.legal_guardian

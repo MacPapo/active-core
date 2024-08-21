@@ -10,8 +10,17 @@ class Subscription < ApplicationRecord
   belongs_to :activity
   belongs_to :activity_plan
 
-  has_one :normal_subscription, class_name: 'Subscription', foreign_key: 'open_subscription_id', dependent: :destroy
-  belongs_to :open_subscription, class_name: 'Subscription', optional: true, dependent: :destroy
+  belongs_to :open_subscription,
+             inverse_of: :normal_subscription,
+             class_name: 'Subscription',
+             optional: true,
+             dependent: :destroy
+
+  has_one :normal_subscription,
+          inverse_of: :open_subscription,
+          class_name: 'Subscription',
+          foreign_key: 'open_subscription_id',
+          dependent: :destroy
 
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
@@ -19,7 +28,7 @@ class Subscription < ApplicationRecord
   enum :status, %i[inactive active expired], default: :inactive
 
   validates :start_date, :activity, :activity_plan, :user, :staff, presence: true
-  validate :active_membership?, if: :activity_subscription?
+  validate :active_membership?, if: :activity_present?
 
   scope :active, -> { where(status: :active) }
 
@@ -52,6 +61,7 @@ class Subscription < ApplicationRecord
   private
 
   def set_start_date
+    p self
     return if activity_plan.one_entrance?
 
     date = start_date
@@ -68,34 +78,33 @@ class Subscription < ApplicationRecord
     self.end_date = plan_handler(activity_plan)
   end
 
-  def activity_subscription?
+  def activity_present?
     activity.present?
   end
 
   def plan_handler(activity_plan)
-    plan = activity_plan.get_plan
+    return start_date if activity_plan.one_entrance?
 
-    case plan
-    when :one_entrance
-      start_date
-    when :half_month
-      half_month_handler(start_date)
-    when :one_month, :one_month_one_lesson, :one_month_two_lessons
-      start_date.at_end_of_month
-    when :three_months
+    case activity_plan
+    when -> { _1.one_year? }
+      start_date.at_end_of_year
+    when -> { _1.three_months? }
       start_date.months_since(2).at_end_of_month
-    when :one_year
-      self.start_date.at_end_of_year
     else
-      '1970-01-01'
+      months_handler(activity_plan)
     end
   end
 
-  def half_month_handler(start_date)
-    if start_date == (start_date.beginning_of_month + 14.days)
-      self.start_date.at_end_of_month
-    else
-      self.start_date + 14.days
-    end
+  def months_handler(plan)
+    return start_date.at_end_of_month unless plan.half_month?
+
+    half_month_handler
+  end
+
+  def half_month_handler
+    date = start_date
+    half = date.beginning_of_month + 14.days
+
+    date == half ? start_date.at_end_of_month : start_date + 14.days
   end
 end

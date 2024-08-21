@@ -5,8 +5,8 @@ class ActivityPlan < ApplicationRecord
   belongs_to :activity
 
   enum :plan, %i[one_entrance half_month one_month
-                 three_months one_year one_month_one_lesson
-                 one_month_two_lesson ], default: :one_month
+                 one_month_one_lesson one_month_two_lessons
+                 three_months one_year ], default: :one_month
 
   validates :activity, presence: true
   validates :plan, presence: true
@@ -17,7 +17,7 @@ class ActivityPlan < ApplicationRecord
     self.plan.to_sym
   end
 
-  def self.humanize_plans(keys=plans.keys)
+  def self.humanize_plans(keys = plans.keys)
     keys.map do |key|
       [ActivityPlan.human_attribute_name("plan.#{key}"), key]
     end

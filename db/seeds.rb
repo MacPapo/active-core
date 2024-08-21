@@ -212,7 +212,6 @@ puts "Staff Added"
 #     method: [0, 1, 2, 3].sample,
 #     payment_type: [0, 1, 2].sample,
 #     entry_type: [0, 1].sample,
-#     payed: true,
 #     note: Faker::Lorem.sentence,
 #     subscription: subscriptions.sample,
 #     staff: staff.sample

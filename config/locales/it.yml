@@ -5,14 +5,6 @@ it:
 
   activemodel:
     enums:
-      payment:
-        payment_method:
-          pos: "POS"
-          cash: "Contanti"
-          bank_transfer: "Bonifico"
-        entry_type:
-          income: "Entrata"
-          expense: "Uscita"
       activity_plan:
         plan:
           one_entrance: "1 Entrata"
@@ -139,10 +131,15 @@ it:
         date: "Data pagamento"
         payment_method: "Metodo di pagamento"
         entry_type: "Tipo Movimento"
-        payed: "Pagato"
         note: "Note eventuali"
         staff: "Collaboratore"
-
+      payment/method:
+        pos: "POS"
+        cash: "Contanti"
+        bank_transfer: "Bonifico"
+      payment/type:
+        income: "Entrata"
+        expense: "Uscita"
   global:
     user: "Utenti"
     staff: "Collaboratori"
@@ -276,6 +273,14 @@ it:
         other: "%{count} collaboratori registrati"
 
   subscriptions:
+    renew_update:
+      renew_succ: "L'abbonamento è stato aggiornato correttamente, per attivarlo procedi al pagamento"
+    create:
+      create_succ: "L'abbonamento è stato creato correttamente, per attivarlo procedi al pagamento"
+    update:
+      update_succ: "L'abbonamento è stato aggiornato correttamente"
+    destroy:
+      destroy_succ: "L'abbonamento è stato eliminato correttamente"
     index:
       title: "Iscrizioni"
       registered:

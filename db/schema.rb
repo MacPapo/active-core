@@ -76,7 +76,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_101643) do
     t.date "date", null: false
     t.integer "payment_method", default: 0, null: false
     t.integer "entry_type", default: 0, null: false
-    t.boolean "payed", default: true, null: false
     t.text "note"
     t.integer "staff_id"
     t.string "payable_type"
@@ -87,7 +86,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_101643) do
     t.index ["date"], name: "index_payments_on_date"
     t.index ["entry_type"], name: "index_payments_on_entry_type"
     t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
-    t.index ["payed"], name: "index_payments_on_payed"
     t.index ["payment_method"], name: "index_payments_on_payment_method"
     t.index ["staff_id"], name: "index_payments_on_staff_id"
     t.index ["updated_at"], name: "index_payments_on_updated_at"

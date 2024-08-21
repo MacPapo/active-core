@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
+# Payment Controller
 class PaymentsController < ApplicationController
-  before_action :set_payment, only: %i[ show edit update destroy ]
-  before_action :set_entity, only: %i[ edit new ]
+  before_action :set_payment, only: %i[show edit update destroy]
+  before_action :set_entity, only: %i[edit new]
 
   # GET /payments
   def index
@@ -13,8 +16,7 @@ class PaymentsController < ApplicationController
   end
 
   # GET /payments/1
-  def show
-  end
+  def show; end
 
   # GET /payments/new
   def new
@@ -23,8 +25,7 @@ class PaymentsController < ApplicationController
   end
 
   # GET /payments/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /payments
   def create
@@ -54,25 +55,27 @@ class PaymentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_payment
-      @payment = Payment.find(params[:id])
-    end
 
-    def set_entity
-      @entity =
-        case params[:payable_type]
-        when 'Membership'
-          Membership.find(params[:payable_id])
-        when 'Subscription'
-          Subscription.find(params[:payable_id])
-        else
-          nil
-        end
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_payment
+    @payment = Payment.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def payment_params
-      params.require(:payment).permit(:amount, :date, :payment_method, :payable_type, :payable_id, :entry_type, :payed, :note, :subscription_id, :staff_id)
-    end
+  def set_entity
+    @entity =
+      case params[:payable_type]
+      when 'Membership'
+        Membership.find(params[:payable_id])
+      when 'Subscription'
+        Subscription.find(params[:payable_id])
+      end
+  end
+
+  # Only allow a list of trusted parameters through.
+  def payment_params
+    params.require(:payment).permit(
+      :amount, :date, :payment_method, :payable_type, :payable_id,
+      :entry_type, :note, :subscription_id, :staff_id
+    )
+  end
 end

@@ -13,17 +13,24 @@ class Payment < ApplicationRecord
   enum :entry_type, %i[income expense], default: :income
 
   validates :payment_method, :entry_type, :payable, :staff, presence: true
-  validates :payed, inclusion: { in: [true, false] }
+
+  def humanize_payment_method(method = payment_method)
+    Payment.human_attribute_name("method.#{method}")
+  end
+
+  def humanize_entry_type(type = entry_type)
+    Payment.human_attribute_name("type.#{type}")
+  end
 
   def self.humanize_payment_methods
     payment_methods.keys.map do |key|
-      [I18n.t("activemodel.enums.payment.payment_method.#{key}"), key]
+      [Payment.human_attribute_name("method.#{key}"), key]
     end
   end
 
   def self.humanize_entry_types
     entry_types.keys.map do |key|
-      [I18n.t("activemodel.enums.payment.entry_type.#{key}"), key]
+      [Payment.human_attribute_name("type.#{key}"), key]
     end
   end
 
@@ -35,8 +42,6 @@ class Payment < ApplicationRecord
 
   # TODO undo activation if payment is destroyed
   def activate_membership_or_subscription
-    return unless payed
-
     case payable_type
     when 'Membership'
       membership = Membership.find(payable_id)

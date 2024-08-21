@@ -334,14 +334,7 @@ RSpec.describe Subscription, type: :model do
                  start_date: '2024-01-01')
     expect(sub).to be_valid
 
-    payment = create(:payment, staff: staff, payed: false, payable: sub)
-    sub.reload
-
-    expect(sub.get_status).to eq(:inactive)
-
-    payment.update(payed: true)
-    sub.reload
-
-    expect(sub.get_status).to eq(:active)
+    payment = create(:payment, staff: staff, payable: sub)
+    expect(sub.status).to eq('active')
   end
 end

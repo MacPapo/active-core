@@ -25,12 +25,7 @@ class Membership < ApplicationRecord
     MEMBERSHIP_COST
   end
 
-  # TODO
-  def get_status
-    self.status.to_sym
-  end
-
-  def humanize_status(status=self.status)
+  def humanize_status(status = self.status)
     Membership.human_attribute_name("status.#{status}")
   end
 

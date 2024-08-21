@@ -37,11 +37,6 @@
         </div>
     <% end %>
 
-    <div class="form-check mb-3">
-        <%= form.check_box :payed, checked: payment.payed, class: 'form-check-input' %>
-        <%= form.label :payed, class: 'form-check-label' %>
-    </div>
-
     <div class="mb-3">
         <%= form.label :note, class: 'form-label' %>
         <%= form.text_area :note, value: payment.note, class: 'form-control' %>
