@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
+# Detach Legal Guardians Job
 class DetachLegalGuardiansJob < ApplicationJob
-  queue_as :default
+  queue_as :background
 
-  def perform(*args)
-    users_to_update = User
-                        .joins(:legal_guardian)
-                        .where("? - users.birth_day >= 18", Date.today)
+  def perform(*)
+    users_to_update = User.joins(:legal_guardian)
+                          .where('? - users.birth_day >= 18', Time.zone.today)
 
-    users_to_update.update_all(legal_guardian: nil)
+    users_to_update.find_each { |u| u.update(legal_guardian_id: nil) }
   end
 end

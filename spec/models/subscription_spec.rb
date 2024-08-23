@@ -14,7 +14,7 @@ RSpec.describe Subscription, type: :model do
 
   it 'allows activity subscription with annual membership and all attributes' do
     activity_subscription = user.subscriptions.build(
-      start_date: Date.today,
+      start_date: Time.zone.today,
       activity_plan: activity_plan,
       staff: staff,
       activity: activity
@@ -31,7 +31,7 @@ RSpec.describe Subscription, type: :model do
     expect(user.membership).to be_nil
 
     activity_subscription = user.subscriptions.build(
-      start_date: Date.today,
+      start_date: Time.zone.today,
       activity_plan: activity_plan,
       staff: staff,
       activity: activity

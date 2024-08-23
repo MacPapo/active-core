@@ -2,8 +2,17 @@
 
 # Subscription Model
 class Subscription < ApplicationRecord
-  before_validation :set_start_date
+  validates :start_date, :activity_id, :activity_plan_id, :user_id, :staff_id, presence: true
+  validates :end_date, comparison: { greater_than: :start_date }, if: -> { start_date.present? && end_date.present? }
+  validate :active_membership?, if: -> { activity.present? }
+
+  delegate :cost, :affiliated_cost, prefix: 'plan', to: :activity_plan
+  delegate :active_membership?, to: :user
+
   before_validation :set_end_date_if_blank
+  after_validation :set_start_date
+
+  after_save -> { ValidateSubscriptionStatusJob.perform_later }
 
   belongs_to :user
   belongs_to :staff
@@ -27,13 +36,7 @@ class Subscription < ApplicationRecord
 
   enum :status, %i[inactive active expired], default: :inactive
 
-  validates :start_date, :activity, :activity_plan, :user, :staff, presence: true
-  validate :active_membership?, if: :activity_present?
-
   scope :active, -> { where(status: :active) }
-
-  delegate :cost, :affiliated_cost, prefix: 'plan', to: :activity_plan
-  delegate :active_membership?, to: :user
 
   OPEN_COST = 30.0
 
@@ -61,8 +64,7 @@ class Subscription < ApplicationRecord
   private
 
   def set_start_date
-    p self
-    return if activity_plan.one_entrance?
+    return if activity_plan.blank? || activity_plan.one_entrance?
 
     date = start_date
 
@@ -76,10 +78,6 @@ class Subscription < ApplicationRecord
     return unless end_date.blank? && start_date.present? && activity_plan
 
     self.end_date = plan_handler(activity_plan)
-  end
-
-  def activity_present?
-    activity.present?
   end
 
   def plan_handler(activity_plan)

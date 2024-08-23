@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
+# Validate Membership Status Job
 class ValidateMembershipStatusJob < ApplicationJob
-  queue_as :default
+  queue_as :background
 
-  def perform(*args)
-    memberships_to_update = Membership
-                              .where(status: :active)
-                              .where("end_date < ?", Date.today)
+  def perform(*)
+    memberships_to_update = Membership.where(status: :active).where('end_date < ?', Time.zone.today)
 
-    memberships_to_update.update_all(status: :expired)
+    memberships_to_update.find_each(&:expired!)
   end
 end

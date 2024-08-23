@@ -2,12 +2,13 @@
 
 # Membership Model
 class Membership < ApplicationRecord
-  before_validation :set_end_date_if_blank
+  validates :start_date, presence: true
+  validates :end_date, comparison: { greater_than: :start_date }, if: -> { start_date.present? && end_date.present? }
 
-  after_initialize :set_default_date, if: :new_record?
+  before_validation :set_dates
 
-  after_save    :validate_status
-  after_destroy :cleanup_subs
+  after_save -> { ValidateMembershipStatusJob.perform_later }
+  after_destroy -> { AfterDeleteMembershipCleanupSubsJob.perform_later }
 
   belongs_to :user
   belongs_to :staff
@@ -16,8 +17,6 @@ class Membership < ApplicationRecord
   has_many :payments, as: :payable, dependent: :destroy
 
   enum :status, %i[inactive active expired], default: :inactive
-
-  validates :start_date, presence: true
 
   MEMBERSHIP_COST = 35.0
 
@@ -30,14 +29,15 @@ class Membership < ApplicationRecord
   end
 
   def num_of_days_til_renewal
-    (renewal_date - Time.zone.today).to_i
-  end
-
-  def renewal_date
-    end_date
+    (end_date - Time.zone.today).to_i
   end
 
   private
+
+  def set_dates
+    set_default_date
+    set_end_date_if_blank
+  end
 
   def set_default_date
     self.start_date ||= Time.zone.today
@@ -47,13 +47,5 @@ class Membership < ApplicationRecord
     return unless end_date.blank? && start_date.present?
 
     self.end_date = Date.new((self.start_date + 1.year).year, 9, 1)
-  end
-
-  def validate_status
-    ValidateMembershipStatusJob.perform_later
-  end
-
-  def cleanup_subs
-    AfterDeleteMembershipCleanupSubsJob.perform_later
   end
 end

@@ -6,9 +6,6 @@ ruby "3.3.3"
 gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 gem "rails-i18n", "~> 7.0"
 
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
-
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", "~> 1.4"
 gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
@@ -37,14 +34,13 @@ gem "jsbundling-rails", "~> 1.3"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-# Use Redis adapter to run Action Cable in production
-# gem "redis", ">= 4.0.1"
+gem "discard", "~> 1.3"
 
-# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-# gem "kredis"
+gem "solid_queue", "~> 0.6.0"
 
-# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "mission_control-jobs", "~> 0.3.1"
+
+gem "sprockets-rails", "~> 3.5"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -90,5 +86,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "discard", "~> 1.3"

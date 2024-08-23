@@ -248,6 +248,12 @@ it:
       registered:
         one: "%{count} pagamenti registrati"
         other: "%{count} pagamenti registrati"
+    create:
+      create_succ: "Il pagamento è stato registrato correttamente."
+    update:
+      update_succ: "Il pagamento è stato aggiornato correttamente."
+    destroy:
+      destroy_succ: "Il pagamento è stato distrutto correttamente."
     new:
       title: "Inserimento di un Nuovo Pagamento"
     edit:
@@ -274,13 +280,13 @@ it:
 
   subscriptions:
     renew_update:
-      renew_succ: "L'abbonamento è stato aggiornato correttamente, per attivarlo procedi al pagamento"
+      renew_succ: "L'abbonamento è stato aggiornato correttamente, per attivarlo procedi al pagamento."
     create:
-      create_succ: "L'abbonamento è stato creato correttamente, per attivarlo procedi al pagamento"
+      create_succ: "L'abbonamento è stato creato correttamente, per attivarlo procedi al pagamento."
     update:
-      update_succ: "L'abbonamento è stato aggiornato correttamente"
+      update_succ: "L'abbonamento è stato aggiornato correttamente."
     destroy:
-      destroy_succ: "L'abbonamento è stato eliminato correttamente"
+      destroy_succ: "L'abbonamento è stato eliminato correttamente."
     index:
       title: "Iscrizioni"
       registered:
@@ -290,8 +296,17 @@ it:
       title: "Inserimento di una Nuova Iscrizione"
 
   memberships:
+    renew_update:
+      renew_succ: "La quota associativa è stata aggiornata correttamente, per attivarla procedi al pagamento."
+    create:
+      create_succ: "La quota associativa è stata creata correttamente, per attivarla procedi al pagamento."
+    update:
+      update_succ: "La quota associativa è stata aggiornata correttamente."
+    destroy:
+      destroy_succ: "La quota associativa è stata eliminata correttamente."
     form:
-      date_help: "La DATA INIZIO si riferisce alla data in cui si vuole registrare la quota associativa."
+      start_date_help: "La DATA INIZIO si riferisce alla data in cui si vuole registrare la quota associativa."
+      end_date_help: "La DATA SCADENZA si riferisce alla data in cui si vuole far scadere la quota associativa."
     index:
       title: "Quote Associative"
       registered:

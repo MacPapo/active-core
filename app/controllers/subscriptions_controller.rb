@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-# Subscription Controlle
+# Subscription Controller
 class SubscriptionsController < ApplicationController
-  before_action :set_subscription, only: %i[show edit renew renew_update update destroy]
-  before_action :set_activity, only: %i[new create]
-  before_action :set_users, only: %i[edit update new create]
+  before_action :set_subscription, only: %i[show edit update renew renew_update destroy]
+  before_action :set_activity, only: %i[new create update renew_update]
+  before_action :set_plans, only: %i[new create update renew_update]
+  before_action :set_users, only: %i[new edit create update]
   before_action :set_weight_room_activity, only: %i[create renew_update update]
 
   after_action :update_open, only: %i[update renew_update]
@@ -21,26 +22,26 @@ class SubscriptionsController < ApplicationController
   def new
     @subscription = Subscription.build
     @subscription.start_date = Time.zone.today
-
-    @plans = @activity.activity_plans
   end
 
   # GET /subscriptions/1/edit
   def edit
     @activity = @subscription.activity
-    @plans = @activity.activity_plans
+    set_plans(@activity)
   end
 
   # POST /subscriptions
   def create
-    @subscription = Subscription.build(subscription_params)
-
-    if @subscription.save
-      create_open_subscription if params[:open]
+    activity_id = subscription_params[:activity_id]
+    begin
+      @subscription = Subscription.build(subscription_params)
+      @subscription.save!
+      Subscription.transaction { create_open_subscription } if params[:open]
 
       redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription), notice: t('.create_succ')
-    else
-      render :new, status: :unprocessable_entity
+    rescue ActiveRecord::RecordInvalid => e
+      @subscription = e.record
+      render :new, activity_id:, status: :unprocessable_entity
     end
   end
 
@@ -48,9 +49,8 @@ class SubscriptionsController < ApplicationController
   def renew
     @subscription.start_date = Time.zone.today
     @subscription.end_date = ''
-
     @activity = @subscription.activity
-    @plans = @activity.activity_plans
+    set_plans(@activity)
     @user = User.find(@subscription.user.id)
   end
 
@@ -58,10 +58,9 @@ class SubscriptionsController < ApplicationController
   def renew_update
     if @subscription.update(subscription_params)
       @subscription.inactive!
-      redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription.id),
-                  notice: t('.renew_succ')
+      redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription.id), notice: t('.renew_succ')
     else
-      rendere :renew, status: :unprocessable_entity
+      render :renew, status: :unprocessable_entity
     end
   end
 
@@ -89,12 +88,16 @@ class SubscriptionsController < ApplicationController
   end
 
   def set_activity
-    @activity = Activity.find(params[:activity_id] || subscription_params[:activity_id])
+    @activity ||= Activity.find(params[:activity_id] || subscription_params[:activity_id])
+  end
+
+  def set_plans(activity = @activity)
+    @plans = activity.activity_plans
   end
 
   def set_users
-    @users = User.joins(:membership).where('membership.status' => :active)
-                 .where.not(id: Subscription.where(activity: @activity).select(:user_id)).load_async
+    @users ||= User.joins(:membership).where('membership.status' => :active)
+                   .where.not(id: Subscription.where(activity: @activity).select(:user_id)).load_async
   end
 
   def update_open
@@ -129,7 +132,8 @@ class SubscriptionsController < ApplicationController
     if open_subscription.save
       @subscription.update(open_subscription_id: open_subscription.id)
     else
-      @subscription.destroy
+      open_subscription.destroy
+      raise ActiveRecord::RecordInvalid.new(open_subscription)
     end
   end
 

@@ -1,16 +1,12 @@
 # frozen_string_literal: true
 
+# After Delete Membership Cleanup Subscriptions Job
 class AfterDeleteMembershipCleanupSubsJob < ApplicationJob
-  queue_as :default
+  queue_as :real_time
 
   def perform(*args)
-    users_to_update = User
-                        .where.missing(:membership)
-                        .joins(:subscriptions)
-                        .distinct
+    users_to_update = User.where.missing(:membership).joins(:subscriptions).distinct
 
-    users_to_update.find_each do |user|
-      user.subscriptions.destroy_all
-    end
+    users_to_update.find_each { |user| user.subscriptions.destroy_all }
   end
 end

@@ -15,7 +15,7 @@ class MembershipPresenter
     when :inactive
       new_payment_path(payable_type: 'Membership', payable_id: @membership.id)
     when :expired
-      edit_membership_path(@membership, user_id: user&.id)
+      renew_membership_path(@membership, user_id: user&.id)
     else
       new_membership_path(user_id: user&.id)
     end

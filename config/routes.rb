@@ -1,20 +1,28 @@
 Rails.application.routes.draw do
   devise_for :staffs
-  resources :waitlists
 
   authenticated :staff, -> { _1.admin? } do
     # TODO delete this
     resources :membership_histories
     resources :subscription_histories
+
+    mount MissionControl::Jobs::Engine, at: '/jobs'
   end
 
-  resources :memberships
   resources :legal_guardians
   resources :payments
   resources :staffs
   resources :activities
   resources :activity_plans
   resources :users
+  resources :waitlists
+
+  resources :memberships do
+    member do
+      get   :renew
+      patch :renew_update
+    end
+  end
 
   resources :subscriptions do
     member do

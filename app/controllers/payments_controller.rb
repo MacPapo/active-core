@@ -21,6 +21,7 @@ class PaymentsController < ApplicationController
   # GET /payments/new
   def new
     @payment = @entity.nil? ? Payment.build : @entity.payments.build
+    @payment.date = Time.zone.today
     @payment.amount = @entity.nil? ? 0.0 : @entity.cost
   end
 
@@ -32,7 +33,7 @@ class PaymentsController < ApplicationController
     @payment = Payment.build(payment_params)
 
     if @payment.save
-      redirect_to payment_url(@payment), notice: "Il pagamento è stato registrato con successo."
+      redirect_to payment_url(@payment), notice: t('.create_succ')
     else
       render :new, status: :unprocessable_entity
     end
@@ -41,7 +42,7 @@ class PaymentsController < ApplicationController
   # PATCH/PUT /payments/1
   def update
     if @payment.update(payment_params)
-      redirect_to payment_url(@payment), notice: "Payment was successfully updated."
+      redirect_to payment_url(@payment), notice: t('.update_succ')
     else
       render :edit, status: :unprocessable_entity
     end
@@ -51,7 +52,7 @@ class PaymentsController < ApplicationController
   def destroy
     @payment.destroy!
 
-    redirect_to payments_url, notice: "Payment was successfully destroyed."
+    redirect_to payments_url, notice: t('.destroy_succ')
   end
 
   private

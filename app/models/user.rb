@@ -4,7 +4,7 @@
 class User < ApplicationRecord
   before_save :normalize_phone
 
-  # after_save :detach_lg_unless_minor, unless: :minor?
+  after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor?
 
   belongs_to :legal_guardian, optional: true
 
@@ -105,9 +105,5 @@ class User < ApplicationRecord
     return unless med_cert_issue_date > Time.zone.today
 
     errors.add(:med_cert_issue_date, I18n.t('global.errors.med_date_future'))
-  end
-
-  def detach_lg_unless_minor
-    DetachLegalGuardiansJob.perform_later
   end
 end

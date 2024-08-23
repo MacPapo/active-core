@@ -15,7 +15,7 @@ class SubscriptionPresenter
     when :inactive
       new_payment_path(payable_type: 'Subscription', payable_id: @subscription.id)
     when :expired
-      edit_subscription_path(@subscription, user_id: user&.id)
+      renew_subscription_path(@subscription, user_id: user&.id)
     else
       new_subscription_path(user_id: user&.id)
     end

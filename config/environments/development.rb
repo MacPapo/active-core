@@ -69,7 +69,8 @@ Rails.application.configure do
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
-
+  config.assets.check_precompiled_asset = false # DELETE ME
+  config.active_job.queue_adapter = :solid_queue
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
