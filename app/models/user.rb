@@ -2,6 +2,17 @@
 
 # User Model
 class User < ApplicationRecord
+  validates :name, :surname, presence: true
+  validates :affiliated, inclusion: { in: [true, false] }
+
+  validates :legal_guardian, presence: true, if: :minor?
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
+  normalizes :email, with: -> { _1.strip.downcase }
+
+  validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }
+  validate :med_cert_issue_date_cannot_be_in_future, if: -> { med_cert_issue_date.present? }
+
+  # FIX ME
   before_save :normalize_phone
 
   after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor?
@@ -19,16 +30,12 @@ class User < ApplicationRecord
   attribute :surname, :string
   attribute :affiliated, :boolean, default: false
 
-  validates :name, :surname, presence: true
-  validates :affiliated, inclusion: { in: [true, false] }
+  scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
+  scope :by_surname, ->(surname) { where('surname LIKE ?', "%#{surname}%") if surname.present? }
 
-  validates :legal_guardian, presence: true, if: :minor?
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
-  normalizes :email, with: -> { _1.strip.downcase }
-
-  validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }
-
-  validate :med_cert_issue_date_cannot_be_in_future, if: :med_cert_present?
+  def self.filter(name, surname)
+    by_name(name).by_surname(surname)
+  end
 
   def full_name
     "#{name} #{surname}"
@@ -46,12 +53,8 @@ class User < ApplicationRecord
     ((Time.zone.now - birth_day.to_time) / 1.year.seconds).floor
   end
 
-  def med_cert_present?
-    med_cert_issue_date.present?
-  end
-
   def med_cert_exp_date
-    med_cert_present? ? med_cert_issue_date + 1.year : nil
+    med_cert_issue_date.present? ? med_cert_issue_date + 1.year : nil
   end
 
   def num_of_days_til_med_cert_expire

@@ -6,17 +6,11 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @pagy, @users = pagy(
-      User
-        .all
-        .includes(:membership, :subscriptions, :legal_guardian)
-        .load_async
-    )
+    @pagy, @users = pagy(User.filter(params[:name], params[:surname]))
   end
 
   # GET /users/1
-  def show
-  end
+  def show; end
 
   # GET /users/new
   def new
@@ -24,8 +18,7 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /users
   def create
@@ -63,6 +56,8 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:cf, :name, :surname, :email, :phone, :birth_day, :med_cert_issue_date, :affiliated, :legal_guardian_id)
+    params.require(:user).permit(
+      :cf, :name, :surname, :email, :phone, :birth_day, :med_cert_issue_date, :affiliated, :legal_guardian_id
+    )
   end
 end

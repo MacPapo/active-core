@@ -9,12 +9,13 @@ Rails.application.routes.draw do
     mount MissionControl::Jobs::Engine, at: '/jobs'
   end
 
+  resources :users
+
   resources :legal_guardians
   resources :payments
   resources :staffs
   resources :activities
   resources :activity_plans
-  resources :users
   resources :waitlists
 
   resources :memberships do
