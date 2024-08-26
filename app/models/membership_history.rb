@@ -6,5 +6,5 @@ class MembershipHistory < ApplicationRecord
   belongs_to :membership
   belongs_to :staff
 
-  enum :action, %i[creation renewal cancellation]
+  enum :action, { creation: 0, renewal: 1, cancellation: 2 }
 end

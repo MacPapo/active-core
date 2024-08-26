@@ -34,11 +34,15 @@ class Subscription < ApplicationRecord
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
 
-  enum :status, %i[inactive active expired], default: :inactive
+  enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive
 
   scope :active, -> { where(status: :active) }
 
   OPEN_COST = 30.0
+
+  def humanize_status(status = self.status)
+    Subscription.human_attribute_name("status.#{status}")
+  end
 
   def cost
     acost =

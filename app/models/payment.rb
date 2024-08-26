@@ -9,11 +9,15 @@ class Payment < ApplicationRecord
   belongs_to :payable, polymorphic: true
   belongs_to :staff
 
-  enum :payment_method, %i[pos cash bank_transfer], default: :cash
-  enum :entry_type, %i[income expense], default: :income
+  enum :payment_method, { pos: 0, cash: 1, bank_transfer: 2 }, default: :cash
+  enum :entry_type, { income: 0, expense: 1 }, default: :income
 
   def payment_summary
     payable.summary
+  end
+
+  def user
+    payable&.user
   end
 
   def humanize_payment_method(method = payment_method)

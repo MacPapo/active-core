@@ -16,7 +16,7 @@ class Membership < ApplicationRecord
   has_many :membership_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
 
-  enum :status, %i[inactive active expired], default: :inactive
+  enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive
 
   MEMBERSHIP_COST = 35.0
 

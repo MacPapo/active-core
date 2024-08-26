@@ -4,9 +4,13 @@
 class ActivityPlan < ApplicationRecord
   belongs_to :activity
 
-  enum :plan, %i[one_entrance half_month one_month
-                 one_month_one_lesson one_month_two_lessons
-                 three_months one_year ], default: :one_month
+  enum :plan, { one_entrance: 0,
+                half_month: 1,
+                one_month: 2,
+                one_month_one_lesson: 3,
+                one_month_two_lessons: 4,
+                three_months: 5,
+                one_year: 6 }, default: :one_month
 
   validates :activity, presence: true
   validates :plan, presence: true

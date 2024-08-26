@@ -15,7 +15,7 @@ class Staff < ApplicationRecord
 
   validates :nickname, :password, :role, presence: true
 
-  enum :role, %i[contributor volunteer admin], default: :contributor
+  enum :role, { contributor: 0, volunteer: 1, admin: 2 }, default: :contributor
 
   delegate :cf, :full_name, :name, :surname, 'med_cert_valid?',
            :age, :email, :phone, :birth_day, 'affiliated?',

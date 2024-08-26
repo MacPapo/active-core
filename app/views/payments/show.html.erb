@@ -1,3 +1,23 @@
-<%= render @payment %>
+<div class="card" id="<%= dom_id @payment %>">
+  <div class="card-header">
+    <h1 class="card-title">
+      <%= t '.payment_detail' %>
+    </h1>
+  </div>
 
-<%= link_to "CREA RICEVUTA", receipt_show_path(payment_id: @payment.id, format: :pdf) %>
+  <!-- Card Body -->
+  <div class="card-body">
+    <%= render @payment %>
+  </div>
+
+  <!-- Card Footer -->
+  <div class="card-footer bg-light">
+    <div class="d-flex justify-content-end">
+      <%= link_to "Crea Ricevuta", receipt_show_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2' %>
+
+      <!-- TODO translate -->
+      <%= link_to "Edit", edit_payment_path(@payment), class: 'btn btn-warning me-2' %>
+      <%= button_to "Elimina questo payment", @payment, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>
+    </div>
+  </div>
+</div>

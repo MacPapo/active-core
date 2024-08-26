@@ -121,10 +121,12 @@ it:
         staff: "Collaboratore"
         activity: "Attività"
         activity_plan: "Piano per questa Attività"
-
-        # TODO
         activity_id: "Attività"
         activity_plan_id: "Piano per questa Attività"
+      subscription/status:
+        inactive: "Inattivo"
+        active: "Attivo"
+        expired: "Scaduto"
 
       payment:
         amount: "Ammontare"
@@ -258,8 +260,9 @@ it:
       title: "Inserimento di un Nuovo Pagamento"
     edit:
       title: "Modifica dei dati Pagamento"
-    payment:
+    show:
       payment_detail: "Dettagli Pagamento"
+    payment:
       payment_info: "Informazioni"
       amount: "Ammonatare"
       date: "Data Pagamento"
@@ -294,6 +297,8 @@ it:
         other: "%{count} iscrizioni registrate"
     new:
       title: "Inserimento di una Nuova Iscrizione"
+    show:
+      title: "Dettagli Iscrizione"
 
   memberships:
     renew_update:

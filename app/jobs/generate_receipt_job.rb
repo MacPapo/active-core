@@ -13,7 +13,7 @@ class GenerateReceiptJob < ApplicationJob
       r.date = payment.date
       r.amount = payment.amount
       r.cause = payment.payable_type
-      r.user = User.first
+      r.user = payment.user
     end
 
     generate_pdf(receipt)
