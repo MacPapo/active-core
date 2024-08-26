@@ -32,6 +32,10 @@ class Membership < ApplicationRecord
     (end_date - Time.zone.today).to_i
   end
 
+  def summary
+    "#{self.class.model_name.human} (#{I18n.l(start_date)} al #{I18n.l(end_date)})"
+  end
+
   private
 
   def set_dates

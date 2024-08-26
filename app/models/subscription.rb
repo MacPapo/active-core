@@ -61,6 +61,10 @@ class Subscription < ApplicationRecord
     (end_date - Time.zone.today).to_i
   end
 
+  def summary
+    "#{self.class.model_name.human} - #{activity.name} (#{activity_plan.humanize_plan}) #{open? ? 'OPEN' : ''} (#{I18n.l(start_date)} al #{I18n.l(end_date)})"
+  end
+
   private
 
   def set_start_date

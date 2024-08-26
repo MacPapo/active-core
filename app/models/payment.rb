@@ -12,6 +12,10 @@ class Payment < ApplicationRecord
   enum :payment_method, %i[pos cash bank_transfer], default: :cash
   enum :entry_type, %i[income expense], default: :income
 
+  def payment_summary
+    payable.summary
+  end
+
   def humanize_payment_method(method = payment_method)
     Payment.human_attribute_name("method.#{method}")
   end

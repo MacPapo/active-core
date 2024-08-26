@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_22_135545) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_26_084855) do
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
     t.integer "num_participants", default: 0, null: false
@@ -89,6 +89,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_22_135545) do
     t.index ["payment_method"], name: "index_payments_on_payment_method"
     t.index ["staff_id"], name: "index_payments_on_staff_id"
     t.index ["updated_at"], name: "index_payments_on_updated_at"
+  end
+
+  create_table "receipts", force: :cascade do |t|
+    t.integer "payment_id", null: false
+    t.integer "user_id", null: false
+    t.float "amount", null: false
+    t.date "date", null: false
+    t.string "cause"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_receipts_on_date"
+    t.index ["id"], name: "index_receipts_on_id", unique: true
+    t.index ["payment_id"], name: "index_receipts_on_payment_id"
+    t.index ["user_id"], name: "index_receipts_on_user_id"
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
@@ -289,6 +303,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_22_135545) do
   add_foreign_key "memberships", "staffs"
   add_foreign_key "memberships", "users"
   add_foreign_key "payments", "staffs"
+  add_foreign_key "receipts", "payments"
+  add_foreign_key "receipts", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
