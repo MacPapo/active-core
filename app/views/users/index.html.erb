@@ -1,140 +1,144 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <div class="d-flex align-items-center">
-        <h1 class="mb-0 me-2"><%= User.model_name.human(count: 2) %></h1>
-        <span>(<%= t('.registered', count: User.count) %>)</span>
-    </div>
+  <div class="d-flex align-items-center">
+    <h1 class="mb-0 me-2"><%= User.model_name.human(count: 2) %></h1>
+    <span>(<%= t('.registered', count: User.count) %>)</span>
+  </div>
 
-    <%= link_to new_user_path, class: 'btn btn-success' do %>
-        <i class="bi bi-person-fill-add"></i> <%= t '.add_user' %>
-    <% end %>
+  <%= link_to new_user_path, class: 'btn btn-success' do %>
+  <i class="bi bi-person-fill-add"></i> <%= t '.add_user' %>
+  <% end %>
 </div>
 
 <div>
   <%= form_with url: users_path, method: :get, data: { turbo_frame: :users, turbo_action: 'advance', controller: 'usearch', action: 'input->usearch#submit' } do |f| %>
-    <div class="row mb-3">
-      <div class="col">
-        <div class="form-floating">
-          <%= f.text_field :name, placeholder: 'Mimmo', class: 'form-control', id: 'floatingInputName' %>
-          <label for="floatingInputName"><%= t 'global.table.name' %></label>
-        </div>
-      </div>
-      <div class="col">
-        <div class="form-floating">
-          <%= f.text_field :surname, placeholder: 'Lucano', class: 'form-control', id: 'floatingInputSurname' %>
-          <label for="floatingInputSurname"><%= t 'global.table.surname' %></label>
-        </div>
+  <div class="row mb-3">
+    <div class="col">
+      <div class="form-floating">
+        <%= f.text_field :name, placeholder: 'Mimmo', class: 'form-control', id: 'floatingInputName' %>
+        <label for="floatingInputName"><%= t 'global.table.name' %></label>
       </div>
     </div>
+    <div class="col">
+      <div class="form-floating">
+        <%= f.text_field :surname, placeholder: 'Lucano', class: 'form-control', id: 'floatingInputSurname' %>
+        <label for="floatingInputSurname"><%= t 'global.table.surname' %></label>
+      </div>
+    </div>
+  </div>
   <% end %>
 </div>
 
 <!-- TODO review and correct this mess -->
 <%= turbo_frame_tag :users do %>
 <div id="users">
-    <table class="table table-hover">
-        <thead class="table-light">
-            <tr>
-                <th><%= t 'global.table.status' %></th>
-                <th><%= t 'global.table.name' %></th>
-                <th><%= t 'global.table.surname' %></th>
-                <th><%= t 'global.table.birth' %></th>
-                <th><%= t 'global.table.affiliated' %></th>
-                <th><%= t 'global.table.membership' %></th>
-                <th><%= t 'global.table.activity' %></th>
-                <th><%= t 'global.table.action' %></th>
-            </tr>
-        </thead>
-        <tbody class="table-group-divider">
-            <% @users.each do |user| %>
+  <table class="table table-hover">
+    <thead class="table-light">
+      <tr>
+        <th><%= t 'global.table.status' %></th>
+        <th><%= t 'global.table.name' %></th>
+        <th><%= t 'global.table.surname' %></th>
+        <th><%= t 'global.table.birth' %></th>
+        <th><%= t 'global.table.affiliated' %></th>
+        <th><%= t 'global.table.membership' %></th>
+        <th><%= t 'global.table.activity' %></th>
+        <th><%= t 'global.table.action' %></th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <% @users.each do |user| %>
 
-                <tr>
-                    <!-- Status -->
-                    <td>
-                        <span
-                            <% compliance = user.verify_compliance %>
-                            <% is_compliance = compliance[:status] %>
-                            type="button"
-                            class="badge rounded-pill text-bg-<%= is_compliance ? 'success' : 'warning' %>"
-                            <% unless is_compliance %>
-                                data-bs-toggle="popover"
-                                data-bs-placement="top"
-                                data-bs-content="<%= compliance[:errors].join(", ") %>"
-                            <% end %>
-                        >
-                            <% if is_compliance %>
-                                <i class="bi bi-person-fill-check"></i>
-                            <% else %>
-                                <i class="bi bi-person-fill-exclamation"></i>
-                            <% end %>
-                        </span>
-                    </td>
+      <tr>
+        <!-- TODO Status -->
+        <td>
+          <% compliance = user.verify_compliance %>
+          <% is_compliance = compliance[:status] %>
+          <div
+            data-controller="popover"
+            data-popover-title="<%= t '.popover' %>"
+            data-popover-content="<%= compliance[:errors].join(", ") %>"
+            >
 
-                    <!-- Name -->
-                    <td>
-                        <%= highlight user.name, params.dig(:name) %>
-                    </td>
+            <button
+              type="button"
+              data-popover-target="button"
+              class="badge rounded-pill text-bg-<%= is_compliance ? 'success' : 'warning' %>"
+              >
+              <% if is_compliance %>
+              <i class="bi bi-person-fill-check"></i>
+              <% else %>
+              <i class="bi bi-person-fill-exclamation"></i>
+              <% end %>
+            </button>
+          </div>
 
-                    <!-- Surname -->
-                    <td>
-                        <%= highlight user.surname, params.dig(:surname) %>
-                    </td>
+        </td>
 
-                    <!-- Birth Day -->
-                    <td>
-                        <%= user.birth_day ? l(user.birth_day, format: :default) : nil %>
-                    </td>
+        <!-- Name -->
+        <td>
+          <%= highlight user.name, params.dig(:name) %>
+        </td>
 
-                    <!-- Affiliated -->
-                    <td>
-                        <%= t user.affiliated %>
-                    </td>
+        <!-- Surname -->
+        <td>
+          <%= highlight user.surname, params.dig(:surname) %>
+        </td>
 
-                    <!-- Membership -->
-                    <td>
-                        <% presenter = MembershipPresenter.new(user.membership) %>
+        <!-- Birth Day -->
+        <td>
+          <%= user.birth_day ? l(user.birth_day, format: :default) : nil %>
+        </td>
 
-                        <%= link_to presenter.appropriate_path(user), class: "btn badge rounded-pill text-bg-#{presenter.css_color}", data: { turbo_frame: "_top" } do %>
-                            <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
-                        <% end %>
-                    </td>
+        <!-- Affiliated -->
+        <td>
+          <%= t user.affiliated %>
+        </td>
 
-                    <!-- Activities -->
-                    <td>
-                        <% subs = user.subscriptions.where.missing(:normal_subscription) %>
-                        <% subs.each do |sub| %>
-                            <% presenter = SubscriptionPresenter.new(sub) %>
+        <!-- Membership -->
+        <td>
+          <% presenter = MembershipPresenter.new(user.membership) %>
 
-                            <%= link_to presenter.appropriate_path(user), class: "btn badge rounded-pill text-bg-#{ presenter.css_color }", data: { turbo_frame: "_top" } do %>
-                              <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
-                            <% end %>
-                        <% end %>
-                    </td>
+          <%= link_to presenter.appropriate_path(user), class: "btn badge rounded-pill text-bg-#{presenter.css_color}", data: { turbo_frame: "_top" } do %>
+          <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
+          <% end %>
+        </td>
 
-                    <!-- Action buttons -->
-                    <td>
-                        <%= link_to user, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
-                            <i class="bi bi-eye-fill"></i>
-                        <% end %>
+        <!-- Activities -->
+        <td>
+          <% subs = user.subscriptions.where.missing(:normal_subscription) %>
+          <% subs.each do |sub| %>
+          <% presenter = SubscriptionPresenter.new(sub) %>
 
-                        <%= link_to edit_user_path(user), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
-                            <i class="bi bi-pencil-fill"></i>
-                        <% end %>
+          <%= link_to presenter.appropriate_path(user), class: "btn badge rounded-pill text-bg-#{ presenter.css_color }", data: { turbo_frame: "_top" } do %>
+          <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
+          <% end %>
+          <% end %>
+        </td>
 
-                        <% if current_staff.admin? %>
-                            <%= button_to user_path(user),
-                                          class: 'btn btn-danger',
-                                          method: :delete,
-                                          data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile", turbo_frame: "_top" },
-                                          form: {style: 'display:inline-block;'} do %>
-                                <i class="bi bi-trash3-fill"></i>
-                            <% end %>
-                        <% end %>
-                    </td>
-                </tr>
-                <% end %>
-        </tbody>
-    </table>
+        <!-- Action buttons -->
+        <td>
+          <%= link_to user, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
+          <i class="bi bi-eye-fill"></i>
+          <% end %>
 
-    <%== pagy_bootstrap_nav(@pagy) %>
-    <% end %>
+          <%= link_to edit_user_path(user), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
+          <i class="bi bi-pencil-fill"></i>
+          <% end %>
+
+          <% if current_staff.admin? %>
+          <%= button_to user_path(user),
+              class: 'btn btn-danger',
+              method: :delete,
+              data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile", turbo_frame: "_top" },
+              form: {style: 'display:inline-block;'} do %>
+          <i class="bi bi-trash3-fill"></i>
+          <% end %>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%== pagy_bootstrap_nav(@pagy) %>
+  <% end %>
 </div>
