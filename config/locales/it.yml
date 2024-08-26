@@ -192,6 +192,7 @@ it:
     index:
       title: "Utenti"
       add_user: "Aggiungi Utente"
+      popover: "Completezza"
       registered:
         one: "%{count} utente registrato"
         other: "%{count} utenti registrati"
