@@ -54,7 +54,11 @@ it:
         affiliated: "Convenzionato"
         legal_guardian: "Tutore Legale"
         legal_guardian_id: "Tutore Legale"
+        membership: "Quota Associativa"
+        activity: "Attività"
+
       staff:
+        id: "ID"
         nickname: "Nickname"
         user: "Utente"
         role: "Ruolo"
@@ -64,7 +68,6 @@ it:
         admin: "Amministratore"
         contributor: "Collaboratore"
         volunteer: "Volontario"
-
 
       legal_guardian:
         name: "Nome"
@@ -97,10 +100,18 @@ it:
         status: "Stato"
         open: "Piano OPEN"
         user: "Utente"
+        user_id: "Utente"
         activity: "Attività"
+        activity_id: "Attività"
         activity_plan: "Piano per l'Attività"
+        activity_plan_id: "Piano per questa Attività"
         staff: "Collaboratore"
         open_subscription: "Attività collegata (OPEN)"
+        updated_at: "Ultimo Aggiornamento"
+      subscription/status:
+        inactive: "Inattivo"
+        active: "Attivo"
+        expired: "Scaduto"
 
       waitlist:
         name: "Nome"
@@ -108,36 +119,24 @@ it:
         phone: "Numero di Cellulare"
 
       membership:
+        id: "ID"
         start_date: "Data inizio"
         end_date: "Data scadenza"
         status: "Stato"
         user: "Utente"
         staff: "Collaboratore"
+        updated_at: "Ultimo Aggiornamento"
       membership/status:
         inactive: "Inattivo"
         active: "Attivo"
         expired: "Scaduto"
 
-      subscription:
-        start_date: "Data inizio"
-        end_date: "Data scadenza"
-        status: "Stato"
-        user: "Utente"
-        user_id: "Utente"
-        staff: "Collaboratore"
-        activity: "Attività"
-        activity_plan: "Piano per questa Attività"
-        activity_id: "Attività"
-        activity_plan_id: "Piano per questa Attività"
-      subscription/status:
-        inactive: "Inattivo"
-        active: "Attivo"
-        expired: "Scaduto"
-
       payment:
+        id: "ID"
         amount: "Ammontare"
         date: "Data pagamento"
         payment_method: "Metodo di pagamento"
+        payable_type: "Tipo di pagamento"
         entry_type: "Tipo Movimento"
         note: "Note eventuali"
         staff: "Collaboratore"
@@ -148,6 +147,10 @@ it:
       payment/type:
         income: "Entrata"
         expense: "Uscita"
+      payment/payable:
+        membership: "Quota Associativa"
+        subscription: "Iscrizione"
+
   global:
     user: "Utenti"
     staff: "Collaboratori"

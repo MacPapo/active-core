@@ -7,15 +7,15 @@
     <table class="table table-hover">
         <thead class="table-light">
             <tr>
-                <th><%= t 'global.table.id' %></th>
-                <th><%= t 'global.table.updated_at' %></th>
-                <th><%= t 'global.table.name' %></th>
-                <th><%= t 'global.table.surname' %></th>
-                <th><%= t 'global.table.activity' %></th>
-                <th><%= t 'global.table.open' %></th>
-                <th><%= t 'global.table.plan' %></th>
-                <th><%= t 'global.table.start_date' %></th>
-		<th><%= t 'global.table.end_date' %></th>
+                <th><%= Subscription.human_attribute_name('id') %></th>
+                <th><%= Subscription.human_attribute_name('updated_at') %></th>
+                <th><%= User.human_attribute_name('name') %></th>
+                <th><%= User.human_attribute_name('surname') %></th>
+                <th><%= Subscription.human_attribute_name('activity') %></th>
+                <th><%= Subscription.human_attribute_name('open') %></th>
+                <th><%= Subscription.human_attribute_name('plan') %></th>
+                <th><%= Subscription.human_attribute_name('start_date') %></th>
+		<th><%= Subscription.human_attribute_name('end_date') %></th>
                 <th><%= t 'global.table.action' %></th>
             </tr>
         </thead>
@@ -56,7 +56,7 @@
 
                     <!-- OPEN -->
                     <td>
-                        <%= subscription.open? %>
+                        <%= t subscription.open? %>
                     </td>
 
                     <!-- ActivityPlan -->

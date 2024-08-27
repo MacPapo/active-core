@@ -20,6 +20,10 @@ class Payment < ApplicationRecord
     payable&.user
   end
 
+  def humanize_payable_type(type = payable_type)
+    Payment.human_attribute_name("payable.#{type.downcase}")
+  end
+
   def humanize_payment_method(method = payment_method)
     Payment.human_attribute_name("method.#{method}")
   end

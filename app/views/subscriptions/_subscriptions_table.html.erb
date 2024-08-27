@@ -1,16 +1,16 @@
 <table class="table">
     <tr>
         <% if actv  %>
-            <th><%= t 'global.table.name' %></th>
-            <th><%= t 'global.table.surname' %></th>
+            <th><%= User.human_attribute_name('name') %></th>
+            <th><%= User.human_attribute_name('surname') %></th>
         <% else %>
-            <th><%= t 'global.table.activity' %></th>
+            <th><%= Subscription.human_attribute_name('activity') %></th>
         <% end %>
-        <th><%= t 'global.table.plan' %></th>
-        <th><%= t 'global.table.start_date' %></th>
-        <th><%= t 'global.table.end_date' %></th>
-        <th><%= t 'global.table.open' %></th>
-        <th><%= t 'global.table.status' %></th>
+        <th><%= Subscription.human_attribute_name('activity_plan') %></th>
+        <th><%= Subscription.human_attribute_name('start_date') %></th>
+        <th><%= Subscription.human_attribute_name('end_date') %></th>
+        <th><%= Subscription.human_attribute_name('open') %></th>
+        <th><%= Subscription.human_attribute_name('status') %></th>
         <th><%= t 'global.table.action' %></th>
     </tr>
     <% subscriptions.each do |subscription| %>

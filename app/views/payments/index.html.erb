@@ -6,35 +6,16 @@
 <div id="payments">
   <table class="table table-hover">
     <thead class="table-light">
-      
       <tr>
-        <th>
-          <%= t '.id' %>
-        </th>
-        <th>
-          <%= t '.date' %>
-        </th>
-        <th>
-          <%= t '.payable_type' %>
-        </th>
-        <th>
-          <%= t '.amount' %>
-        </th>
-        <th>
-          <%= t '.payment_method' %>
-        </th>
-        <th>
-          <%= t '.entry_type' %>
-        </th>
-        <th>
-          <%= t '.note' %>
-        </th>
-        <th>
-          <%= t '.staff' %>
-        </th>
-        <th>
-          <%= t '.action' %>
-        </th>
+        <th><%= Payment.human_attribute_name('id') %></th>
+        <th><%= Payment.human_attribute_name('date') %></th>
+	<th><%= Payment.human_attribute_name('payable_type') %></th>
+        <th><%= Payment.human_attribute_name('amount') %></th>
+	<th><%= Payment.human_attribute_name('payment_method') %></th>
+	<th><%= Payment.human_attribute_name('entry_type') %></th>
+        <th><%= Payment.human_attribute_name('note') %></th>
+	<th><%= Payment.human_attribute_name('staff') %></th>
+	<th><%= t '.action' %></th>
       </tr>
     </thead>
 
@@ -50,27 +31,27 @@
 
 	<!-- Date -->
 	<td>
-          <%= payment.date %>
+          <%= l payment.date %>
 	</td>
 
 	<!-- Payable Type -->
 	<td>
-          <%= payment.payable_type %>
+          <%= payment.humanize_payable_type %>
 	</td>
 
 	<!-- Amount -->
 	<td>
-          <%= payment.amount %>
+          <%= number_to_currency payment.amount %>
 	</td>
 
 	<!-- Payment Method -->
 	<td>
-          <%= payment.payment_method %>
+          <%= payment.humanize_payment_method %>
 	</td>
 
 	<!-- Entry Type -->
 	<td>
-          <%= payment.entry_type %>
+          <%= payment.humanize_entry_type %>
 	</td>
 
 	<!-- Note -->

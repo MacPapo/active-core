@@ -13,9 +13,9 @@
     <table class="table table-hover">
         <thead class="table-light">
             <tr>
-                <th>Nome</th>
-                <th>Numero partecipanti</th>
-                <th>Azioni</th>
+                <th><%= Activity.human_attribute_name('name') %></th>
+                <th><%= Activity.human_attribute_name('num_participants') %></th>
+                <th><%= t 'global.table.action' %></th>
             </tr>
         </thead>
 

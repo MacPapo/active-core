@@ -13,11 +13,11 @@
     <table class="table table-hover">
         <thead class="table-light">
             <tr>
-                <th><%= t 'global.table.id' %></th>
-                <th><%= t 'global.table.name' %></th>
-                <th><%= t 'global.table.surname' %></th>
-                <th><%= t 'global.table.birth' %></th>
-                <th><%= t 'global.table.role' %></th>
+                <th><%= Staff.human_attribute_name('id') %></th>
+                <th><%= User.human_attribute_name('name') %></th>
+                <th><%= User.human_attribute_name('surname') %></th>
+                <th><%= User.human_attribute_name('birth_day') %></th>
+                <th><%= Staff.human_attribute_name('role') %></th>
                 <th><%= t 'global.table.action' %></th>
             </tr>
         </thead>

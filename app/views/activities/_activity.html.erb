@@ -48,13 +48,13 @@
         <thead>
           <tr>
             <th>
-              <%= t 'global.table.plan' %>
+              <%= ActivityPlan.human_attribute_name('plan') %>
             </th>
             <th>
-              <%= t 'global.table.cost' %>
+              <%= ActivityPlan.human_attribute_name('cost') %>
             </th>
             <th>
-              <%= t 'global.table.affiliated_cost' %>
+              <%= ActivityPlan.human_attribute_name('affiliated_cost') %>
             </th>
             <% if current_staff.admin? %>
               <th>

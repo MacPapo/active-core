@@ -35,12 +35,12 @@
     <thead class="table-light">
       <tr>
         <th><%= t 'global.table.status' %></th>
-        <th><%= t 'global.table.name' %></th>
-        <th><%= t 'global.table.surname' %></th>
-        <th><%= t 'global.table.birth' %></th>
-        <th><%= t 'global.table.affiliated' %></th>
-        <th><%= t 'global.table.membership' %></th>
-        <th><%= t 'global.table.activity' %></th>
+        <th><%= User.human_attribute_name('name') %></th>
+        <th><%= User.human_attribute_name('surname') %></th>
+        <th><%= User.human_attribute_name('birth_day') %></th>
+        <th><%= User.human_attribute_name('affiliated') %></th>
+        <th><%= User.human_attribute_name('membership') %></th>
+        <th><%= User.human_attribute_name('activity') %></th>
         <th><%= t 'global.table.action' %></th>
       </tr>
     </thead>
@@ -58,8 +58,7 @@
             data-popover-content="<%= compliance[:errors].join(", ") %>"
             >
 
-            <button
-              type="button"
+            <span
               data-popover-target="button"
               class="badge rounded-pill text-bg-<%= is_compliance ? 'success' : 'warning' %>"
               >
@@ -68,7 +67,7 @@
               <% else %>
               <i class="bi bi-person-fill-exclamation"></i>
               <% end %>
-            </button>
+            </span>
           </div>
 
         </td>
