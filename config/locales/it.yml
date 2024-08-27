@@ -54,10 +54,16 @@ it:
         affiliated: "Convenzionato"
         legal_guardian: "Tutore Legale"
         legal_guardian_id: "Tutore Legale"
+      staff:
+        nickname: "Nickname"
+        user: "Utente"
+        role: "Ruolo"
+        current_sign_in_at: "Accesso attuale effettuato"
+        last_sign_in_at: "Ultimo accesso effettuato"
       staff/role:
-          admin: "Amministratore"
-          contributor: "Collaboratore"
-          volunteer: "Volontario"
+        admin: "Amministratore"
+        contributor: "Collaboratore"
+        volunteer: "Volontario"
 
 
       legal_guardian:
@@ -187,6 +193,8 @@ it:
   users:
     new:
       title: "Inserimento di un Nuovo Utente"
+    show:
+      user_detail: "Dettagli Utente"
     edit:
       title: "Aggiornamento dell'Utente"
     index:
@@ -197,7 +205,6 @@ it:
         one: "%{count} utente registrato"
         other: "%{count} utenti registrati"
     user:
-      user_detail: "Dettagli Utente"
       personal_data: "Anagrafica"
       name_surname: "Nome e Cognome:"
       birth: "Data di Nascita:"
@@ -221,12 +228,12 @@ it:
         one: "%{count} attività registrate"
         other: "%{count} attività registrate"
     activity:
-      title: "Dettagli Attività"
       name: "Nome attività"
       num_participants: "Numero partecipanti"
       plans: "Piani per questa attività"
       add_plan: "Aggiungi Piano per l'attività"
     show:
+      title: "Dettagli Attività"
       list_users: "Lista utenti iscritti"
       no_subs: "Ancora nessun partecipante per questa Attività"
     new:
@@ -274,13 +281,25 @@ it:
       staff: "Collaboratore che ha Registrato questa Transazione"
 
   staffs:
-
+    show:
+      title: "Dettagli Collaboratore"
+    staff:
+      personal_data: "Anagrafica"
+      trace: "Tracciamento"
+      never: "Mai"
     index:
       title: "Collaboratori"
       add_staff: "Aggiungi Collaboratore"
       registered:
         one: "%{count} collaboratori registrati"
         other: "%{count} collaboratori registrati"
+
+  legal_guardians:
+    show:
+      title: "Dettagli Tutore Legale"
+    legal_guardian:
+      full_name: "Nome e Cognome"
+      users: "È tutore di"
 
   subscriptions:
     renew_update:
@@ -318,6 +337,8 @@ it:
       registered:
         one: "%{count} quota associativa registrata"
         other: "%{count} quote associative registrate"
+    show:
+      title: "Dettagli Quote Associativa"
     new:
       title: "Inserimento di una Quota Associativa"
 

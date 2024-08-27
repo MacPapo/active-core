@@ -1,1 +1,21 @@
-<%= render @user %>
+<div class="card" id="<%= dom_id @user %>">
+  <div class="card-header">
+    <h1 class="card-title">
+      <%= t '.user_detail' %>
+    </h1>
+  </div>
+
+  <!-- Card Body -->
+  <div class="card-body">
+    <%= render @user %>
+  </div>
+
+  <!-- Card Footer -->
+  <div class="card-footer bg-light">
+    <div class="d-flex justify-content-end">
+      <!-- TODO translate -->
+      <%= link_to "Modifica questo utente", edit_user_path(@user), class: 'btn btn-warning me-2' %>
+      <%= button_to "Elimina questo utente", @user, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>
+    </div>
+  </div>
+</div>

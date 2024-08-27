@@ -1,8 +1,21 @@
-<%= render @membership %>
+<div class="card" id="<%= dom_id @membership %>">
+  <div class="card-header">
+    <h1 class="card-title">
+      <%= t '.title' %>
+    </h1>
+  </div>
 
-<div>
-  <%= link_to "Edit this membership", edit_membership_path(@membership, user_id: @membership.user.id) %> |
-  <%= link_to "Back to memberships", memberships_path %>
+  <!-- Card Body -->
+  <div class="card-body">
+    <%= render @membership %>
+  </div>
 
-  <%= button_to "Destroy this membership", @membership, method: :delete %>
+  <!-- Card Footer -->
+  <div class="card-footer bg-light">
+    <div class="d-flex justify-content-end">
+      <%= link_to "Edit this membership", edit_membership_path(@membership, user_id: @membership.user.id), class: 'btn btn-warning me-2' %>
+
+      <%= button_to "Destroy this membership", @membership, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>
+    </div>
+  </div>
 </div>

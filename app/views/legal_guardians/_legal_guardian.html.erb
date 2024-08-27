@@ -1,27 +1,51 @@
-<div id="<%= dom_id legal_guardian %>">
-  <p>
-    <strong>Name:</strong>
-    <%= legal_guardian.name %>
-  </p>
+<div class="row mb-4">
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= t '.full_name' %>
+    </h5>
+    <div class="card-text">
+      <%= legal_guardian.full_name %>
+    </div>
+  </div>
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= LegalGuardian.human_attribute_name('birth_day') %>
+    </h5>
+    <div class="card-text">
+      <%= l legal_guardian.birth_day %>
+    </div>
+  </div>
+</div>
 
-  <p>
-    <strong>Surname:</strong>
-    <%= legal_guardian.surname %>
-  </p>
+<div class="row mb-4">
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= LegalGuardian.human_attribute_name('email') %>
+    </h5>
+    <div class="card-text">
+      <%= legal_guardian.email %>
+    </div>
+  </div>
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= LegalGuardian.human_attribute_name('phone') %>
+    </h5>
+    <div class="card-text">
+      <%= legal_guardian.phone %>
+    </div>
+  </div>
+</div>
 
-  <p>
-    <strong>Email:</strong>
-    <%= legal_guardian.email %>
-  </p>
+<hr>
 
-  <p>
-    <strong>Phone:</strong>
-    <%= legal_guardian.phone %>
+<div>
+  <h3 class="card-subtitle mb-3">
+    <%= t '.users' %>
+  </h3>
+  <p class="card-text">
+    <!-- TODO -->
+    <% legal_guardian.users.each do |user| %>
+    <%= user.full_name %>
+    <% end %>
   </p>
-
-  <p>
-    <strong>Date of birth:</strong>
-    <%= legal_guardian.birth_day %>
-  </p>
-
 </div>

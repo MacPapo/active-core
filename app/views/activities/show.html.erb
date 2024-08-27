@@ -1,20 +1,41 @@
-<%= render @activity %>
+<div class="card" id="<%= dom_id @activity %>">
+  <div class="card-header">
+    <h1 class="card-title">
+      <%= t '.title' %>
+    </h1>
+  </div>
+
+  <!-- Card Body -->
+  <div class="card-body">
+    <%= render @activity %>
+  </div>
+
+  <!-- Card Footer -->
+  <div class="card-footer bg-light">
+    <div class="d-flex justify-content-end">
+      <!-- TODO translate -->
+      <%= link_to "Modifica questa attività", edit_activity_path(@activity), class: 'btn btn-warning me-2' %>
+      <%= button_to "Elimina questo utente", @activity, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" } %>
+    </div>
+  </div>
+</div>
 
 <br/>
 
 <div class="container">
-    <hr/>
+  <hr/>
 
-    <h3>
-        <%= t '.list_users' %>
-    </h3>
+  <h3>
+    <%= t '.list_users' %>
+  </h3>
 
-    <% if @activity.subscriptions && @activity.subscriptions.length > 0 %>
-        <%= render 'subscriptions/subscriptions_table',
-                   subscriptions: @activity.subscriptions,
-                   actv: true
-        %>
-    <% else %>
-        <%= t '.no_subs' %>
-    <% end %>
+  <% if @subs && @subs.length > 0 %>
+    <%= render 'subscriptions/subscriptions_table',
+               subscriptions: @subs,
+               actv: true
+    %>
+    <%== pagy_bootstrap_nav(@pagy) %>
+  <% else %>
+    <%= t '.no_subs' %>
+  <% end %>
 </div>

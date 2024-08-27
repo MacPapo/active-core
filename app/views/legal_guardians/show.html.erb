@@ -1,8 +1,21 @@
-<%= render @legal_guardian %>
+<div class="card" id="<%= dom_id @legal_guardian %>">
+  <div class="card-header">
+    <h1 class="card-title">
+      <%= t '.title' %>
+    </h1>
+  </div>
 
-<div>
-  <%= link_to "Edit this legal guardian", edit_legal_guardian_path(@legal_guardian) %> |
-  <%= link_to "Back to legal guardians", legal_guardians_path %>
+  <!-- Card Body -->
+  <div class="card-body">
+    <%= render @legal_guardian %>
+  </div>
 
-  <%= button_to "Destroy this legal guardian", @legal_guardian, method: :delete %>
+  <!-- Card Footer -->
+  <div class="card-footer bg-light">
+    <div class="d-flex justify-content-end">
+      <%= link_to "Edit this legal guardian", edit_legal_guardian_path(@legal_guardian), class: 'btn btn-warning me-2' %>
+      <%= button_to "Destroy this legal guardian", @legal_guardian, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>
+      <!-- TODO translate -->
+    </div>
+  </div>
 </div>

@@ -1,174 +1,159 @@
-<div class="card" id="<%= dom_id user %>">
-    <div class="card-header">
-        <h1 class="card-title"><%= t '.user_detail' %></h1>
-    </div>
-    <div class="card-body">
-        <h3 class="card-subtitle mb-4"><%= t '.personal_data' %></h3>
+<h3 class="card-subtitle mb-4">
+  <%= t '.personal_data' %>
+</h3>
 
-        <!-- Personal Data -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.name_surname' %>
-                </h5>
-                <p class="card-text">
-                    <%= user.full_name %>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.birth' %>
-                </h5>
-                <% if user.birth_day %>
-                    <p class="card-text">
-                        <%= l user.birth_day %> (<%= t 'datetime.distance_in_words.x_years', count: user.age %>)
-                    </p>
-                <% end %>
-            </div>
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.cf' %>
-                </h5>
-                <p class="card-text">
-                    <%= user.cf %>
-                </p>
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    Email:
-                </h5>
-                <p class="card-text">
-                    <%= user.email.nil? ? 'Da inserire!' : user.email %>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.phone' %>
-                </h5>
-                <p class="card-text">
-                    <%= user.phone.nil? ? 'Da inserire!' : user.phone %>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.affiliated' %>
-                </h5>
-                <% affiliated = user.affiliated %>
-                <span class="badge text-bg-<%= affiliated ? 'success' : 'warning' %>"><%= t affiliated %></span>
-            </div>
-        </div>
+<!-- Personal Data -->
+<div class="row mb-4">
+  <div class="col-md-4">
+    <h5 class="card-subtitle mb-2">
+      <%= t '.name_surname' %>
+    </h5>
+    <p class="card-text">
+      <%= user.full_name %>
+    </p>
+  </div>
+  <div class="col-md-4">
+    <h5 class="card-subtitle mb-2">
+      <%= t '.birth' %>
+    </h5>
+    <% if user.birth_day %>
+      <p class="card-text">
+        <%= l user.birth_day %> (<%= num_to_human_years user.age %>)
+      </p>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <h5 class="card-subtitle mb-2">
+      <%= t '.cf' %>
+    </h5>
+    <p class="card-text">
+      <%= user.cf %>
+    </p>
+  </div>
+</div>
+<div class="row mb-4">
+  <div class="col-md-4">
+    <h5 class="card-subtitle mb-2">
+      Email:
+    </h5>
+    <p class="card-text">
+      <%= user.email.nil? ? 'Da inserire!' : user.email %>
+    </p>
+  </div>
+  <div class="col-md-4">
+    <h5 class="card-subtitle mb-2">
+      <%= t '.phone' %>
+    </h5>
+    <p class="card-text">
+      <%= user.phone.nil? ? 'Da inserire!' : user.phone %>
+    </p>
+  </div>
+  <div class="col-md-4">
+    <h5 class="card-subtitle mb-2">
+      <%= t '.affiliated' %>
+    </h5>
+    <% affiliated = user.affiliated %>
+    <span class="badge text-bg-<%= affiliated ? 'success' : 'warning' %>"><%= t affiliated %></span>
+  </div>
+</div>
 
-        <% if user.legal_guardian %>
+<% if user.legal_guardian %>
 
-            <!-- Legal Guardian -->
-            <div>
-                <% lg = user.legal_guardian %>
-                <h3 class="card-subtitle mb-4">
-                    <%= t '.legal_guardian' %>
-                </h3>
+<!-- Legal Guardian -->
+<div>
+  <% lg = user.legal_guardian %>
+  <h3 class="card-subtitle mb-4">
+    <%= t '.legal_guardian' %>
+  </h3>
 
-                <!-- TODO -->
-                <div class="list-group">
-                    <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'list-group-item list-group-item-action' %>
-                </div>
-            </div>
-        <% end %>
-
-        <hr/>
-
-        <!-- Cert med -->
-        <div>
-            <h3 class="card-subtitle mb-3">
-                <%= t '.med_cert' %>
-            </h3>
-            <p class="cart-text">
-                <% start_date = user.med_cert_issue_date %>
-		<% end_date = user.med_cert_exp_date %>
-
-                <% if start_date.nil? %>
-                    <span class="badge text-bg-warning"><%= t '.to_be_inserted' %></span>
-                <% else %>
-                    <% days = user.num_of_days_til_med_cert_expire %>
-                    <%= l start_date, format: :default %> - <%= l end_date, format: :default %> (<%= t 'datetime.distance_in_words.x_days', count: days %>)
-                <% end %>
-            </p>
-        </div>
-
-        <hr/>
-
-        <!-- TODO restyle this card and add the buttons to renew the memb -->
-        <div>
-            <h3 class="card-subtitle mb-4">
-                <%= t '.membership' %>
-            </h3>
-
-            <% membership = user.membership %>
-            <% if membership %>
-
-                <p class="cart-text">
-
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <h5 class="card-subtitle mb-2">
-                                <%= t '.start_date' %>
-                            </h5>
-                            <p class="card-text">
-                                <%= l membership.start_date, format: :default %>
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <h5 class="card-subtitle mb-2">
-                                <%= t '.end_date' %>
-                            </h5>
-                            <p class="card-text">
-                                <% days_til_ren = membership.num_of_days_til_renewal %>
-                                <%= l membership.end_date, format: :default %> (<%= t 'datetime.distance_in_words.x_days', count: days_til_ren %>)
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <h5 class="card-subtitle mb-2">
-                                <%= t '.status' %>
-                            </h5>
-                            <p class="card-text">
-                                <%= membership.status.humanize %>
-                            </p>
-                        </div>
-                    </div>
-                </p>
-
-            <% else %>
-                <%= t '.to_be_inserted' %>
-            <% end %>
-
-        </div>
-
-        <!-- Subscriptions -->
-        <hr/>
-
-        <div>
-            <h3 class="mb-3"><%= t '.subs' %></h3>
-            <% if user.subscriptions.length > 0 %>
-                <%= render 'subscriptions/subscriptions_table',
-                           subscriptions: user.subscriptions,
-                           actv: false
-                %>
-
-            <% else %>
-                <%= t '.no_subs' %>
-            <% end %>
-        </div>
-
-    </div>
-
-    <!-- Card Footer -->
-    <div class="card-footer bg-light">
-        <div class="d-flex justify-content-end">
-            <!-- TODO translate -->
-            <%= link_to "Modifica questo utente", edit_user_path(user), class: 'btn btn-warning me-2' %>
-            <%#= link_to "Back to users", users_path %>
-            <%= button_to "Elimina questo utente", user, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>
-        </div>
+  <!-- TODO -->
+  <div class="list-group">
+    <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'list-group-item list-group-item-action' %>
     </div>
 </div>
+<% end %>
+
+<hr/>
+
+<!-- Cert med -->
+<div>
+  <h3 class="card-subtitle mb-3">
+    <%= t '.med_cert' %>
+  </h3>
+  <p class="cart-text">
+    <% start_date = user.med_cert_issue_date %>
+  <% end_date = user.med_cert_exp_date %>
+
+  <% if start_date.nil? %>
+    <span class="badge text-bg-warning"><%= t '.to_be_inserted' %></span>
+  <% else %>
+    <%= l start_date, format: :default %> - <%= l end_date, format: :default %> (<%= num_to_human_days user.num_of_days_til_med_cert_expire %>)
+  <% end %>
+  </p>
+</div>
+
+<hr/>
+
+<!-- TODO restyle this card and add the buttons to renew the memb -->
+<div>
+  <h3 class="card-subtitle mb-4">
+    <%= t '.membership' %>
+  </h3>
+
+  <% membership = user.membership %>
+  <% if membership %>
+
+  <p class="cart-text">
+
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <h5 class="card-subtitle mb-2">
+          <%= t '.start_date' %>
+        </h5>
+        <p class="card-text">
+          <%= l membership.start_date, format: :default %>
+        </p>
+      </div>
+      <div class="col-md-4">
+        <h5 class="card-subtitle mb-2">
+          <%= t '.end_date' %>
+        </h5>
+        <p class="card-text">
+          <%= l membership.end_date, format: :default %> (<%= num_to_human_days membership.num_of_days_til_renewal %>)
+        </p>
+      </div>
+      <div class="col-md-4">
+        <h5 class="card-subtitle mb-2">
+          <%= t '.status' %>
+        </h5>
+        <p class="card-text">
+          <%= membership.status.humanize %>
+        </p>
+      </div>
+    </div>
+  </p>
+
+<% else %>
+  <%= t '.to_be_inserted' %>
+<% end %>
+
+</div>
+
+<!-- Subscriptions -->
+<hr/>
+
+<div>
+  <h3 class="mb-3"><%= t '.subs' %></h3>
+  <% if user.subscriptions.length > 0 %>
+    <%= render 'subscriptions/subscriptions_table',
+               subscriptions: user.subscriptions,
+               actv: false
+    %>
+
+  <% else %>
+    <%= t '.no_subs' %>
+  <% end %>
+</div>
+
+
+

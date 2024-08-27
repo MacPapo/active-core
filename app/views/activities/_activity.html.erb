@@ -1,121 +1,111 @@
-<div class="card" id="<%= dom_id activity %>">
-    <div class="card-header">
-        <h1 class="card-title">
-            <%= t '.title' %>
-        </h1>
-    </div>
-    <div class="card-body">
+<div class="row mb-6">
 
-        <div class="row mb-6">
+  <!-- Activity name -->
+  <div class="col-md-6">
+    <h5 class="card-subtitle mb-2">
+      <%= Activity.human_attribute_name('name') %>
+    </h5>
+    <p class="card-text">
+      <%= activity.name %>
+    </p>
+  </div>
 
-            <!-- Activity name -->
-            <div class="col-md-6">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.name' %>
-                </h5>
-                <p class="card-text">
-                    <%= activity.name %>
-                </p>
-            </div>
+  <!-- Number of people -->
+  <div class="col-md-6">
+    <h5 class="card-subtitle mb-2">
+      <%= Activity.human_attribute_name('num_participants') %>
+    </h5>
 
-            <!-- Number of people -->
-            <div class="col-md-6">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.num_participants' %>
-                </h5>
-                <p class="card-text">
-                    <!-- TODO calculate only active sub -->
-                    <% partecipants = activity.subscriptions %>
-                    <% npartecipants = activity.num_participants %>
+    <p class="card-text">
+      <% partecipants = activity.subscriptions %>
+      <% npartecipants = activity.num_participants %>
 
-                    <% if partecipants %>
-                        <% plen = partecipants.length %>
-                        <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
-                    <% end %>
-                </p>
-            </div>
-        </div>
+      <% if partecipants %>
+        <% plen = partecipants.length %>
+        <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
+        <% end %>
+    </p>
+  </div>
+</div>
 
-        <hr/>
+<hr/>
 
-        <!-- Activity Plans -->
-        <div class="row mb-6">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="mb-0">
-                    <%= t '.plans' %>
-                </h4>
+<!-- Activity Plans -->
+<div class="row mb-6">
+  <% plans = activity.activity_plans %>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">
+      <%= ActivityPlan.model_name.human(count: plans.length) %>
+    </h4>
 
-                <%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-success' do %>
-                    <i class="bi bi-activity"></i> <%= t '.add_plan' %>
-                <% end %>
-            </div>
-            <% plans = activity.activity_plans %>
-            <% if plans && plans.length > 0 %>
-                <div class="container">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <%= t 'global.table.plan' %>
-                                </th>
-                                <th>
-                                    <%= t 'global.table.cost' %>
-                                </th>
-                                <th>
-                                    <%= t 'global.table.affiliated_cost' %>
-                                </th>
-                                <% if current_staff.admin? %>
-                                    <th>
-                                        <%= t 'global.table.action' %>
-                                    </th>
-                                <% end %>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% plans.each do |plan| %>
-                                <tr>
-
-                                    <!-- Plan -->
-                                    <td>
-                                        <%= plan.humanize_plan %>
-                                    </td>
-
-                                    <!-- Cost -->
-                                    <td>
-                                        <%= number_to_currency plan.cost %>
-                                    </td>
-
-                                    <!-- Affiliated cost -->
-                                    <td>
-                                        <% cst = plan.affiliated_cost %>
-                                        <% if cst %>
-                                            <%= number_to_currency cst %>
-                                        <% end %>
-                                    </td>
-
-                                    <% if current_staff.admin? %>
-                                        <!-- Action buttons -->
-                                        <td>
-
-                                            <%= link_to edit_activity_plan_path(plan, activity_id: activity.id), class: 'btn btn-warning' do %>
-                                                <i class="bi bi-pencil-fill"></i>
-                                            <% end %>
-
-                                            <%= button_to activity_plan_path(plan),
-                                                          class: 'btn btn-danger',
-                                                          method: :delete,
-                                                          data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" },
-                                                          form: {style: 'display:inline-block;'} do %>
-                                                <i class="bi bi-trash3-fill"></i>
-                                            <% end %>
-                                        </td>
-                                    <% end %>
-                                </tr>
-                            <% end %>
-                        </tbody>
-                    </table>
-                </div>
+    <%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-success' do %>
+      <i class="bi bi-activity"></i> <%= t '.add_plan' %>
+    <% end %>
+  </div>
+  <% if plans && plans.length > 0 %>
+    <div class="container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>
+              <%= t 'global.table.plan' %>
+            </th>
+            <th>
+              <%= t 'global.table.cost' %>
+            </th>
+            <th>
+              <%= t 'global.table.affiliated_cost' %>
+            </th>
+            <% if current_staff.admin? %>
+              <th>
+                <%= t 'global.table.action' %>
+              </th>
             <% end %>
-        </div>
+          </tr>
+        </thead>
+        <tbody>
+          <% plans.each do |plan| %>
+            <tr>
+
+              <!-- Plan -->
+              <td>
+                <%= plan.humanize_plan %>
+              </td>
+
+              <!-- Cost -->
+              <td>
+                <%= number_to_currency plan.cost %>
+              </td>
+
+              <!-- Affiliated cost -->
+              <td>
+                <% cst = plan.affiliated_cost %>
+                <% if cst %>
+                  <%= number_to_currency cst %>
+                <% end %>
+              </td>
+
+              <% if current_staff.admin? %>
+                <!-- Action buttons -->
+              <td>
+
+                <%= link_to edit_activity_plan_path(plan, activity_id: activity.id), class: 'btn btn-warning' do %>
+                  <i class="bi bi-pencil-fill"></i>
+                <% end %>
+
+                <%= button_to activity_plan_path(plan),
+                              class: 'btn btn-danger',
+                              method: :delete,
+                              data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" },
+                              form: {style: 'display:inline-block;'} do %>
+                  <i class="bi bi-trash3-fill"></i>
+                <% end %>
+              </td>
+            <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
+  <% end %>
 </div>

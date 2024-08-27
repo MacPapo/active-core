@@ -32,6 +32,7 @@ class SubscriptionsController < ApplicationController
 
   # POST /subscriptions
   def create
+    # TODO fix delegation controller if no users available
     activity_id = subscription_params[:activity_id]
     begin
       @subscription = Subscription.build(subscription_params)

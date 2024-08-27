@@ -1,110 +1,116 @@
-<div class="card" id="<%= dom_id staff %>">
-    <div class="card-header">
-        <h1 class="card-title"><%= t '.staff_detail' %></h1>
-    </div>
-    <div class="card-body">
-        <h3 class="card-subtitle mb-4"><%= t '.personal_data' %></h3>
+<h3 class="card-subtitle mb-4">
+  <%= t '.personal_data' %>
+</h3>
 
-	<p>
-          <strong>Nickname</strong>
-          <%= staff.nickname %>
-	</p>
-
-        <!-- Personal Data -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.name_surname' %>
-                </h5>
-                <p class="card-text">
-                    <%= staff.full_name %>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.birth' %>
-                </h5>
-                <% if staff.birth_day %>
-                    <p class="card-text">
-                        <%= l staff.birth_day %> (<%= t 'datetime.distance_in_words.x_years', count: staff.age %>)
-                    </p>
-                <% end %>
-            </div>
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.cf' %>
-                </h5>
-                <p class="card-text">
-                    <%= staff.cf %>
-                </p>
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    Email:
-                </h5>
-                <p class="card-text">
-                    <%= staff.email.blank? ? 'Da inserire!' : staff.email %>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.phone' %>
-                </h5>
-                <p class="card-text">
-                    <%= staff.phone.blank? ? 'Da inserire!' : staff.phone %>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <h5 class="card-subtitle mb-2">
-                    <%= t '.affiliated' %>
-                </h5>
-                <span class="badge text-bg-<%= staff.affiliated? ? 'success' : 'warning' %>"><%= t staff.affiliated? %></span>
-            </div>
-        </div>
-
-	<% unless staff.volunteer? %>
-        <hr/>
-        <!-- Cert med -->
-        <div>
-            <h3 class="card-subtitle mb-3">
-                <%= t '.med_cert' %>
-            </h3>
-            <p class="cart-text">
-                <% start_date = staff.user.med_cert_issue_date %>
-
-                <% if start_date.nil? %>
-                    <span class="badge text-bg-warning"><%= t '.to_be_inserted' %></span>
-                <% else %>
-                    <%= l start_date %> (<%= distance_of_time_in_words_to_now staff.user.med_cert_exp_date %>)
-                <% end %>
-            </p>
-        </div>
-	<% end %>
-
-        <hr/>
-        <% if current_staff.admin? %>
-
-        <!-- TODO -->
-        <p>
-          <strong>Current_sign_in_at</strong>
-          <%= l staff.current_sign_in_at %>
-        </p>
-        <p>
-          <strong>Last_sign_in_at</strong>
-          <%= l staff.last_sign_in_at %>
-        </p>
-	<% end %>
-    </div>
-
-    <!-- Card Footer -->
-    <div class="card-footer bg-light">
-        <div class="d-flex justify-content-end">
-            <!-- TODO translate -->
-            <%= link_to "Modifica questo utente", edit_staff_path(staff), class: 'btn btn-warning me-2' %>
-            <%#= link_to "Back to staffs", staffs_path %>
-            <%= button_to "Elimina questo utente", staff, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>
-        </div>
-    </div>
+<!-- Personal Data -->
+<div class="row mb-3">
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= Staff.human_attribute_name('nickname') %>
+    </h5>
+    <p class="card-text">
+      <%= staff.nickname %>
+    </p>
+  </div>
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= Staff.human_attribute_name('user') %>
+    </h5>
+    <p class="card-text">
+      <%= staff.full_name %>
+    </p>
+  </div>
 </div>
+
+<div class="row mb-3">
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= User.human_attribute_name('cf') %>
+    </h5>
+    <p class="card-text">
+      <%= staff.cf %>
+    </p>
+  </div>
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= User.human_attribute_name('birth_day') %>
+    </h5>
+    <% if staff.birth_day %>
+      <p class="card-text">
+        <%= l staff.birth_day %> (<%= num_to_human_years staff.age %>)
+      </p>
+    <% end %>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= User.human_attribute_name('email') %>
+    </h5>
+    <p class="card-text">
+      <%= staff.email.blank? ? 'Da inserire!' : staff.email %>
+    </p>
+  </div>
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= User.human_attribute_name('phone') %>
+    </h5>
+    <p class="card-text">
+      <%= staff.phone.blank? ? 'Da inserire!' : staff.phone %>
+    </p>
+  </div>
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= User.human_attribute_name('affiliated') %>
+    </h5>
+    <span class="badge text-bg-<%= staff.affiliated? ? 'success' : 'warning' %>"><%= t staff.affiliated? %></span>
+  </div>
+</div>
+
+<% unless staff.volunteer? %>
+  <hr/>
+  <!-- Cert med -->
+  <div>
+    <h3 class="card-subtitle mb-3">
+      <%= t '.med_cert' %>
+    </h3>
+    <p class="cart-text">
+      <% start_date = staff.user.med_cert_issue_date %>
+
+      <% if start_date.nil? %>
+        <span class="badge text-bg-warning"><%= t '.to_be_inserted' %></span>
+      <% else %>
+        <%= l start_date %> (<%= distance_of_time_in_words_to_now staff.user.med_cert_exp_date %>)
+      <% end %>
+    </p>
+  </div>
+<% end %>
+
+<% if current_staff.admin? %>
+<hr/>
+<!-- TODO -->
+<h3 class="card-subtitle mb-3">
+  <%= t '.trace' %>
+</h3>
+<div class="row mb-3">
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= Staff.human_attribute_name('current_sign_in_at') %>
+    </h5>
+    <p class="card-text">
+      <%= staff.current_sign_in_at ? time_ago_in_words(staff.current_sign_in_at) : t('.never') %>
+    </p>
+  </div>
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= Staff.human_attribute_name('last_sign_in_at') %>
+    </h5>
+    <% if staff.birth_day %>
+      <p class="card-text">
+        <%= staff.last_sign_in_at ? time_ago_in_words(staff.last_sign_in_at) : t('.never') %>
+      </p>
+    <% end %>
+  </div>
+</div>
+<% end %>
