@@ -9,9 +9,20 @@ class Payment < ApplicationRecord
   belongs_to :payable, polymorphic: true
   belongs_to :staff
 
+  has_one :receipt, dependent: :destroy
+
   enum :payment_method, { pos: 0, cash: 1, bank_transfer: 2 }, default: :cash
   enum :entry_type, { income: 0, expense: 1 }, default: :income
 
+  scope :by_type, ->(type) { where(payable_type: type.capitalize) if type.present? }
+  scope :by_method, ->(method) { where(payment_method: method) if method.present? }
+  scope :order_by_date, ->(date) { order("date #{date&.upcase}") if date.present? }
+  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction&.upcase}") if direction.present? }
+
+  def self.filter(date, type, method, direction)
+    by_type(type).by_method(method).order_by_date(date).order_by_updated_at(direction)
+  end
+  
   def payment_summary
     payable.summary
   end

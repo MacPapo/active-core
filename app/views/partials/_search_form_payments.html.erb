@@ -1,0 +1,54 @@
+<div>
+  <%= form_with url: path, method: :get, data: { turbo_frame: frame, turbo_action: 'advance', controller: 'usearch', action: 'input->usearch#submit' } do |f| %>
+  <div class="row mb-3">
+    <div class="col">
+      <div class="form-floating">
+        <select class="form-select" id="floatingInputDirection" name="date" aria-label="Floating label select">
+	  <option value="">Seleziona DATE</option>
+	  <option value="asc">ASC</option>
+	  <option value="desc">DESC</option>
+	</select>
+
+        <label for="floatingInputDirection"><%= t Activity.human_attribute_name('num_participants') %></label>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-floating">
+        <select class="form-select" id="floatingInputDirection" name="type" aria-label="Floating label select">
+	  <!-- TODO TRANSLATE -->
+	  <option value="">Seleziona TYpe</option>
+	  <option value="membership">Quota Associativa</option>
+	  <option value="subscription">Iscrizioni</option>
+	</select>
+
+        <label for="floatingInputDirection"><%= t Payment.human_attribute_name('payable_type') %></label>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-floating">
+        <select class="form-select" id="floatingInputDirection" name="method" aria-label="Floating label select">
+	  <!-- TODO Translate -->
+	  <option value="">Seleziona Method</option>
+	  <option value="cash">Contanti</option>
+	  <option value="bank_transfer">Bonifico</option>
+	  <option value="pos">POS</option>
+	</select>
+
+        <label for="floatingInputDirection"><%= t Activity.human_attribute_name('num_participants') %></label>
+      </div>
+    </div>
+    <!-- TODO translate -->
+    <div class="col">
+      <div class="form-floating">
+        <select class="form-select" id="floatingInputDirection" name="direction" aria-label="Floating label select">
+	  <option value="">Seleziona Direction</option>
+	  <option value="asc">ASC</option>
+	  <option value="desc">DESC</option>
+	</select>
+
+        <label for="floatingInputDirection"><%= t 'global.table.direction' %></label>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>

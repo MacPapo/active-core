@@ -3,11 +3,13 @@
   <span>(<%= t('.registered', count: @pagy.count) %>)</span>
 </div>
 
+<%= render 'partials/search_form_payments', path: payments_path, frame: :payments %>
+
+<%= turbo_frame_tag :payments do %>
 <div id="payments">
   <table class="table table-hover">
     <thead class="table-light">
       <tr>
-        <th><%= Payment.human_attribute_name('id') %></th>
         <th><%= Payment.human_attribute_name('date') %></th>
 	<th><%= Payment.human_attribute_name('payable_type') %></th>
         <th><%= Payment.human_attribute_name('amount') %></th>
@@ -23,11 +25,6 @@
       
       <% @payments.each do |payment| %>
       <tr>
-
-	<!-- ID -->
-	<th scope="row">
-          <%= payment.id %>
-	</th>
 
 	<!-- Date -->
 	<td>
@@ -87,3 +84,4 @@
   </table>
   <%== pagy_bootstrap_nav(@pagy) %>
 </div>
+<% end %>

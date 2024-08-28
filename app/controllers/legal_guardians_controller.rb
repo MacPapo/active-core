@@ -3,12 +3,16 @@ class LegalGuardiansController < ApplicationController
 
   # GET /legal_guardians or /legal_guardians.json
   def index
-    @legal_guardians = LegalGuardian.all
+    @pagy, @legal_guardians = pagy(
+      LegalGuardian
+        .filter(params[:name], params[:surname], params[:direction])
+        .includes(:users)
+        .load_async
+    )
   end
 
   # GET /legal_guardians/1 or /legal_guardians/1.json
-  def show
-  end
+  def show; end
 
   # GET /legal_guardians/new
   def new
@@ -16,8 +20,7 @@ class LegalGuardiansController < ApplicationController
   end
 
   # GET /legal_guardians/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /legal_guardians or /legal_guardians.json
   def create

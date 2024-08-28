@@ -18,7 +18,15 @@ class Membership < ApplicationRecord
 
   enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive
 
+  scope :by_name, ->(name) { where('users.name LIKE ?', "%#{name}%") if name.present? }
+  scope :by_surname, ->(surname) { where('users.surname LIKE ?', "%#{surname}%") if surname.present? }
+  scope :order_by_updated_at, ->(direction) { order("memberships.updated_at #{direction&.upcase}") }
+
   MEMBERSHIP_COST = 35.0
+
+  def self.filter(name, surname, direction)
+    joins(:user).by_name(name).by_surname(surname).order_by_updated_at(direction)
+  end
 
   def cost
     MEMBERSHIP_COST

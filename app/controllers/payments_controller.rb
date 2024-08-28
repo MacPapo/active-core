@@ -9,7 +9,7 @@ class PaymentsController < ApplicationController
   def index
     @pagy, @payments = pagy(
       Payment
-        .all
+        .filter(params[:date], params[:type], params[:method], params[:direction])
         .includes(:staff)
         .load_async
     )

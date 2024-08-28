@@ -9,11 +9,13 @@
     <% end %>
 </div>
 
+<%= render 'partials/search_form_users', path: staffs_path, frame: :staffs %>
+
+<%= turbo_frame_tag :staffs do %>
 <div id="staffs">
     <table class="table table-hover">
         <thead class="table-light">
             <tr>
-                <th><%= Staff.human_attribute_name('id') %></th>
                 <th><%= User.human_attribute_name('name') %></th>
                 <th><%= User.human_attribute_name('surname') %></th>
                 <th><%= User.human_attribute_name('birth_day') %></th>
@@ -25,11 +27,6 @@
         <tbody class="table-group-divider">
             <% @staffs.each do |staff| %>
                 <tr>
-                    <!-- ID -->
-                    <th scope="row">
-                        <%= staff.id %>
-                    </th>
-
                     <!-- Name -->
                     <td>
                         <%= staff.name %>
@@ -77,3 +74,4 @@
     </table>
     <%== pagy_bootstrap_nav(@pagy) %>
 </div>
+<% end %>

@@ -6,8 +6,9 @@ class StaffsController < ApplicationController
   def index
     @pagy, @staffs = pagy(
       Staff
-        .all
+        .filter(params[:name], params[:surname], params[:direction])
         .includes(:user)
+        .load_async
     )
   end
 

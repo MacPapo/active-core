@@ -1,13 +1,15 @@
 <div class="d-flex align-items-center mb-3">
-  <h1 class="me-2"><%= t '.title' %></h1>
+  <h1 class="mb-0 me-2"><%= t '.title' %></h1>
   <span>(<%= t('.registered', count: @pagy.count) %>)</span>
 </div>
 
+<%= render 'partials/search_form_users', path: subscriptions_path, frame: :subscriptions %>
+
+<%= turbo_frame_tag :subscriptions do %>
 <div id="subscriptions">
     <table class="table table-hover">
         <thead class="table-light">
             <tr>
-                <th><%= Subscription.human_attribute_name('id') %></th>
                 <th><%= Subscription.human_attribute_name('updated_at') %></th>
                 <th><%= User.human_attribute_name('name') %></th>
                 <th><%= User.human_attribute_name('surname') %></th>
@@ -26,14 +28,9 @@
 
                 <tr>
 
-                    <!-- ID -->
-                    <th scope="row">
-                        <%= subscription.id %>
-                    </th>
-
                     <!-- Updated At -->
                     <td>
-		        <%= l subscription.updated_at %> (<%= distance_of_time_in_words_to_now subscription.updated_at %>) 
+		      <%= humanize_timestamp subscription.updated_at %>
                     </td>
 
                     <!-- Name -->
@@ -101,3 +98,4 @@
     </table>
     <%== pagy_bootstrap_nav(@pagy) %>
 </div>
+<% end %>

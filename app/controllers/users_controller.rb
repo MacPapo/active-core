@@ -6,7 +6,12 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @pagy, @users = pagy(User.filter(params[:name], params[:surname]))
+    @pagy, @users = pagy(
+      User
+        .filter(params[:name], params[:surname], params[:direction])
+        .includes(:membership, :subscriptions, :legal_guardian)
+        .load_async
+    )
   end
 
   # GET /users/1

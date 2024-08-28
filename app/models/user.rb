@@ -24,6 +24,7 @@ class User < ApplicationRecord
 
   has_many   :subscriptions, dependent: :destroy
   has_many   :waitlists, dependent: :destroy
+  has_many   :receipts, dependent: :destroy
 
   attribute :cf, :string
   attribute :name, :string
@@ -32,9 +33,10 @@ class User < ApplicationRecord
 
   scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
   scope :by_surname, ->(surname) { where('surname LIKE ?', "%#{surname}%") if surname.present? }
+  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction&.upcase}" )}
 
-  def self.filter(name, surname)
-    by_name(name).by_surname(surname)
+  def self.filter(name, surname, direction)
+    by_name(name).by_surname(surname).order_by_updated_at(direction)
   end
 
   def full_name

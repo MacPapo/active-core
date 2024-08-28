@@ -7,7 +7,12 @@ class MembershipsController < ApplicationController
 
   # GET /memberships
   def index
-    @pagy, @memberships = pagy(Membership.all.includes(:user).load_async)
+    @pagy, @memberships = pagy(
+      Membership
+        .filter(params[:name], params[:surname], params[:direction])
+        .includes(:user)
+        .load_async
+    )
   end
 
   # GET /memberships/1

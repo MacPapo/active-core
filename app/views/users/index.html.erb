@@ -9,24 +9,7 @@
   <% end %>
 </div>
 
-<div>
-  <%= form_with url: users_path, method: :get, data: { turbo_frame: :users, turbo_action: 'advance', controller: 'usearch', action: 'input->usearch#submit' } do |f| %>
-  <div class="row mb-3">
-    <div class="col">
-      <div class="form-floating">
-        <%= f.text_field :name, placeholder: 'Mimmo', class: 'form-control', id: 'floatingInputName' %>
-        <label for="floatingInputName"><%= t 'global.table.name' %></label>
-      </div>
-    </div>
-    <div class="col">
-      <div class="form-floating">
-        <%= f.text_field :surname, placeholder: 'Lucano', class: 'form-control', id: 'floatingInputSurname' %>
-        <label for="floatingInputSurname"><%= t 'global.table.surname' %></label>
-      </div>
-    </div>
-  </div>
-  <% end %>
-</div>
+<%= render 'partials/search_form_users', path: users_path, frame: :users %>
 
 <!-- TODO review and correct this mess -->
 <%= turbo_frame_tag :users do %>

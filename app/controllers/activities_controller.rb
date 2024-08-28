@@ -8,7 +8,7 @@ class ActivitiesController < ApplicationController
   def index
     @pagy, @activities = pagy(
       Activity
-        .all
+        .filter(params[:name], params[:num], params[:direction])
         .includes(:subscriptions)
         .load_async
     )

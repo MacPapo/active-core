@@ -1,0 +1,35 @@
+<div>
+  <%= form_with url: path, method: :get, data: { turbo_frame: frame, turbo_action: 'advance', controller: 'usearch', action: 'input->usearch#submit' } do |f| %>
+  <div class="row mb-3">
+    <div class="col">
+      <div class="form-floating">
+        <%= f.text_field :name, placeholder: 'Karate', class: 'form-control', id: 'floatingInputName' %>
+        <label for="floatingInputName"><%= Activity.human_attribute_name('name') %></label>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-floating">
+        <select class="form-select" id="floatingInputDirection" name="num" aria-label="Floating label select">
+	  <option value="">Seleziona Num</option>
+	  <option value="asc">ASC</option>
+	  <option value="desc">DESC</option>
+	</select>
+
+        <label for="floatingInputDirection"><%= t Activity.human_attribute_name('num_participants') %></label>
+      </div>
+    </div>
+    <!-- TODO translate -->
+    <div class="col">
+      <div class="form-floating">
+        <select class="form-select" id="floatingInputDirection" name="direction" aria-label="Floating label select">
+	  <option value="">Seleziona Direction</option>
+	  <option value="asc">ASC</option>
+	  <option value="desc">DESC</option>
+	</select>
+
+        <label for="floatingInputDirection"><%= t 'global.table.direction' %></label>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>

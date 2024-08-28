@@ -13,7 +13,7 @@
   <!-- Card Footer -->
   <div class="card-footer bg-light">
     <div class="d-flex justify-content-end">
-      <%= link_to "Crea Ricevuta", receipt_show_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2' %>
+      <%= link_to "Stampa Ricevuta", receipt_show_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2' %>
 
       <!-- TODO translate -->
       <%= link_to "Edit", edit_payment_path(@payment), class: 'btn btn-warning me-2' %>

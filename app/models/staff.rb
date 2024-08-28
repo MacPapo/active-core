@@ -21,6 +21,14 @@ class Staff < ApplicationRecord
            :age, :email, :phone, :birth_day, 'affiliated?',
            :med_cert_issue_date, :med_cert_exp_date, to: :user
 
+  scope :by_name, ->(name) { where('users.name LIKE ?', "%#{name}%") if name.present? }
+  scope :by_surname, ->(surname) { where('users.surname LIKE ?', "%#{surname}%") if surname.present? }
+  scope :order_by_updated_at, ->(direction) { order("staffs.updated_at #{direction&.upcase}" )}
+
+  def self.filter(name, surname, direction)
+    joins(:user).by_name(name).by_surname(surname).order_by_updated_at(direction)
+  end
+  
   def email_required?
     false
   end

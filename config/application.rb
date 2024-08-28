@@ -21,7 +21,10 @@ module ProjectGym
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+
+    # Configure App Timezone
+    config.time_zone = 'Rome'
+    
     # config.eager_load_paths << Rails.root.join("extras")
     config.generators.system_tests = nil
     config.generators do |g|

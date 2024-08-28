@@ -3,12 +3,14 @@
   <span>(<%= t('.registered', count: @pagy.count) %>)</span>
 </div>
 
+<%= render 'partials/search_form_users', path: memberships_path, frame: :memberships %>
+
+<%= turbo_frame_tag :memberships do %>
 <div id="memberships">
 
     <table class="table table-hover">
         <thead class="table-light">
             <tr>
-                <th><%= Membership.human_attribute_name('id') %></th>
                 <th><%= Membership.human_attribute_name('updated_at') %></th>
                 <th><%= User.human_attribute_name('name') %></th>
                 <th><%= User.human_attribute_name('surname') %></th>
@@ -21,14 +23,9 @@
         <tbody class="table-group-divider">
             <% @memberships.each do |membership| %>
                 <tr>
-                    <!-- ID -->
-                    <th scope="row">
-                        <%= membership.id %>
-                    </th>
-
                     <!-- Updated At -->
                     <td>
-                        <%= l membership.updated_at %> (<%= distance_of_time_in_words_to_now membership.updated_at %>) 
+                      <%= humanize_timestamp membership.updated_at %>
                     </td>
 
                     <!-- Name -->
@@ -80,3 +77,4 @@
 
     <%== pagy_bootstrap_nav(@pagy) %>
 </div>
+<% end %>
