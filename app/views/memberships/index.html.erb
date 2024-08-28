@@ -51,11 +51,11 @@
 
                     <!-- Action -->
                     <td>
-                        <%= link_to membership, class: 'btn btn-primary' do %>
+                        <%= link_to membership, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
                             <i class="bi bi-eye-fill"></i>
                         <% end %>
 
-                        <%= link_to edit_membership_path(membership, user_id: user.id), class: 'btn btn-warning' do %>
+                        <%= link_to edit_membership_path(membership, user_id: user.id), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
                             <i class="bi bi-pencil-fill"></i>
                         <% end %>
 
@@ -64,7 +64,7 @@
                             <%= button_to membership,
                                           class: 'btn btn-danger',
                                           method: :delete,
-                                          data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" },
+                                          data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" },
                                           form: {style: 'display:inline-block;'} do %>
                                 <i class="bi bi-trash3-fill"></i>
                             <% end %>

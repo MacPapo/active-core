@@ -64,16 +64,16 @@
 
 	<!-- Action buttons -->
 	<td>
-          <%= link_to payment, class: 'btn btn-primary' do %>
+          <%= link_to payment, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
           <i class="bi bi-eye-fill"></i>
           <% end %>
 
-          <%= link_to edit_payment_path(payment), class: 'btn btn-warning' do %>
+          <%= link_to edit_payment_path(payment), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
           <i class="bi bi-pencil-fill"></i>
           <% end %>
 
           <% if current_staff.admin? %>
-          <%= button_to payment, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+          <%= button_to payment, class: 'btn btn-danger', method: :delete, data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
           <i class="bi bi-trash3-fill"></i>
           <% end %>
           <% end %>

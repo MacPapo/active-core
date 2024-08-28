@@ -44,11 +44,11 @@
 
                             <!-- Add users to activity -->
                             <% if npartecipants == 99 || (npartecipants != 99 && partecipants.length < npartecipants) %>
-                                <%= link_to new_subscription_path(activity_id: activity), class: 'btn btn-success' do %>
+                                <%= link_to new_subscription_path(activity_id: activity), class: 'btn btn-success', data: { turbo_frame: "_top" } do %>
                                     <i class="bi bi-person-plus-fill"></i>
                                 <% end %>
                             <% else %>
-                                <%= link_to new_waitlist_path(activity_id: activity), class: 'btn btn-info' do %>
+                                <%= link_to new_waitlist_path(activity_id: activity), class: 'btn btn-info', data: { turbo_frame: "_top" } do %>
                                     <i class="bi bi-telephone-plus-fill"></i>
                                 <% end %>
                             <% end %>
@@ -57,16 +57,16 @@
 
                     <!-- Action buttons -->
                     <td>
-                        <%= link_to activity_path(activity), class: 'btn btn-primary' do %>
+                        <%= link_to activity_path(activity), class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
                             <i class="bi bi-eye-fill"></i>
                         <% end %>
 
-                        <%= link_to edit_activity_path(activity), class: 'btn btn-warning' do %>
+                        <%= link_to edit_activity_path(activity), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
                             <i class="bi bi-pencil-fill"></i>
                         <% end %>
 
                         <% if current_staff.admin? %>
-                            <%= button_to activity_path(activity), class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+                            <%= button_to activity_path(activity), class: 'btn btn-danger', method: :delete, data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
                                 <i class="bi bi-trash3-fill"></i>
                             <% end %>
                         <% end %>
