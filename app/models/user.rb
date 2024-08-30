@@ -33,7 +33,7 @@ class User < ApplicationRecord
 
   scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
   scope :by_surname, ->(surname) { where('surname LIKE ?', "%#{surname}%") if surname.present? }
-  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction&.upcase}" )}
+  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction.blank? ? 'DESC' : direction.upcase}") }
 
   def self.filter(name, surname, direction)
     by_name(name).by_surname(surname).order_by_updated_at(direction)

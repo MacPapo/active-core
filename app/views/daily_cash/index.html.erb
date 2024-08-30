@@ -1,0 +1,29 @@
+<div class="d-flex align-items-center mb-3">
+    <h1 class="mb-0 me-2">
+        <%= t '.title' %>
+        <span>(<%= t '.total' %> <%= number_to_currency @total %>)</span>
+    </h1>
+</div>
+
+<div id="daily_cash">
+
+    <!-- Morning -->
+    <div>
+        <h3>
+            <%= t '.morning' %>
+            <span>(<%= number_to_currency @morning_cash %>)</span>
+        </h3>
+        <%= render 'partials/payments_table', payments: @morning %>
+        <%== pagy_bootstrap_nav(@morning_pagy) %>
+    </div>
+
+    <!-- Afternoon -->
+    <div>
+        <h3>
+            <%= t '.afternoon' %>
+            <span>(<%= number_to_currency @afternoon_cash %>)</span>
+        </h3>
+        <%= render 'partials/payments_table', payments: @afternoon %>
+        <%== pagy_bootstrap_nav(@afternoon_pagy) %>
+    </div>
+</div>

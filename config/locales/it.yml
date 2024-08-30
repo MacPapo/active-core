@@ -76,7 +76,7 @@ it:
         phone: "Numero di Telefono"
         birth_day: "Data di Nascita"
         users: "Utenti Associati"
-        
+
       activity:
         name: "Nome Attività"
         num_participants: "Numero massimo di partecipanti"
@@ -139,6 +139,8 @@ it:
         entry_type: "Tipo Movimento"
         note: "Note eventuali"
         staff: "Collaboratore"
+        updated_at: "Data Aggiornamento"
+        created_at: "Data Creazione"
       payment/method:
         pos: "POS"
         cash: "Contanti"
@@ -151,6 +153,7 @@ it:
         subscription: "Iscrizione"
 
   global:
+    daily_cash: "Cassa Giornaliera"
     user: "Utenti"
     staff: "Collaboratori"
     activity: "Attività"
@@ -346,3 +349,10 @@ it:
   waitlists:
     new:
       title: "Inserimento in Lista di Attesa"
+
+  daily_cash:
+    index:
+      title: "Cassa Giornaliera"
+      total: "Totale"
+      morning: "Mattina"
+      afternoon: "Pomeriggio"

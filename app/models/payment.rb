@@ -19,10 +19,24 @@ class Payment < ApplicationRecord
   scope :order_by_date, ->(date) { order("date #{date&.upcase}") if date.present? }
   scope :order_by_updated_at, ->(direction) { order("updated_at #{direction&.upcase}") if direction.present? }
 
+  scope :by_time_interval, ->(from, to) { where(created_at: from..to).order(created_at: :desc) }
+
   def self.filter(date, type, method, direction)
     by_type(type).by_method(method).order_by_date(date).order_by_updated_at(direction)
   end
-  
+
+  # TODO watch this
+  def self.daily_cash(arg)
+    return nil if arg.blank?
+
+    mid = Time.zone.now.beginning_of_day
+    select_range = ->(y) { by_time_interval(mid + y.first, mid + y.last) }
+
+    select_range.call(
+      arg == :morning ? [8.hours, 12.hours] : [15.hours, 20.hours]
+    )
+  end
+
   def payment_summary
     payable.summary
   end

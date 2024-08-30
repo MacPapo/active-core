@@ -38,6 +38,10 @@
                 <%= link_to payments_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
                     <i class="bi bi-cash-stack me-2"></i> <%= Payment.model_name.human(count: 2) %>
                 <% end %>
+
+                <%= link_to daily_cash_index_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
+                    <i class="bi bi-cash-coin me-2"></i> <%= t 'global.daily_cash' %>
+                <% end %>
             </div>
         </div>
     </nav>

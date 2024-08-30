@@ -1,80 +1,80 @@
 <div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      Data Inizio:
-    </h5>
-    <div class="card-text">
-      <%= subscription.start_date %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            Data Inizio:
+        </h5>
+        <div class="card-text">
+            <%= subscription.start_date %>
+        </div>
     </div>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      Data Fine:
-    </h5>
-    <div class="card-text">
-      <%= subscription.end_date %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            Data Fine:
+        </h5>
+        <div class="card-text">
+            <%= subscription.end_date %>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      Nome e Cognome:
-    </h5>
-    <div class="card-text">
-      <%= subscription.user.full_name %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            Nome e Cognome:
+        </h5>
+        <div class="card-text">
+            <%= subscription.user.full_name %>
+        </div>
     </div>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      Attività:
-    </h5>
-    <div class="card-text">
-      <%= subscription.activity.name %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            Attività:
+        </h5>
+        <div class="card-text">
+            <%= subscription.activity.name %>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      Piano per questa attività:
-    </h5>
-    <div class="card-text">
-        <%= subscription.activity_plan.humanize_plan %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            Piano per questa attività:
+        </h5>
+        <div class="card-text">
+            <%= subscription.activity_plan.humanize_plan %>
+        </div>
     </div>
-  </div>
 </div>
 
 <% is_open = subscription.open? %>
 <div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      OPEN:
-    </h5>
-    <div class="card-text">
-      <%= t is_open %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            OPEN:
+        </h5>
+        <div class="card-text">
+            <%= t is_open %>
+        </div>
     </div>
-  </div>
 
-  <% if is_open %>
-  <% open_sub = subscription.open_subscription %>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      Attività OPEN:
-    </h5>
-    <div class="card-text">
-      <%= open_sub.activity.name %> (<%= open_sub.activity_plan.humanize_plan %>)
-    </div>
-  </div>
-  <% end %>
+    <% if is_open && subscription.open_subscription %>
+        <% open_sub = subscription.open_subscription %>
+        <div class="col">
+            <h5 class="card-subtitle mb-2">
+                Attività OPEN:
+            </h5>
+            <div class="card-text">
+                <%= open_sub.activity.name %> (<%= open_sub.activity_plan.humanize_plan %>)
+            </div>
+        </div>
+    <% end %>
 </div>
 
 <div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      STATUS: <%= subscription.humanize_status %>
-    </h5>
-  </div>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            STATUS: <%= subscription.humanize_status %>
+        </h5>
+    </div>
 </div>

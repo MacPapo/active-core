@@ -10,8 +10,8 @@ class Membership < ApplicationRecord
   after_save -> { ValidateMembershipStatusJob.perform_later }
   after_destroy -> { AfterDeleteMembershipCleanupSubsJob.perform_later }
 
-  belongs_to :user
-  belongs_to :staff
+  belongs_to :user, touch: true
+  belongs_to :staff, touch: true
 
   has_many :membership_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy

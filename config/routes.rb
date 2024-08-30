@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'receipt/show'
   devise_for :staffs
 
   authenticated :staff, -> { _1.admin? } do
@@ -11,14 +10,14 @@ Rails.application.routes.draw do
   end
 
   resources :users
-
   resources :legal_guardians
   resources :payments
   resources :staffs
   resources :activities
   resources :activity_plans
   resources :waitlists
-  resources :receipts, only: [:show]
+  get 'receipt/show'
+  resources :daily_cash, only: [:index]
 
   resources :memberships do
     member do

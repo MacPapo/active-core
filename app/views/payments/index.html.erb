@@ -1,87 +1,13 @@
 <div class="d-flex align-items-center mb-3">
-  <h1 class="me-2"><%= t '.title' %></h1>
-  <span>(<%= t('.registered', count: @pagy.count) %>)</span>
+    <h1 class="mb-0 me-2"><%= t '.title' %></h1>
+    <span>(<%= t('.registered', count: @pagy.count) %>)</span>
 </div>
 
 <%= render 'partials/search_form_payments', path: payments_path, frame: :payments %>
 
 <%= turbo_frame_tag :payments do %>
-<div id="payments">
-  <table class="table table-hover">
-    <thead class="table-light">
-      <tr>
-        <th><%= Payment.human_attribute_name('date') %></th>
-	<th><%= Payment.human_attribute_name('payable_type') %></th>
-        <th><%= Payment.human_attribute_name('amount') %></th>
-	<th><%= Payment.human_attribute_name('payment_method') %></th>
-	<th><%= Payment.human_attribute_name('entry_type') %></th>
-        <th><%= Payment.human_attribute_name('note') %></th>
-	<th><%= Payment.human_attribute_name('staff') %></th>
-	<th><%= t '.action' %></th>
-      </tr>
-    </thead>
-
-    <tbody class="table-group-divider">
-      
-      <% @payments.each do |payment| %>
-      <tr>
-
-	<!-- Date -->
-	<td>
-          <%= l payment.date %>
-	</td>
-
-	<!-- Payable Type -->
-	<td>
-          <%= payment.humanize_payable_type %>
-	</td>
-
-	<!-- Amount -->
-	<td>
-          <%= number_to_currency payment.amount %>
-	</td>
-
-	<!-- Payment Method -->
-	<td>
-          <%= payment.humanize_payment_method %>
-	</td>
-
-	<!-- Entry Type -->
-	<td>
-          <%= payment.humanize_entry_type %>
-	</td>
-
-	<!-- Note -->
-	<td>
-          <%= payment.note %>
-	</td>
-
-	<!-- Staff -->
-	<% staff = payment.staff %>
-	<td>
-          <%= staff.full_name %>
-	</td>
-
-	<!-- Action buttons -->
-	<td>
-          <%= link_to payment, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
-          <i class="bi bi-eye-fill"></i>
-          <% end %>
-
-          <%= link_to edit_payment_path(payment), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
-          <i class="bi bi-pencil-fill"></i>
-          <% end %>
-
-          <% if current_staff.admin? %>
-          <%= button_to payment, class: 'btn btn-danger', method: :delete, data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
-          <i class="bi bi-trash3-fill"></i>
-          <% end %>
-          <% end %>
-	</td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <%== pagy_bootstrap_nav(@pagy) %>
-</div>
+    <div id="payments">
+        <%= render 'partials/payments_table', payments: @payments %>
+        <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
 <% end %>

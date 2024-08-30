@@ -14,9 +14,9 @@ class Subscription < ApplicationRecord
 
   after_save -> { ValidateSubscriptionStatusJob.perform_later }
 
-  belongs_to :user
-  belongs_to :staff
-  belongs_to :activity
+  belongs_to :user, touch: true
+  belongs_to :staff, touch: true
+  belongs_to :activity, touch: true
   belongs_to :activity_plan
 
   belongs_to :open_subscription,
