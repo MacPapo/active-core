@@ -20,9 +20,13 @@ class PaymentsController < ApplicationController
 
   # GET /payments/new
   def new
-    @payment = @entity.nil? ? Payment.build : @entity.payments.build
-    @payment.date = Time.zone.today
-    @payment.amount = @entity.nil? ? 0.0 : @entity.cost
+    if entity_has_payment?
+      redirect_to payments_path, alert: t('.payment_already_registered')
+    else
+      @payment = @entity.nil? ? Payment.build : @entity.payments.build
+      @payment.date = Time.zone.today
+      @payment.amount = @entity.nil? ? 0.0 : @entity.cost
+    end
   end
 
   # GET /payments/1/edit
@@ -70,6 +74,12 @@ class PaymentsController < ApplicationController
       when 'Subscription'
         Subscription.find(params[:payable_id])
       end
+  end
+
+  def entity_has_payment?
+    return false if @entity.blank?
+
+    Payment.exists?(payable: @entity, created_at: 1.minutes.ago..Time.zone.now)
   end
 
   # Only allow a list of trusted parameters through.

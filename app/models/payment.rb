@@ -17,7 +17,7 @@ class Payment < ApplicationRecord
   scope :by_type, ->(type) { where(payable_type: type.capitalize) if type.present? }
   scope :by_method, ->(method) { where(payment_method: method) if method.present? }
   scope :order_by_date, ->(date) { order("date #{date&.upcase}") if date.present? }
-  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction&.upcase}") if direction.present? }
+  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction.blank? ? 'DESC' : direction&.upcase}") }
 
   scope :by_time_interval, ->(from, to) { where(created_at: from..to).order(created_at: :desc) }
 

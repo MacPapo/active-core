@@ -20,7 +20,7 @@ class Membership < ApplicationRecord
 
   scope :by_name, ->(name) { where('users.name LIKE ?', "%#{name}%") if name.present? }
   scope :by_surname, ->(surname) { where('users.surname LIKE ?', "%#{surname}%") if surname.present? }
-  scope :order_by_updated_at, ->(direction) { order("memberships.updated_at #{direction&.upcase}") }
+  scope :order_by_updated_at, ->(direction) { order("memberships.updated_at #{direction.blank? ? 'DESC' : direction&.upcase}") }
 
   MEMBERSHIP_COST = 35.0
 

@@ -17,7 +17,7 @@ class ReceiptController < ApplicationController
   end
 
   def send_pdf
-    receipt = GenerateReceiptJob.perform_now(:sas, @payment)
+    receipt = GenerateReceiptJob.perform_now(:print, @payment)
     send_data receipt.render,
               filename: "#{@payment.created_at.strftime('%Y-%m-%d')}-ricevuta.pdf",
               type: 'application/pdf',

@@ -1,10 +1,20 @@
-<h1>Editing subscription</h1>
+<div class="card" id="<%= dom_id @subscription %>">
+    <div class="card-header">
+        <h1 class="card-title">
+            <%= t '.title' %>
+        </h1>
+    </div>
 
-<%= render "renew_form", subscription: @subscription %>
+    <!-- Card Body -->
+    <div class="card-body">
+        <%= render "renew_form", subscription: @subscription %>
+    </div>
 
-<br>
-
-<div>
-  <%= link_to "Show this subscription", @subscription %> |
-  <%= link_to "Back to subscriptions", subscriptions_path %>
+    <!-- Card Footer -->
+    <div class="card-footer bg-light">
+        <div class="d-flex justify-content-end">
+            <%= link_to "Show this subscription", @subscription, class: 'btn btn-primary me-2' %>
+            <%= link_to "Back to subscriptions", subscriptions_path, class: 'btn btn-info' %>
+        </div>
+    </div>
 </div>

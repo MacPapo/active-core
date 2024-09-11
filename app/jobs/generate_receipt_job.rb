@@ -8,18 +8,36 @@ class GenerateReceiptJob < ApplicationJob
   def perform(*args)
     op, payment = args
 
-    receipt = Receipt.find_or_create_by(payment:) do |r|
-      r.id = Receipt.generate_id
+    receipt = generate_receipt(payment)
+
+    handle_op(op, receipt)
+  end
+
+  private
+
+  def handle_op(op, receipt)
+    case op
+    when :print
+      generate_pdf(receipt)
+    when :email
+      p 'todo'
+    else
+      p 'else'
+    end
+  end
+
+  def generate_receipt(payment)
+    sub, mem = Receipt.generate_number(payment.payable_type)
+
+    Receipt.find_or_create_by(payment:) do |r|
+      r.sub_num = sub
+      r.mem_num = mem
       r.date = payment.date
       r.amount = payment.amount
       r.cause = payment.payable_type
       r.user = payment.user
     end
-
-    generate_pdf(receipt)
   end
-
-  private
 
   def generate_pdf(receipt)
     Receipts::Receipt.new(
@@ -35,8 +53,10 @@ class GenerateReceiptJob < ApplicationJob
   end
 
   def generate_details(receipt)
+    num = receipt.cause == 'Membership' ? receipt.mem_num : receipt.sub_num
+
     [
-      ['Ricevuta N: ', receipt.id.to_s],
+      ['Ricevuta N: ', num],
       ['Data: ', I18n.l(receipt.date)],
       ['Metodo Pagamento', receipt.payment.humanize_payment_method]
     ]

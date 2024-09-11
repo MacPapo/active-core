@@ -1,10 +1,20 @@
-<h1>Rinnovo Quota Associativa</h1>
+<div class="card" id="<%= dom_id @membership %>">
+    <div class="card-header">
+        <h1 class="card-title">
+            <%= t '.title' %>
+        </h1>
+    </div>
 
-<%= render "form", membership: @membership %>
+    <!-- Card Body -->
+    <div class="card-body">
+        <%= render "form", membership: @membership %>
+    </div>
 
-<br>
-
-<div>
-  <%= link_to "Show this membership", @membership %> |
-  <%= link_to "Ritorna alla lista utenti", users_path %>
+    <!-- Card Footer -->
+    <div class="card-footer bg-light">
+        <div class="d-flex justify-content-end">
+            <%= link_to "Show this membership", @membership %> |
+            <%= link_to "Ritorna alla lista utenti", users_path %>
+        </div>
+    </div>
 </div>

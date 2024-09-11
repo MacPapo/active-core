@@ -2,18 +2,19 @@
   <%= t '.payment_info' %>
 </h3>
 
+<% payment_attribute_to_string = ->(attr) { attribute_to_string(payment, attr) } %>
 <div class="row mb-4">
   <div class="col">
     <h5 class="card-subtitle mb-2">
-      <%= t '.amount' %>
+      <%= payment_attribute_to_string.('amount') %>
     </h5>
     <div class="card-text">
-      <%= payment.amount %>
+      <%= number_to_currency payment.amount %>
     </div>
   </div>
   <div class="col">
     <h5 class="card-subtitle mb-2">
-      <%= t '.date' %>
+      <%= payment_attribute_to_string.('date') %>
     </h5>
     <div class="card-text">
       <%= l payment.date %>
@@ -24,29 +25,18 @@
 <div class="row mb-4">
   <div class="col">
     <h5 class="card-subtitle mb-2">
-      <%= t '.method' %>
+      <%= payment_attribute_to_string.('payment_method') %>
     </h5>
     <div class="card-text">
-      <%= payment.payment_method %>
+      <%= payment.humanize_payment_method %>
     </div>
   </div>
   <div class="col">
     <h5 class="card-subtitle mb-2">
-      <%= t '.payable_type' %>
+      <%= payment_attribute_to_string.('payable_type') %>
     </h5>
     <div class="card-text">
-      <%= payment.payable_type %>
-    </div>
-  </div>
-</div>
-
-<div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= t '.entry_type' %>
-    </h5>
-    <div class="card-text">
-      <%= payment.entry_type %>
+      <%= payment.humanize_payable_type %>
     </div>
   </div>
 </div>
@@ -54,7 +44,18 @@
 <div class="row mb-4">
   <div class="col">
     <h5 class="card-subtitle mb-2">
-      <%= t '.note' %>
+      <%= payment_attribute_to_string.('entry_type') %>
+    </h5>
+    <div class="card-text">
+      <%= payment.humanize_entry_type %>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col">
+    <h5 class="card-subtitle mb-2">
+      <%= payment_attribute_to_string.('note') %>
     </h5>
     <div class="card-text">
       <%= payment.note %>
@@ -68,7 +69,7 @@
   <% staff = payment.staff %>
   <div class="col">
     <h5 class="card-subtitle mb-4">
-      <%= t '.staff' %>
+      <%= payment_attribute_to_string.('staff') %>
     </h5>
     <div class="list-group">
       <%= link_to "#{staff.full_name}",  staff, class: 'list-group-item list-group-item-action' %>

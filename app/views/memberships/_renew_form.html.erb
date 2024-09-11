@@ -1,4 +1,4 @@
-<%= form_with(model: membership) do |form| %>
+<%= form_with(model: membership, url: renew_update_membership_path(@membership), method: :patch) do |form| %>
     <% if membership.errors.any? %>
         <div style="color: red">
             <h2><%= t('global.forms.messages.errors', count: membership.errors.count) %></h2>
@@ -14,12 +14,6 @@
     <div class="mb-3">
         <%= form.label :start_date, class: 'form-label' %>
         <%= form.date_field :start_date, class: 'form-control', data: { describedby: 'dateHelp' }, autofocus: true %>
-        <div id="dateHelp" class="form-text"><%= t '.date_help' %></div>
-    </div>
-
-    <div class="mb-3">
-        <%= form.label :end_date, class: 'form-label' %>
-        <%= form.date_field :end_date, class: 'form-control', data: { describedby: 'dateHelp' } %>
         <div id="dateHelp" class="form-text"><%= t '.date_help' %></div>
     </div>
 

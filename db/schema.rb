@@ -92,6 +92,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_26_084855) do
   end
 
   create_table "receipts", force: :cascade do |t|
+    t.integer "sub_num", null: false
+    t.integer "mem_num", null: false
     t.integer "payment_id", null: false
     t.integer "user_id", null: false
     t.float "amount", null: false
@@ -100,8 +102,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_26_084855) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["date"], name: "index_receipts_on_date"
-    t.index ["id"], name: "index_receipts_on_id", unique: true
+    t.index ["mem_num", "date"], name: "index_receipts_on_mem_num_and_date"
     t.index ["payment_id"], name: "index_receipts_on_payment_id"
+    t.index ["sub_num", "date"], name: "index_receipts_on_sub_num_and_date"
     t.index ["user_id"], name: "index_receipts_on_user_id"
   end
 

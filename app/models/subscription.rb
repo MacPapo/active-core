@@ -5,6 +5,7 @@ class Subscription < ApplicationRecord
   validates :start_date, :activity_id, :activity_plan_id, :user_id, :staff_id, presence: true
   validates :end_date, comparison: { greater_than: :start_date }, if: -> { start_date.present? && end_date.present? }
   validate :active_membership?, if: -> { activity.present? }
+  validate :date_valid_for_membership?, if: -> { user.membership.active? }
 
   delegate :cost, :affiliated_cost, prefix: 'plan', to: :activity_plan
   delegate :active_membership?, to: :user
@@ -39,7 +40,7 @@ class Subscription < ApplicationRecord
   scope :active, -> { where(status: :active) }
   scope :by_name, ->(name) { where('users.name LIKE ?', "%#{name}%") if name.present? }
   scope :by_surname, ->(surname) { where('users.surname LIKE ?', "%#{surname}%") if surname.present? }
-  scope :order_by_updated_at, ->(direction) { order("subscriptions.updated_at #{direction&.upcase}") }
+  scope :order_by_updated_at, ->(direction) { order("subscriptions.updated_at #{direction.blank? ? 'DESC' : direction&.upcase }") }
 
   def self.filter(name, surname, direction)
     joins(:user).by_name(name).by_surname(surname).order_by_updated_at(direction)
@@ -100,7 +101,7 @@ class Subscription < ApplicationRecord
 
     case activity_plan
     when -> { _1.one_year? }
-      start_date.at_end_of_year
+      user.membership.end_date
     when -> { _1.three_months? }
       start_date.months_since(2).at_end_of_month
     else
@@ -119,5 +120,10 @@ class Subscription < ApplicationRecord
     half = date.beginning_of_month + 14.days
 
     date == half ? start_date.at_end_of_month : start_date + 14.days
+  end
+
+  # FIX THIS
+  def date_valid_for_membership?
+    end_date < user.membership.end_date
   end
 end

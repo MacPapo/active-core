@@ -212,18 +212,6 @@ it:
     user:
       personal_data: "Anagrafica"
       name_surname: "Nome e Cognome:"
-      birth: "Data di Nascita:"
-      cf: "Codice Fiscale"
-      phone: "Numero di Telefono:"
-      affiliated: "Utente convenzionato:"
-      membership: "Quota Associativa"
-      to_be_inserted: "Da inserire"
-      status: "Stato"
-      start_date: "Data inizio:"
-      end_date: "Data scadenza:"
-      legal_guardian: "Tutore Legale"
-      med_cert: "Data rilascio certificato medico"
-      subs: "Iscrizioni"
       no_subs: "Nessuna iscrizione effettuata"
 
   activities:
@@ -270,6 +258,7 @@ it:
       destroy_succ: "Il pagamento è stato distrutto correttamente."
     new:
       title: "Inserimento di un Nuovo Pagamento"
+      payment_already_registered: "Ridirezionato qui per non inserire un pagamento doppio"
     edit:
       title: "Modifica dei dati Pagamento"
     show:
@@ -323,8 +312,15 @@ it:
       title: "Inserimento di una Nuova Iscrizione"
     show:
       title: "Dettagli Iscrizione"
+    edit:
+      title: "Aggiornamento Iscrizione"
+    renew:
+      title: "Rinnovo Iscrizione"
+      subscription_already_inactive: "Redirezionato qui per non rinnovare due volte la stessa Iscrizione"
 
   memberships:
+    renew_form:
+      date_help: "La DATA INIZIO si riferisce alla data in cui si vuole rinnovare la quota associativa."
     renew_update:
       renew_succ: "La quota associativa è stata aggiornata correttamente, per attivarla procedi al pagamento."
     create:
@@ -345,6 +341,12 @@ it:
       title: "Dettagli Quote Associativa"
     new:
       title: "Inserimento di una Quota Associativa"
+      membership_already_registered: "Redirezionato qui per non inserire una doppia Quota Associativa"
+    edit:
+      title: "Aggiornamento Quota Associativa"
+    renew:
+      title: "Rinnovo Quota Associativa"
+      membership_inactive: "Redirezionato qui per non rinnovare due volte la stessa Quota Associativa"
 
   waitlists:
     new:

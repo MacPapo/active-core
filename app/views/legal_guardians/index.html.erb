@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
   <div class="d-flex align-items-center">
-    <h1 class="mb-0 me-2"><%= LegalGuardian.model_name.human(count: 2) %></h1>
+    <h1 class="mb-0 me-2"><%= model_to_string(LegalGuardian, 2) %></h1>
   </div>
 </div>
 
@@ -45,7 +45,7 @@
 
 	<!-- Phone -->
 	<td>
-	  <%= legal_guardian.phone %>
+	  <%= phone_to_string legal_guardian.phone %>
 	</td>
 
 	<!-- Users -->

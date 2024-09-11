@@ -3,7 +3,7 @@
 # Membership Controller
 class MembershipsController < ApplicationController
   before_action :set_membership, only: %i[show edit renew renew_update update destroy]
-  before_action :set_user, only: %i[edit new create update renew_update]
+  before_action :set_user, only: %i[edit new renew create update renew_update]
 
   # GET /memberships
   def index
@@ -20,8 +20,12 @@ class MembershipsController < ApplicationController
 
   # GET /memberships/new
   def new
-    @membership = Membership.build
-    @membership.start_date = Time.zone.today
+    if user_has_membership?
+      redirect_to memberships_path, alert: t('.membership_already_registered')
+    else
+      @membership = Membership.build
+      @membership.start_date = Time.zone.today
+    end
   end
 
   # GET /memberships/1/edit
@@ -41,8 +45,12 @@ class MembershipsController < ApplicationController
   end
 
   def renew
-    @membership.start_date = Time.zone.today
-    @membership.end_date = ''
+    if @membership.inactive?
+      redirect_to users_path, alert: t('.membership_inactive')
+    else
+      @membership.start_date = Time.zone.today
+      @membership.update!(end_date: nil)
+    end
   end
 
   def renew_update
@@ -81,6 +89,10 @@ class MembershipsController < ApplicationController
 
   def set_user
     @user ||= User.find(params[:user_id] || membership_params[:user_id])
+  end
+
+  def user_has_membership?
+    Membership.exists?(user_id: @user.id)
   end
 
   # Only allow a list of trusted parameters through.

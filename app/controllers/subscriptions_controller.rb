@@ -53,11 +53,15 @@ class SubscriptionsController < ApplicationController
 
   # GET /subscriptions/1/renew
   def renew
-    @subscription.start_date = Time.zone.today
-    @subscription.end_date = ''
-    @activity = @subscription.activity
-    set_plans(@activity)
-    @user = User.find(@subscription.user.id)
+    if @subscription.inactive?
+      redirect_to users_path, alert: t('.subscription_already_inactive')
+    else
+      @subscription.start_date = Time.zone.today
+      @subscription.end_date = ''
+      @activity = @subscription.activity
+      set_plans(@activity)
+      @user = User.find(@subscription.user.id)
+    end
   end
 
   # PATCH/PUT /subscriptions/1
@@ -103,7 +107,7 @@ class SubscriptionsController < ApplicationController
 
   def set_users
     @users ||= User.joins(:membership).where('membership.status' => :active)
-                   .where.not(id: Subscription.where(activity: @activity).select(:user_id)).load_async
+                   .where.not(id: Subscription.where(activity: @activity).select(:user_id)).distinct.load_async
   end
 
   def update_open

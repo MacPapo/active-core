@@ -13,7 +13,7 @@ class Activity < ApplicationRecord
   # TODO rework activity and modify schema with index!!!
   scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
   scope :order_by_num_participants, ->(num) { order("num_participants #{num&.upcase}") }
-  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction&.upcase}") }
+  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction.blank? ? 'DESC' : direction&.upcase}") }
 
   def self.filter(name, num, direction)
     by_name(name).order_by_num_participants(num).order_by_updated_at(direction)

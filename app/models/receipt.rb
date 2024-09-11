@@ -5,7 +5,6 @@ class Receipt < ApplicationRecord
   belongs_to :payment
   belongs_to :user
 
-  validates :id, presence: true, uniqueness: true
   validates :date, :amount, :cause, presence: true
 
   delegate :number_to_currency, to: ActiveSupport::NumberHelper
@@ -22,12 +21,17 @@ class Receipt < ApplicationRecord
     COMPANY
   end
 
-  def self.generate_id
-    date_part = Time.zone.now.strftime('%d%m%Y')
-    sequence_number = Receipt.where('date(created_at) = ?', Time.zone.today).count + 1
-    formatted_number = format('%04d', sequence_number)
+  def self.generate_number(type)
+    last = Receipt.last
 
-    "#{date_part}#{formatted_number}".to_i
+    case type
+    when 'Membership'
+      [last.blank? ? 0 : last.sub_num, last.blank? ? 1 : last.mem_num + 1]
+    when 'Subscription'
+      [last.blank? ? 1 : last.sub_num + 1, last.blank? ? 0 : last.mem_num]
+    else
+      p 'else'
+    end
   end
 
   def amount_to_currency

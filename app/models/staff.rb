@@ -28,7 +28,7 @@ class Staff < ApplicationRecord
   def self.filter(name, surname, direction)
     joins(:user).by_name(name).by_surname(surname).order_by_updated_at(direction)
   end
-  
+
   def email_required?
     false
   end
@@ -41,8 +41,7 @@ class Staff < ApplicationRecord
     false
   end
 
-  # TODO rework
-  def get_role
-    role.to_sym
+  def humanize_role
+    Staff.human_attribute_name("role.#{role}")
   end
 end

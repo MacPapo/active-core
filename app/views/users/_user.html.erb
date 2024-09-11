@@ -1,160 +1,159 @@
 <h3 class="card-subtitle mb-4">
-  <%= t '.personal_data' %>
+    <%= t '.personal_data' %>
 </h3>
 
+
 <!-- Personal Data -->
+<% user_attribute_to_string = ->(attr) { attribute_to_string(user, attr) } %>
 <div class="row mb-4">
-  <div class="col-md-4">
-    <h5 class="card-subtitle mb-2">
-      <%= t '.name_surname' %>
-    </h5>
-    <p class="card-text">
-      <%= user.full_name %>
-    </p>
-  </div>
-  <div class="col-md-4">
-    <h5 class="card-subtitle mb-2">
-      <%= t '.birth' %>
-    </h5>
-    <% if user.birth_day %>
-      <p class="card-text">
-        <%= l user.birth_day %> (<%= num_to_human_years user.age %>)
-      </p>
-    <% end %>
-  </div>
-  <div class="col-md-4">
-    <h5 class="card-subtitle mb-2">
-      <%= t '.cf' %>
-    </h5>
-    <p class="card-text">
-      <%= user.cf %>
-    </p>
-  </div>
+    <div class="col-md-4">
+        <h5 class="card-subtitle mb-2">
+            <%= t '.name_surname' %>
+        </h5>
+        <p class="card-text">
+            <%= user.full_name %>
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h5 class="card-subtitle mb-2">
+            <%= user_attribute_to_string.('birth_day') %>
+        </h5>
+        <% if user.birth_day %>
+            <p class="card-text">
+                <%= l user.birth_day %> (<%= num_to_human_years user.age %>)
+            </p>
+        <% end %>
+    </div>
+    <div class="col-md-4">
+        <h5 class="card-subtitle mb-2">
+            <%= user_attribute_to_string.('cf') %>
+        </h5>
+        <p class="card-text">
+            <%= user.cf %>
+        </p>
+    </div>
 </div>
 
 <div class="row mb-4">
-  <div class="col-md-4">
-    <h5 class="card-subtitle mb-2">
-      Email:
-    </h5>
-    <p class="card-text">
-      <%= user.email.nil? ? 'Da inserire!' : user.email %>
-    </p>
-  </div>
-  <div class="col-md-4">
-    <h5 class="card-subtitle mb-2">
-      <%= t '.phone' %>
-    </h5>
-    <p class="card-text">
-      <%= user.phone.nil? ? 'Da inserire!' : user.phone %>
-    </p>
-  </div>
-  <div class="col-md-4">
-    <h5 class="card-subtitle mb-2">
-      <%= t '.affiliated' %>
-    </h5>
-    <% affiliated = user.affiliated %>
-    <span class="badge text-bg-<%= affiliated ? 'success' : 'warning' %>"><%= t affiliated %></span>
-  </div>
+    <div class="col-md-4">
+        <h5 class="card-subtitle mb-2">
+            <%= user_attribute_to_string.('email') %>
+        </h5>
+        <p class="card-text">
+            <%= user.email %>
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h5 class="card-subtitle mb-2">
+            <%= user_attribute_to_string.('phone') %>
+        </h5>
+        <p class="card-text">
+            <%= phone_to_string user.phone %>
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h5 class="card-subtitle mb-2">
+            <%= user_attribute_to_string.('affiliated') %>
+        </h5>
+        <% affiliated = user.affiliated %>
+        <span class="badge text-bg-<%= affiliated ? 'success' : 'warning' %>"><%= t affiliated %></span>
+    </div>
 </div>
 
 <% if user.legal_guardian %>
 
-<!-- Legal Guardian -->
-<div>
-  <% lg = user.legal_guardian %>
-  <h3 class="card-subtitle mb-4">
-    <%= t '.legal_guardian' %>
-  </h3>
+    <!-- Legal Guardian -->
+    <div>
+        <% lg = user.legal_guardian %>
+        <h3 class="card-subtitle mb-4">
+            <%= t '.legal_guardian' %>
+        </h3>
 
-  <!-- TODO -->
-  <div class="list-group">
-    <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'list-group-item list-group-item-action' %>
+        <!-- TODO -->
+        <div class="list-group">
+            <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'list-group-item list-group-item-action' %>
+        </div>
     </div>
-</div>
 <% end %>
 
 <hr/>
 
 <!-- Cert med -->
 <div>
-  <h3 class="card-subtitle mb-3">
-    <%= t '.med_cert' %>
-  </h3>
-  <p class="cart-text">
-    <% start_date = user.med_cert_issue_date %>
+    <h3 class="card-subtitle mb-3">
+        <%= t '.med_cert' %>
+    </h3>
+    <p class="cart-text">
+        <% start_date = user.med_cert_issue_date %>
   <% end_date = user.med_cert_exp_date %>
 
   <% if start_date.nil? %>
-    <span class="badge text-bg-warning"><%= t '.to_be_inserted' %></span>
+      <span class="badge text-bg-warning"><%= t 'empty' %></span>
   <% else %>
-    <%= l start_date, format: :default %> - <%= l end_date, format: :default %> (<%= num_to_human_days user.num_of_days_til_med_cert_expire %>)
+      <%= l start_date, format: :default %> - <%= l end_date, format: :default %> (<%= num_to_human_days user.num_of_days_til_med_cert_expire %>)
   <% end %>
-  </p>
+    </p>
 </div>
 
 <hr/>
 
 <!-- TODO restyle this card and add the buttons to renew the memb -->
 <div>
-  <h3 class="card-subtitle mb-4">
-    <%= t '.membership' %>
-  </h3>
+    <h3 class="card-subtitle mb-4">
+        <%= t '.membership' %>
+    </h3>
 
-  <% membership = user.membership %>
-  <% if membership %>
+    <% membership = user.membership %>
+    <% if membership %>
 
-  <p class="cart-text">
+        <% membership_attribute_to_string = ->(attr) { attribute_to_string(membership, attr) } %>
+        <p class="cart-text">
 
-    <div class="row mb-4">
-      <div class="col-md-4">
-        <h5 class="card-subtitle mb-2">
-          <%= t '.start_date' %>
-        </h5>
-        <p class="card-text">
-          <%= l membership.start_date, format: :default %>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <h5 class="card-subtitle mb-2">
+                        <%= membership_attribute_to_string.('start_date') %>
+                    </h5>
+                    <p class="card-text">
+                        <%= l membership.start_date, format: :default %>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="card-subtitle mb-2">
+                        <%= membership_attribute_to_string.('end_date') %>
+                    </h5>
+                    <p class="card-text">
+                        <%= l membership.end_date, format: :default %> (<%= num_to_human_days membership.num_of_days_til_renewal %>)
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="card-subtitle mb-2">
+                        <%= membership_attribute_to_string.('status') %>
+                    </h5>
+                    <p class="card-text">
+                        <%= membership.humanize_status %>
+                    </p>
+                </div>
+            </div>
         </p>
-      </div>
-      <div class="col-md-4">
-        <h5 class="card-subtitle mb-2">
-          <%= t '.end_date' %>
-        </h5>
-        <p class="card-text">
-          <%= l membership.end_date, format: :default %> (<%= num_to_human_days membership.num_of_days_til_renewal %>)
-        </p>
-      </div>
-      <div class="col-md-4">
-        <h5 class="card-subtitle mb-2">
-          <%= t '.status' %>
-        </h5>
-        <p class="card-text">
-          <%= membership.status.humanize %>
-        </p>
-      </div>
-    </div>
-  </p>
 
-<% else %>
-  <%= t '.to_be_inserted' %>
-<% end %>
-
+    <% else %>
+        <%= t 'empty' %>
+    <% end %>
 </div>
 
 <!-- Subscriptions -->
 <hr/>
 
 <div>
-  <h3 class="mb-3"><%= t '.subs' %></h3>
-  <% if user.subscriptions.length > 0 %>
-    <%= render 'subscriptions/subscriptions_table',
-               subscriptions: user.subscriptions,
-               actv: false
-    %>
+    <h3 class="mb-3"><%= t '.subs' %></h3>
+    <% if user.subscriptions.length > 0 %>
+        <%= render 'subscriptions/subscriptions_table',
+                   subscriptions: user.subscriptions,
+                   actv: false
+        %>
 
-  <% else %>
-    <%= t '.no_subs' %>
-  <% end %>
+    <% else %>
+        <%= t '.no_subs' %>
+    <% end %>
 </div>
-
-
-

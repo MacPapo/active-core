@@ -57,7 +57,7 @@
       <%= User.human_attribute_name('phone') %>
     </h5>
     <p class="card-text">
-      <%= staff.phone.blank? ? 'Da inserire!' : staff.phone %>
+      <%= phone_to_string staff.phone %>
     </p>
   </div>
   <div class="col">
@@ -79,7 +79,7 @@
       <% start_date = staff.user.med_cert_issue_date %>
 
       <% if start_date.nil? %>
-        <span class="badge text-bg-warning"><%= t '.to_be_inserted' %></span>
+        <span class="badge text-bg-warning"><%= t 'empty' %></span>
       <% else %>
         <%= l start_date %> (<%= distance_of_time_in_words_to_now staff.user.med_cert_exp_date %>)
       <% end %>

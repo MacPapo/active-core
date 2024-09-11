@@ -12,7 +12,6 @@ class User < ApplicationRecord
   validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }
   validate :med_cert_issue_date_cannot_be_in_future, if: -> { med_cert_issue_date.present? }
 
-  # FIX ME
   before_save :normalize_phone
 
   after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor?
@@ -25,11 +24,6 @@ class User < ApplicationRecord
   has_many   :subscriptions, dependent: :destroy
   has_many   :waitlists, dependent: :destroy
   has_many   :receipts, dependent: :destroy
-
-  attribute :cf, :string
-  attribute :name, :string
-  attribute :surname, :string
-  attribute :affiliated, :boolean, default: false
 
   scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
   scope :by_surname, ->(surname) { where('surname LIKE ?', "%#{surname}%") if surname.present? }
@@ -103,7 +97,7 @@ class User < ApplicationRecord
   private
 
   def normalize_phone
-    self.phone = Phonelib.parse(phone).full_e164.presence
+    self.phone = Phonelib.parse(phone).national
   end
 
   def med_cert_issue_date_cannot_be_in_future
