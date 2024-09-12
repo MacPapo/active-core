@@ -4,7 +4,7 @@
 class GenerateReceiptJob < ApplicationJob
   queue_as :real_time
 
-  # User op as :sym to handle event and payment to retrieve Receipt or create it
+  # User op as :sym to handle event and payment to print or email
   def perform(*args)
     op, payment = args
 
@@ -27,7 +27,7 @@ class GenerateReceiptJob < ApplicationJob
   end
 
   def generate_receipt(payment)
-    sub, mem = Receipt.generate_number(payment.payable_type)
+    sub, mem = Receipt.generate_number(payment.date, payment.payable_type)
 
     Receipt.find_or_create_by(payment:) do |r|
       r.sub_num = sub

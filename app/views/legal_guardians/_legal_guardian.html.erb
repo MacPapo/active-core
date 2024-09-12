@@ -1,51 +1,52 @@
+<% lg_attribute_to_string = ->(attr) { attribute_to_string(legal_guardian, attr) } %>
 <div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= t '.full_name' %>
-    </h5>
-    <div class="card-text">
-      <%= legal_guardian.full_name %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= t '.full_name' %>
+        </h5>
+        <div class="card-text">
+            <%= legal_guardian.full_name %>
+        </div>
     </div>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= LegalGuardian.human_attribute_name('birth_day') %>
-    </h5>
-    <div class="card-text">
-      <%= l legal_guardian.birth_day %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= lg_attribute_to_string.('birth_day') %>
+        </h5>
+        <div class="card-text">
+            <%= l legal_guardian.birth_day %>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= LegalGuardian.human_attribute_name('email') %>
-    </h5>
-    <div class="card-text">
-      <%= legal_guardian.email %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= lg_attribute_to_string.('email') %>
+        </h5>
+        <div class="card-text">
+            <%= legal_guardian.email %>
+        </div>
     </div>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= LegalGuardian.human_attribute_name('phone') %>
-    </h5>
-    <div class="card-text">
-      <%= phone_to_string legal_guardian.phone %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= lg_attribute_to_string.('phone') %>
+        </h5>
+        <div class="card-text">
+            <%= phone_to_string legal_guardian.phone %>
+        </div>
     </div>
-  </div>
 </div>
 
 <hr>
 
 <div>
-  <h3 class="card-subtitle mb-3">
-    <%= t '.users' %>
-  </h3>
-  <p class="card-text">
-    <!-- TODO -->
-    <% legal_guardian.users.each do |user| %>
-    <%= user.full_name %>
-    <% end %>
-  </p>
+    <h3 class="card-subtitle mb-3">
+        <%= lg_attribute_to_string.('users') %>
+    </h3>
+    <p class="card-text">
+        <!-- TODO -->
+        <% legal_guardian.users.each do |user| %>
+            <%= user.full_name %>
+        <% end %>
+    </p>
 </div>

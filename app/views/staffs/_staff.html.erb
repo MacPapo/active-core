@@ -1,116 +1,118 @@
 <h3 class="card-subtitle mb-4">
-  <%= t '.personal_data' %>
+    <%= t '.personal_data' %>
 </h3>
 
+<% staff_attribute_to_string = ->(attr) { attribute_to_string(staff, attr) } %>
+<% user_attribute_to_string = ->(attr) { attribute_to_string(staff.user, attr) } %>
 <!-- Personal Data -->
 <div class="row mb-3">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= Staff.human_attribute_name('nickname') %>
-    </h5>
-    <p class="card-text">
-      <%= staff.nickname %>
-    </p>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= Staff.human_attribute_name('user') %>
-    </h5>
-    <p class="card-text">
-      <%= staff.full_name %>
-    </p>
-  </div>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= staff_attribute_to_string.('nickname') %>
+        </h5>
+        <p class="card-text">
+            <%= staff.nickname %>
+        </p>
+    </div>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= staff_attribute_to_string.('user') %>
+        </h5>
+        <p class="card-text">
+            <%= staff.full_name %>
+        </p>
+    </div>
 </div>
 
 <div class="row mb-3">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= User.human_attribute_name('cf') %>
-    </h5>
-    <p class="card-text">
-      <%= staff.cf %>
-    </p>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= User.human_attribute_name('birth_day') %>
-    </h5>
-    <% if staff.birth_day %>
-      <p class="card-text">
-        <%= l staff.birth_day %> (<%= num_to_human_years staff.age %>)
-      </p>
-    <% end %>
-  </div>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= user_attribute_to_string.('cf') %>
+        </h5>
+        <p class="card-text">
+            <%= staff.cf %>
+        </p>
+    </div>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= user_attribute_to_string.('birth_day') %>
+        </h5>
+        <% if staff.birth_day %>
+            <p class="card-text">
+                <%= l staff.birth_day %> (<%= num_to_human_years staff.age %>)
+            </p>
+        <% end %>
+    </div>
 </div>
 
 <div class="row mb-3">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= User.human_attribute_name('email') %>
-    </h5>
-    <p class="card-text">
-      <%= staff.email.blank? ? 'Da inserire!' : staff.email %>
-    </p>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= User.human_attribute_name('phone') %>
-    </h5>
-    <p class="card-text">
-      <%= phone_to_string staff.phone %>
-    </p>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= User.human_attribute_name('affiliated') %>
-    </h5>
-    <span class="badge text-bg-<%= staff.affiliated? ? 'success' : 'warning' %>"><%= t staff.affiliated? %></span>
-  </div>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= user_attribute_to_string.('email') %>
+        </h5>
+        <p class="card-text">
+            <%= staff.email %>
+        </p>
+    </div>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= user_attribute_to_string.('phone') %>
+        </h5>
+        <p class="card-text">
+            <%= phone_to_string staff.phone %>
+        </p>
+    </div>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= user_attribute_to_string.('affiliated') %>
+        </h5>
+        <span class="badge text-bg-<%= staff.affiliated? ? 'success' : 'warning' %>"><%= t staff.affiliated? %></span>
+    </div>
 </div>
 
 <% unless staff.volunteer? %>
-  <hr/>
-  <!-- Cert med -->
-  <div>
-    <h3 class="card-subtitle mb-3">
-      <%= t '.med_cert' %>
-    </h3>
-    <p class="cart-text">
-      <% start_date = staff.user.med_cert_issue_date %>
+    <hr/>
+    <!-- Cert med -->
+    <div>
+        <h3 class="card-subtitle mb-3">
+            <%= user_attribute_to_string.('med_cert_issue_date') %>
+        </h3>
+        <p class="cart-text">
+            <% start_date = staff.user.med_cert_issue_date %>
 
-      <% if start_date.nil? %>
-        <span class="badge text-bg-warning"><%= t 'empty' %></span>
-      <% else %>
-        <%= l start_date %> (<%= distance_of_time_in_words_to_now staff.user.med_cert_exp_date %>)
-      <% end %>
-    </p>
-  </div>
+            <% if start_date.nil? %>
+                <span class="badge text-bg-warning"><%= t 'empty' %></span>
+            <% else %>
+                <%= l start_date %> (<%= distance_of_time_in_words_to_now staff.user.med_cert_exp_date %>)
+            <% end %>
+        </p>
+    </div>
 <% end %>
 
 <% if current_staff.admin? %>
-<hr/>
-<!-- TODO -->
-<h3 class="card-subtitle mb-3">
-  <%= t '.trace' %>
-</h3>
-<div class="row mb-3">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= Staff.human_attribute_name('current_sign_in_at') %>
-    </h5>
-    <p class="card-text">
-      <%= staff.current_sign_in_at ? time_ago_in_words(staff.current_sign_in_at) : t('.never') %>
-    </p>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= Staff.human_attribute_name('last_sign_in_at') %>
-    </h5>
-    <% if staff.birth_day %>
-      <p class="card-text">
-        <%= staff.last_sign_in_at ? time_ago_in_words(staff.last_sign_in_at) : t('.never') %>
-      </p>
-    <% end %>
-  </div>
-</div>
+    <hr/>
+    <!-- TODO -->
+    <h3 class="card-subtitle mb-3">
+        <%= t '.trace' %>
+    </h3>
+    <div class="row mb-3">
+        <div class="col">
+            <h5 class="card-subtitle mb-2">
+                <%= staff_attribute_to_string.('current_sign_in_at') %>
+            </h5>
+            <p class="card-text">
+                <%= staff.current_sign_in_at ? time_ago_in_words(staff.current_sign_in_at) : t('.never') %>
+            </p>
+        </div>
+        <div class="col">
+            <h5 class="card-subtitle mb-2">
+                <%= staff_attribute_to_string.('last_sign_in_at') %>
+            </h5>
+            <% if staff.birth_day %>
+                <p class="card-text">
+                    <%= staff.last_sign_in_at ? time_ago_in_words(staff.last_sign_in_at) : t('.never') %>
+                </p>
+            <% end %>
+        </div>
+    </div>
 <% end %>

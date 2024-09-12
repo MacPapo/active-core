@@ -1,8 +1,7 @@
-<%= form_with(model: user) do |form| %>
+<%= form_with(model: user, data: { controller: 'agecheck' }) do |form| %>
     <% if user.errors.any? %>
         <div style="color: red">
             <h2><%= t('global.forms.messages.errors', count: user.errors.count) %></h2>
-
             <ul>
                 <% user.errors.each do |error| %>
                     <li><%= error.full_message %></li>
@@ -31,11 +30,16 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row form-group">
         <div class="col">
             <div class="mb-3">
                 <%= form.label :birth_day, class: 'form-label' %>
-                <%= form.date_field :birth_day, min: 90.year.ago, max: 2.year.ago, class: 'form-control' %>
+                <%= form.date_field :birth_day,
+                    min: 90.year.ago,
+                    max: 2.year.ago,
+                    class: 'form-control',
+                    'data-agecheck-target' => "birthDate",
+                    data: { action: "change->agecheck#checkAge" } %>
             </div>
         </div>
         <div class="col align-self-center">
@@ -68,7 +72,8 @@
         <%= form.date_field :med_cert_issue_date, max: Time.zone.today, class: 'form-control' %>
     </div>
 
-    <div class="mb-3">
+    <!-- Target del tutore legale -->
+    <div class="mb-3" data-agecheck-target="guardianSection" style="display: none;">
         <%= form.label :legal_guardian_id, class: 'form-label' %>
         <%= form.collection_select :legal_guardian_id, LegalGuardian.all, :id, :full_name, {}, { prompt: true, class: 'form-select' } %>
     </div>

@@ -2,11 +2,11 @@
 
 # Users Helper
 module UsersHelper
-  def attribute_to_string(model, atr)
-    return 'empty' if model.blank? || atr.blank?
+  def attribute_to_string(model, attr)
+    return 'empty' if model.blank? || attr.blank?
 
     model_class = model.class
-    model_class.human_attribute_name(atr)
+    model_class.human_attribute_name(attr)
   end
 
   def model_to_string(model, count = 1)

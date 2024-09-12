@@ -62,8 +62,8 @@ it:
         nickname: "Nickname"
         user: "Utente"
         role: "Ruolo"
-        current_sign_in_at: "Accesso attuale effettuato"
-        last_sign_in_at: "Ultimo accesso effettuato"
+        current_sign_in_at: "Accesso attuale"
+        last_sign_in_at: "Ultimo accesso"
       staff/role:
         admin: "Amministratore"
         contributor: "Collaboratore"

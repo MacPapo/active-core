@@ -1,50 +1,51 @@
+<% mem_attribute_to_string = ->(attr) { attribute_to_string(membership, attr) } %>
 <div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= Membership.human_attribute_name('start_date') %>
-    </h5>
-    <div class="card-text">
-      <%= l membership.start_date %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= mem_attribute_to_string.('start_date') %>
+        </h5>
+        <div class="card-text">
+            <%= l membership.start_date %>
+        </div>
     </div>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= Membership.human_attribute_name('end_date') %>
-    </h5>
-    <div class="card-text">
-      <%= l membership.end_date %> (<%= num_to_human_days membership.num_of_days_til_renewal %>)
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= mem_attribute_to_string.('end_date') %>
+        </h5>
+        <div class="card-text">
+            <%= l membership.end_date %> (<%= num_to_human_days membership.num_of_days_til_renewal %>)
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= Membership.human_attribute_name('user') %>
-    </h5>
-    <div class="card-text">
-      <%= membership.user.full_name %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= mem_attribute_to_string.('user') %>
+        </h5>
+        <div class="card-text">
+            <%= membership.user.full_name %>
+        </div>
     </div>
-  </div>
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= Membership.human_attribute_name('status') %>
-    </h5>
-    <div class="card-text">
-      <%= membership.humanize_status %>
+    <div class="col">
+        <h5 class="card-subtitle mb-2">
+            <%= mem_attribute_to_string.('status') %>
+        </h5>
+        <div class="card-text">
+            <%= membership.humanize_status %>
+        </div>
     </div>
-  </div>
 </div>
 
 <% if current_staff.admin? %>
-<div class="row mb-4">
-  <div class="col">
-    <h5 class="card-subtitle mb-2">
-      <%= Membership.human_attribute_name('staff') %>
-    </h5>
-    <div class="card-text">
-      <%= membership.staff.full_name %>
+    <div class="row mb-4">
+        <div class="col">
+            <h5 class="card-subtitle mb-2">
+                <%= mem_attribute_to_string.('staff') %>
+            </h5>
+            <div class="card-text">
+                <%= membership.staff.full_name %>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 <% end %>

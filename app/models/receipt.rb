@@ -21,8 +21,9 @@ class Receipt < ApplicationRecord
     COMPANY
   end
 
-  def self.generate_number(type)
-    last = Receipt.last
+  def self.generate_number(date, type)
+    end_year = Date.new((date + 1.year).year, 9, 1)
+    last = Receipt.where(date: date.beginning_of_year..end_year).last
 
     case type
     when 'Membership'
@@ -30,7 +31,7 @@ class Receipt < ApplicationRecord
     when 'Subscription'
       [last.blank? ? 1 : last.sub_num + 1, last.blank? ? 0 : last.mem_num]
     else
-      p 'else'
+      p 'GEN NUM ELSE'
     end
   end
 

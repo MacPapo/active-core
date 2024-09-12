@@ -1,111 +1,114 @@
+<% activity_attribute_to_string = ->(attr) { attribute_to_string(activity, attr) } %>
 <div class="row mb-6">
 
-  <!-- Activity name -->
-  <div class="col-md-6">
-    <h5 class="card-subtitle mb-2">
-      <%= Activity.human_attribute_name('name') %>
-    </h5>
-    <p class="card-text">
-      <%= activity.name %>
-    </p>
-  </div>
+    <!-- Activity name -->
+    <div class="col-md-6">
+        <h5 class="card-subtitle mb-2">
+            <%= activity_attribute_to_string.('name') %>
+        </h5>
+        <p class="card-text">
+            <%= activity.name %>
+        </p>
+    </div>
 
-  <!-- Number of people -->
-  <div class="col-md-6">
-    <h5 class="card-subtitle mb-2">
-      <%= Activity.human_attribute_name('num_participants') %>
-    </h5>
+    <!-- Number of people -->
+    <div class="col-md-6">
+        <h5 class="card-subtitle mb-2">
+            <%= activity_attribute_to_string.('num_participants') %>
+        </h5>
 
-    <p class="card-text">
-      <% partecipants = activity.subscriptions %>
-      <% npartecipants = activity.num_participants %>
+        <p class="card-text">
+            <% partecipants = activity.subscriptions %>
+            <% npartecipants = activity.num_participants %>
 
-      <% if partecipants %>
-        <% plen = partecipants.length %>
-        <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
-        <% end %>
-    </p>
-  </div>
+            <% if partecipants %>
+                <% plen = partecipants.length %>
+                <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
+            <% end %>
+        </p>
+    </div>
 </div>
 
 <hr/>
 
 <!-- Activity Plans -->
 <div class="row mb-6">
-  <% plans = activity.activity_plans %>
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0">
-      <%= model_to_string(ActivityPlan, plans.length) %>
-    </h4>
+    <% plans = activity.activity_plans %>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">
+            <%= model_to_string(ActivityPlan, plans.length) %>
+        </h4>
 
-    <%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-success' do %>
-      <i class="bi bi-activity"></i> <%= t '.add_plan' %>
-    <% end %>
-  </div>
-  <% if plans && plans.length > 0 %>
-    <div class="container">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>
-              <%= ActivityPlan.human_attribute_name('plan') %>
-            </th>
-            <th>
-              <%= ActivityPlan.human_attribute_name('cost') %>
-            </th>
-            <th>
-              <%= ActivityPlan.human_attribute_name('affiliated_cost') %>
-            </th>
-            <% if current_staff.admin? %>
-              <th>
-                <%= t 'global.table.action' %>
-              </th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% plans.each do |plan| %>
-            <tr>
-
-              <!-- Plan -->
-              <td>
-                <%= plan.humanize_plan %>
-              </td>
-
-              <!-- Cost -->
-              <td>
-                <%= number_to_currency plan.cost %>
-              </td>
-
-              <!-- Affiliated cost -->
-              <td>
-                <% cst = plan.affiliated_cost %>
-                <% if cst %>
-                  <%= number_to_currency cst %>
-                <% end %>
-              </td>
-
-              <% if current_staff.admin? %>
-                <!-- Action buttons -->
-              <td>
-
-                <%= link_to edit_activity_plan_path(plan, activity_id: activity.id), class: 'btn btn-warning' do %>
-                  <i class="bi bi-pencil-fill"></i>
-                <% end %>
-
-                <%= button_to activity_plan_path(plan),
-                              class: 'btn btn-danger',
-                              method: :delete,
-                              data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" },
-                              form: {style: 'display:inline-block;'} do %>
-                  <i class="bi bi-trash3-fill"></i>
-                <% end %>
-              </td>
-            <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+        <%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-success' do %>
+            <i class="bi bi-activity"></i> <%= t '.add_plan' %>
+        <% end %>
     </div>
-  <% end %>
+    <% if plans && plans.length > 0 %>
+        <% p = plans.first %>
+        <% plan_attribute_to_string = ->(attr) { attribute_to_string(p, attr)} %>
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <%= plan_attribute_to_string.('plan') %>
+                        </th>
+                        <th>
+                            <%= plan_attribute_to_string.('cost') %>
+                        </th>
+                        <th>
+                            <%= plan_attribute_to_string.('affiliated_cost') %>
+                        </th>
+                        <% if current_staff.admin? %>
+                            <th>
+                                <%= t 'global.table.action' %>
+                            </th>
+                        <% end %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% plans.each do |plan| %>
+                        <tr>
+
+                            <!-- Plan -->
+                            <td>
+                                <%= plan.humanize_plan %>
+                            </td>
+
+                            <!-- Cost -->
+                            <td>
+                                <%= number_to_currency plan.cost %>
+                            </td>
+
+                            <!-- Affiliated cost -->
+                            <td>
+                                <% cst = plan.affiliated_cost %>
+                                <% if cst %>
+                                    <%= number_to_currency cst %>
+                                <% end %>
+                            </td>
+
+                            <% if current_staff.admin? %>
+                                <!-- Action buttons -->
+                                <td>
+
+                                    <%= link_to edit_activity_plan_path(plan, activity_id: activity.id), class: 'btn btn-warning' do %>
+                                        <i class="bi bi-pencil-fill"></i>
+                                    <% end %>
+
+                                    <%= button_to activity_plan_path(plan),
+                                                  class: 'btn btn-danger',
+                                                  method: :delete,
+                                                  data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" },
+                                                  form: {style: 'display:inline-block;'} do %>
+                                        <i class="bi bi-trash3-fill"></i>
+                                    <% end %>
+                                </td>
+                            <% end %>
+                        </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    <% end %>
 </div>

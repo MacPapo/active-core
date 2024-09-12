@@ -1,7 +1,8 @@
+<% sub_attribute_to_string = ->(attr) { attribute_to_string(subscription, attr) } %>
 <div class="row mb-4">
     <div class="col">
         <h5 class="card-subtitle mb-2">
-            <%= t  %>
+            <%= sub_attribute_to_string.('start_date') %>
         </h5>
         <div class="card-text">
             <%= l subscription.start_date %>
@@ -28,7 +29,7 @@
     </div>
     <div class="col">
         <h5 class="card-subtitle mb-2">
-            Attività:
+            <%= sub_attribute_to_string.('activity') %>
         </h5>
         <div class="card-text">
             <%= subscription.activity.name %>
@@ -39,7 +40,7 @@
 <div class="row mb-4">
     <div class="col">
         <h5 class="card-subtitle mb-2">
-            Piano per questa attività:
+            <%= sub_attribute_to_string.('activity_plan') %>
         </h5>
         <div class="card-text">
             <%= subscription.activity_plan.humanize_plan %>
@@ -51,7 +52,7 @@
 <div class="row mb-4">
     <div class="col">
         <h5 class="card-subtitle mb-2">
-            OPEN:
+            <%= sub_attribute_to_string.('open') %>
         </h5>
         <div class="card-text">
             <%= t is_open %>
@@ -62,7 +63,7 @@
         <% open_sub = subscription.open_subscription %>
         <div class="col">
             <h5 class="card-subtitle mb-2">
-                Attività OPEN:
+                <%= sub_attribute_to_string.('open_subscription') %>
             </h5>
             <div class="card-text">
                 <%= open_sub.activity.name %> (<%= open_sub.activity_plan.humanize_plan %>)
@@ -74,7 +75,7 @@
 <div class="row mb-4">
     <div class="col">
         <h5 class="card-subtitle mb-2">
-            STATUS: <%= subscription.humanize_status %>
+           <%= sub_attribute_to_string.('status') %>: <%= subscription.humanize_status %>
         </h5>
     </div>
 </div>
