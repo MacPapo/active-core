@@ -9,8 +9,17 @@ Rails.application.routes.draw do
     mount MissionControl::Jobs::Engine, at: '/jobs'
   end
 
-  resources :users
-  resources :legal_guardians
+  resources :users do
+    collection do
+      get :activity_search
+    end
+  end
+
+  resources :legal_guardians do
+    collection do
+      get 'find_by_email'
+    end
+  end
   resources :payments
   resources :staffs
   resources :activities

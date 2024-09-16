@@ -56,7 +56,7 @@
         <div class="col">
             <div class="mb-3">
                 <%= form.label :email, class: 'form-label' %>
-                <%= form.text_field :email, class: 'form-control' %>
+                <%= form.email_field :email, class: 'form-control' %>
             </div>
         </div>
         <div class="col">
@@ -73,9 +73,52 @@
     </div>
 
     <!-- Target del tutore legale -->
-    <div class="mb-3" data-agecheck-target="guardianSection" style="display: none;">
-        <%= form.label :legal_guardian_id, class: 'form-label' %>
-        <%= form.collection_select :legal_guardian_id, LegalGuardian.all, :id, :full_name, {}, { prompt: true, class: 'form-select' } %>
+    <div id="legal-guardian-fields" class="mb-3" data-agecheck-target="guardianSection" style="display: none;">
+        <h3>Dati del tutore legale</h3>
+        <%= form.fields_for :legal_guardian, include_id: false do |guardian_form| %>
+            <div data-controller="legalguardian">
+                <div class="mb-3">
+                    <%= guardian_form.label :email, 'Email tutore' %>
+                    <%= guardian_form.email_field :email,
+                        class: 'form-control',
+                        value: @legal_guardian&.email,
+                        'data-legalguardian-target' => "email",
+                        data: { action: "change->legalguardian#findGuardian" } %>
+                </div>
+                <div class="mb-3">
+                    <%= guardian_form.label :name, 'Nome tutore' %>
+                    <%= guardian_form.text_field :name,
+                        class: 'form-control',
+                        value: @legal_guardian&.name,
+                        'data-legalguardian-target' => "name"
+                    %>
+                </div>
+                <div class="mb-3">
+                    <%= guardian_form.label :surname, 'Cognome tutore' %>
+                    <%= guardian_form.text_field :surname,
+                        class: 'form-control',
+                        value: @legal_guardian&.surname,
+                        'data-legalguardian-target' => "surname"
+                    %>
+                </div>
+                <div class="mb-3">
+                    <%= guardian_form.label :phone, 'Telefono tutore' %>
+                    <%= guardian_form.telephone_field :phone,
+                        class: 'form-control',
+                        value: @legal_guardian&.phone,
+                        'data-legalguardian-target' => "phone"
+                    %>
+                </div>
+                <div class="mb-3">
+                    <%= guardian_form.label :birth_day, 'Data di nascita tutore' %>
+                    <%= guardian_form.date_field :birth_day,
+                        class: 'form-control',
+                        value: @legal_guardian&.birth_day,
+                        'data-legalguardian-target' => "birthDay"
+                    %>
+                </div>
+            </div>
+        <% end %>
     </div>
 
     <div class="actions">

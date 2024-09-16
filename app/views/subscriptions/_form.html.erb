@@ -1,4 +1,4 @@
-<%= form_with(model: subscription) do |form| %>
+<%= form_with(model: subscription, data: { controller: 'activity-search-user' }) do |form| %>
     <% if subscription.errors.any? %>
         <div style="color: red">
             <h2><%= t('global.forms.messages.errors', count: subscription.errors.count) %></h2>
@@ -25,20 +25,30 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <%= form.label :user_id, class: 'form-label' %>
-                <%= form.collection_select :user_id, @users, :id, :full_name, {}, { class: 'form-select' } %>
-            </div>
-        </div>
-        <div class="col">
-            <div class="mb-3">
-                <%= form.label :activity_plan_id, class: 'form-label' %>
-                <%= form.collection_select :activity_plan_id, @plans, :id, :humanize_plan, {}, { class: 'form-select' } %>
-            </div>
+    <div class="col">
+        <div class="mb-3">
+            <%= form.label :activity_plan_id, class: 'form-label' %>
+            <%= form.collection_select :activity_plan_id, @plans, :id, :humanize_plan, {}, { class: 'form-select' } %>
         </div>
     </div>
+
+    <div class="container mt-4">
+        <h1>Cerca Utente</h1>
+
+        <%= text_field_tag :q, nil, data: { 'activity-search-user-target' => "input",
+            'action' => "input->activity-search-user#search change->activity-search-user#selectUser" },
+                           class: 'form-control',
+                           list: "datalistOptions",
+                           placeholder: 'Inserisci nome utente...',
+                           autocomplete: "off"
+        %>
+
+        <%= form.hidden_field :user_id, data: { 'activity-search-user-target' => "hiddenUserId" } %>
+
+        <datalist id="datalistOptions" data-activity-search-user-target="results">
+        </datalist>
+    </div>
+
 
     <div class="form-check mb-3">
         <%= label_tag do %>

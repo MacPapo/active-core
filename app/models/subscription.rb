@@ -4,8 +4,8 @@
 class Subscription < ApplicationRecord
   validates :start_date, :activity_id, :activity_plan_id, :user_id, :staff_id, presence: true
   validates :end_date, comparison: { greater_than: :start_date }, if: -> { start_date.present? && end_date.present? }
-  validate :active_membership?, if: -> { activity.present? }
-  validate :date_valid_for_membership?, if: -> { user.membership.active? }
+  validate :active_membership?, if: -> { user.present? && activity.present? }
+  validate :date_valid_for_membership?, if: -> { user&.membership&.active? }
 
   delegate :cost, :affiliated_cost, prefix: 'plan', to: :activity_plan
   delegate :active_membership?, to: :user

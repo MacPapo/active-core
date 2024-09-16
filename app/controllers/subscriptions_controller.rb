@@ -5,7 +5,6 @@ class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: %i[show edit update renew renew_update destroy]
   before_action :set_activity, only: %i[new create update renew_update]
   before_action :set_plans, only: %i[new create update renew_update]
-  before_action :set_users, only: %i[new edit create update]
   before_action :set_weight_room_activity, only: %i[create renew_update update]
 
   after_action :update_open, only: %i[update renew_update]
@@ -37,7 +36,6 @@ class SubscriptionsController < ApplicationController
 
   # POST /subscriptions
   def create
-    # TODO fix delegation controller if no users available
     activity_id = subscription_params[:activity_id]
     begin
       @subscription = Subscription.build(subscription_params)
@@ -103,11 +101,6 @@ class SubscriptionsController < ApplicationController
 
   def set_plans(activity = @activity)
     @plans = activity.activity_plans
-  end
-
-  def set_users
-    @users ||= User.joins(:membership).where('membership.status' => :active)
-                   .where.not(id: Subscription.where(activity: @activity).select(:user_id)).distinct.load_async
   end
 
   def update_open

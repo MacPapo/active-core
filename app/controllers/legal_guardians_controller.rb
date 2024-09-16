@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Legal Guardian Controller
 class LegalGuardiansController < ApplicationController
   before_action :set_legal_guardian, only: %i[show edit update destroy]
 
@@ -13,6 +16,17 @@ class LegalGuardiansController < ApplicationController
 
   # GET /legal_guardians/1 or /legal_guardians/1.json
   def show; end
+
+  def find_by_email
+    email = params[:email]
+    legal_guardian = LegalGuardian.find_by(email:)
+
+    if legal_guardian
+      render json: { found: true, legal_guardian: }
+    else
+      render json: { found: false }
+    end
+  end
 
   # GET /legal_guardians/new
   def new

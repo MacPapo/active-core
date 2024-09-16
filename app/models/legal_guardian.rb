@@ -2,10 +2,7 @@
 
 # LegalGuardian Model
 class LegalGuardian < ApplicationRecord
-  # TODO rework
   before_save :normalize_phone
-
-  # after_save :delete_all_lg_without_users
 
   has_many :users, dependent: :nullify
 
@@ -45,7 +42,7 @@ class LegalGuardian < ApplicationRecord
   end
 
   def normalize_phone
-    self.phone = Phonelib.parse(phone).full_e164.presence
+    self.phone = Phonelib.parse(phone).national
   end
 
   def delete_all_lg_without_users

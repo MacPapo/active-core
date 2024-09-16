@@ -24,6 +24,8 @@
             <% end %>
 
             <% flash.each do |type, msg| %>
+                <% next if type.to_s == "timedout" %>
+
                 <div class="alert alert-<%= type == 'alert' ? 'warning' : 'success' %> alert-dismissible fade show" role="alert">
                     <%= msg %>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -32,8 +34,8 @@
 
             <!-- Contents -->
             <%= yield %>
-                </div>
 
+            </div>
         </div>
     </body>
 </html>

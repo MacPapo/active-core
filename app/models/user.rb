@@ -5,7 +5,6 @@ class User < ApplicationRecord
   validates :name, :surname, presence: true
   validates :affiliated, inclusion: { in: [true, false] }
 
-  validates :legal_guardian, presence: true, if: :minor?
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   normalizes :email, with: -> { _1.strip.downcase }
 

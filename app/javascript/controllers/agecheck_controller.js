@@ -5,13 +5,12 @@ export default class extends Controller {
     static targets = ["birthDate", "guardianSection"]
 
     connect() {
-        this.checkAge() // Chiama checkAge alla connessione iniziale
+        this.checkAge()
     }
 
     checkAge() {
         const birthDateValue = this.birthDateTarget.value;
 
-        // Se il campo non ha una data, nascondi la sezione del tutore legale
         if (!birthDateValue) {
             this.hideGuardianSection();
             return;
@@ -31,7 +30,6 @@ export default class extends Controller {
         let age = today.getFullYear() - birthDate.getFullYear();
         const monthDifference = today.getMonth() - birthDate.getMonth();
 
-        // Calcolo per verificare se l'utente non ha ancora compiuto 18 anni
         if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
