@@ -23,6 +23,16 @@ class ActivitiesController < ApplicationController
     )
   end
 
+  # GET /activities/:id/plans
+  def plans
+    activity = Activity.find(params[:id])
+    plans = activity.activity_plans
+
+    render json: { plans: plans.map { |plan| { id: plan.id, name: plan.humanize_plan } } }
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Attività non trovata' }, status: :not_found
+  end
+
   # GET /activities/new
   def new
     @activity = Activity.new

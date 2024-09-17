@@ -25,30 +25,47 @@
         </div>
     </div>
 
-    <div class="col">
-        <div class="mb-3">
-            <%= form.label :activity_plan_id, class: 'form-label' %>
-            <%= form.collection_select :activity_plan_id, @plans, :id, :humanize_plan, {}, { class: 'form-select' } %>
+    <% if @user %>
+        <div class="row mb-3">
+            <div class="col">
+                <%= form.label :activity_id, 'Seleziona Attività', class: 'form-label' %>
+                <%= form.collection_select :activity_id, @activities, :id, :name,
+                                                                                                                      { prompt: "#{t('.sel_activity')}" },
+                 { class: 'form-select', data: { action: "change->activity-search-user#loadPlans" } }
+                %>
+            </div>
+
+            <div class="col">
+                <%= form.label :activity_plan_id, 'Seleziona Piano', class: 'form-label' %>
+                <%= form.collection_select :activity_plan_id, @plans || [], :id, :humanize_plan, {}, { class: 'form-select', 'data-activity-search-user-target' => "plans" } %>
+            </div>
         </div>
-    </div>
 
-    <div class="container mt-4">
-        <h1>Cerca Utente</h1>
+        <%= form.hidden_field :user_id, value: @user.id %>
+        <%= hidden_field_tag :direction, 0 %>
+    <% else %>
 
-        <%= text_field_tag :q, nil, data: { 'activity-search-user-target' => "input",
-            'action' => "input->activity-search-user#search change->activity-search-user#selectUser" },
-                           class: 'form-control',
-                           list: "datalistOptions",
-                           placeholder: 'Inserisci nome utente...',
-                           autocomplete: "off"
-        %>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <%= form.label :user_id, class: 'form-label' %>
+                    <%= text_field_tag :q, nil, data: { 'activity-search-user-target' => "input", 'action' => "input->activity-search-user#search change->activity-search-user#selectUser" },
+                                       class: 'form-control', list: "datalistOptions", autocomplete: "off", placeholder: t('.sel_user') %>
+                    <datalist id="datalistOptions" data-activity-search-user-target="results"></datalist>
+                </div>
+            </div>
 
+            <div class="col">
+                <div class="mb-3">
+                    <%= form.label :activity_plan_id, class: 'form-label' %>
+                    <%= form.collection_select :activity_plan_id, @plans, :id, :humanize_plan, {}, { class: 'form-select' } %>
+                </div>
+            </div>
+        </div>
         <%= form.hidden_field :user_id, data: { 'activity-search-user-target' => "hiddenUserId" } %>
-
-        <datalist id="datalistOptions" data-activity-search-user-target="results">
-        </datalist>
-    </div>
-
+        <%= form.hidden_field :activity_id, value: @activity.id %>
+        <%= hidden_field_tag :direction, 1 %>
+    <% end %>
 
     <div class="form-check mb-3">
         <%= label_tag do %>
@@ -57,7 +74,6 @@
         <% end %>
     </div>
 
-    <%= form.hidden_field :activity_id, value: @activity.id %>
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 
     <div class="actions">

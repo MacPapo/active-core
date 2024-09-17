@@ -25,7 +25,6 @@ class Payment < ApplicationRecord
     by_type(type).by_method(method).order_by_date(date).order_by_updated_at(direction)
   end
 
-  # TODO watch this
   def self.daily_cash(arg)
     return nil if arg.blank?
 
@@ -33,7 +32,7 @@ class Payment < ApplicationRecord
     select_range = ->(y) { by_time_interval(mid + y.first, mid + y.last) }
 
     select_range.call(
-      arg == :morning ? [8.hours, 12.hours] : [15.hours, 20.hours]
+      arg == :morning ? [7.hours, 13.hours] : [15.hours, 21.hours]
     )
   end
 

@@ -22,11 +22,16 @@ Rails.application.routes.draw do
   end
   resources :payments
   resources :staffs
-  resources :activities
+
+  resources :activities do
+    get 'plans', on: :member
+  end
+
   resources :activity_plans
   resources :waitlists
   get 'receipt/show'
-  resources :daily_cash, only: [:index]
+
+  resources :daily_cash
 
   resources :memberships do
     member do

@@ -3,8 +3,8 @@
 # Subscription Controller
 class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: %i[show edit update renew renew_update destroy]
-  before_action :set_activity, only: %i[new create update renew_update]
-  before_action :set_plans, only: %i[new create update renew_update]
+  before_action :set_activity, only: %i[create update renew_update]
+  before_action :set_plans, only: %i[create update renew_update]
   before_action :set_weight_room_activity, only: %i[create renew_update update]
 
   after_action :update_open, only: %i[update renew_update]
@@ -26,6 +26,9 @@ class SubscriptionsController < ApplicationController
   def new
     @subscription = Subscription.build
     @subscription.start_date = Time.zone.today
+
+    set_user_and_activities(params[:user_id]) if params[:user_id]
+    set_activity_and_plan(params[:activity_id]) if params[:activity_id]
   end
 
   # GET /subscriptions/1/edit
@@ -37,16 +40,35 @@ class SubscriptionsController < ApplicationController
   # POST /subscriptions
   def create
     activity_id = subscription_params[:activity_id]
+    user_id = subscription_params[:user_id]
+    direction = params[:direction].to_i
     begin
-      @subscription = Subscription.build(subscription_params)
-      @subscription.save!
-      Subscription.transaction { create_open_subscription } if params[:open]
+      ActiveRecord::Base.transaction do
+        @subscription = Subscription.build(subscription_params)
 
-      redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription), notice: t('.create_succ')
+        check_if_user_already_subscribed! subscription_params[:user_id]
+
+        @subscription.save!
+        Subscription.transaction { create_open_subscription } if params[:open]
+
+        redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription), notice: t('.create_succ')
+      end
     rescue ActiveRecord::RecordInvalid => e
-      @subscription = e.record
-      render :new, activity_id:, status: :unprocessable_entity
+      set_activity_and_plan(activity_id)
+      flash.now[:alert] = e.message
+      render :new, status: :unprocessable_entity
+    rescue => e
+      set_user_and_activities(user_id) if direction.zero?
+      set_activity_and_plan(activity_id) if !direction.zero?
+      flash.now[:alert] = e
+      render :new, status: :unprocessable_entity
     end
+  end
+
+  def check_if_user_already_subscribed!(id)
+    x = @activity.subscriptions.where(user: id)
+
+    raise t('.create_duplicate_user') if x.present?
   end
 
   # GET /subscriptions/1/renew
@@ -90,6 +112,16 @@ class SubscriptionsController < ApplicationController
   end
 
   private
+
+  def set_user_and_activities(uid)
+    @user = User.find(uid)
+    @activities = Activity.all
+  end
+
+  def set_activity_and_plan(aid)
+    @activity = Activity.find(aid)
+    set_plans(@activity)
+  end
 
   def set_subscription
     @subscription = Subscription.find(params[:id])

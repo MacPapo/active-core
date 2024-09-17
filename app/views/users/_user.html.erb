@@ -61,7 +61,6 @@
 </div>
 
 <% if user.legal_guardian %>
-
     <!-- Legal Guardian -->
     <div>
         <% lg = user.legal_guardian %>
@@ -145,8 +144,19 @@
 <!-- Subscriptions -->
 <hr/>
 
+
 <div>
-    <h3 class="mb-3"><%= t '.subs' %></h3>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center">
+            <h3 class="mb-3"><%= t '.subs' %></h3>
+        </div>
+
+        <%= link_to new_subscription_path(user_id: user) ,class: 'btn btn-success'  do %>
+            <i class="bi bi-person-fill-add"></i> <%= t '.add_sub' %>
+        <% end %>
+    </div>
+
+
     <% if user.subscriptions.length > 0 %>
         <%= render 'subscriptions/subscriptions_table',
                    subscriptions: user.subscriptions,

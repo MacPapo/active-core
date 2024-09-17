@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# TODO translate notices
+# Activity Plans Controller
 class ActivityPlansController < ApplicationController
   before_action :set_activity_plan, only: %i[ edit update destroy ]
   before_action :set_activity, only: %i[ new ]
@@ -25,7 +25,7 @@ class ActivityPlansController < ApplicationController
     @activity_plan = ActivityPlan.new(activity_plan_params)
 
     if @activity_plan.save
-      redirect_to activity_path(@activity_plan.activity), notice: "Il piano è stato correttamente creato."
+      redirect_to activity_path(@activity_plan.activity), notice: t('.create_succ')
     else
       render :new, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class ActivityPlansController < ApplicationController
   # PATCH/PUT /activity_plans/1
   def update
     if @activity_plan.update(activity_plan_params)
-      redirect_to activity_path(@activity_plan.activity), notice: "Il piano è stato correttamente aggiornato."
+      redirect_to activity_path(@activity_plan.activity), notice: t('.update_succ')
     else
       render :edit, status: :unprocessable_entity
     end
@@ -45,7 +45,7 @@ class ActivityPlansController < ApplicationController
     actv = @activity_plan.activity
     @activity_plan.destroy!
 
-    redirect_to activity_path(actv), notice: "Activity_Plan was successfully destroyed."
+    redirect_to activity_path(actv), notice: t('.destroy_succ')
   end
 
   private

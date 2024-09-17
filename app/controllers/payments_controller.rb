@@ -79,7 +79,7 @@ class PaymentsController < ApplicationController
   def entity_has_payment?
     return false if @entity.blank?
 
-    Payment.exists?(payable: @entity, created_at: 1.minutes.ago..Time.zone.now)
+    Payment.exists?(payable: @entity, created_at: 1.minute.ago..Time.zone.now)
   end
 
   # Only allow a list of trusted parameters through.

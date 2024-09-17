@@ -14,7 +14,7 @@
             <span>(<%= number_to_currency @morning_cash %>)</span>
         </h3>
         <%= render 'partials/payments_table', payments: @morning %>
-        <%== pagy_bootstrap_nav(@morning_pagy) %>
+        <%== pagy_bootstrap_nav(@pagy_morning) %>
     </div>
 
     <!-- Afternoon -->
@@ -24,6 +24,6 @@
             <span>(<%= number_to_currency @afternoon_cash %>)</span>
         </h3>
         <%= render 'partials/payments_table', payments: @afternoon %>
-        <%== pagy_bootstrap_nav(@afternoon_pagy) %>
+        <%== pagy_bootstrap_nav(@pagy_afternoon) %>
     </div>
 </div>

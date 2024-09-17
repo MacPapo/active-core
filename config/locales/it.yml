@@ -3,18 +3,6 @@ it:
   true: "Si"
   false: "No"
 
-  activemodel:
-    enums:
-      activity_plan:
-        plan:
-          one_entrance: "1 Entrata"
-          half_month: "1/2 Mese"
-          one_month: "1 Mese"
-          three_months: "3 Mesi"
-          one_year: "1 Anno"
-          one_month_one_lesson: "1 Mese, 1 volta a settimana"
-          one_month_two_lessons: "1 Mese, 2 volte a settimana"
-
   activerecord:
     models:
       user:
@@ -219,6 +207,11 @@ it:
       personal_data: "Anagrafica"
       name_surname: "Nome e Cognome:"
       no_subs: "Nessuna iscrizione effettuata"
+      legal_guardian: "Dati Tutore Legale"
+      med_cert: "Dati Certificato Medico"
+      membership: "Dati Quota Associativa"
+      subs: "Attività Frequentate"
+      add_sub: "Aggiungi una Attività"
 
   activities:
     index:
@@ -241,6 +234,12 @@ it:
   activity_plans:
     new:
       title: "Inserimento di un Nuovo Piano per questa Attività"
+    create:
+      create_succ: "Il Piano è stato creato correttamente"
+    update:
+      update_succ: "Il Piano è stato aggiornato correttamente"
+    destroy:
+      destroy_succ: "Il Piano è stato eliminato correttamente"
 
   payments:
     index:
@@ -301,9 +300,13 @@ it:
       users: "È tutore di"
 
   subscriptions:
+    form:
+      sel_activity: "Seleziona una attività..."
+      sel_user: "Cerca un utente..."
     renew_update:
       renew_succ: "L'abbonamento è stato aggiornato correttamente, per attivarlo procedi al pagamento."
     create:
+      create_duplicate_user: "L'utente è già registrato a questo corso, controlla!"
       create_succ: "L'abbonamento è stato creato correttamente, per attivarlo procedi al pagamento."
     update:
       update_succ: "L'abbonamento è stato aggiornato correttamente."
