@@ -49,6 +49,7 @@ it:
         id: "ID"
         nickname: "Nickname"
         user: "Utente"
+        user_id: "Utente"
         role: "Ruolo"
         current_sign_in_at: "Accesso attuale"
         last_sign_in_at: "Ultimo accesso"
@@ -154,7 +155,7 @@ it:
       no_email: "Email Mancante"
       no_birth_date: "Data di Nascita Mancante"
       no_phone: "Cellulare Mancante"
-      no_med: "Certificato Medico Mancante"
+      no_med_cert_issue_date: "Certificato Medico Mancante"
       no_mem: "L'utente deve avere pagato la Quota Associativa per essere iscritto a questa Attività"
 
     forms:
@@ -279,6 +280,18 @@ it:
       staff: "Collaboratore che ha Registrato questa Transazione"
 
   staffs:
+    form:
+      sel_user: "Cerca l'utente per nome..."
+    create:
+      create_succ: "Il Collaboratore è stato creato correttamente"
+    update:
+      update_succ: "Il Collaboratore è stato aggiornato correttamente"
+    destroy:
+      destroy_succ: "Il Collaboratore è stato eliminato correttamente"
+    edit:
+      title: "Aggiornamento Collaboratore"
+    new:
+      title: "Inserimento di un Nuovo Collaboratore"
     show:
       title: "Dettagli Collaboratore"
     staff:
@@ -293,6 +306,14 @@ it:
         other: "%{count} collaboratori registrati"
 
   legal_guardians:
+    create:
+      create_succ: "Il Tutore Legale è stato creato correttamente"
+    update:
+      update_succ: "Il Tutore Legale è stato aggiornato correttamente"
+    destroy:
+      destroy_succ: "Il Tutore Legale è stato eliminato correttamente"
+    edit:
+      title: "Aggiornamento Tutore Legale"
     show:
       title: "Dettagli Tutore Legale"
     legal_guardian:

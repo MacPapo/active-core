@@ -44,4 +44,10 @@ class Staff < ApplicationRecord
   def humanize_role
     Staff.human_attribute_name("role.#{role}")
   end
+
+  def self.humanize_roles
+    roles.keys.map do |key|
+      [Staff.human_attribute_name("role.#{key}"), key]
+    end
+  end
 end

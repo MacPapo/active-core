@@ -10,7 +10,6 @@ class Activity < ApplicationRecord
   validates :num_participants, presence: true
   validates :num_participants, numericality: { greater_than: 0 }
 
-  # TODO rework activity and modify schema with index!!!
   scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
   scope :order_by_num_participants, ->(num) { order("num_participants #{num&.upcase}") }
   scope :order_by_updated_at, ->(direction) { order("updated_at #{direction.blank? ? 'DESC' : direction&.upcase}") }

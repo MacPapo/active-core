@@ -2,8 +2,8 @@
 
 # Activity Plans Controller
 class ActivityPlansController < ApplicationController
-  before_action :set_activity_plan, only: %i[ edit update destroy ]
-  before_action :set_activity, only: %i[ new ]
+  before_action :set_activity_plan, only: %i[edit update destroy]
+  before_action :set_activity, only: %i[new]
 
   # GET /activity_plans/new
   def new

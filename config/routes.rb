@@ -2,9 +2,10 @@ Rails.application.routes.draw do
   devise_for :staffs
 
   authenticated :staff, -> { _1.admin? } do
-    # TODO delete this
-    resources :membership_histories
-    resources :subscription_histories
+    resources :payments, only: [:index]
+    resources :subscriptions, only: [:index]
+    resources :memberships, only: [:index]
+    resources :staffs
 
     mount MissionControl::Jobs::Engine, at: '/jobs'
   end
@@ -20,8 +21,7 @@ Rails.application.routes.draw do
       get 'find_by_email'
     end
   end
-  resources :payments
-  resources :staffs
+  resources :payments, except: [:index]
 
   resources :activities do
     get 'plans', on: :member
@@ -33,14 +33,14 @@ Rails.application.routes.draw do
 
   resources :daily_cash
 
-  resources :memberships do
+  resources :memberships, except: [:index] do
     member do
       get   :renew
       patch :renew_update
     end
   end
 
-  resources :subscriptions do
+  resources :subscriptions, except: [:index] do
     member do
       get   :renew
       patch :renew_update

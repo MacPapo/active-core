@@ -1,10 +1,20 @@
-<h1>Editing legal guardian</h1>
+<div class="card">
+    <div class="card-header">
+        <h1><%= t '.title' %></h1>
+    </div>
 
-<%= render "form", legal_guardian: @legal_guardian %>
+    <div class="card-body">
+        <%= render "form", legal_guardian: @legal_guardian %>
+    </div>
 
-<br>
+    <div class="card-footer">
+        <!-- TODO align right -->
+        <%= link_to @legal_guardian, class: 'btn btn-primary' do %>
+            <i class="bi bi-eye-fill"></i>
+        <% end %>
 
-<div>
-  <%= link_to "Show this legal guardian", @legal_guardian %> |
-  <%= link_to "Back to legal guardians", legal_guardians_path %>
+        <%= link_to legal_guardians_path, class: 'btn btn-danger' do %>
+            <i class="bi bi-trash3-fill"></i>
+        <% end %>
+    </div>
 </div>

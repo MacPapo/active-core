@@ -63,28 +63,13 @@ class User < ApplicationRecord
     membership&.active?
   end
 
-  # TODO rework this
   def verify_compliance
-    compliance = { status: true, errors: [] }
+    (attribute_names - %w[id cf affiliated legal_guardian_id created_at updated_at]).map do |x|
+      val = send(x)
+      next if val.present?
 
-    if self.minor? && self.legal_guardian
-
-      if self.med_cert_issue_date.nil? || (self.cf.nil? || self.cf.empty?)
-        compliance[:status] = false
-
-        compliance[:errors] << I18n.t('global.errors.no_med') if self.med_cert_issue_date.nil?
-      end
-
-      return compliance
-    end
-
-    compliance[:status] = false unless self.email && self.phone && self.med_cert_issue_date
-
-    compliance[:errors] << I18n.t('global.errors.no_email') if self.email.nil? || self.email.empty?
-    compliance[:errors] << I18n.t('global.errors.no_phone') if self.phone.nil?
-    compliance[:errors] << I18n.t('global.errors.no_med') if self.med_cert_issue_date.nil?
-
-    compliance
+      I18n.t("global.errors.no_#{x}")
+    end.compact
   end
 
   def med_cert_valid?

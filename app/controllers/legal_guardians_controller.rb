@@ -42,7 +42,7 @@ class LegalGuardiansController < ApplicationController
 
     respond_to do |format|
       if @legal_guardian.save
-        format.html { redirect_to legal_guardian_url(@legal_guardian), notice: "Legal guardian was successfully created." }
+        format.html { redirect_to legal_guardian_url(@legal_guardian), notice: t('.create_succ') }
         format.json { render :show, status: :created, location: @legal_guardian }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -55,7 +55,7 @@ class LegalGuardiansController < ApplicationController
   def update
     respond_to do |format|
       if @legal_guardian.update(legal_guardian_params)
-        format.html { redirect_to legal_guardian_url(@legal_guardian), notice: "Legal guardian was successfully updated." }
+        format.html { redirect_to legal_guardian_url(@legal_guardian), notice: t('.update_succ') }
         format.json { render :show, status: :ok, location: @legal_guardian }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -69,19 +69,20 @@ class LegalGuardiansController < ApplicationController
     @legal_guardian.destroy!
 
     respond_to do |format|
-      format.html { redirect_to legal_guardians_url, notice: "Legal guardian was successfully destroyed." }
+      format.html { redirect_to legal_guardians_url, notice: t('.destroy_succ') }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_legal_guardian
-      @legal_guardian = LegalGuardian.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def legal_guardian_params
-      params.require(:legal_guardian).permit(:name, :surname, :email, :phone, :birth_day)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_legal_guardian
+    @legal_guardian = LegalGuardian.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def legal_guardian_params
+    params.require(:legal_guardian).permit(:name, :surname, :email, :phone, :birth_day)
+  end
 end

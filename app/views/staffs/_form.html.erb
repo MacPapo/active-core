@@ -1,4 +1,4 @@
-<%= form_with(model: staff) do |form| %>
+<%= form_with(model: staff, data: { controller: 'activity-search-user' }) do |form| %>
     <% if staff.errors.any? %>
         <div style="color: red">
             <h2><%= t('global.forms.messages.errors', count: staff.errors.count) %></h2>
@@ -11,19 +11,33 @@
         </div>
     <% end %>
 
-    <div>
-        <%= form.label :nickname, class: 'form-label' %>
-        <%= form.text_field :nickname, class: 'form-control' %>
+    <div class="row mb-3">
+        <div class="col">
+            <%= form.label :user_id, class: 'form-label' %>
+            <%= text_field_tag :q, nil, data: { 'activity-search-user-target' => "input", 'action' => "input->activity-search-user#search change->activity-search-user#selectUser" },
+                               class: 'form-control', list: "datalistOptions", autocomplete: "off", placeholder: t('.sel_user') %>
+            <datalist id="datalistOptions" data-activity-search-user-target="results"></datalist>
+        </div>
+        <%= form.hidden_field :user_id, data: { 'activity-search-user-target' => "hiddenUserId" } %>
     </div>
 
-    <div>
-        <%= form.label :password, class: 'form-label' %>
-        <%= form.password_field :password, class: 'form-control' %>
+    <div class="row mb-3">
+        <div class="col">
+            <%= form.label :nickname, class: 'form-label' %>
+            <%= form.text_field :nickname, class: 'form-control' %>
+        </div>
+
+        <div class="col">
+            <%= form.label :password, class: 'form-label' %>
+            <%= form.password_field :password, class: 'form-control' %>
+        </div>
     </div>
 
-    <div>
-        <%= form.label :role, class: 'form-label' %>
-        <%= form.select :role, @roles, {}, { class: 'form-select' } %>
+    <div class="row mb-3">
+        <div class="col">
+            <%= form.label :role, class: 'form-label' %>
+            <%= form.select :role, @roles, {}, { class: 'form-select' } %>
+        </div>
     </div>
 
     <div class="actions">

@@ -31,25 +31,20 @@
       <% @users.each do |user| %>
 
       <tr>
-        <!-- TODO Status -->
         <td>
           <% compliance = user.verify_compliance %>
-          <% is_compliance = compliance[:status] %>
+          <% is_compliance = compliance.empty? %>
           <div
             data-controller="popover"
             data-popover-title="<%= t '.popover' %>"
-            data-popover-content="<%= compliance[:errors].join(", ") %>"
+            data-popover-content="<%= compliance.join(", ") %>"
             >
 
             <span
               data-popover-target="button"
               class="badge rounded-pill text-bg-<%= is_compliance ? 'success' : 'warning' %>"
               >
-              <% if is_compliance %>
-              <i class="bi bi-person-fill-check"></i>
-              <% else %>
-              <i class="bi bi-person-fill-exclamation"></i>
-              <% end %>
+                <i class="bi bi-person-fill-<%= is_compliance ? 'check' : 'exclamation' %>"></i>
             </span>
           </div>
 

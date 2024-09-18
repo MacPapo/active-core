@@ -1,5 +1,3 @@
-console.log('Loading popovers...')  // TODO delete me
-
 import * as bootstrap from "bootstrap"
 
 const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
