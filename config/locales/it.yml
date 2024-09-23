@@ -333,7 +333,10 @@ it:
     create:
       create_duplicate_user: "L'utente è già registrato a questo corso, controlla!"
       create_duplicate_open: "L'utente è già registrato a ad un corso con modalità OPEN, controlla!"
+      merge_failed: "Errore nella fusione tra l'attività richiesta e l'abbonamento alla Sala pesi nell'operazione di OPEN"
+      create_open_failed: "Errore nell'operazione di creazione dell'abbonamento OPEN"
       create_succ: "L'abbonamento è stato creato correttamente, per attivarlo procedi al pagamento."
+      create_failed: "L'abbonamento NON è stato creato correttamente, controllare i dati inseriti."
     update:
       update_succ: "L'abbonamento è stato aggiornato correttamente."
     destroy:

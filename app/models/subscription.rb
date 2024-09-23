@@ -11,7 +11,7 @@ class Subscription < ApplicationRecord
   delegate :active_membership?, to: :user
 
   before_validation :set_end_date_if_blank
-  after_validation :set_start_date
+  after_validation  :set_start_date, if: -> { will_save_change_to_attribute?('start_date') }
 
   after_save -> { ValidateSubscriptionStatusJob.perform_later }
 
@@ -84,10 +84,10 @@ class Subscription < ApplicationRecord
 
     date = start_date
 
-    self.start_date = start_date.beginning_of_month
+    self.start_date = date.beginning_of_month
     return unless activity_plan.half_month?
 
-    self.start_date += 14.days if date.after?(start_date + 11.days)
+    self.start_date += 14.days if date.after?(start_date + 14.days)
   end
 
   def set_end_date_if_blank
@@ -119,7 +119,7 @@ class Subscription < ApplicationRecord
     date = start_date
     half = date.beginning_of_month + 14.days
 
-    date == half ? start_date.at_end_of_month : start_date + 14.days
+    date <= half ? half : start_date.at_end_of_month
   end
 
   # FIX THIS
