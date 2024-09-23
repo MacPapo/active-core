@@ -36,7 +36,9 @@ gem "jbuilder"
 
 gem "discard", "~> 1.3"
 
-gem "solid_queue", "~> 0.6.0"
+gem "receipts", "~> 2.4"
+
+gem "solid_queue", "~> 0.9.0"
 
 gem "mission_control-jobs", "~> 0.3.1"
 
@@ -86,5 +88,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "receipts", "~> 2.4"

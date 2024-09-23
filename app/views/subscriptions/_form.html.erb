@@ -1,4 +1,4 @@
-<%= form_with(model: subscription, data: { controller: 'activity-search-user' }) do |form| %>
+<%= form_with(model: subscription, data: { controller: 'activity-search-user toggle-open' }) do |form| %>
     <% if subscription.errors.any? %>
         <div style="color: red">
             <h2><%= t('global.forms.messages.errors', count: subscription.errors.count) %></h2>
@@ -30,8 +30,9 @@
             <div class="col">
                 <%= form.label :activity_id, 'Seleziona Attività', class: 'form-label' %>
                 <%= form.collection_select :activity_id, @activities, :id, :name,
-                                                                                                                      { prompt: "#{t('.sel_activity')}" },
-                 { class: 'form-select', data: { action: "change->activity-search-user#loadPlans" } }
+                 { prompt: "#{t('.sel_activity')}" },
+                 { class: 'form-select', data: { action: "change->activity-search-user#loadPlans change->toggle-open#toggleOpenField" },
+                     'data-toggle-open-target' => 'activitySelect' }
                 %>
             </div>
 
@@ -63,11 +64,11 @@
             </div>
         </div>
         <%= form.hidden_field :user_id, data: { 'activity-search-user-target' => "hiddenUserId" } %>
-        <%= form.hidden_field :activity_id, value: @activity.id %>
+        <%= form.hidden_field :activity_id, value: @activity.id, 'data-toggle-open-target' => 'activitySelect' %>
         <%= hidden_field_tag :direction, 1 %>
     <% end %>
 
-    <div class="form-check mb-3">
+    <div class="form-check mb-3" data-toggle-open-target="openField">
         <%= label_tag do %>
             <%= check_box_tag(:open, class: 'form-check-input') %>
             OPEN

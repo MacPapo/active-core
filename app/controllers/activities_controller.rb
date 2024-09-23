@@ -2,7 +2,7 @@
 
 # Activity Controller
 class ActivitiesController < ApplicationController
-  before_action :set_activity, only: %i[ show edit update destroy ]
+  before_action :set_activity, only: %i[show edit update destroy]
 
   # GET /activities
   def index
@@ -66,6 +66,11 @@ class ActivitiesController < ApplicationController
     @activity.destroy!
 
     redirect_to activities_url, notice: 'Activity was successfully destroyed.'
+  end
+
+  # GET /activities/1/name
+  def name
+    render json: { name: Activity.find(params[:id])&.name }
   end
 
   private

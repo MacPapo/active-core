@@ -16,5 +16,8 @@ application.register("legalguardian", LegalguardianController)
 import PopoverController from "./popover_controller"
 application.register("popover", PopoverController)
 
+import ToggleOpenController from "./toggle_open_controller"
+application.register("toggle-open", ToggleOpenController)
+
 import UsearchController from "./usearch_controller"
 application.register("usearch", UsearchController)

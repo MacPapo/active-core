@@ -1,9 +1,20 @@
-<h1>Modificando il Piano per questa Attività</h1>
+<div class="card">
+    <div class="card-header">
+        <h1><%= t '.title' %></h1>
+    </div>
 
-<%= render "form", activity_plan: @activity_plan %>
+    <div class="card-body">
+        <%= render "form", activity_plan: @activity_plan %>
+    </div>
 
-<br>
+    <div class="card-footer">
+        <!-- TODO align right -->
+        <%= link_to activity_path(@activity_plan.activity), class: 'btn btn-primary' do %>
+            <i class="bi bi-eye-fill"></i>
+        <% end %>
 
-<div>
-    <%= link_to "Torna indietro", activity_path(@activity_plan.activity) %>
+        <%= link_to activity_path(@activity_plan.activity), class: 'btn btn-danger' do %>
+            <i class="bi bi-trash3-fill"></i>
+        <% end %>
+    </div>
 </div>

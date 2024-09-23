@@ -26,10 +26,16 @@ class SubscriptionPresenter
     oname = @subscription.open_subscription&.activity&.name
 
     if @subscription.open?
-      "#{sname.titleize} + #{oname.titleize}"
+      "#{sname} + #{oname}"
     else
-      sname.titleize
+      sname
     end
+  end
+
+  def status_title
+    return @subscription.humanize_status unless subscription_handler == :empty
+
+    I18n.t('empty')
   end
 
   def link_icon

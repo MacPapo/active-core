@@ -15,7 +15,7 @@
     </tr>
     <% subscriptions.each do |subscription| %>
         <tr>
-
+            <% presenter = SubscriptionPresenter.new(subscription) %>
             <% activity = subscription.activity %>
             <% plan = subscription.activity_plan %>
 
@@ -58,9 +58,11 @@
                 <%= t subscription.open? %>
             </td>
 
-            <!-- TODO STATUS -->
+            <!-- STATUS -->
             <td>
-                <%= subscription.humanize_status %>
+                <%= link_to presenter.appropriate_path(user), class: "btn badge rounded-pill text-bg-#{ presenter.css_color }", data: { turbo_frame: "_top" } do %>
+                    <i class="<%= presenter.link_icon %>"></i> <%= generic ? presenter.status_title : presenter.link_title  %>
+                <% end %>
             </td>
 
             <!-- Action buttons -->

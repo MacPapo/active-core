@@ -9,87 +9,87 @@
 #   end
 
 # Clean up existing data to ensure idempotency
-Activity.destroy_all
+# Activity.destroy_all
 # Subscription.destroy_all
 # SubscriptionType.destroy_all
-LegalGuardian.destroy_all
+# LegalGuardian.destroy_all
 User.destroy_all
 Staff.destroy_all
 
 # Seed LegalGuardians
-100.times do
-  LegalGuardian.create!(
-    name: Faker::Name.first_name,
-    surname: Faker::Name.last_name,
-    email: Faker::Internet.unique.email,
-    phone: '+39 341 4488 932',
-    birth_day: Faker::Date.birthday(min_age: 30, max_age: 60)
-  )
-end
+# 100.times do
+#   LegalGuardian.create!(
+#     name: Faker::Name.first_name,
+#     surname: Faker::Name.last_name,
+#     email: Faker::Internet.unique.email,
+#     phone: '+39 341 4488 932',
+#     birth_day: Faker::Date.birthday(min_age: 30, max_age: 60)
+#   )
+# end
 
-puts "LegalGuardians Added"
+# puts "LegalGuardians Added"
 
 # Seed Users with Legal Guardians
-100.times do
-  legal_guardian = LegalGuardian.all.sample
-  User.create!(
-    cf: Faker::Finance.vat_number,
-    name: Faker::Name.first_name,
-    surname: Faker::Name.last_name,
-    email: Faker::Internet.unique.email,
-    phone: '+39 341 4488 933',
-    birth_day: Faker::Date.birthday(min_age: 5, max_age: 17),
-    med_cert_issue_date: nil,
-    legal_guardian: legal_guardian,
-  )
-end
+# 100.times do
+#   legal_guardian = LegalGuardian.all.sample
+#   User.create!(
+#     cf: Faker::Finance.vat_number,
+#     name: Faker::Name.first_name,
+#     surname: Faker::Name.last_name,
+#     email: Faker::Internet.unique.email,
+#     phone: '+39 341 4488 933',
+#     birth_day: Faker::Date.birthday(min_age: 5, max_age: 17),
+#     med_cert_issue_date: nil,
+#     legal_guardian: legal_guardian,
+#   )
+# end
 
-puts "Minor Users Added"
+# puts "Minor Users Added"
 
 # Seed Users without Legal Guardians
-100.times do
-  User.create!(
-    cf: Faker::Finance.vat_number,
-    name: Faker::Name.first_name,
-    surname: Faker::Name.last_name,
-    email: Faker::Internet.unique.email,
-    phone: '+39 341 4488 934',
-    birth_day: Faker::Date.birthday(min_age: 18, max_age: 100),
-    med_cert_issue_date: nil,
-    legal_guardian: nil,
-    affiliated: false
-  )
-end
+# 100.times do
+#   User.create!(
+#     cf: Faker::Finance.vat_number,
+#     name: Faker::Name.first_name,
+#     surname: Faker::Name.last_name,
+#     email: Faker::Internet.unique.email,
+#     phone: '+39 341 4488 934',
+#     birth_day: Faker::Date.birthday(min_age: 18, max_age: 100),
+#     med_cert_issue_date: nil,
+#     legal_guardian: nil,
+#     affiliated: false
+#   )
+# end
 
-puts "Normal Users Added"
+# puts "Normal Users Added"
 
 # Seed Activities
-30.times do
-  ac = Activity.create!(
-    name: Faker::Sport.unique.sport,
-    num_participants: 30
-  )
+# 30.times do
+#   ac = Activity.create!(
+#     name: Faker::Sport.unique.sport,
+#     num_participants: 30
+#   )
 
-  ActivityPlan.create!(
-    plan: :one_month,
-    activity: ac,
-    cost: 55.0
-  )
-end
+#   ActivityPlan.create!(
+#     plan: :one_month,
+#     activity: ac,
+#     cost: 55.0
+#   )
+# end
 
 # Seed 'sala pesi'
-sala = Activity.create!(
-  name: 'SALA PESI',
-  num_participants: 99
-)
+# sala = Activity.create!(
+#   name: 'SALA PESI',
+#   num_participants: 99
+# )
 
-ActivityPlan.create!(
-  plan: :one_month,
-  activity: sala,
-  cost: 55.0
-)
+# ActivityPlan.create!(
+#   plan: :one_month,
+#   activity: sala,
+#   cost: 55.0
+# )
 
-puts "Activities Added"
+# puts "Activities Added"
 
 # Seed Subscription Types
 # TODO
@@ -157,49 +157,49 @@ Staff.create!(
   role: :admin
 )
 
-normal_user = User.create!(
-  cf: Faker::Finance.vat_number,
-  name: 'Normal',
-  surname: 'User',
-  email: 'normal@example.com',
-  phone: '+39 342 4488 935',
-  birth_day: Faker::Date.birthday(min_age: 30, max_age: 60),
-  med_cert_issue_date: nil,
-  affiliated: false
-)
+# normal_user = User.create!(
+#   cf: Faker::Finance.vat_number,
+#   name: 'Normal',
+#   surname: 'User',
+#   email: 'normal@example.com',
+#   phone: '+39 342 4488 935',
+#   birth_day: Faker::Date.birthday(min_age: 30, max_age: 60),
+#   med_cert_issue_date: nil,
+#   affiliated: false
+# )
 
-puts "Normal User Added"
+# puts "Normal User Added"
 
-Staff.create!(
-  user: normal_user,
-  nickname: 'normal',
-  password: 'normalpassword',
-  role: :contributor
-)
+# Staff.create!(
+#   user: normal_user,
+#   nickname: 'normal',
+#   password: 'normalpassword',
+#   role: :contributor
+# )
 
-puts "Admin Staff Added"
+# puts "Admin Staff Added"
 
-10.times do
-  user = User.create!(
-    cf: Faker::Finance.vat_number,
-    name: Faker::Name.first_name,
-    surname: Faker::Name.last_name,
-    email: Faker::Internet.unique.email,
-    phone: '+39 341 4488 936',
-    birth_day: Faker::Date.birthday(min_age: 18, max_age: 60),
-    med_cert_issue_date: nil,
-    affiliated: false
-  )
+# 10.times do
+#   user = User.create!(
+#     cf: Faker::Finance.vat_number,
+#     name: Faker::Name.first_name,
+#     surname: Faker::Name.last_name,
+#     email: Faker::Internet.unique.email,
+#     phone: '+39 341 4488 936',
+#     birth_day: Faker::Date.birthday(min_age: 18, max_age: 60),
+#     med_cert_issue_date: nil,
+#     affiliated: false
+#   )
 
-  Staff.create!(
-    user: user,
-    nickname: Faker::Internet.username(specifier: 5..10),
-    password: 'password',
-    role: [0, 1].sample
-  )
-end
+#   Staff.create!(
+#     user: user,
+#     nickname: Faker::Internet.username(specifier: 5..10),
+#     password: 'password',
+#     role: [0, 1].sample
+#   )
+# end
 
-puts "Staff Added"
+# puts "Staff Added"
 
 # staff = Staff.all
 # subscriptions = Subscription.all

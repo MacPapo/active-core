@@ -103,42 +103,39 @@
     </h3>
 
     <% membership = user.membership %>
-    <% if membership %>
+    <% presenter = MembershipPresenter.new(membership) %>
+    <div class="row mb-4">
+        <% if membership %>
 
-        <% membership_attribute_to_string = ->(attr) { attribute_to_string(membership, attr) } %>
-        <p class="cart-text">
+            <% membership_attribute_to_string = ->(attr) { attribute_to_string(membership, attr) } %>
 
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <h5 class="card-subtitle mb-2">
-                        <%= membership_attribute_to_string.('start_date') %>
-                    </h5>
-                    <p class="card-text">
-                        <%= l membership.start_date, format: :default %>
-                    </p>
-                </div>
-                <div class="col-md-4">
-                    <h5 class="card-subtitle mb-2">
-                        <%= membership_attribute_to_string.('end_date') %>
-                    </h5>
-                    <p class="card-text">
-                        <%= l membership.end_date, format: :default %> (<%= num_to_human_days membership.num_of_days_til_renewal %>)
-                    </p>
-                </div>
-                <div class="col-md-4">
-                    <h5 class="card-subtitle mb-2">
-                        <%= membership_attribute_to_string.('status') %>
-                    </h5>
-                    <p class="card-text">
-                        <%= membership.humanize_status %>
-                    </p>
-                </div>
+            <div class="col">
+                <h5 class="card-subtitle mb-2">
+                    <%= membership_attribute_to_string.('start_date') %>
+                </h5>
+                <p class="card-text">
+                    <%= l membership.start_date, format: :default %>
+                </p>
             </div>
-        </p>
+            <div class="col">
+                <h5 class="card-subtitle mb-2">
+                    <%= membership_attribute_to_string.('end_date') %>
+                </h5>
+                <p class="card-text">
+                    <%= l membership.end_date, format: :default %> (<%= num_to_human_days membership.num_of_days_til_renewal %>)
+                </p>
+            </div>
+        <% end %>
 
-    <% else %>
-        <%= t 'empty' %>
-    <% end %>
+        <div class="col">
+            <h5 class="card-subtitle mb-2">
+                <%= membership_attribute_to_string.('status') %>
+            </h5>
+            <%= link_to presenter.appropriate_path(user), class: "btn badge text-bg-#{presenter.css_color}", data: { turbo_frame: "_top" } do %>
+                <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
+            <% end %>
+        </div>
+    </div>
 </div>
 
 <!-- Subscriptions -->
@@ -160,7 +157,8 @@
     <% if user.subscriptions.length > 0 %>
         <%= render 'subscriptions/subscriptions_table',
                    subscriptions: user.subscriptions,
-                   actv: false
+                   actv: false,
+                   generic: true
         %>
 
     <% else %>

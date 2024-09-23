@@ -6,6 +6,8 @@ class Activity < ApplicationRecord
   has_many :waitlists, dependent: :destroy
   has_many :activity_plans, dependent: :destroy
 
+  normalizes :name, with: -> { _1.capitalize }
+
   validates :name, presence: true, uniqueness: true
   validates :num_participants, presence: true
   validates :num_participants, numericality: { greater_than: 0 }

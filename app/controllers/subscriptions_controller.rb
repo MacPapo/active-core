@@ -41,15 +41,19 @@ class SubscriptionsController < ApplicationController
   def create
     activity_id = subscription_params[:activity_id]
     user_id = subscription_params[:user_id]
-    direction = params[:direction].to_i
+    direction = params[:direction]
     begin
       ActiveRecord::Base.transaction do
         @subscription = Subscription.build(subscription_params)
 
-        check_if_user_already_subscribed! subscription_params[:user_id]
+        check_if_user_already_subscribed!(user_id)
 
         @subscription.save!
-        Subscription.transaction { create_open_subscription } if params[:open]
+        if params[:open] && params[:open].to_i == 1
+          raise t('.create_duplicate_open') if open_already_exists(user_id)
+
+          Subscription.transaction { create_open_subscription }
+        end
 
         redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription), notice: t('.create_succ')
       end
@@ -58,8 +62,9 @@ class SubscriptionsController < ApplicationController
       flash.now[:alert] = e.message
       render :new, status: :unprocessable_entity
     rescue => e
-      set_user_and_activities(user_id) if direction.zero?
-      set_activity_and_plan(activity_id) if !direction.zero?
+      real_direction = direction&.to_i
+      set_user_and_activities(user_id) if real_direction.zero?
+      set_activity_and_plan(activity_id) if !real_direction.zero?
       flash.now[:alert] = e
       render :new, status: :unprocessable_entity
     end
@@ -136,28 +141,34 @@ class SubscriptionsController < ApplicationController
   end
 
   def update_open
-    if params[:open]
-      Subscription.transaction { @subscription.open? ? renew_open_subscription : create_open_subscription }
-    elsif @subscription.open?
-      open = @subscription.open_subscription
-      @subscription.update(open_subscription: nil)
-      open.destroy
+    Subscription.transaction do
+      if params[:open] && params[:open].to_i == 1
+        @subscription.open? ? renew_open_subscription : create_open_subscription
+      elsif @subscription.open?
+        if @subscription.open_subscription.present?
+          @subscription.update(open_subscription: nil)
+        else
+          @subscription.normal_subscription.update(open_subscription: nil)
+        end
+      end
     end
   end
 
   def renew_open_subscription
     @subscription.open_subscription.update!(
-      status: :inactive, start_date: @subscription.start_date.beginning_of_month,
+      start_date: @subscription.start_date.beginning_of_month,
       end_date: @subscription.start_date.end_of_month
     )
   end
 
   def set_weight_room_activity
-    @weight_room = Activity.find_by(name: 'SALA PESI')
+    @weight_room = Activity.find_by(name: 'Sala pesi')
     @weight_plan = @weight_room.activity_plans.find_by(plan: :one_month)
   end
 
   def create_open_subscription
+    return connect_weight_room if weight_room_subscription_already_exists(subscription_params[:user_id])
+
     open_subscription = Subscription.build(
       user_id: subscription_params[:user_id], normal_subscription: @subscription,
       staff_id: subscription_params[:staff_id], activity: @weight_room,
@@ -170,6 +181,18 @@ class SubscriptionsController < ApplicationController
       open_subscription.destroy
       raise ActiveRecord::RecordInvalid.new(open_subscription)
     end
+  end
+
+  def open_already_exists(id)
+    User.find(id).has_open_subscription?
+  end
+
+  def weight_room_subscription_already_exists(id)
+    @weight_room.subscriptions.where(user_id: id).present?
+  end
+
+  def connect_weight_room
+    p 'CONNETTO'
   end
 
   # Only allow a list of trusted parameters through.

@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   resources :activities do
     get 'plans', on: :member
+    get 'name', on: :member
   end
 
   resources :activity_plans

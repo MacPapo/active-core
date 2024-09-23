@@ -190,7 +190,7 @@ it:
     show:
       user_detail: "Dettagli Utente"
     edit:
-      title: "Aggiornamento dell'Utente"
+      title: "Modifica dell'Utente"
     create:
       create_succ: "L'utente è stato creato correttamente"
     update:
@@ -215,6 +215,8 @@ it:
       add_sub: "Aggiungi una Attività"
 
   activities:
+    edit:
+      title: "Modifica Attività"
     index:
       title: "Attività"
       registered:
@@ -233,6 +235,8 @@ it:
       title: "Inserimento Nuova Attività"
 
   activity_plans:
+    edit:
+      title: "Modifica Piano Attività"
     new:
       title: "Inserimento di un Nuovo Piano per questa Attività"
     create:
@@ -289,7 +293,7 @@ it:
     destroy:
       destroy_succ: "Il Collaboratore è stato eliminato correttamente"
     edit:
-      title: "Aggiornamento Collaboratore"
+      title: "Modifica Collaboratore"
     new:
       title: "Inserimento di un Nuovo Collaboratore"
     show:
@@ -313,7 +317,7 @@ it:
     destroy:
       destroy_succ: "Il Tutore Legale è stato eliminato correttamente"
     edit:
-      title: "Aggiornamento Tutore Legale"
+      title: "Modifica Tutore Legale"
     show:
       title: "Dettagli Tutore Legale"
     legal_guardian:
@@ -328,6 +332,7 @@ it:
       renew_succ: "L'abbonamento è stato aggiornato correttamente, per attivarlo procedi al pagamento."
     create:
       create_duplicate_user: "L'utente è già registrato a questo corso, controlla!"
+      create_duplicate_open: "L'utente è già registrato a ad un corso con modalità OPEN, controlla!"
       create_succ: "L'abbonamento è stato creato correttamente, per attivarlo procedi al pagamento."
     update:
       update_succ: "L'abbonamento è stato aggiornato correttamente."
@@ -343,7 +348,7 @@ it:
     show:
       title: "Dettagli Iscrizione"
     edit:
-      title: "Aggiornamento Iscrizione"
+      title: "Modifica Iscrizione"
     renew:
       title: "Rinnovo Iscrizione"
       subscription_already_inactive: "Redirezionato qui per non rinnovare due volte la stessa Iscrizione"
@@ -373,7 +378,7 @@ it:
       title: "Inserimento di una Quota Associativa"
       membership_already_registered: "Redirezionato qui per non inserire una doppia Quota Associativa"
     edit:
-      title: "Aggiornamento Quota Associativa"
+      title: "Modifica Quota Associativa"
     renew:
       title: "Rinnovo Quota Associativa"
       membership_inactive: "Redirezionato qui per non rinnovare due volte la stessa Quota Associativa"

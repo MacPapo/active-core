@@ -32,7 +32,8 @@
   <% if @subs && @subs.length > 0 %>
     <%= render 'subscriptions/subscriptions_table',
                subscriptions: @subs,
-               actv: true
+               actv: true,
+               generic: true
     %>
     <%== pagy_bootstrap_nav(@pagy) %>
   <% else %>

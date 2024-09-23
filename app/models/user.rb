@@ -64,8 +64,15 @@ class User < ApplicationRecord
   end
 
   def verify_compliance
-    (attribute_names - %w[id cf affiliated legal_guardian_id created_at updated_at]).map do |x|
+    avoid = %w[id cf affiliated legal_guardian_id created_at updated_at]
+    avoid_minor = %w[email phone]
+
+    attribute_names.map do |x|
+      next if avoid.include?(x)
+
       val = send(x)
+      next if avoid_minor.include?(x) && minor?
+
       next if val.present?
 
       I18n.t("global.errors.no_#{x}")
@@ -76,6 +83,14 @@ class User < ApplicationRecord
     return false if med_cert_issue_date.blank?
 
     Time.zone.today < med_cert_issue_date + 1.year
+  end
+
+  def has_open_subscription?
+    return false if subscriptions.blank?
+
+    subscriptions.each { |x| return true if x.open? }
+
+    false
   end
 
   private
