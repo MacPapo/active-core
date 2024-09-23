@@ -1,0 +1,14 @@
+memberships_validation:
+  class: ValidateMembershipStatusJob
+  queue: background
+  schedule: every hour
+
+subscriptions_validation:
+  class: ValidateSubscriptionStatusJob
+  queue: background
+  schedule: every hour
+
+legal_guardian_cleanup:
+  class: DeleteStaleLegalGuardiansJob
+  queue: background
+  schedule: every hour
