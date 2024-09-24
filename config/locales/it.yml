@@ -142,6 +142,7 @@ it:
         subscription: "Iscrizione"
 
   global:
+    logout: "Esci"
     daily_cash: "Cassa Giornaliera"
     user: "Utenti"
     staff: "Collaboratori"

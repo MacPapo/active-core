@@ -1,58 +1,69 @@
 <!-- Sidebar -->
-<div class="sidebar bg-dark text-white p-3 d-flex flex-column justify-content-between position-fixed" style="width: 220px; height: 100vh;">
-    <nav id="sidebarMenu" class="d-lg-block">
-        <div class="position-sticky">
-            <!-- Brand -->
-            <div class="mb-4">
-                <%= link_to "ASD Querini Fit", users_path, class: 'navbar-brand list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center fs-4'%>
-            </div>
+<div class="p-3 d-flex flex-column justify-content-between position-fixed" style="width: 220px; height: 100vh;">
 
-            <!-- Sidebar Links -->
-            <div class="list-group list-group-flush">
-                <%= link_to users_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                    <i class="bi bi-people-fill me-2"></i> <%= model_to_string(User, 2) %>
-                <% end %>
-
-                <%= link_to legal_guardians_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                    <i class="bi bi-person-fill me-2"></i> <%= model_to_string(LegalGuardian, 2) %>
-                <% end %>
-
-                <%= link_to activities_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                    <i class="bi bi-activity me-2"></i> <%= model_to_string(Activity) %>
-                <% end %>
-
-                <% if current_staff && current_staff.admin? %>
-                    <%= link_to staffs_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                        <i class="bi bi-person-workspace me-2"></i> <%= model_to_string(Staff, 2) %>
-                    <% end %>
-
-                    <%= link_to subscriptions_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                        <i class="bi bi-clipboard-data-fill me-2"></i> <%= model_to_string(Subscription, 2) %>
-                    <% end %>
-
-                    <%= link_to memberships_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                        <i class="bi bi-pie-chart-fill me-2"></i> <%= model_to_string(Membership, 2) %>
-                    <% end %>
-
-                    <%= link_to payments_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                        <i class="bi bi-cash-stack me-2"></i> <%= model_to_string(Payment, 2) %>
-                    <% end %>
-                <% end %>
-
-                <%= link_to daily_cash_index_path, class: 'list-group-item list-group-item-action bg-dark text-white py-2 d-flex align-items-center' do %>
-                    <i class="bi bi-cash-coin me-2"></i> <%= t 'global.daily_cash' %>
-                <% end %>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Bottone di logout -->
-    <div class="mt-4">
-        <p class="text-center">
-            <%= link_to current_staff, class: 'link-offset-2 link-underline link-underline-opacity-0 link-info mb-2' do %>
-                <i class="bi bi-person-badge-fill"></i> <%= current_staff.nickname %>
+    <!-- Sidebar Links -->
+    <div class="d-grid gap-2">
+        <!-- Brand -->
+        <div class="mb-3 text-center fs-3 fw-bold">
+            <%= link_to users_path, class: 'list-group-item list-group-item-action' do %>
+                <span class="text-secondary">Querini Fit</span>
             <% end %>
-        </p>
-        <%= button_to "Logout", destroy_staff_session_path, method: :delete, class: 'btn btn-outline-danger w-100' %>
+        </div>
+
+        <%= active_link_to users_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+            <i class="bi bi-people-fill"></i>
+            <span class="ps-2"><%= model_to_string(User, 2) %></span>
+        <% end %>
+
+        <%= active_link_to legal_guardians_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+            <i class="bi bi-person-fill"></i>
+            <span class="ps-2"><%= model_to_string(LegalGuardian, 2) %></span>
+        <% end %>
+
+        <%= active_link_to activities_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+            <i class="bi bi-activity"></i>
+            <span class="ps-2"><%= model_to_string(Activity) %></span>
+        <% end %>
+
+        <% if current_staff && current_staff.admin? %>
+            <%= active_link_to staffs_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+                <i class="bi bi-person-workspace"></i>
+                <span class="ps-2"><%= model_to_string(Staff, 2) %></span>
+            <% end %>
+
+            <%= active_link_to subscriptions_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+                <i class="bi bi-clipboard-data-fill"></i>
+                <span class="ps-2"><%= model_to_string(Subscription, 2) %></span>
+            <% end %>
+
+            <%= active_link_to memberships_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+                <i class="bi bi-pie-chart-fill"></i>
+                <span class="ps-2"><%= model_to_string(Membership, 2) %></span>
+            <% end %>
+
+            <%= active_link_to payments_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+                <i class="bi bi-cash-stack"></i>
+                <span class="ps-2"><%= model_to_string(Payment, 2) %></span>
+            <% end %>
+        <% end %>
+
+        <%= active_link_to daily_cash_index_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+            <i class="bi bi-cash-coin"></i>
+            <span class="ps-2"><%= t 'global.daily_cash' %></span>
+        <% end %>
+    </div>
+
+    <div class="d-grid gap-1">
+
+        <!-- Staff Profile button -->
+        <%= link_to current_staff, class: 'btn btn-outline-info border-0' do %>
+            <i class="bi bi-person-badge-fill"></i> <%= current_staff.nickname %>
+        <% end %>
+
+        <!-- Log-out button -->
+        <%= button_to destroy_staff_session_path, method: :delete, class: 'btn btn-outline-danger border-0 w-100' do %>
+            <i class="bi bi-box-arrow-right"></i>
+            <span class="ps-2"><%= t('global.logout') %></span>
+        <% end %>
     </div>
 </div>

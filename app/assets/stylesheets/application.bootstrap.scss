@@ -1,2 +1,15 @@
+@import "bootstrap/scss/functions";
+
+$primary: #F3F4F6;
+$secondary: #2C3E50;
+$tertiary: #FF6B6B;
+
+$info: #0a9396;
+$success: #28C76F;
+$warning: #EE9B00;
+$danger: #bb3e03;
+$light: #fdfcdc;
+$dark: #001219;
+
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
