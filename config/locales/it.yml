@@ -142,6 +142,7 @@ it:
         subscription: "Iscrizione"
 
   global:
+    search_name: "Cerca per Nome e Cognome ..."
     logout: "Esci"
     daily_cash: "Cassa Giornaliera"
     user: "Utenti"

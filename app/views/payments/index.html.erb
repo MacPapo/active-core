@@ -1,7 +1,6 @@
-<div class="d-flex align-items-center mb-3">
-    <h1 class="mb-0 me-2"><%= t '.title' %></h1>
-    <span>(<%= t('.registered', count: @pagy.count) %>)</span>
-</div>
+<p class="mb-3 me-2 fs-3 fw-semibold text-secondary">
+    <%= t '.title' %>
+</p>
 
 <%= render 'partials/search_form_payments', path: payments_path, frame: :payments %>
 

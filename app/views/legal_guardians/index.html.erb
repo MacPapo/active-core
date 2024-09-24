@@ -1,85 +1,83 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <div class="d-flex align-items-center">
-    <h1 class="mb-0 me-2"><%= model_to_string(LegalGuardian, 2) %></h1>
-  </div>
-</div>
+<p class="mb-3 me-2 fs-3 fw-semibold text-secondary">
+    <%= model_to_string(LegalGuardian, 2) %>
+</p>
 
 <%= render 'partials/search_form_users', path: legal_guardians_path, frame: :legal_guardians %>
 
 <%= turbo_frame_tag :legal_guardians do %>
-<div id="legal_guardians">
-  <table class="table table-hover">
-    <thead class="table-light">
-      <tr>
-	<th><%= LegalGuardian.human_attribute_name('name') %></th>
-	<th><%= LegalGuardian.human_attribute_name('surname') %></th>
-	<th><%= LegalGuardian.human_attribute_name('birth_day') %></th>
-	<th><%= LegalGuardian.human_attribute_name('email') %></th>
-	<th><%= LegalGuardian.human_attribute_name('phone') %></th>
-	<th><%= LegalGuardian.human_attribute_name('users') %></th>
-	<th><%= t 'global.table.action' %></th>
-      </tr>
-    </thead>
-    <tbody class="table-group-divider">
-      <% @legal_guardians.each do |legal_guardian| %>
-      <tr>
-	<!-- Name -->
-	<td>
-	  <%= legal_guardian.name %>
-	</td>
+    <div id="legal_guardians">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+	            <th><%= LegalGuardian.human_attribute_name('name') %></th>
+	            <th><%= LegalGuardian.human_attribute_name('surname') %></th>
+	            <th><%= LegalGuardian.human_attribute_name('birth_day') %></th>
+	            <th><%= LegalGuardian.human_attribute_name('email') %></th>
+	            <th><%= LegalGuardian.human_attribute_name('phone') %></th>
+	            <th><%= LegalGuardian.human_attribute_name('users') %></th>
+	            <th><%= t 'global.table.action' %></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <% @legal_guardians.each do |legal_guardian| %>
+                    <tr>
+	                <!-- Name -->
+	                <td>
+	                    <%= legal_guardian.name %>
+	                </td>
 
-	<!-- Surname -->
-	<td>
-	  <%= legal_guardian.surname %>
-	</td>
+	                <!-- Surname -->
+	                <td>
+	                    <%= legal_guardian.surname %>
+	                </td>
 
-	<!-- Birth Day -->
-	<td>
-	  <%= l legal_guardian.birth_day %>
-	</td>
+	                <!-- Birth Day -->
+	                <td>
+	                    <%= l legal_guardian.birth_day %>
+	                </td>
 
-	<!-- Email -->
-	<td>
-	  <%= legal_guardian.email %>
-	</td>
+	                <!-- Email -->
+	                <td>
+	                    <%= legal_guardian.email %>
+	                </td>
 
-	<!-- Phone -->
-	<td>
-	  <%= phone_to_string legal_guardian.phone %>
-	</td>
+	                <!-- Phone -->
+	                <td>
+	                    <%= phone_to_string legal_guardian.phone %>
+	                </td>
 
-	<!-- Users -->
-	<td>
-	  <% users = legal_guardian.users %>
-	  <% users.each do |user| %>
-  	    <%= user.full_name %>
-	  <% end %>
-	</td>
+	                <!-- Users -->
+	                <td>
+	                    <% users = legal_guardian.users %>
+	                    <% users.each do |user| %>
+  	                        <%= user.full_name %>
+	                    <% end %>
+	                </td>
 
-	<!-- Action -->
-        <td>
-          <%= link_to legal_guardian, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
-          <i class="bi bi-eye-fill"></i>
-          <% end %>
+	                <!-- Action -->
+                        <td>
+                            <%= link_to legal_guardian, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
+                                <i class="bi bi-eye-fill"></i>
+                            <% end %>
 
-          <%= link_to edit_legal_guardian_path(legal_guardian), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
-          <i class="bi bi-pencil-fill"></i>
-          <% end %>
+                            <%= link_to edit_legal_guardian_path(legal_guardian), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
+                                <i class="bi bi-pencil-fill"></i>
+                            <% end %>
 
-          <% if current_staff.admin? %>
-          <%= button_to legal_guardian,
-              class: 'btn btn-danger',
-              method: :delete,
-              data: { turbo_confirm: "Sicuro di voler eliminare questo LG? L'operazione non è reversibile", turbo_frame: "_top" },
-              form: {style: 'display:inline-block;'} do %>
-          <i class="bi bi-trash3-fill"></i>
-          <% end %>
-          <% end %>
-        </td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <%== pagy_bootstrap_nav(@pagy) %>
-</div>
+                            <% if current_staff.admin? %>
+                                <%= button_to legal_guardian,
+                                              class: 'btn btn-danger',
+                                              method: :delete,
+                                              data: { turbo_confirm: "Sicuro di voler eliminare questo LG? L'operazione non è reversibile", turbo_frame: "_top" },
+                                              form: {style: 'display:inline-block;'} do %>
+                                    <i class="bi bi-trash3-fill"></i>
+                                <% end %>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
 <% end %>

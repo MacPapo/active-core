@@ -1,80 +1,79 @@
-<div class="d-flex align-items-center mb-3">
-  <h1 class="mb-0 me-2"><%= t '.title' %></h1>
-  <span>(<%= t('.registered', count: @pagy.count) %>)</span>
-</div>
+<p class="mb-3 me-2 fs-3 fw-semibold text-secondary">
+    <%= t '.title' %>
+</p>
 
 <%= render 'partials/search_form_users', path: memberships_path, frame: :memberships %>
 
 <%= turbo_frame_tag :memberships do %>
-<div id="memberships">
+    <div id="memberships">
 
-    <table class="table table-hover">
-        <thead class="table-light">
-            <tr>
-                <th><%= Membership.human_attribute_name('updated_at') %></th>
-                <th><%= User.human_attribute_name('name') %></th>
-                <th><%= User.human_attribute_name('surname') %></th>
-                <th><%= Membership.human_attribute_name('start_date') %></th>
-                <th><%= Membership.human_attribute_name('end_date') %></th>
-                <th><%= t 'global.table.action' %></th>
-            </tr>
-        </thead>
-
-        <tbody class="table-group-divider">
-            <% @memberships.each do |membership| %>
+        <table class="table table-hover">
+            <thead class="table-light">
                 <tr>
-                    <!-- Updated At -->
-                    <td>
-                      <%= humanize_timestamp membership.updated_at %>
-                    </td>
-
-                    <!-- Name -->
-                    <% user = membership.user %>
-                    <td>
-                        <%= user.name %>
-                    </td>
-
-                    <!-- Surname -->
-                    <td>
-                        <%= user.surname %>
-                    </td>
-
-                    <!-- Start Date -->
-                    <td>
-                        <%= l membership.start_date %>
-                    </td>
-
-                    <!-- End Date -->
-                    <td>
-                        <%= l membership.end_date %>
-                    </td>
-
-                    <!-- Action -->
-                    <td>
-                        <%= link_to membership, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
-                            <i class="bi bi-eye-fill"></i>
-                        <% end %>
-
-                        <%= link_to edit_membership_path(membership, user_id: user.id), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
-                            <i class="bi bi-pencil-fill"></i>
-                        <% end %>
-
-                        <% if current_staff.admin? %>
-                            <!-- TODO translate -->
-                            <%= button_to membership,
-                                          class: 'btn btn-danger',
-                                          method: :delete,
-                                          data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" },
-                                          form: {style: 'display:inline-block;'} do %>
-                                <i class="bi bi-trash3-fill"></i>
-                            <% end %>
-                        <% end %>
-                    </td>
+                    <th><%= Membership.human_attribute_name('updated_at') %></th>
+                    <th><%= User.human_attribute_name('name') %></th>
+                    <th><%= User.human_attribute_name('surname') %></th>
+                    <th><%= Membership.human_attribute_name('start_date') %></th>
+                    <th><%= Membership.human_attribute_name('end_date') %></th>
+                    <th><%= t 'global.table.action' %></th>
                 </tr>
-            <% end %>
-        </tbody>
-    </table>
+            </thead>
 
-    <%== pagy_bootstrap_nav(@pagy) %>
-</div>
+            <tbody class="table-group-divider">
+                <% @memberships.each do |membership| %>
+                    <tr>
+                        <!-- Updated At -->
+                        <td>
+                            <%= humanize_timestamp membership.updated_at %>
+                        </td>
+
+                        <!-- Name -->
+                        <% user = membership.user %>
+                        <td>
+                            <%= user.name %>
+                        </td>
+
+                        <!-- Surname -->
+                        <td>
+                            <%= user.surname %>
+                        </td>
+
+                        <!-- Start Date -->
+                        <td>
+                            <%= l membership.start_date %>
+                        </td>
+
+                        <!-- End Date -->
+                        <td>
+                            <%= l membership.end_date %>
+                        </td>
+
+                        <!-- Action -->
+                        <td>
+                            <%= link_to membership, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
+                                <i class="bi bi-eye-fill"></i>
+                            <% end %>
+
+                            <%= link_to edit_membership_path(membership, user_id: user.id), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
+                                <i class="bi bi-pencil-fill"></i>
+                            <% end %>
+
+                            <% if current_staff.admin? %>
+                                <!-- TODO translate -->
+                                <%= button_to membership,
+                                              class: 'btn btn-danger',
+                                              method: :delete,
+                                              data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" },
+                                              form: {style: 'display:inline-block;'} do %>
+                                    <i class="bi bi-trash3-fill"></i>
+                                <% end %>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+
+        <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
 <% end %>
