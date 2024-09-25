@@ -6,12 +6,16 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
+    @sort_by = params[:sort_by] || 'updated_at'
+    @direction = params[:direction] || 'desc'
+
     @pagy, @users = pagy(
-      User
-        .filter(params[:name], params[:surname], params[:direction])
+      User.filter(params[:name], @sort_by, @direction)
         .includes(:membership, :subscriptions, :legal_guardian)
         .load_async
     )
+
+    respond_to { |f| f.html }
   end
 
   def activity_search

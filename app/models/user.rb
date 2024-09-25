@@ -24,12 +24,39 @@ class User < ApplicationRecord
   has_many   :waitlists, dependent: :destroy
   has_many   :receipts, dependent: :destroy
 
-  scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
-  scope :by_surname, ->(surname) { where('surname LIKE ?', "%#{surname}%") if surname.present? }
-  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction.blank? ? 'DESC' : direction.upcase}") }
+  # Filter users by name or surname using partial matches
+  scope :by_name, ->(query) do
+    if query.present?
+      where(
+        'name LIKE :q OR surname LIKE :q OR (surname LIKE :s AND name LIKE :n)',
+        q: "%#{query}%",
+        s: "%#{query.split.last}%",
+        n: "%#{query.split.first}%"
+      )
+    end
+  end
 
-  def self.filter(name, surname, direction)
-    by_name(name).by_surname(surname).order_by_updated_at(direction)
+  # Sort users by specified column and direction
+  scope :sorted, ->(sort_by, direction) do
+    if %w[name surname birth_day affiliated].include?(sort_by)
+      direction = %w[asc desc].include?(direction) ? direction : 'asc'
+      order("#{sort_by} #{direction}")
+    end
+  end
+
+  # Order by updated_at with a default direction
+  scope :order_by_updated_at, -> { order('updated_at desc') }
+
+  # Combine filtering and sorting
+  def self.filter(name, sort_by, direction)
+    p sort_by
+    p direction
+
+    p sorted(sort_by, direction)
+
+    by_name(name)
+      .sorted(sort_by, direction)
+      .order_by_updated_at
   end
 
   def full_name
