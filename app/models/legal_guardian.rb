@@ -13,12 +13,30 @@ class LegalGuardian < ApplicationRecord
   validates :phone, phone: { possible: true, types: [:fixed_or_mobile] }
   validate :an_eligible_legal_guardian?
 
-  scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
-  scope :by_surname, ->(surname) { where('surname LIKE ?', "%#{surname}%") if surname.present? }
-  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction&.upcase}" )}
+  scope :by_name, ->(query) do
+    if query.present?
+      where(
+        'name LIKE :q OR surname LIKE :q OR (surname LIKE :s AND name LIKE :n)',
+        q: "%#{query}%",
+        s: "%#{query.split.last}%",
+        n: "%#{query.split.first}%"
+      )
+    end
+  end
 
-  def self.filter(name, surname, direction)
-    by_name(name).by_surname(surname).order_by_updated_at(direction)
+  scope :sorted, ->(sort_by, direction) do
+    if %w[name surname birth_day affiliated].include?(sort_by)
+      direction = %w[asc desc].include?(direction) ? direction : 'asc'
+      order("#{sort_by} #{direction}")
+    end
+  end
+
+  scope :order_by_updated_at, -> { order('updated_at desc') }
+
+  def self.filter(name, sort_by, direction)
+    by_name(name)
+      .sorted(sort_by, direction)
+      .order_by_updated_at
   end
 
   def full_name

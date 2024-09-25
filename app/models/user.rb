@@ -24,7 +24,6 @@ class User < ApplicationRecord
   has_many   :waitlists, dependent: :destroy
   has_many   :receipts, dependent: :destroy
 
-  # Filter users by name or surname using partial matches
   scope :by_name, ->(query) do
     if query.present?
       where(
@@ -36,7 +35,6 @@ class User < ApplicationRecord
     end
   end
 
-  # Sort users by specified column and direction
   scope :sorted, ->(sort_by, direction) do
     if %w[name surname birth_day affiliated].include?(sort_by)
       direction = %w[asc desc].include?(direction) ? direction : 'asc'
@@ -44,16 +42,9 @@ class User < ApplicationRecord
     end
   end
 
-  # Order by updated_at with a default direction
   scope :order_by_updated_at, -> { order('updated_at desc') }
 
-  # Combine filtering and sorting
   def self.filter(name, sort_by, direction)
-    p sort_by
-    p direction
-
-    p sorted(sort_by, direction)
-
     by_name(name)
       .sorted(sort_by, direction)
       .order_by_updated_at

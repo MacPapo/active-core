@@ -12,7 +12,7 @@ $danger: #FF6B6B;
 $border: #abb2b9;
 
 $light: #F3F4F6;
-$dark: #8258F2;
+$dark: #DBFC75;
 
 
 // Override dei colori del form
@@ -25,7 +25,8 @@ $input-focus-border-color: $secondary;
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
 
-// Custom styles for Pagy pagination components
+// PAGY COMPONENTS
+
 .pagy-bootstrap .pagination .page-item .page-link {
   color: $secondary;  // Color for page links
 }
@@ -44,4 +45,26 @@ $input-focus-border-color: $secondary;
 .pagy-bootstrap .pagination .page-link:hover {
   background-color: lightgrey; // Hover color for page links
   border-color: lightgrey;     // Hover border color
+}
+
+// HIGHLIHT COMPONENTS
+
+mark {
+    color: $secondary;
+    background-color: $dark;
+}
+
+/* Change the checkbox and radio button checked state */
+.form-check-input:checked[type="checkbox"] {
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%232C3E50' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+.form-check-input:checked {
+    background-color: $dark;
+    border-color: $secondary;
+}
+
+// TABLE COMPONENTS
+
+.table .table-secondary th {
+    background-color: $secondary;
 }

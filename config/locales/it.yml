@@ -152,6 +152,10 @@ it:
     membership: "Quote"
     del_sub: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile"
 
+    registered:
+      one: "registrato"
+      other: "registrati"
+
     errors:
       med_date_future: "non può essere nel Futuro"
       no_email: "Email Mancante"
@@ -203,9 +207,6 @@ it:
       title: "Utenti"
       add_user: "Aggiungi Utente"
       popover: "Completezza"
-      registered:
-        one: "%{count} utente registrato"
-        other: "%{count} utenti registrati"
     user:
       personal_data: "Anagrafica"
       name_surname: "Nome e Cognome:"
@@ -322,6 +323,8 @@ it:
       title: "Modifica Tutore Legale"
     show:
       title: "Dettagli Tutore Legale"
+    index:
+      add_legal_guardian: "Aggiungi Tutore Legale"
     legal_guardian:
       full_name: "Nome e Cognome"
       users: "È tutore di"

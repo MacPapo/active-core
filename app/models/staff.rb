@@ -21,12 +21,31 @@ class Staff < ApplicationRecord
            :age, :email, :phone, :birth_day, 'affiliated?',
            :med_cert_issue_date, :med_cert_exp_date, to: :user
 
-  scope :by_name, ->(name) { where('users.name LIKE ?', "%#{name}%") if name.present? }
-  scope :by_surname, ->(surname) { where('users.surname LIKE ?', "%#{surname}%") if surname.present? }
-  scope :order_by_updated_at, ->(direction) { order("staffs.updated_at #{direction&.upcase}" )}
+  scope :by_name, ->(query) do
+    if query.present?
+      where(
+        'name LIKE :q OR surname LIKE :q OR (surname LIKE :s AND name LIKE :n)',
+        q: "%#{query}%",
+        s: "%#{query.split.last}%",
+        n: "%#{query.split.first}%"
+      )
+    end
+  end
 
-  def self.filter(name, surname, direction)
-    joins(:user).by_name(name).by_surname(surname).order_by_updated_at(direction)
+  scope :sorted, ->(sort_by, direction) do
+    if %w[name surname birth_day affiliated].include?(sort_by)
+      direction = %w[asc desc].include?(direction) ? direction : 'asc'
+      order("#{sort_by} #{direction}")
+    end
+  end
+
+  scope :order_by_updated_at, -> { order('staffs.updated_at desc') }
+
+  def self.filter(name, sort_by, direction)
+    joins(:user)
+      .by_name(name)
+      .sorted(sort_by, direction)
+      .order_by_updated_at
   end
 
   def email_required?

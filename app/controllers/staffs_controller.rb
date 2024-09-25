@@ -7,12 +7,16 @@ class StaffsController < ApplicationController
 
   # GET /staffs
   def index
+    @sort_by = params[:sort_by] || 'updated_at'
+    @direction = params[:direction] || 'desc'
+
     @pagy, @staffs = pagy(
-      Staff
-        .filter(params[:name], params[:surname], params[:direction])
+      Staff.filter(params[:name], @sort_by, @direction)
         .includes(:user)
         .load_async
     )
+
+    respond_to { |f| f.html }
   end
 
   # GET /staffs/1
