@@ -162,13 +162,8 @@ it:
       other: "registrati"
 
     errors:
-      med_date_future: "non può essere nel Futuro"
-      no_email: "Email Mancante"
-      no_birth_date: "Data di Nascita Mancante"
-      no_phone: "Cellulare Mancante"
-      no_med_cert_issue_date: "Certificato Medico Mancante"
-      no_mem: "L'utente deve avere pagato la Quota Associativa per essere iscritto a questa Attività"
-
+      eligible: ", deve avere almeno 18 anni."
+      
     forms:
       messages:
         errors:
@@ -330,6 +325,8 @@ it:
         other: "%{count} collaboratori registrati"
 
   legal_guardians:
+    new:
+      title: "Inserimento di un nuovo Tutore Legale"
     create:
       create_succ: "Il Tutore Legale è stato creato correttamente"
     update:

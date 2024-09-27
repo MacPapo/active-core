@@ -11,19 +11,23 @@
         </div>
     <% end %>
 
-    <div class="row mb-3">
+    <div class="row g-3 mb-2">
         <div class="col">
-            <%= form.label :name, class: 'form-label' %>
-            <%= form.text_field :name, class: 'form-control', autofocus: true %>
+            <div class="d-flex">
+                <%= form.label :name, class: 'form-label fw-semibold text-secondary' %>*
+            </div>
+            <%= form.text_field :name, placeholder: 'Sala pesi', class: 'form-control', autofocus: true %>
         </div>
 
         <div class="col">
-            <%= form.label :num_participants, class: 'form-label' %>
+            <div class="d-flex">
+                <%= form.label :num_participants, class: 'form-label fw-semibold text-secondary' %>*
+            </div>
             <%= form.number_field :num_participants, class: 'form-control' %>
         </div>
     </div>
 
-    <div>
-        <%= form.submit class: 'btn btn-success w-100' %>
+    <div class="mt-4">
+        <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
     </div>
 <% end %>

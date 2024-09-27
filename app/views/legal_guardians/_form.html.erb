@@ -10,35 +10,45 @@
         </div>
     <% end %>
 
-    <div class="row mb-3">
+    <div class="row g-3 mb-2">
         <div class="col">
-            <%= form.label :name, class: 'form-label' %>
-            <%= form.text_field :name, class: 'form-control' %>
+            <div class="d-flex">
+                <%= form.label :name, class: 'form-label fw-semibold text-secondary' %>*
+            </div>
+            <%= form.text_field :name, placeholder: 'Mario', class: 'form-control' %>
         </div>
         <div class="col">
-            <%= form.label :surname, class: 'form-label' %>
-            <%= form.text_field :surname, class: 'form-control' %>
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col">
-            <%= form.label :email, class: 'form-label' %>
-            <%= form.text_field :email, class: 'form-control' %>
-        </div>
-
-        <div class="col">
-            <%= form.label :phone, class: 'form-label' %>
-            <%= form.text_field :phone, class: 'form-control' %>
-        </div>
-
-        <div class="col">
-            <%= form.label :birth_day, class: 'form-label' %>
-            <%= form.date_field :birth_day, class: 'form-control' %>
+            <div class="d-flex">
+                <%= form.label :surname, class: 'form-label fw-semibold text-secondary' %>*
+            </div>
+            <%= form.text_field :surname, placeholder: 'Rossi', class: 'form-control' %>
         </div>
     </div>
 
-    <div class="actions">
-        <%= form.submit class: 'btn btn-success w-100' %>
+    <div class="row g-3 mb-2">
+        <div class="col">
+            <div class="d-flex">
+                <%= form.label :email, class: 'form-label fw-semibold text-secondary' %>*
+            </div>
+            <%= form.text_field :email, placeholder: 'mario.rossi@esempio.org', class: 'form-control' %>
+        </div>
+
+        <div class="col">
+            <div class="d-flex">
+                <%= form.label :phone, class: 'form-label fw-semibold text-secondary' %>*
+            </div>
+            <%= form.text_field :phone, placeholder: '336 4889120', class: 'form-control' %>
+        </div>
+
+        <div class="col">
+            <div class="d-flex">
+                <%= form.label :birth_day, class: 'form-label fw-semibold text-secondary' %>*
+            </div>
+            <%= form.date_field :birth_day, max: 18.years.ago, min: 100.years.ago, class: 'form-control' %>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
     </div>
 <% end %>

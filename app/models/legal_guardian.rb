@@ -56,14 +56,10 @@ class LegalGuardian < ApplicationRecord
   def an_eligible_legal_guardian?
     return unless minor?
 
-    errors.add(:legal_guardian, 'must not be a minor!')
+    errors.add(:birth_day, :too_young, message: I18n.t('global.errors.eligible'))
   end
 
   def normalize_phone
     self.phone = Phonelib.parse(phone).national
-  end
-
-  def delete_all_lg_without_users
-    DeleteStaleLegalGuardiansJob.perform_later
   end
 end
