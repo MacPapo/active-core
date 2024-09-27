@@ -143,6 +143,7 @@ it:
 
   global:
     search_name: "Cerca per Nome e Cognome ..."
+    search_activity: "Cerca l'attività per Nome ..."
     logout: "Esci"
     daily_cash: "Cassa Giornaliera"
     user: "Utenti"
@@ -151,6 +152,10 @@ it:
     subscription: "Iscrizioni"
     membership: "Quote"
     del_sub: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile"
+
+    devise:
+      sign_in: "Hey, autenticati!"
+      sign_in_comp: "Rieccoti, accedi per sbloccare la tua area di lavoro ..."
 
     registered:
       one: "registrato"
@@ -191,6 +196,13 @@ it:
       updated_at: "Data Ultimo Aggiornamento"
 
   users:
+    form:
+      legal_guardians_data: "Dati del Tutore Legale"
+      lg_email: "Email"
+      lg_phone: "Numero di Telefono"
+      lg_name: "Nome"
+      lg_surname: "Cognome"
+      lg_birth_day: "Data di Nascita"
     new:
       title: "Inserimento di un Nuovo Utente"
     show:
@@ -206,7 +218,10 @@ it:
     index:
       title: "Utenti"
       add_user: "Aggiungi Utente"
-      popover: "Completezza"
+      popover:
+        zero: "Completo!"
+        one: "%{count} campo Mancante"
+        other: "%{count} campi Mancanti"
     user:
       personal_data: "Anagrafica"
       name_surname: "Nome e Cognome:"
@@ -222,9 +237,11 @@ it:
       title: "Modifica Attività"
     index:
       title: "Attività"
+      add_activity: "Aggiungi Attività"
+      num_participants: "Partecipanti"
       registered:
-        one: "%{count} attività registrate"
-        other: "%{count} attività registrate"
+        one: "registrata"
+        other: "registrate"
     activity:
       name: "Nome attività"
       num_participants: "Numero partecipanti"

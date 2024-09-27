@@ -1,7 +1,10 @@
 @import "bootstrap/scss/functions";
 
 $primary: #FCFCFD;
+
 $secondary: #2C3E50;
+$secondary-10: #7eb1e5;
+$secondary-80: #395168;
 
 
 $info: #0a9396;
@@ -9,7 +12,7 @@ $success: #28C76F;
 $warning: #EE9B00;
 $danger: #FF6B6B;
 
-$border: #abb2b9;
+$border: #abb2ba;
 
 $light: #F3F4F6;
 $dark: #DBFC75;
@@ -67,4 +70,24 @@ mark {
 
 .table .table-secondary th {
     background-color: $secondary;
+}
+
+// TABLIST COMPONENTS
+
+.nav-pills .nav-link {
+  background-color: $light;
+  color: $secondary;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: $dark;
+}
+
+.nav-pills .nav-link.active {
+  background-color: $secondary;
+  color: $primary;
+}
+
+.nav-pills .nav-link.active:hover {
+  background-color: $secondary-80;
 }

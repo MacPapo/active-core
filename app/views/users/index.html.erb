@@ -16,7 +16,8 @@
             <%= render 'partials/search_form_users', path: users_path, frame: :users %>
         </div>
         <%= link_to new_user_path, class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
-            <i class="bi bi-person-fill-add"></i> <%= t '.add_user' %>
+            <i class="bi bi-person-fill-add"></i>
+            <span class="ms-1"><%= t '.add_user' %></span>
         <% end %>
     </div>
 
@@ -27,25 +28,25 @@
                 <table class="table table-borderless table-striped mb-0">
                     <thead class="table-secondary">
                         <tr class="fs-6">
-                            <th class="text-primary fw-semibold"><%= t 'global.table.status' %></th>
+                            <th class="text-primary text-begin fw-semibold"><%= t 'global.table.status' %></th>
                             <th><%= user_sortable_column.call('name', User.human_attribute_name('name')) %></th>
                             <th><%= user_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
                             <th><%= user_sortable_column.call('birth_day', User.human_attribute_name('birth_day')) %></th>
-                            <th><%= user_sortable_column.call('affiliated', User.human_attribute_name('affiliated')) %></th>
                             <th class="text-primary fw-semibold"><%= User.human_attribute_name('membership') %></th>
                             <th class="text-primary fw-semibold"><%= User.human_attribute_name('activity') %></th>
-                            <th class="text-primary fw-semibold"><%= t 'global.table.action' %></th>
+                            <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
                         </tr>
                     </thead>
                     <tbody>
                         <% @users.each do |user| %>
-                            <tr>
+                            <tr class="text-begin">
                                 <td>
                                     <% compliance = user.verify_compliance %>
+                                    <% count = compliance&.size %>
                                     <% is_compliance = compliance.empty? %>
                                     <div
                                         data-controller="popover"
-                                        data-popover-title="<%= t '.popover' %>"
+                                        data-popover-title="<%= t('.popover', count: count) %>"
                                         data-popover-content="<%= compliance.join(", ") %>"
                                     >
                                         <span
@@ -72,11 +73,6 @@
                                     <%= user.birth_day ? l(user.birth_day, format: :default) : nil %>
                                 </td>
 
-                                <!-- Affiliated -->
-                                <td>
-                                    <%= t user.affiliated %>
-                                </td>
-
                                 <!-- Membership -->
                                 <td>
                                     <% presenter = MembershipPresenter.new(user.membership) %>
@@ -97,7 +93,7 @@
                                 </td>
 
                                 <!-- Action buttons -->
-                                <td>
+                                <td class="text-end">
                                     <%= link_to user, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
                                         <i class="bi bi-eye-fill"></i>
                                     <% end %>

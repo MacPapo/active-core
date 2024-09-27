@@ -1,79 +1,93 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <p class="mb-0 me-2 fs-3 fw-semibold text-secondary">
-        <%= t '.title' %>
+        <%= model_to_string(Activity, 2) %>
     </p>
 
-    <%= link_to new_activity_path, class: 'btn btn-success' do %>
-        <i class="bi bi-activity"></i> Aggiungi Attività
-    <% end %>
+    <div class="d-flex align-items-center">
+        <% count = Activity.count %>
+        <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
+        <span class="fs-6 fw-light ps-2 text-muted"><%= t('.registered', count:) %></span>
+    </div>
 </div>
 
-<%= render 'partials/search_form_activities', path: activities_path, frame: :activities %>
+<div class="bg-primary border border-secondary-subtle rounded-3 container">
+    <div class="d-flex align-items-center">
+        <div class="flex-grow-1 me-2">
+            <%= render 'partials/search_form_activities', path: activities_path, frame: :activities %>
+        </div>
+        <%= link_to new_activity_path, class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+            <i class="bi bi-activity"></i>
+            <span class="ms-1"><%= t('.add_activity') %></span>
+        <% end %>
+    </div>
 
-<%= turbo_frame_tag :activities do %>
-    <div id="activities">
-        <table class="table table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th><%= Activity.human_attribute_name('name') %></th>
-                    <th><%= Activity.human_attribute_name('num_participants') %></th>
-                    <th><%= t 'global.table.action' %></th>
-                </tr>
-            </thead>
+    <%= turbo_frame_tag :activities do %>
+        <% activity_sortable_column = ->(col, title) { sortable_column(col, title, activities_path, :activities, @sort_by, @direction) } %>
+        <div id="activities" class="table-responsive">
+            <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
+                <table class="table table-borderless table-striped mb-0">
+                    <thead class="table-secondary">
+                        <tr class="fs-6">
+                            <th style="width: 15%;"><%= activity_sortable_column.call('num_participants', t('.num_participants')) %></th>
+                            <th><%= activity_sortable_column.call('name', Activity.human_attribute_name('name')) %></th>
+                            <th class="text-primary fw-semibold text-end"><%= t 'global.table.action' %></th>
+                        </tr>
+                    </thead>
 
-            <tbody class="table-group-divider">
-                <% @activities.each do |activity| %>
-                    <tr>
-                        <!-- Name -->
-                        <td>
-                            <%= activity.name %>
-                        </td>
-
-                        <!-- TODO Number  -->
-                        <td>
-                            <div>
-                                <!-- TODO calculate only active sub -->
+                    <tbody class="table-group-divider">
+                        <% @activities.each do |activity| %>
+                            <tr class="text-begin">
                                 <% partecipants = activity.subscriptions %>
                                 <% npartecipants = activity.num_participants %>
 
-                                <% if partecipants %>
-                                    <% plen = partecipants.length %>
-                                    <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
-                                <% end %>
-
-                                <!-- Add users to activity -->
-                                <% if npartecipants == 99 || (npartecipants != 99 && partecipants.length < npartecipants) %>
-                                    <%= link_to new_subscription_path(activity_id: activity), class: 'btn btn-success', data: { turbo_frame: "_top" } do %>
-                                        <i class="bi bi-person-plus-fill"></i>
+                                <!-- Number  -->
+                                <td class="d-flex align-items-center">
+                                    <!-- Add users to activity -->
+                                    <% if npartecipants == 99 || (npartecipants != 99 && partecipants.length < npartecipants) %>
+                                        <%= link_to new_subscription_path(activity_id: activity), class: 'btn btn-success', data: { turbo_frame: "_top" } do %>
+                                            <i class="bi bi-person-plus-fill"></i>
+                                        <% end %>
+                                    <% else %>
+                                        <%= link_to new_waitlist_path(activity_id: activity), class: 'btn btn-info', data: { turbo_frame: "_top" } do %>
+                                            <i class="bi bi-telephone-plus-fill"></i>
+                                        <% end %>
                                     <% end %>
-                                <% else %>
-                                    <%= link_to new_waitlist_path(activity_id: activity), class: 'btn btn-info', data: { turbo_frame: "_top" } do %>
-                                        <i class="bi bi-telephone-plus-fill"></i>
+                                    <div class="ms-1">
+                                        <% if partecipants %>
+                                            <% plen = partecipants.length %>
+                                            <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
+                                        <% end %>
+                                    </div>
+                                </td>
+
+                                <!-- Name -->
+                                <td>
+                                    <%= highlight activity.name, params.dig(:name) %>
+                                </td>
+
+                                <!-- Action buttons -->
+                                <td class="text-end">
+                                    <%= link_to activity_path(activity), class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
+                                        <i class="bi bi-eye-fill"></i>
                                     <% end %>
-                                <% end %>
-                            </div>
-                        </td>
 
-                        <!-- Action buttons -->
-                        <td>
-                            <%= link_to activity_path(activity), class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
-                                <i class="bi bi-eye-fill"></i>
-                            <% end %>
+                                    <%= link_to edit_activity_path(activity), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
+                                        <i class="bi bi-pencil-fill"></i>
+                                    <% end %>
 
-                            <%= link_to edit_activity_path(activity), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
-                                <i class="bi bi-pencil-fill"></i>
-                            <% end %>
+                                    <% if current_staff.admin? %>
+                                        <%= button_to activity_path(activity), class: 'btn btn-danger', method: :delete, data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+                                            <i class="bi bi-trash3-fill"></i>
+                                        <% end %>
+                                    <% end %>
+                                </td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
 
-                            <% if current_staff.admin? %>
-                                <%= button_to activity_path(activity), class: 'btn btn-danger', method: :delete, data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
-                                    <i class="bi bi-trash3-fill"></i>
-                                <% end %>
-                            <% end %>
-                        </td>
-                    </tr>
-                <% end %>
-            </tbody>
-        </table>
-        <%== pagy_bootstrap_nav(@pagy) %>
-    </div>
-<% end %>
+            <%== pagy_bootstrap_nav(@pagy) %>
+        </div>
+    <% end %>
+</div>

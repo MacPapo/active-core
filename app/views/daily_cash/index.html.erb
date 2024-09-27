@@ -9,37 +9,82 @@
     </div>
 </div>
 
-<div id="daily_cash">
+<div id="daily_cash" class="bg-primary border border-secondary-subtle rounded-3 container">
+    <!-- Tab List -->
+    <% is_afternoon = Time.zone.now.after?(Time.zone.parse('13:00')) %>
+    <ul class="nav nav-pills py-3 gap-2" id="pills-tab" role="tablist">
 
-    <!-- Morning -->
-    <div>
-        <div class="d-flex justify-content-between align-items-center">
-            <p class="mb-0 me-2 fs-4 fw-semibold text-secondary">
+        <!-- Morning -->
+        <li class="nav-item" role="presentation">
+            <button class="nav-link border border-secondary-subtle fs-5 <%= 'active' unless is_afternoon %>"
+                    id="pills-morning-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#pills-morning"
+                    type="button"
+                    role="tab"
+                    aria-controls="pills-morning"
+                    aria-selected="<%= !is_afternoon %>">
                 <%= t '.morning' %>
-            </p>
+            </button>
+        </li>
 
-            <div class="d-flex align-items-center">
-                <p class="fs-3 fw-bold text-secondary mb-0"><%= number_to_currency @morning_cash %></p>
-                <span class="fs-6 fw-light ps-2 text-muted">07-13</span>
-            </div>
-        </div>
-        <%= render 'partials/payments_table', payments: @morning %>
-        <%== pagy_bootstrap_nav(@pagy_morning) %>
-    </div>
-
-    <!-- Afternoon -->
-    <div>
-        <div class="d-flex justify-content-between align-items-center">
-            <p class="mb-0 me-2 fs-4 fw-semibold text-secondary">
+        <!-- Afternoon -->
+        <li class="nav-item" role="presentation">
+            <button class="nav-link border border-secondary-subtle fs-5 <%= 'fw-semibold active' if is_afternoon %>"
+                    id="pills-afternoon-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#pills-afternoon"
+                    type="button"
+                    role="tab"
+                    aria-controls="pills-afternoon"
+                    aria-selected="<%= is_afternoon %>">
                 <%= t '.afternoon' %>
-            </p>
+            </button>
+        </li>
+    </ul>
 
-            <div class="d-flex align-items-center">
-                <p class="fs-3 fw-bold text-secondary mb-0"><%= number_to_currency @afternoon_cash %></p>
-                <span class="fs-6 fw-light ps-2 text-muted">15-21</span>
-            </div>
+    <!-- Tab List Body -->
+    <div class="tab-content" id="pills-tabContent">
+
+        <!-- Morning Tab Content -->
+        <div class="tab-pane fade <%= 'show active' unless is_afternoon %>"
+             id="pills-morning"
+             role="tabpanel"
+             aria-labelledby="pills-morning-tab"
+             tabindex="0">
+
+            <%= turbo_frame_tag :morning do %>
+                <%= render 'partials/payments_table', payments: @morning %>
+                <div class="d-flex justify-content-between align-items-center">
+                    <%== pagy_bootstrap_nav(@pagy_morning) %>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <p class="fs-4 fw-bold text-secondary mb-0"><%= number_to_currency @morning_cash %></p>
+                        <span class="fs-6 fw-light ps-2 text-muted">07-13</span>
+                    </div>
+                </div>
+            <% end %>
         </div>
-        <%= render 'partials/payments_table', payments: @afternoon %>
-        <%== pagy_bootstrap_nav(@pagy_afternoon) %>
+
+        <!-- Afternoon Tab Content -->
+        <div class="tab-pane fade <%= 'show active' if is_afternoon %>"
+             id="pills-afternoon"
+             role="tabpanel"
+             aria-labelledby="pills-afternoon-tab"
+             tabindex="0">
+
+            <%= turbo_frame_tag :afternoon do %>
+                <%= render 'partials/payments_table', payments: @afternoon %>
+                <div class="d-flex justify-content-between align-items-center">
+                    <%== pagy_bootstrap_nav(@pagy_afternoon) %>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <p class="fs-4 fw-bold text-secondary mb-0"><%= number_to_currency @afternoon_cash %></p>
+                        <span class="fs-6 fw-light ps-2 text-muted">15-21</span>
+                    </div>
+                </div>
+            <% end %>
+
+        </div>
     </div>
 </div>

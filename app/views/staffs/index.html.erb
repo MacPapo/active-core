@@ -16,7 +16,8 @@
             <%= render 'partials/search_form_users', path: staffs_path, frame: :staffs %>
         </div>
         <%= link_to new_staff_path, class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
-            <i class="bi bi-person-fill-add"></i> <%= t '.add_staff' %>
+            <i class="bi bi-person-fill-add"></i>
+            <span class="ms-1"><%= t '.add_staff' %></span>
         <% end %>
     </div>
 
@@ -31,7 +32,7 @@
                             <th><%= staff_sortable_column.call('surname' ,User.human_attribute_name('surname')) %></th>
                             <th><%= staff_sortable_column.call('birth_day' ,User.human_attribute_name('birth_day')) %></th>
                             <th class="text-primary fw-semibold"><%= Staff.human_attribute_name('role') %></th>
-                            <th class="text-primary fw-semibold"><%= t 'global.table.action' %></th>
+                            <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
                         </tr>
                     </thead>
 
@@ -58,7 +59,8 @@
                                     <%= staff.humanize_role %>
                                 </td>
 
-                                <td>
+                                <!-- Action -->
+                                <td class="text-end">
                                     <%= link_to staff, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
                                         <i class="bi bi-eye-fill"></i>
                                     <% end %>

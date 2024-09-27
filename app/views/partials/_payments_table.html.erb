@@ -1,81 +1,70 @@
-<table class="table table-hover">
-    <thead class="table-light">
-        <tr>
-            <th><%= Payment.human_attribute_name('created_at') %></th>
-            <th><%= Payment.human_attribute_name('date') %></th>
-            <th><%= Payment.human_attribute_name('payable_type') %></th>
-            <th><%= Payment.human_attribute_name('amount') %></th>
-            <th><%= Payment.human_attribute_name('payment_method') %></th>
-            <th><%= Payment.human_attribute_name('entry_type') %></th>
-            <th><%= Payment.human_attribute_name('note') %></th>
-            <th><%= Payment.human_attribute_name('staff') %></th>
-            <th><%= t '.action' %></th>
-        </tr>
-    </thead>
-
-    <tbody class="table-group-divider">
-
-        <% payments.each do |payment| %>
-            <tr>
-
-                <!-- Created At -->
-                <td>
-                    <%= l payment.created_at, format: :short %>
-                </td>
-
-                <!-- Date -->
-                <td>
-                    <%= l payment.date %>
-                </td>
-
-                <!-- Payable Type -->
-                <td>
-                    <%= payment.humanize_payable_type %>
-                </td>
-
-                <!-- Amount -->
-                <td>
-                    <%= number_to_currency payment.amount %>
-                </td>
-
-                <!-- Payment Method -->
-                <td>
-                    <%= payment.humanize_payment_method %>
-                </td>
-
-                <!-- Entry Type -->
-                <td>
-                    <%= payment.humanize_entry_type %>
-                </td>
-
-                <!-- Note -->
-                <td>
-                    <%= payment.note %>
-                </td>
-
-                <!-- Staff -->
-                <% staff = payment.staff %>
-                <td>
-                    <%= staff.nickname %>
-                </td>
-
-                <!-- Action buttons -->
-                <td>
-                    <%= link_to payment, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
-                        <i class="bi bi-eye-fill"></i>
-                    <% end %>
-
-                    <%= link_to edit_payment_path(payment), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
-                        <i class="bi bi-pencil-fill"></i>
-                    <% end %>
-
-                    <% if current_staff.admin? %>
-                        <%= button_to payment, class: 'btn btn-danger', method: :delete, data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
-                            <i class="bi bi-trash3-fill"></i>
-                        <% end %>
-                    <% end %>
-                </td>
+<div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
+    <table class="table table-borderless table-striped mb-0">
+        <thead class="table-secondary">
+            <tr class="fs-6">
+                <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('date') %></th>
+                <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('payable_type') %></th>
+                <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('amount') %></th>
+                <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('payment_method') %></th>
+                <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('note') %></th>
+                <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('staff') %></th>
+                <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
             </tr>
-        <% end %>
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+            <% payments.each do |payment| %>
+                <tr>
+
+                    <!-- Created At -->
+                    <td>
+                        <%= l payment.created_at, format: :short %>
+                    </td>
+
+                    <!-- Payable Type -->
+                    <td>
+                        <%= payment.humanize_payable_type %>
+                    </td>
+
+                    <!-- Amount -->
+                    <td>
+                        <%= number_to_currency payment.amount %>
+                    </td>
+
+                    <!-- Payment Method -->
+                    <td>
+                        <%= payment.humanize_payment_method %>
+                    </td>
+
+                    <!-- Note -->
+                    <td>
+                        <%= payment.note %>
+                    </td>
+
+                    <!-- Staff -->
+                    <% staff = payment.staff %>
+                    <td>
+                        <%= staff.nickname %>
+                    </td>
+
+                    <!-- Action buttons -->
+                    <td class="text-end">
+                        <%= link_to payment, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
+                            <i class="bi bi-eye-fill"></i>
+                        <% end %>
+
+                        <%= link_to edit_payment_path(payment), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
+                            <i class="bi bi-pencil-fill"></i>
+                        <% end %>
+
+                        <% if current_staff.admin? %>
+                            <%= button_to payment, class: 'btn btn-danger', method: :delete, data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+                                <i class="bi bi-trash3-fill"></i>
+                            <% end %>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>

@@ -13,10 +13,18 @@ class Activity < ApplicationRecord
   validates :num_participants, numericality: { greater_than: 0 }
 
   scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
-  scope :order_by_num_participants, ->(num) { order("num_participants #{num&.upcase}") }
-  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction.blank? ? 'DESC' : direction&.upcase}") }
+  scope :sorted, ->(sort_by, direction) do
+    if %w[name num_participants].include?(sort_by)
+      direction = %w[asc desc].include?(direction) ? direction : 'asc'
+      order("#{sort_by} #{direction}")
+    end
+  end
 
-  def self.filter(name, num, direction)
-    by_name(name).order_by_num_participants(num).order_by_updated_at(direction)
+  scope :order_by_updated_at, -> { order('updated_at desc') }
+
+  def self.filter(name, sort_by, direction)
+    by_name(name)
+      .sorted(sort_by, direction)
+      .order_by_updated_at
   end
 end

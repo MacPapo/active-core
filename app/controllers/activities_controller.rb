@@ -6,12 +6,16 @@ class ActivitiesController < ApplicationController
 
   # GET /activities
   def index
+    @sort_by = params[:sort_by] || 'updated_at'
+    @direction = params[:direction] || 'desc'
+
     @pagy, @activities = pagy(
-      Activity
-        .filter(params[:name], params[:num], params[:direction])
+      Activity.filter(params[:name], @sort_by, @direction)
         .includes(:subscriptions)
         .load_async
     )
+
+    respond_to { |f| f.html }
   end
 
   # GET /activities/1

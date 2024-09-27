@@ -5,13 +5,16 @@ class User < ApplicationRecord
   validates :name, :surname, presence: true
   validates :affiliated, inclusion: { in: [true, false] }
 
+  validates :cf, length: { is: 16 }, allow_blank: true
+  normalizes :cf, with: -> { _1.strip.upcase }
+
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   normalizes :email, with: -> { _1.strip.downcase }
 
   validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }
   validate :med_cert_issue_date_cannot_be_in_future, if: -> { med_cert_issue_date.present? }
 
-  before_save :normalize_phone
+  before_save :normalize_phone, if: -> { phone.present? }
 
   after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor?
 
@@ -36,7 +39,7 @@ class User < ApplicationRecord
   end
 
   scope :sorted, ->(sort_by, direction) do
-    if %w[name surname birth_day affiliated].include?(sort_by)
+    if %w[name surname birth_day].include?(sort_by)
       direction = %w[asc desc].include?(direction) ? direction : 'asc'
       order("#{sort_by} #{direction}")
     end
@@ -93,7 +96,7 @@ class User < ApplicationRecord
 
       next if val.present?
 
-      I18n.t("global.errors.no_#{x}")
+      User.human_attribute_name(x)
     end.compact
   end
 

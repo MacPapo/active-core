@@ -33,7 +33,7 @@ class Staff < ApplicationRecord
   end
 
   scope :sorted, ->(sort_by, direction) do
-    if %w[name surname birth_day affiliated].include?(sort_by)
+    if %w[name surname birth_day].include?(sort_by)
       direction = %w[asc desc].include?(direction) ? direction : 'asc'
       order("#{sort_by} #{direction}")
     end

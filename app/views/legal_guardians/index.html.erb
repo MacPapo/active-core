@@ -19,10 +19,10 @@
             <%= render 'partials/search_form_users', path: legal_guardians_path, frame: :legal_guardians %>
         </div>
         <%= link_to new_legal_guardian_path, class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
-            <i class="bi bi-person-fill-add"></i> <%= t '.add_legal_guardian' %>
+            <i class="bi bi-person-fill-add"></i>
+            <span class="ms-1"><%= t '.add_legal_guardian' %></span>
         <% end %>
     </div>
-
 
     <%= turbo_frame_tag :legal_guardians do %>
         <% legal_guardian_sortable_column = ->(col, title) { sortable_column(col, title, legal_guardians_path, :legal_guardians, @sort_by, @direction) } %>
@@ -34,10 +34,10 @@
 	                    <th><%= legal_guardian_sortable_column.call('name', LegalGuardian.human_attribute_name('name')) %></th>
 	                    <th><%= legal_guardian_sortable_column.call('surname', LegalGuardian.human_attribute_name('surname')) %></th>
 	                    <th><%= legal_guardian_sortable_column.call('birth_day', LegalGuardian.human_attribute_name('birth_day')) %></th>
-	                    <th class="text-primary fw-semibold"><%= LegalGuardian.human_attribute_name('email') %></th>
+	                    <th><%= legal_guardian_sortable_column.call('email', LegalGuardian.human_attribute_name('email')) %></th>
 	                    <th class="text-primary fw-semibold"><%= LegalGuardian.human_attribute_name('phone') %></th>
 	                    <th class="text-primary fw-semibold"><%= LegalGuardian.human_attribute_name('users') %></th>
-	                    <th class="text-primary fw-semibold"><%= t 'global.table.action' %></th>
+	                    <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,7 +74,7 @@
 	                        </td>
 
 	                        <!-- Action -->
-                                <td>
+                                <td class="text-end">
                                     <%= link_to legal_guardian, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
                                         <i class="bi bi-eye-fill"></i>
                                     <% end %>

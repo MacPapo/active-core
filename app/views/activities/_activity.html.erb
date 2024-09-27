@@ -40,7 +40,8 @@
         </h4>
 
         <%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-success' do %>
-            <i class="bi bi-activity"></i> <%= t '.add_plan' %>
+            <i class="bi bi-activity"></i>
+            <span class="ms-1"><%= t '.add_plan' %></span>
         <% end %>
     </div>
     <% if plans && plans.length > 0 %>

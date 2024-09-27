@@ -6,8 +6,8 @@ class DailyCashController < ApplicationController
     @morning_item = Payment.daily_cash(:morning).includes(:staff)
     @afternoon_item = Payment.daily_cash(:afternoon).includes(:staff)
 
-    @pagy_morning, @morning = pagy(@morning_item, items: 5, page_param: :page_morning)
-    @pagy_afternoon, @afternoon = pagy(@afternoon_item, items: 5, page_param: :page_afternoon)
+    @pagy_morning, @morning = pagy(@morning_item, page_param: :page_morning)
+    @pagy_afternoon, @afternoon = pagy(@afternoon_item, page_param: :page_afternoon)
 
     @morning_cash = @morning_item.sum(:amount)
     @afternoon_cash = @afternoon_item.sum(:amount)
