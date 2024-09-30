@@ -11,8 +11,11 @@
         </div>
     <% end %>
 
-    <div class="mb-3">
-        <%= form.label :start_date, class: 'form-label' %>
+    <div class="mb-2">
+        <div class="d-flex">
+            <%= form.label :start_date, class: 'form-label fw-semibold text-secondary' %>*
+        </div>
+
         <%= form.date_field :start_date, class: 'form-control', data: { describedby: 'dateHelp' }, autofocus: true %>
         <div id="dateHelp" class="form-text"><%= t '.date_help' %></div>
     </div>
@@ -20,7 +23,7 @@
     <%= form.hidden_field :user_id, value: @user.id %>
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 
-    <div>
-        <%= form.submit class: 'btn btn-success w-100' %>
+    <div class="mt-4">
+        <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
     </div>
 <% end %>

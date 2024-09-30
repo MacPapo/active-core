@@ -41,13 +41,13 @@ class SubscriptionPresenter
   def link_icon
     case subscription_handler
     when :active
-      'me-2 bi bi-eye'
+      'me-2 text-secondary bi bi-eye-fill'
     when :inactive
-      'me-2 bi bi-credit-card'
+      'me-2 text-secondary bi bi-credit-card'
     when :expired
-      'me-2 bi bi-arrow-clockwise'
+      'me-2 text-secondary bi bi-arrow-clockwise'
     else
-      'me-2 bi bi-plus-lg'
+      'me-2 text-secondary bi bi-plus-circle-fill'
     end
   end
 

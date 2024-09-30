@@ -114,7 +114,8 @@ it:
         status: "Stato"
         user: "Utente"
         staff: "Collaboratore"
-        updated_at: "Ultimo Aggiornamento"
+        updated_at: "Data aggiornamento"
+        created_at: "Data creazione"
       membership/status:
         inactive: "Inattivo"
         active: "Attivo"
@@ -142,6 +143,7 @@ it:
         subscription: "Iscrizione"
 
   global:
+    full_name: "Nome e Cognome"
     search_name: "Cerca per Nome e Cognome ..."
     search_activity: "Cerca l'attività per Nome ..."
     logout: "Esci"
@@ -151,7 +153,13 @@ it:
     activity: "Attività"
     subscription: "Iscrizioni"
     membership: "Quote"
-    del_sub: "Sicuro di voler eliminare questa iscrizione? L'operazione non è reversibile"
+    no_subs: "Ancora nessun partecipante per questa Attività"
+
+    edit_button: "Modifica"
+    destroy_button: "Elimina"
+    receipt_button: "Stampa Ricevuta"
+
+    destroy_dialog: "Sicuro di voler eliminare? L'operazione non è reversibile"
 
     devise:
       sign_in: "Hey, autenticati!"
@@ -161,9 +169,13 @@ it:
       one: "registrato"
       other: "registrati"
 
+    remaining:
+      one: "giorno rimasto"
+      other: "giorni rimasti"
+
     errors:
       eligible: ", deve avere almeno 18 anni."
-      
+
     forms:
       messages:
         errors:
@@ -219,12 +231,13 @@ it:
         other: "%{count} campi Mancanti"
     user:
       personal_data: "Anagrafica"
-      name_surname: "Nome e Cognome:"
       no_subs: "Nessuna iscrizione effettuata"
-      legal_guardian: "Dati Tutore Legale"
-      med_cert: "Dati Certificato Medico"
-      membership: "Dati Quota Associativa"
-      subs: "Attività Frequentate"
+      legal_guardian: "Tutore Legale"
+      med_cert: "Certificato Medico"
+      membership: "Quota Associativa"
+      no_membership: "Non è stata registrata la Quota Associativa per questo utente."
+      add_membership: "Registra Quota Associativa"
+      subs: "Attività"
       add_sub: "Aggiungi una Attività"
 
   activities:
@@ -238,14 +251,19 @@ it:
         one: "registrata"
         other: "registrate"
     activity:
+      info: "Informazioni"
+      plan: "Piani"
+      user: "Utenti"
       name: "Nome attività"
       num_participants: "Numero partecipanti"
       plans: "Piani per questa attività"
-      add_plan: "Aggiungi Piano per l'attività"
+      add_plan: "Aggiungi Piano"
     show:
-      title: "Dettagli Attività"
+      title: "Dettagli"
       list_users: "Lista utenti iscritti"
-      no_subs: "Ancora nessun partecipante per questa Attività"
+      registered:
+        one: "piano registrato"
+        other: "piani registrati"
     new:
       title: "Inserimento Nuova Attività"
 
@@ -340,7 +358,6 @@ it:
     index:
       add_legal_guardian: "Aggiungi Tutore Legale"
     legal_guardian:
-      full_name: "Nome e Cognome"
       users: "È tutore di"
 
   subscriptions:
@@ -363,8 +380,8 @@ it:
     index:
       title: "Iscrizioni"
       registered:
-        one: "%{count} iscrizioni registrate"
-        other: "%{count} iscrizioni registrate"
+        one: "registrate"
+        other: "registrate"
     new:
       title: "Inserimento di una Nuova Iscrizione"
     show:
@@ -392,8 +409,8 @@ it:
     index:
       title: "Quote Associative"
       registered:
-        one: "%{count} quota associativa registrata"
-        other: "%{count} quote associative registrate"
+        one: "registrata"
+        other: "registrate"
     show:
       title: "Dettagli Quote Associativa"
     new:

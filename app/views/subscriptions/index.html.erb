@@ -1,100 +1,111 @@
-<p class="mb-3 me-2 fs-3 fw-semibold text-secondary">
-    <%= t '.title' %>
-</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <p class="mb-0 fs-3 fw-semibold text-secondary">
+        <%= model_to_string(Subscription, 2) %>
+    </p>
 
-<%= render 'partials/search_form_users', path: subscriptions_path, frame: :subscriptions %>
-
-<%= turbo_frame_tag :subscriptions do %>
-    <div id="subscriptions">
-        <table class="table table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th><%= Subscription.human_attribute_name('updated_at') %></th>
-                    <th><%= User.human_attribute_name('name') %></th>
-                    <th><%= User.human_attribute_name('surname') %></th>
-                    <th><%= Subscription.human_attribute_name('activity') %></th>
-                    <th><%= Subscription.human_attribute_name('open') %></th>
-                    <th><%= Subscription.human_attribute_name('plan') %></th>
-                    <th><%= Subscription.human_attribute_name('start_date') %></th>
-		    <th><%= Subscription.human_attribute_name('end_date') %></th>
-                    <th><%= t 'global.table.action' %></th>
-                </tr>
-            </thead>
-
-            <tbody class="table-group-divider">
-
-                <% @subscriptions.each do |subscription| %>
-
-                    <tr>
-
-                        <!-- Updated At -->
-                        <td>
-		            <%= humanize_timestamp subscription.updated_at %>
-                        </td>
-
-                        <!-- Name -->
-                        <% user = subscription.user %>
-                        <td>
-                            <%= user.name %>
-                        </td>
-
-                        <!-- Surname -->
-                        <td>
-                            <%= user.surname %>
-                        </td>
-
-                        <!-- Activity -->
-                        <% activity = subscription.activity %>
-                        <% plan = subscription.activity_plan %>
-                        <td>
-                            <%= activity.name %>
-                        </td>
-
-                        <!-- OPEN -->
-                        <td>
-                            <%= t subscription.open? %>
-                        </td>
-
-                        <!-- ActivityPlan -->
-                        <td>
-                            <%= plan.humanize_plan %>
-                        </td>
-
-                        <!-- Start Date -->
-                        <td>
-                            <%= l subscription.start_date %>
-                        </td>
-
-                        <!-- End Date -->
-                        <td>
-                            <%= l subscription.end_date %>
-		        </td>
-
-                        <!-- Action -->
-                        <td>
-                            <%= link_to subscription, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
-                                <i class="bi bi-eye-fill"></i>
-                            <% end %>
-
-                            <%= link_to edit_subscription_path(subscription), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
-                                <i class="bi bi-pencil-fill"></i>
-                            <% end %>
-
-                            <% if current_staff.admin? %>
-                                <%= button_to subscription,
-                                              class: 'btn btn-danger',
-                                              method: :delete,
-                                              data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" },
-                                              form: {style: 'display:inline-block;'} do %>
-                                    <i class="bi bi-trash3-fill"></i>
-                                <% end %>
-                            <% end %>
-                        </td>
-                    </tr>
-                <% end %>
-            </tbody>
-
-        </table>
-        <%== pagy_bootstrap_nav(@pagy) %>
+    <div class="d-flex align-items-center">
+        <% count = Subscription.count %>
+        <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
+        <span class="fs-6 fw-light ps-2 text-muted"><%= t('.registered', count:) %></span>
     </div>
-<% end %>
+</div>
+
+<div class="bg-primary border border-secondary-subtle rounded-3 container">
+    <%= render 'partials/search_form_users', path: subscriptions_path, frame: :subscriptions %>
+
+    <%= turbo_frame_tag :subscriptions do %>
+        <% sub_sortable_column = ->(col, title) { sortable_column(col, title, subscriptions_path, :subscriptions, @sort_by, @direction) } %>
+        <div id="subscriptions" class="table-responsive">
+            <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
+                <table class="table table-borderless table-striped mb-0">
+                    <thead class="table-secondary">
+                        <tr class="fs-6">
+                            <th><%= sub_sortable_column.call('user_name', User.human_attribute_name('name')) %></th>
+                            <th><%= sub_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
+                            <th><%= sub_sortable_column.call('activity_name', Subscription.human_attribute_name('activity')) %></th>
+                            <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('open') %></th>
+                            <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('plan') %></th>
+                            <th><%= sub_sortable_column.call('start_date', Subscription.human_attribute_name('start_date')) %></th>
+		            <th><%= sub_sortable_column.call('end_date', Subscription.human_attribute_name('end_date')) %></th>
+                            <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="table-group-divider">
+
+                        <% @subscriptions.each do |subscription| %>
+
+                            <tr class="align-middle">
+
+                                <!-- Name -->
+                                <% user = subscription.user %>
+                                <td class="text-begin">
+                                    <%= highlight user.name, params.dig(:name) %>
+                                </td>
+
+                                <!-- Surname -->
+                                <td>
+                                    <%= highlight user.surname, params.dig(:name) %>
+                                </td>
+
+                                <!-- Activity -->
+                                <% activity = subscription.activity %>
+                                <% plan = subscription.activity_plan %>
+                                <td>
+                                    <%= activity.name %>
+                                </td>
+
+                                <!-- OPEN -->
+                                <td>
+                                    <%= t subscription.open? %>
+                                </td>
+
+                                <!-- ActivityPlan -->
+                                <td>
+                                    <%= plan.humanize_plan %>
+                                </td>
+
+                                <!-- Start Date -->
+                                <td>
+                                    <%= l subscription.start_date %>
+                                </td>
+
+                                <!-- End Date -->
+                                <td>
+                                    <%= l subscription.end_date %>
+		                </td>
+
+                                <!-- Action -->
+                                <td class="text-end">
+                                    <%= link_to subscription,
+                                                class: 'btn btn-info btn-sm border border-secondary-subtle',
+                                                data: { turbo_frame: "_top" } do %>
+                                        <i class="bi bi-eye-fill"></i>
+                                    <% end %>
+
+                                    <%= link_to edit_subscription_path(subscription),
+                                                class: 'btn btn-warning btn-sm border border-secondary-subtle',
+                                                data: { turbo_frame: "_top" } do %>
+                                        <i class="bi bi-pencil-fill"></i>
+                                    <% end %>
+
+                                    <% if current_staff.admin? %>
+                                        <%= button_to subscription,
+                                                      class: 'btn btn-danger btn-sm border border-secondary-subtle',
+                                                      method: :delete,
+                                                      data: { turbo_frame: "_top", turbo_confirm: t('global.destroy_dialog') },
+                                                      form: {style: 'display:inline-block;'} do %>
+                                            <i class="bi bi-trash3-fill"></i>
+                                        <% end %>
+                                    <% end %>
+                                </td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+
+            <%== pagy_bootstrap_nav(@pagy) %>
+        </div>
+    <% end %>
+</div>

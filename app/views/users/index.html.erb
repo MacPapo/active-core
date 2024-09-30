@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <p class="mb-0 me-2 fs-3 fw-semibold text-secondary">
+    <p class="mb-0 fs-3 fw-semibold text-secondary">
         <%= model_to_string(User, 2) %>
     </p>
 
@@ -39,8 +39,8 @@
                     </thead>
                     <tbody>
                         <% @users.each do |user| %>
-                            <tr class="text-begin">
-                                <td>
+                            <tr class="align-middle">
+                                <td class="text-begin">
                                     <% compliance = user.verify_compliance %>
                                     <% count = compliance&.size %>
                                     <% is_compliance = compliance.empty? %>
@@ -51,9 +51,9 @@
                                     >
                                         <span
                                             data-popover-target="button"
-                                            class="badge rounded-pill text-bg-<%= is_compliance ? 'success' : 'warning' %>"
+                                            class="btn border border-secondary-subtle badge rounded-pill text-bg-<%= is_compliance ? 'success' : 'warning' %>"
                                         >
-                                            <i class="bi bi-person-fill-<%= is_compliance ? 'check' : 'exclamation' %>"></i>
+                                            <i class="text-secondary bi bi-person-fill-<%= is_compliance ? 'check' : 'exclamation' %>"></i>
                                         </span>
                                     </div>
                                 </td>
@@ -76,8 +76,9 @@
                                 <!-- Membership -->
                                 <td>
                                     <% presenter = MembershipPresenter.new(user.membership) %>
-                                    <%= link_to presenter.appropriate_path(user), class: "btn badge rounded-pill text-bg-#{presenter.css_color}", data: { turbo_frame: "_top" } do %>
-                                        <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
+                                    <%= link_to presenter.appropriate_path(user), class: "btn text-secondary border border-secondary-subtle badge rounded-pill text-bg-#{presenter.css_color}", data: { turbo_frame: "_top" } do %>
+                                        <i class="<%= presenter.link_icon %>"></i>
+                                        <%= presenter.link_title %>
                                     <% end %>
                                 </td>
 
@@ -86,7 +87,7 @@
                                     <% subs = user.subscriptions.where.missing(:normal_subscription) %>
                                     <% subs.each do |sub| %>
                                         <% presenter = SubscriptionPresenter.new(sub) %>
-                                        <%= link_to presenter.appropriate_path(user), class: "btn badge rounded-pill text-bg-#{ presenter.css_color }", data: { turbo_frame: "_top" } do %>
+                                        <%= link_to presenter.appropriate_path(user), class: "btn text-secondary border border-secondary-subtle badge rounded-pill text-bg-#{ presenter.css_color }", data: { turbo_frame: "_top" } do %>
                                             <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
                                         <% end %>
                                     <% end %>
@@ -94,19 +95,19 @@
 
                                 <!-- Action buttons -->
                                 <td class="text-end">
-                                    <%= link_to user, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
-                                        <i class="bi bi-eye-fill"></i>
+                                    <%= link_to user, class: 'btn btn-info btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
+                                        <i class="bi text-secondary bi-eye-fill"></i>
                                     <% end %>
 
-                                    <%= link_to edit_user_path(user), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
-                                        <i class="bi bi-pencil-fill"></i>
+                                    <%= link_to edit_user_path(user), class: 'btn btn-warning btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
+                                        <i class="bi text-secondary bi-pencil-fill"></i>
                                     <% end %>
 
                                     <% if current_staff.admin? %>
                                         <%= button_to user_path(user),
-                                                      class: 'btn btn-danger',
+                                                      class: 'btn text-secondary btn-danger btn-sm border border-secondary-subtle',
                                                       method: :delete,
-                                                      data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile", turbo_frame: "_top" },
+                                                      data: { turbo_confirm: t('global.destroy_dialog'), turbo_frame: "_top" },
                                                       form: {style: 'display:inline-block;'} do %>
                                             <i class="bi bi-trash3-fill"></i>
                                         <% end %>

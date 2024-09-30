@@ -10,34 +10,34 @@
         </div>
     <% end %>
 
-    <div class="row">
+    <div class="row g-3 mb-2">
+
+        <!-- Start Date -->
         <div class="col">
-            <div class="mb-3">
-                <%= form.label :start_date, class: 'form-label' %>
-                <%= form.date_field :start_date, class: 'form-control' %>
-            </div>
+            <%= form.label :start_date, class: 'form-label fw-semibold text-secondary' %>
+            <%= form.date_field :start_date, class: 'form-control' %>
         </div>
+
+        <!-- End Date -->
         <div class="col">
-            <div class="mb-3">
-                <%= form.label :end_date, class: 'form-label' %>
-                <%= form.date_field :end_date, class: 'form-control' %>
-            </div>
+            <%= form.label :end_date, class: 'form-label fw-semibold text-secondary' %>
+            <%= form.date_field :end_date, class: 'form-control' %>
         </div>
     </div>
 
     <% if @user && !@activity %>
-        <div class="row mb-3">
+        <div class="row mb-2">
             <div class="col">
-                <%= form.label :activity_id, 'Seleziona Attività', class: 'form-label' %>
+                <%= form.label :activity_id, t('.sel_activity'), class: 'form-label fw-semibold text-secondary' %>
                 <%= form.collection_select :activity_id, @activities, :id, :name,
-                 { prompt: "#{t('.sel_activity')}" },
+                    { prompt: "#{t('.sel_activity')}" },
                  { class: 'form-select', data: { action: "change->activity-search-user#loadPlans change->toggle-open#toggleOpenField" },
                      'data-toggle-open-target' => 'activitySelect' }
                 %>
             </div>
 
             <div class="col">
-                <%= form.label :activity_plan_id, 'Seleziona Piano', class: 'form-label' %>
+                <%= form.label :activity_plan_id, t('.sel_plan'), class: 'form-label fw-semibold text-secondary' %>
                 <%= form.collection_select :activity_plan_id, @plans || [], :id, :humanize_plan, {}, { class: 'form-select', 'data-activity-search-user-target' => "plans" } %>
             </div>
         </div>
@@ -46,29 +46,26 @@
         <%= hidden_field_tag :direction, 0 %>
     <% else %>
 
-        <div class="row">
+        <div class="row g-3 mb-2">
             <div class="col">
-                <div class="mb-3">
-                    <%= form.label :user_id, class: 'form-label' %>
-                    <%= text_field_tag :q, nil, data: { 'activity-search-user-target' => "input", 'action' => "input->activity-search-user#search change->activity-search-user#selectUser" },
-                                       class: 'form-control', list: "datalistOptions", autocomplete: "off", placeholder: t('.sel_user') %>
-                    <datalist id="datalistOptions" data-activity-search-user-target="results"></datalist>
-                </div>
+                <%= form.label :user_id, class: 'form-label fw-semibold text-secondary' %>
+                <%= text_field_tag :q, nil, data: { 'activity-search-user-target' => "input", 'action' => "input->activity-search-user#search change->activity-search-user#selectUser" },
+                                   class: 'form-control', list: "datalistOptions", autocomplete: "off", placeholder: t('.sel_user') %>
+                <datalist id="datalistOptions" data-activity-search-user-target="results"></datalist>
             </div>
 
             <div class="col">
-                <div class="mb-3">
-                    <%= form.label :activity_plan_id, class: 'form-label' %>
-                    <%= form.collection_select :activity_plan_id, @plans, :id, :humanize_plan, {}, { class: 'form-select' } %>
-                </div>
+                <%= form.label :activity_plan_id, class: 'form-label fw-semibold text-secondary' %>
+                <%= form.collection_select :activity_plan_id, @plans, :id, :humanize_plan, {}, { class: 'form-select' } %>
             </div>
         </div>
+
         <%= form.hidden_field :user_id, data: { 'activity-search-user-target' => "hiddenUserId" } %>
         <%= form.hidden_field :activity_id, value: @activity.id, 'data-toggle-open-target' => 'activitySelect' %>
         <%= hidden_field_tag :direction, 1 %>
     <% end %>
 
-    <div class="form-check mb-3" data-toggle-open-target="openField">
+    <div class="form-check mb-2" data-toggle-open-target="openField">
         <%= label_tag do %>
             <%= check_box_tag(:open, class: 'form-check-input') %>
             OPEN
@@ -77,7 +74,7 @@
 
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 
-    <div class="actions">
-        <%= form.submit class: 'btn btn-success w-100' %>
+    <div class="mt-4">
+        <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
     </div>
 <% end %>

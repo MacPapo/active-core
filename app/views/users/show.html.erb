@@ -1,21 +1,30 @@
-<div class="card" id="<%= dom_id @user %>">
-  <div class="card-header">
-    <h1 class="card-title">
-      <%= t '.user_detail' %>
-    </h1>
-  </div>
+<p class="mb-b fs-3 fw-semibold text-secondary">
+    <%= t '.user_detail' %>
+</p>
 
-  <!-- Card Body -->
-  <div class="card-body">
-    <%= render @user %>
-  </div>
+<div class="bg-primary border border-secondary-subtle rounded-3 container">
 
-  <!-- Card Footer -->
-  <div class="card-footer bg-light">
-    <div class="d-flex justify-content-end">
-      <!-- TODO translate -->
-      <%= link_to "Modifica questo utente", edit_user_path(@user), class: 'btn btn-warning me-2' %>
-      <%= button_to "Elimina questo utente", @user, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>
+    <div>
+        <%= render @user %>
     </div>
-  </div>
+
+    <div class="py-3 d-flex justify-content-end">
+
+        <!-- Edit -->
+        <%= link_to edit_user_path(@user), class: 'btn btn-warning me-2 fs-5 text-secondary' do %>
+            <i class="bi bi-pencil-fill me-1"></i>
+            <%= t('global.edit_button') %>
+        <% end %>
+
+        <% if current_staff.admin? %>
+            <!-- Destroy -->
+            <%= button_to @user,
+                          class: 'btn btn-danger fs-5 text-secondary',
+                          method: :delete,
+                          data: { turbo_confirm: t('global.destroy_dialog') } do %>
+                <i class="bi bi-trash3-fill"></i>
+                <%= t('global.destroy_button') %>
+            <% end %>
+        <% end %>
+    </div>
 </div>

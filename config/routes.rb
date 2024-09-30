@@ -2,33 +2,40 @@ Rails.application.routes.draw do
   devise_for :staffs
 
   authenticated :staff, -> { _1.admin? } do
+    resources :staffs
+
     resources :payments, only: [:index]
     resources :subscriptions, only: [:index]
     resources :memberships, only: [:index]
-    resources :staffs
+    resources :users, only: [:destroy]
+    resources :legal_guardians, only: [:destroy]
+    resources :activities, only: %i[destroy edit]
+    resources :activity_plans, only: %i[new create destory edit]
 
     mount MissionControl::Jobs::Engine, at: '/jobs'
   end
 
-  resources :users do
+  resources :users, except: [:destroy] do
     collection do
       get :activity_search
     end
   end
 
-  resources :legal_guardians do
+  resources :legal_guardians, except: [:destroy] do
     collection do
       get 'find_by_email'
     end
   end
+
   resources :payments, except: [:index]
 
-  resources :activities do
+  resources :activities, except: %i[destroy edit] do
     get 'plans', on: :member
     get 'name', on: :member
   end
 
-  resources :activity_plans
+  resources :activity_plans, except: %i[new create destory edit]
+
   resources :waitlists
   get 'receipt/show'
 

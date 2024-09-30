@@ -1,118 +1,142 @@
-<h3 class="card-subtitle mb-4">
-    <%= t '.personal_data' %>
-</h3>
-
 <% staff_attribute_to_string = ->(attr) { attribute_to_string(staff, attr) } %>
 <% user_attribute_to_string = ->(attr) { attribute_to_string(staff.user, attr) } %>
+
 <!-- Personal Data -->
-<div class="row mb-3">
+<div class="row mb-2">
+
+    <!-- Nickname -->
     <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= staff_attribute_to_string.('nickname') %>
-        </h5>
-        <p class="card-text">
+        </p>
+        <p class="fs-5 fw-semibold text-secondary">
             <%= staff.nickname %>
         </p>
     </div>
+
+    <!-- User -->
     <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= staff_attribute_to_string.('user') %>
-        </h5>
-        <p class="card-text">
+        </p>
+        <p class="fs-5 fw-semibold text-secondary">
             <%= staff.full_name %>
         </p>
     </div>
-</div>
 
-<div class="row mb-3">
+    <!-- Birth Day -->
     <div class="col">
-        <h5 class="card-subtitle mb-2">
-            <%= user_attribute_to_string.('cf') %>
-        </h5>
-        <p class="card-text">
-            <%= staff.cf %>
-        </p>
-    </div>
-    <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= user_attribute_to_string.('birth_day') %>
-        </h5>
+        </p>
         <% if staff.birth_day %>
-            <p class="card-text">
+            <p class="fs-5 fw-semibold text-secondary">
                 <%= l staff.birth_day %> (<%= num_to_human_years staff.age %>)
             </p>
         <% end %>
     </div>
+
+    <!-- CF -->
+    <div class="col">
+        <p class="fs-6 fw-light text-muted mb-2">
+            <%= user_attribute_to_string.('cf') %>
+        </p>
+        <p class="fs-5 fw-semibold text-secondary">
+            <%= staff.cf %>
+        </p>
+    </div>
 </div>
 
-<div class="row mb-3">
-    <div class="col">
-        <h5 class="card-subtitle mb-2">
+<div class="row mb-2">
+
+    <!-- Email -->
+    <% email = staff.email %>
+    <div class="col-md-3">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= user_attribute_to_string.('email') %>
-        </h5>
-        <p class="card-text">
-            <%= staff.email %>
+        </p>
+        <p class="fs-5 fw-semibold <%= email.present? ? 'text-secondary' : 'text-warning' %>">
+            <% if email.present? %>
+                <%= email %>
+            <% else %>
+                <%= t('empty') %>
+            <% end %>
         </p>
     </div>
-    <div class="col">
-        <h5 class="card-subtitle mb-2">
+
+    <!-- Phone -->
+    <% phone = staff.phone %>
+    <div class="col-md-3">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= user_attribute_to_string.('phone') %>
-        </h5>
-        <p class="card-text">
-            <%= phone_to_string staff.phone %>
+        </p>
+
+        <p class="fs-5 fw-semibold <%= phone.present? ? 'text-secondary' : 'text-warning' %>">
+            <% if phone.present? %>
+                <%= phone_to_string phone %>
+            <% else %>
+                <%= t('empty') %>
+            <% end %>
         </p>
     </div>
+
+    <!-- Affiliated -->
+    <% affiliated = staff.affiliated? %>
     <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= user_attribute_to_string.('affiliated') %>
-        </h5>
-        <span class="badge text-bg-<%= staff.affiliated? ? 'success' : 'warning' %>"><%= t staff.affiliated? %></span>
+        </p>
+        <p class="fs-5 fw-semibold text-secondary">
+            <%= t affiliated %>
+        </p>
     </div>
 </div>
 
 <% unless staff.volunteer? %>
-    <hr/>
-    <!-- Cert med -->
-    <div>
-        <h3 class="card-subtitle mb-3">
-            <%= user_attribute_to_string.('med_cert_issue_date') %>
-        </h3>
-        <p class="cart-text">
-            <% start_date = staff.user.med_cert_issue_date %>
 
-            <% if start_date.nil? %>
-                <span class="badge text-bg-warning"><%= t 'empty' %></span>
+    <!-- Cert med -->
+    <% med = staff.med_cert_issue_date %>
+    <div class="row mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
+            <%= user_attribute_to_string.('med_cert_issue_date') %>
+        </p>
+        <p class="fs-5 fw-semibold <%= med.present? ? 'text-secondary' : 'text-warning' %>">
+
+            <% if med.present? %>
+                <%= l med %> (<%= distance_of_time_in_words_to_now staff.user.med_cert_exp_date %>)
             <% else %>
-                <%= l start_date %> (<%= distance_of_time_in_words_to_now staff.user.med_cert_exp_date %>)
+                <%= t 'empty' %>
             <% end %>
         </p>
     </div>
 <% end %>
 
 <% if current_staff.admin? %>
-    <hr/>
-    <!-- TODO -->
-    <h3 class="card-subtitle mb-3">
-        <%= t '.trace' %>
-    </h3>
-    <div class="row mb-3">
+
+    <div class="container py-1">
+        <hr>
+    </div>
+
+    <div class="row mb-2">
+
+        <!-- Current Sign In At -->
         <div class="col">
-            <h5 class="card-subtitle mb-2">
+            <p class="fs-6 fw-light text-muted mb-2">
                 <%= staff_attribute_to_string.('current_sign_in_at') %>
-            </h5>
-            <p class="card-text">
-                <%= staff.current_sign_in_at ? time_ago_in_words(staff.current_sign_in_at) : t('.never') %>
+            </p>
+            <p class="fs-5 fw-semibold text-secondary">
+                <%= staff.current_sign_in_at.present? ? time_ago_in_words(staff.current_sign_in_at) : t('.never') %>
             </p>
         </div>
+
+        <!-- Last Sign In At -->
         <div class="col">
-            <h5 class="card-subtitle mb-2">
+            <p class="fs-6 fw-light text-muted mb-2">
                 <%= staff_attribute_to_string.('last_sign_in_at') %>
-            </h5>
-            <% if staff.birth_day %>
-                <p class="card-text">
-                    <%= staff.last_sign_in_at ? time_ago_in_words(staff.last_sign_in_at) : t('.never') %>
-                </p>
-            <% end %>
+            </p>
+            <p class="fs-5 fw-semibold text-secondary">
+                <%= staff.last_sign_in_at.present? ? time_ago_in_words(staff.last_sign_in_at) : t('.never') %>
+            </p>
         </div>
     </div>
 <% end %>

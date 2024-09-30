@@ -1,81 +1,146 @@
 <% sub_attribute_to_string = ->(attr) { attribute_to_string(subscription, attr) } %>
-<div class="row mb-4">
+<!-- User -->
+<% user = subscription.user %>
+<div class="row mb-2">
     <div class="col">
-        <h5 class="card-subtitle mb-2">
-            <%= sub_attribute_to_string.('start_date') %>
-        </h5>
-        <div class="card-text">
-            <%= l subscription.start_date %>
+        <p class="fs-6 fw-light text-muted mb-2">
+            <%= sub_attribute_to_string.('user') %>
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
+            <%= link_to "#{user.full_name}",
+                        user,
+                        class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2'
+            %>
         </div>
     </div>
-    <div class="col">
-        <h5 class="card-subtitle mb-2">
-            Data Fine:
-        </h5>
-        <div class="card-text">
-            <%= l subscription.end_date %>
-        </div>
-    </div>
-</div>
 
-<div class="row mb-4">
+
+    <!-- Activity -->
+    <% activity = subscription.activity %>
     <div class="col">
-        <h5 class="card-subtitle mb-2">
-            Nome e Cognome:
-        </h5>
-        <div class="card-text">
-            <%= subscription.user.full_name %>
-        </div>
-    </div>
-    <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= sub_attribute_to_string.('activity') %>
-        </h5>
-        <div class="card-text">
-            <%= subscription.activity.name %>
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
+            <%= link_to "#{activity.name}",
+                        activity,
+                        class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2'
+            %>
         </div>
     </div>
-</div>
 
-<div class="row mb-4">
+    <!-- Activity Plan -->
     <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= sub_attribute_to_string.('activity_plan') %>
-        </h5>
-        <div class="card-text">
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
             <%= subscription.activity_plan.humanize_plan %>
         </div>
     </div>
 </div>
 
-<% is_open = subscription.open? %>
-<div class="row mb-4">
+<div class="row mb-2">
+
+    <!-- Start Date -->
     <div class="col">
-        <h5 class="card-subtitle mb-2">
-            <%= sub_attribute_to_string.('open') %>
-        </h5>
-        <div class="card-text">
-            <%= t is_open %>
+        <p class="fs-6 fw-light text-muted mb-2">
+            <%= sub_attribute_to_string.('start_date') %>
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
+            <%= l subscription.start_date %>
         </div>
     </div>
 
-    <% if is_open && subscription.open_subscription %>
+    <!-- End Date -->
+    <div class="col">
+        <p class="fs-6 fw-light text-muted mb-2">
+            <%= sub_attribute_to_string.('end_date') %>
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
+            <%= l subscription.end_date %>
+        </div>
+    </div>
+
+    <!-- Status -->
+    <% presenter = SubscriptionPresenter.new(subscription) %>
+    <div class="col">
+        <p class="fs-6 fw-light text-muted mb-2">
+            <%= sub_attribute_to_string.('status') %>
+        </p>
+        <%= link_to presenter.appropriate_path(user),
+                    class: "btn fs-6 border border-secondary-subtle fw-semibold text-secondary text-bg-#{presenter.css_color}",
+                    data: { turbo_frame: "_top" } do %>
+            <i class="<%= presenter.link_icon %>"></i>
+            <%= presenter.link_title %>
+        <% end %>
+    </div>
+</div>
+
+<% is_open = subscription.open? %>
+<% if is_open && subscription.open_subscription %>
+    <div class="container py-1">
+        <hr>
+    </div>
+
+    <div class="row mb-2">
+
+        <!-- OPEN -->
+        <div class="col-md-4">
+            <p class="fs-6 fw-light text-muted mb-2">
+                <%= sub_attribute_to_string.('open') %>
+            </p>
+            <div class="fs-5 fw-semibold text-secondary">
+                <%= t is_open %>
+            </div>
+        </div>
+
+        <!-- OPEN SUB -->
         <% open_sub = subscription.open_subscription %>
         <div class="col">
-            <h5 class="card-subtitle mb-2">
+            <p class="fs-6 fw-light text-muted mb-2">
                 <%= sub_attribute_to_string.('open_subscription') %>
-            </h5>
-            <div class="card-text">
+            </p>
+            <div class="fs-5 fw-semibold text-secondary">
                 <%= open_sub.activity.name %> (<%= open_sub.activity_plan.humanize_plan %>)
             </div>
         </div>
-    <% end %>
-</div>
-
-<div class="row mb-4">
-    <div class="col">
-        <h5 class="card-subtitle mb-2">
-           <%= sub_attribute_to_string.('status') %>: <%= subscription.humanize_status %>
-        </h5>
     </div>
-</div>
+<% end %>
+
+<% if current_staff.admin? %>
+
+    <div class="container py-1">
+        <hr>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col">
+            <p class="fs-6 fw-light text-muted mb-2">
+                <%= sub_attribute_to_string.('staff') %>
+            </p>
+            <div class="fs-5 fw-semibold text-secondary">
+                <% staff = subscription.staff %>
+                <%= link_to "#{staff.nickname}", staff, class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2' %>
+            </div>
+        </div>
+
+        <div class="col">
+            <p class="fs-6 fw-light text-muted mb-2">
+                <%= sub_attribute_to_string.('updated_at') %>
+            </p>
+            <div class="fs-5 fw-semibold text-secondary">
+                <%= l subscription.updated_at, format: :long %>
+            </div>
+        </div>
+
+        <div class="col">
+            <p class="fs-6 fw-light text-muted mb-2">
+                <%= sub_attribute_to_string.('created_at') %>
+            </p>
+            <div class="fs-5 fw-semibold text-secondary">
+                <%= l subscription.created_at, format: :long %>
+            </div>
+        </div>
+    </div>
+<% end %>

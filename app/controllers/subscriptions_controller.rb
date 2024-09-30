@@ -12,12 +12,16 @@ class SubscriptionsController < ApplicationController
 
   # GET /subscriptions
   def index
+    @sort_by = params[:sort_by] || 'updated_at'
+    @direction = params[:direction] || 'desc'
+
     @pagy, @subscriptions = pagy(
-      Subscription
-        .filter(params[:name], params[:surname], params[:direction])
+      Subscription.filter(params[:name], @sort_by, @direction)
         .includes(:user, :activity, :activity_plan)
         .load_async
     )
+
+    respond_to { |f| f.html }
   end
 
   # GET /subscriptions/1

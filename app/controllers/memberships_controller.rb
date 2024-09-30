@@ -7,12 +7,16 @@ class MembershipsController < ApplicationController
 
   # GET /memberships
   def index
+    @sort_by = params[:sort_by] || 'updated_at'
+    @direction = params[:direction] || 'desc'
+
     @pagy, @memberships = pagy(
-      Membership
-        .filter(params[:name], params[:surname], params[:direction])
+      Membership.filter(params[:name], @sort_by, @direction)
         .includes(:user)
         .load_async
     )
+
+    respond_to { |f| f.html }
   end
 
   # GET /memberships/1

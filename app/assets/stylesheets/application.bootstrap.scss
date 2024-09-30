@@ -7,10 +7,10 @@ $secondary-10: #7eb1e5;
 $secondary-80: #395168;
 
 
-$info: #0a9396;
-$success: #28C76F;
-$warning: #EE9B00;
-$danger: #FF6B6B;
+$info: #57e5e5;
+$success: #5be599;
+$warning: #f4ba5d;
+$danger: #f96363;
 
 $border: #abb2ba;
 
@@ -27,6 +27,24 @@ $input-focus-border-color: $secondary;
 
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+
+// SIDEBAR BUTTON COMPONENTS
+
+.btn-bd-secondary {
+  --bs-btn-font-weight: 400;
+  --bs-btn-color: #{$secondary};
+  // --bs-btn-bg: #{$primary};
+
+  --bs-btn-hover-color: #{$secondary};
+  --bs-btn-hover-bg: #{$dark};
+  --bs-btn-hover-border-color: #{$dark};
+  --bs-btn-focus-shadow-rgb: #{$dark};
+
+  --bs-btn-active-color: #{$primary};
+  --bs-btn-active-bg: #{$secondary};
+  --bs-btn-active-border-color: #{$border};
+}
+
 
 // PAGY COMPONENTS
 
@@ -90,4 +108,18 @@ mark {
 
 .nav-pills .nav-link.active:hover {
   background-color: $secondary-80;
+}
+
+
+.form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: $border;
+    opacity: 0.5; /* Firefox */
+}
+
+.form-control:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: $border;
+}
+
+.form-control::-ms-input-placeholder { /* Microsoft Edge */
+    color: $border;
 }

@@ -1,23 +1,33 @@
-<div class="card" id="<%= dom_id @payment %>">
-  <div class="card-header">
-    <h1 class="card-title">
-      <%= t '.payment_detail' %>
-    </h1>
-  </div>
+<p class="mb-b fs-3 fw-semibold text-secondary">
+    <%= t '.payment_detail' %>
+</p>
 
-  <!-- Card Body -->
-  <div class="card-body">
-    <%= render @payment %>
-  </div>
+<div class="bg-primary border border-secondary-subtle rounded-3 container">
 
-  <!-- Card Footer -->
-  <div class="card-footer bg-light">
-    <div class="d-flex justify-content-end">
-      <%= link_to "Stampa Ricevuta", receipt_show_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2' %>
-
-      <!-- TODO translate -->
-      <%= link_to "Edit", edit_payment_path(@payment), class: 'btn btn-warning me-2' %>
-      <%= button_to "Elimina questo payment", @payment, class: 'btn btn-danger', method: :delete, data: { turbo_confirm: "Sicuro di voler eliminare questo utente? L'operazione non è reversibile" } %>
+    <div>
+        <%= render @payment %>
     </div>
-  </div>
+
+    <div class="py-3 d-flex justify-content-end">
+
+        <%= link_to receipt_show_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2 fs-5 text-secondary' do %>
+            <i class="bi bi-receipt me-1"></i>
+            <%= t('global.receipt_button') %>
+        <% end %>
+
+        <!-- Edit -->
+        <%= link_to edit_payment_path(@payment), class: 'btn btn-warning me-2 fs-5 text-secondary' do %>
+            <i class="bi bi-pencil-fill me-1"></i>
+            <%= t('global.edit_button') %>
+        <% end %>
+
+        <!-- Destroy -->
+        <%= button_to @payment,
+                      class: 'btn btn-danger fs-5 text-secondary',
+                      method: :delete,
+                      data: { turbo_confirm: t('global.destroy_dialog') } do %>
+            <i class="bi bi-trash3-fill"></i>
+            <%= t('global.destroy_button') %>
+        <% end %>
+    </div>
 </div>

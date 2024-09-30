@@ -37,28 +37,41 @@ class Subscription < ApplicationRecord
 
   enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive
 
-  scope :active, -> { where(status: :active) }
-  scope :by_name, ->(name) { where('users.name LIKE ?', "%#{name}%") if name.present? }
-  scope :by_surname, ->(surname) { where('users.surname LIKE ?', "%#{surname}%") if surname.present? }
-  scope :order_by_updated_at, ->(direction) { order("subscriptions.updated_at #{direction.blank? ? 'DESC' : direction&.upcase }") }
+  OPEN_COST = 30.0
 
-  def self.filter(name, surname, direction)
-    joins(:user).by_name(name).by_surname(surname).order_by_updated_at(direction)
+  scope :by_name, ->(query) do
+    if query.present?
+      where('users.name LIKE :q OR users.surname LIKE :q OR (users.surname LIKE :s AND users.name LIKE :n)', q: "%#{query}%", s: "%#{query.split.last}%", n: "%#{query.split.first}%")
+    end
   end
 
-  OPEN_COST = 30.0
+  scope :sorted, ->(sort_by, direction) do
+    if %w[user_name activity_name surname start_date end_date].include?(sort_by)
+      direction = %w[asc desc].include?(direction) ? direction : 'asc'
+
+      if sort_by == 'user_name' || sort_by == 'activity_name'
+        sort_by = sort_by == 'user_name' ? 'users.name' : 'activities.name'
+      end
+
+      order("#{sort_by} #{direction}")
+    end
+  end
+
+  scope :order_by_updated_at, -> { order('subscriptions.updated_at desc') }
+
+  def self.filter(name, sort_by, direction)
+    joins(:user)
+      .by_name(name)
+      .sorted(sort_by, direction)
+      .order_by_updated_at
+  end
 
   def humanize_status(status = self.status)
     Subscription.human_attribute_name("status.#{status}")
   end
 
   def cost
-    acost =
-      if user.affiliated? && plan_affiliated_cost
-        plan_affiliated_cost
-      else
-        plan_cost
-      end
+    acost = user.affiliated? && plan_affiliated_cost.present? ? plan_affiliated_cost : plan_cost
 
     open? ? acost + OPEN_COST : acost
   end
@@ -67,7 +80,7 @@ class Subscription < ApplicationRecord
     open_subscription.present? || normal_subscription.present?
   end
 
-  def days_til_renewal
+  def days_til_renwal
     return -1 if start_date.blank? || end_date.blank?
 
     (end_date - Time.zone.today).to_i

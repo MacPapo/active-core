@@ -1,52 +1,71 @@
 <% lg_attribute_to_string = ->(attr) { attribute_to_string(legal_guardian, attr) } %>
-<div class="row mb-4">
-    <div class="col">
-        <h5 class="card-subtitle mb-2">
-            <%= t '.full_name' %>
-        </h5>
-        <div class="card-text">
+<div class="row mb-2">
+
+    <!-- Full Name -->
+    <div class="col-md-4">
+        <p class="fs-6 fw-light text-muted mb-2">
+            <%= t 'global.full_name' %>
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
             <%= legal_guardian.full_name %>
         </div>
     </div>
+
+    <!-- Birth Day -->
     <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= lg_attribute_to_string.('birth_day') %>
-        </h5>
-        <div class="card-text">
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
             <%= l legal_guardian.birth_day %>
         </div>
     </div>
 </div>
 
-<div class="row mb-4">
-    <div class="col">
-        <h5 class="card-subtitle mb-2">
+<div class="row mb-2">
+
+    <!-- Email -->
+    <div class="col-md-4">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= lg_attribute_to_string.('email') %>
-        </h5>
-        <div class="card-text">
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
             <%= legal_guardian.email %>
         </div>
     </div>
+
+    <!-- Phone -->
     <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= lg_attribute_to_string.('phone') %>
-        </h5>
-        <div class="card-text">
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
             <%= phone_to_string legal_guardian.phone %>
         </div>
     </div>
 </div>
 
-<hr>
-
-<div>
-    <h3 class="card-subtitle mb-3">
-        <%= lg_attribute_to_string.('users') %>
-    </h3>
-    <p class="card-text">
-        <!-- TODO simil lista -->
-        <% legal_guardian.users.each do |user| %>
-            <%= user.full_name %>
-        <% end %>
-    </p>
+<div class="container py-1">
+    <hr>
 </div>
+
+<% users = legal_guardian.users %>
+<% if users.present? %>
+
+    <!-- Users -->
+    <div class="row">
+        <p class="fs-6 fw-light text-muted mb-2">
+            <%= lg_attribute_to_string.('users') %>
+        </p>
+
+        <p class="fs-5 fw-semibold text-secondary">
+            <% users.each_with_index do |user, i| %>
+                <%= i.zero? ? '' : ',' %>
+                <%= link_to "#{user.full_name}",
+                            user,
+                            class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2'
+                %>
+            <% end %>
+        </p>
+    </div>
+<% end %>

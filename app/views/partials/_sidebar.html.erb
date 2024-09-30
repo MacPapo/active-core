@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<div class="pt-3 px-2 pb-2 bg-primary border border-secondary-subtle d-flex flex-column justify-content-between position-fixed" style="width: 220px; height: 100vh;">
+<div class="pt-3 px-2 pb-2 bg-primary border-end border-secondary-subtle d-flex flex-column justify-content-between position-fixed" style="width: 220px; height: 100vh;">
 
     <!-- Sidebar Links -->
     <div class="d-grid gap-1">
@@ -10,45 +10,46 @@
             <% end %>
         </div>
 
-        <%= active_link_to users_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+        <%= active_link_to users_path,
+                           class: 'btn btn-bd-secondary d-flex align-items-center' do %>
             <i class="bi bi-people-fill"></i>
             <span class="ps-3"><%= model_to_string(User, 2) %></span>
         <% end %>
 
-        <%= active_link_to legal_guardians_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+        <%= active_link_to legal_guardians_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
             <i class="bi bi-person-fill"></i>
             <span class="ps-3"><%= model_to_string(LegalGuardian, 2) %></span>
         <% end %>
 
-        <%= active_link_to activities_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
-            <i class="bi bi-activity"></i>
+        <%= active_link_to activities_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
+            <i class="bi bi-person-arms-up"></i>
             <span class="ps-3"><%= model_to_string(Activity) %></span>
         <% end %>
 
         <% if current_staff && current_staff.admin? %>
-            <%= active_link_to staffs_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+            <%= active_link_to staffs_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
                 <i class="bi bi-person-workspace"></i>
                 <span class="ps-3"><%= model_to_string(Staff, 2) %></span>
             <% end %>
 
-            <%= active_link_to subscriptions_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+            <%= active_link_to subscriptions_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
                 <i class="bi bi-clipboard-data-fill"></i>
                 <span class="ps-3"><%= model_to_string(Subscription, 2) %></span>
             <% end %>
 
-            <%= active_link_to memberships_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+            <%= active_link_to memberships_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
                 <i class="bi bi-pie-chart-fill"></i>
                 <span class="ps-3"><%= model_to_string(Membership, 2) %></span>
             <% end %>
 
-            <%= active_link_to payments_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
+            <%= active_link_to payments_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
                 <i class="bi bi-cash-stack"></i>
                 <span class="ps-3"><%= model_to_string(Payment, 2) %></span>
             <% end %>
         <% end %>
 
-        <%= active_link_to daily_cash_index_path, class: 'btn btn-outline-secondary border-0 d-flex align-items-center' do %>
-            <i class="bi bi-cash-coin"></i>
+        <%= active_link_to daily_cash_index_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
+            <i class="bi bi-piggy-bank-fill"></i>
             <span class="ps-3"><%= t 'global.daily_cash' %></span>
         <% end %>
     </div>

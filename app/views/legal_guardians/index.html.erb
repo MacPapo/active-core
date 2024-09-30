@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <p class="mb-0 me-2 fs-3 fw-semibold text-secondary">
+    <p class="mb-0 fs-3 fw-semibold text-secondary">
         <%= model_to_string(LegalGuardian, 2) %>
     </p>
 
@@ -9,9 +9,6 @@
         <span class="fs-6 fw-light ps-2 text-muted"><%= t('global.registered', count:) %></span>
     </div>
 </div>
-
-<p class="mb-3 me-2 fs-3 fw-semibold text-secondary">
-</p>
 
 <div class="bg-primary border border-secondary-subtle rounded-3 container">
     <div class="d-flex align-items-center">
@@ -42,9 +39,10 @@
                     </thead>
                     <tbody>
                         <% @legal_guardians.each do |legal_guardian| %>
-                            <tr>
+                            <tr class="align-middle">
+
 	                        <!-- Name -->
-	                        <td>
+	                        <td class="text-begin">
 	                            <%= highlight legal_guardian.name, params.dig(:name) %>
 	                        </td>
 
@@ -75,19 +73,19 @@
 
 	                        <!-- Action -->
                                 <td class="text-end">
-                                    <%= link_to legal_guardian, class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
+                                    <%= link_to legal_guardian, class: 'btn btn-info btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
                                         <i class="bi bi-eye-fill"></i>
                                     <% end %>
 
-                                    <%= link_to edit_legal_guardian_path(legal_guardian), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
+                                    <%= link_to edit_legal_guardian_path(legal_guardian), class: 'btn btn-warning btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
                                         <i class="bi bi-pencil-fill"></i>
                                     <% end %>
 
                                     <% if current_staff.admin? %>
                                         <%= button_to legal_guardian,
-                                                      class: 'btn btn-danger',
+                                                      class: 'btn btn-danger btn-sm border border-secondary-subtle',
                                                       method: :delete,
-                                                      data: { turbo_confirm: "Sicuro di voler eliminare questo LG? L'operazione non è reversibile", turbo_frame: "_top" },
+                                                      data: { turbo_confirm: t('global.destroy_dialog'), turbo_frame: "_top" },
                                                       form: {style: 'display:inline-block;'} do %>
                                             <i class="bi bi-trash3-fill"></i>
                                         <% end %>

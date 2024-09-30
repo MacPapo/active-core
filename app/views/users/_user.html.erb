@@ -1,168 +1,276 @@
-<h3 class="card-subtitle mb-4">
-    <%= t '.personal_data' %>
-</h3>
+<ul class="nav nav-pills py-3 gap-2" id="pills-tab" role="tablist">
 
+    <!-- Personal Data -->
+    <li class="nav-item" role="presentation">
+        <button class="nav-link border border-secondary-subtle fs-5 active"
+                id="pills-personal-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-personal"
+                type="button"
+                role="tab"
+                aria-controls="pills-personal"
+                aria-selected="true">
+            <%= t '.personal_data' %>
+        </button>
+    </li>
 
-<!-- Personal Data -->
-<% user_attribute_to_string = ->(attr) { attribute_to_string(user, attr) } %>
-<div class="row mb-4">
-    <div class="col-md-4">
-        <h5 class="card-subtitle mb-2">
-            <%= t '.name_surname' %>
-        </h5>
-        <p class="card-text">
-            <%= user.full_name %>
-        </p>
-    </div>
-    <div class="col-md-4">
-        <h5 class="card-subtitle mb-2">
-            <%= user_attribute_to_string.('birth_day') %>
-        </h5>
-        <% if user.birth_day %>
-            <p class="card-text">
-                <%= l user.birth_day %> (<%= num_to_human_years user.age %>)
-            </p>
-        <% end %>
-    </div>
-    <div class="col-md-4">
-        <h5 class="card-subtitle mb-2">
-            <%= user_attribute_to_string.('cf') %>
-        </h5>
-        <p class="card-text">
-            <%= user.cf %>
-        </p>
-    </div>
-</div>
+    <!-- Membership -->
+    <li class="nav-item" role="presentation">
+        <button class="nav-link border border-secondary-subtle fs-5"
+                id="pills-membership-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-membership"
+                type="button"
+                role="tab"
+                aria-controls="pills-membership"
+                aria-selected="false">
+            <%= t '.membership' %>
+        </button>
+    </li>
 
-<div class="row mb-4">
-    <div class="col-md-4">
-        <h5 class="card-subtitle mb-2">
-            <%= user_attribute_to_string.('email') %>
-        </h5>
-        <p class="card-text">
-            <%= user.email %>
-        </p>
-    </div>
-    <div class="col-md-4">
-        <h5 class="card-subtitle mb-2">
-            <%= user_attribute_to_string.('phone') %>
-        </h5>
-        <p class="card-text">
-            <%= phone_to_string user.phone %>
-        </p>
-    </div>
-    <div class="col-md-4">
-        <h5 class="card-subtitle mb-2">
-            <%= user_attribute_to_string.('affiliated') %>
-        </h5>
-        <% affiliated = user.affiliated %>
-        <span class="badge text-bg-<%= affiliated ? 'success' : 'warning' %>"><%= t affiliated %></span>
-    </div>
-</div>
+    <!-- Subscriptions -->
+    <li class="nav-item" role="presentation">
+        <button class="nav-link border border-secondary-subtle fs-5"
+                id="pills-subscription-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-subscription"
+                type="button"
+                role="tab"
+                aria-controls="pills-subscription"
+                aria-selected="false">
+            <%= t '.subs' %>
+        </button>
+    </li>
+</ul>
 
-<% if user.legal_guardian %>
-    <!-- Legal Guardian -->
-    <div>
-        <% lg = user.legal_guardian %>
-        <h3 class="card-subtitle mb-4">
-            <%= t '.legal_guardian' %>
-        </h3>
+<!-- Tab List Body -->
+<div class="tab-content" id="pills-tabContent">
 
-        <!-- TODO -->
-        <div class="list-group">
-            <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'list-group-item list-group-item-action' %>
+    <!-- Personal Tab Content -->
+    <div class="tab-pane fade show active"
+         id="pills-personal"
+         role="tabpanel"
+         aria-labelledby="pills-personal-tab"
+         tabindex="0">
+
+        <!-- Personal Data -->
+        <% user_attribute_to_string = ->(attr) { attribute_to_string(user, attr) } %>
+        <div class="row mb-2">
+
+            <!-- Full Name -->
+            <div class="col">
+                <p class="fs-6 fw-light text-muted mb-2">
+                    <%= t 'global.full_name' %>
+                </p>
+                <p class="fs-5 fw-semibold text-secondary">
+                    <%= user.full_name %>
+                </p>
+            </div>
+
+            <!-- Birth Day -->
+            <div class="col">
+                <p class="fs-6 fw-light text-muted mb-2">
+                    <%= user_attribute_to_string.('birth_day') %>
+                </p>
+
+                <% birth_day_present = user.birth_day.present? %>
+                <p class="fs-5 fw-semibold <%= birth_day_present ? 'text-secondary' : 'text-warning' %>" >
+                    <% if birth_day_present %>
+                        <%= l user.birth_day %> (<%= num_to_human_years user.age %>)
+                    <% else %>
+                        <%= t('empty') %>
+                    <% end %>
+                </p>
+            </div>
+
+            <!-- CF -->
+            <div class="col">
+                <p class="fs-6 fw-light text-muted mb-2">
+                    <%= user_attribute_to_string.('cf') %>
+                </p>
+
+                <% cf_present = user.cf.present? %>
+                <p class="fs-5 fw-semibold <%= cf_present ? 'text-secondary' : 'text-warning' %> ">
+                    <% if cf_present %>
+                        <%= user.cf %>
+                    <% else %>
+                        <%= t('empty') %>
+                    <% end %>
+                </p>
+            </div>
         </div>
+
+        <div class="row mb-2">
+
+            <!-- Email -->
+            <div class="col">
+                <p class="fs-6 fw-light text-muted mb-2">
+                    <%= user_attribute_to_string.('email') %>
+                </p>
+
+                <% email_present = user.email.present? %>
+                <p class="fs-5 fw-semibold <%= email_present ? 'text-secondary' : 'text-warning' %> ">
+                    <% if email_present %>
+                        <%= user.email %>
+                    <% else %>
+                        <%= t('empty') %>
+                    <% end %>
+                </p>
+            </div>
+
+            <!-- Phone -->
+            <div class="col">
+                <p class="fs-6 fw-light text-muted mb-2">
+                    <%= user_attribute_to_string.('phone') %>
+                </p>
+
+                <% phone_present = user.phone.present? %>
+                <p class="fs-5 fw-semibold <%= phone_present ? 'text-secondary' : 'text-warning' %> ">
+                    <% if phone_present %>
+                        <%= phone_to_string user.phone %>
+                    <% else %>
+                        <%= t('empty') %>
+                    <% end %>
+                </p>
+            </div>
+
+            <!-- Affiliated -->
+            <div class="col">
+                <p class="fs-6 fw-light text-muted mb-2">
+                    <%= user_attribute_to_string.('affiliated') %>
+                </p>
+                <p class="fs-5 fw-semibold text-secondary">
+                    <%= t user.affiliated %>
+                </p>
+            </div>
+        </div>
+
+        <!-- Cert med -->
+        <div class="row">
+            <div class="col-md-4">
+                <p class="fs-6 fw-light text-muted mb-2">
+                    <%= t '.med_cert' %>
+                </p>
+
+                <% med = user.med_cert_issue_date %>
+                <p class="fs-5 fw-semibold <%= med.blank? ? 'text-warning' : 'text-secondary' %>">
+
+                    <% if med.present? %>
+                        <%= l med %> (<%= distance_of_time_in_words_to_now user.med_cert_exp_date %>)
+                    <% else %>
+                        <%= t 'empty' %>
+                    <% end %>
+                </p>
+            </div>
+
+            <% if user.legal_guardian.present? %>
+
+                <!-- Legal Guardian -->
+                <div class="col">
+                    <% lg = user.legal_guardian %>
+                    <p class="fs-6 fw-light text-muted mb-2">
+                        <%= t '.legal_guardian' %>
+                    </p>
+
+                    <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2' %>
+                </div>
+            <% end %>
+        </div>
+
     </div>
-<% end %>
 
-<hr/>
+    <!-- Membership Tab Content -->
+    <div class="tab-pane fade"
+         id="pills-membership"
+         role="tabpanel"
+         aria-labelledby="pills-membership-tab"
+         tabindex="1">
 
-<!-- Cert med -->
-<div>
-    <h3 class="card-subtitle mb-3">
-        <%= t '.med_cert' %>
-    </h3>
-    <p class="cart-text">
-        <% start_date = user.med_cert_issue_date %>
-  <% end_date = user.med_cert_exp_date %>
+        <% membership = user.membership %>
+        <% presenter = MembershipPresenter.new(membership) %>
+        <% membership_attribute_to_string = ->(attr) { attribute_to_string(membership, attr) } %>
 
-  <% if start_date.nil? %>
-      <span class="badge text-bg-warning"><%= t 'empty' %></span>
-  <% else %>
-      <%= l start_date, format: :default %> - <%= l end_date, format: :default %> (<%= num_to_human_days user.num_of_days_til_med_cert_expire %>)
-  <% end %>
-    </p>
-</div>
+        <% if membership.present? %>
+            <div class="row mb-2">
+                <div class="col">
+                    <p class="fs-6 fw-light text-muted mb-2">
+                        <%= membership_attribute_to_string.('start_date') %>
+                    </p>
+                    <p class="fs-5 fw-semibold text-secondary">
+                        <%= l membership.start_date, format: :default %>
+                    </p>
+                </div>
+                <div class="col">
+                    <p class="fs-6 fw-light text-muted mb-2">
+                        <%= membership_attribute_to_string.('end_date') %>
+                    </p>
+                    <p class="fs-5 fw-semibold text-secondary">
+                        <%= l membership.end_date, format: :default %> (<%= num_to_human_days membership.num_of_days_til_renewal %>)
+                    </p>
+                </div>
 
-<hr/>
+                <div class="col">
+                    <p class="fs-6 fw-light text-muted mb-1">
+                        <%= membership_attribute_to_string.('status') %>
+                    </p>
 
-<!-- TODO restyle this card and add the buttons to renew the memb -->
-<div>
-    <h3 class="card-subtitle mb-4">
-        <%= t '.membership' %>
-    </h3>
-
-    <% membership = user.membership %>
-    <% presenter = MembershipPresenter.new(membership) %>
-    <div class="row mb-4">
-        <% if membership %>
-
-            <% membership_attribute_to_string = ->(attr) { attribute_to_string(membership, attr) } %>
-
-            <div class="col">
-                <h5 class="card-subtitle mb-2">
-                    <%= membership_attribute_to_string.('start_date') %>
-                </h5>
-                <p class="card-text">
-                    <%= l membership.start_date, format: :default %>
-                </p>
+                    <%= link_to presenter.appropriate_path(user),
+                                class: "btn fs-6 border border-secondary-subtle fw-semibold text-secondary text-bg-#{presenter.css_color}",
+                                data: { turbo_frame: "_top" } do %>
+                        <i class="<%= presenter.link_icon %>"></i>
+                        <%= presenter.link_title %>
+                    <% end %>
+                </div>
             </div>
-            <div class="col">
-                <h5 class="card-subtitle mb-2">
-                    <%= membership_attribute_to_string.('end_date') %>
-                </h5>
-                <p class="card-text">
-                    <%= l membership.end_date, format: :default %> (<%= num_to_human_days membership.num_of_days_til_renewal %>)
+
+        <% else %>
+
+            <div class="d-flex align-items-center">
+                <p class="fs-5 fw-light text-secondary me-3 mb-0">
+                    <%= t('.no_membership') %>
                 </p>
+
+                <%= link_to new_membership_path(user_id: user&.id), class: "btn border border-secondary-subtle fs-6 fw-semibold text-secondary bg-dark" do %>
+                    <i class="me-2 bi bi-plus-lg"></i>
+                    <%= t('.add_membership') %>
+                <% end %>
             </div>
+
         <% end %>
+    </div>
 
-        <div class="col">
-            <h5 class="card-subtitle mb-2">
-                <%= membership_attribute_to_string.('status') %>
-            </h5>
-            <%= link_to presenter.appropriate_path(user), class: "btn badge text-bg-#{presenter.css_color}", data: { turbo_frame: "_top" } do %>
-                <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
+    <!-- Subscription Tab Content -->
+    <div class="tab-pane fade"
+         id="pills-subscription"
+         role="tabpanel"
+         aria-labelledby="pills-subscription-tab"
+         tabindex="2">
+
+
+        <!-- Subscriptions -->
+        <div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                    <h3 class="mb-3"></h3>
+                </div>
+
+                <%= link_to new_subscription_path(user_id: user) ,class: 'btn btn-success'  do %>
+                    <i class="bi bi-person-fill-add"></i>
+                    <span class="ms-1"><%= t '.add_sub' %></span>
+                <% end %>
+            </div>
+
+
+            <% if user.subscriptions.length > 0 %>
+                <%= render 'subscriptions/subscriptions_table',
+                           subscriptions: user.subscriptions,
+                           actv: false,
+                           generic: true
+                %>
+
+            <% else %>
+                <%= t '.no_subs' %>
             <% end %>
         </div>
     </div>
-</div>
-
-<!-- Subscriptions -->
-<hr/>
-
-
-<div>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="d-flex align-items-center">
-            <h3 class="mb-3"><%= t '.subs' %></h3>
-        </div>
-
-        <%= link_to new_subscription_path(user_id: user) ,class: 'btn btn-success'  do %>
-            <i class="bi bi-person-fill-add"></i>
-            <span class="ms-1"><%= t '.add_sub' %></span>
-        <% end %>
-    </div>
-
-
-    <% if user.subscriptions.length > 0 %>
-        <%= render 'subscriptions/subscriptions_table',
-                   subscriptions: user.subscriptions,
-                   actv: false,
-                   generic: true
-        %>
-
-    <% else %>
-        <%= t '.no_subs' %>
-    <% end %>
 </div>

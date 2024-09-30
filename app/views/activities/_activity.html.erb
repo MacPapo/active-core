@@ -1,115 +1,198 @@
 <% activity_attribute_to_string = ->(attr) { attribute_to_string(activity, attr) } %>
-<div class="row mb-6">
 
-    <!-- Activity name -->
-    <div class="col-md-6">
-        <h5 class="card-subtitle mb-2">
-            <%= activity_attribute_to_string.('name') %>
-        </h5>
-        <p class="card-text">
-            <%= activity.name %>
-        </p>
+<ul class="nav nav-pills py-3 gap-2" id="pills-tab" role="tablist">
+
+    <!-- Info -->
+    <li class="nav-item" role="presentation">
+        <button class="nav-link border border-secondary-subtle fs-5 active"
+                id="pills-info-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-info"
+                type="button"
+                role="tab"
+                aria-controls="pills-info"
+                aria-selected="true">
+            <%= t '.info' %>
+        </button>
+    </li>
+
+    <!-- Plans -->
+    <li class="nav-item" role="presentation">
+        <button class="nav-link border border-secondary-subtle fs-5"
+                id="pills-plan-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-plan"
+                type="button"
+                role="tab"
+                aria-controls="pills-plan"
+                aria-selected="false">
+            <%= t '.plan' %>
+        </button>
+    </li>
+
+    <!-- Users -->
+    <li class="nav-item" role="presentation">
+        <button class="nav-link border border-secondary-subtle fs-5"
+                id="pills-user-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-user"
+                type="button"
+                role="tab"
+                aria-controls="pills-user"
+                aria-selected="false">
+            <%= t '.user' %>
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="pills-tabContent">
+
+    <div class="tab-pane fade show active"
+         id="pills-info"
+         role="tabpanel"
+         aria-labelledby="pills-info-tab"
+         tabindex="0">
+
+        <div class="row">
+
+            <!-- Activity name -->
+            <div class="col">
+                <p class="fs-6 fw-light text-muted mb-2">
+                    <%= activity_attribute_to_string.('name') %>
+                </p>
+                <p class="fs-5 fw-semibold text-secondary">
+                    <%= activity.name %>
+                </p>
+            </div>
+
+            <!-- Number of people -->
+            <div class="col">
+                <p class="fs-6 fw-light text-muted mb-2">
+                    <%= activity_attribute_to_string.('num_participants') %>
+                </p>
+
+                <p class="fs-5 fw-semibold text-secondary">
+                    <% partecipants = activity.subscriptions %>
+                    <% npartecipants = activity.num_participants %>
+
+                    <% if partecipants %>
+                        <% plen = partecipants.length %>
+                        <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
+                    <% end %>
+                </p>
+            </div>
+        </div>
     </div>
 
-    <!-- Number of people -->
-    <div class="col-md-6">
-        <h5 class="card-subtitle mb-2">
-            <%= activity_attribute_to_string.('num_participants') %>
-        </h5>
+    <div class="tab-pane fade"
+         id="pills-plan"
+         role="tabpanel"
+         aria-labelledby="pills-plan-tab"
+         tabindex="1">
 
-        <p class="card-text">
-            <% partecipants = activity.subscriptions %>
-            <% npartecipants = activity.num_participants %>
+        <% if current_staff.admin? %>
+            <div class="d-flex justify-content-end align-items-center mb-2">
+                <%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+                    <!-- <i class="text-secondary bi bi-activity"></i> -->
+                    <i class="text-secondary bi bi-bar-chart-fill"></i>
+                    <span class="ms-1">
+                        <%= t '.add_plan' %>
+                    </span>
+                <% end %>
+            </div>
+        <% end %>
 
-            <% if partecipants %>
-                <% plen = partecipants.length %>
-                <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
-            <% end %>
-        </p>
+        <!-- Activity Plans -->
+
+        <% if @plans && @plans.length > 0 %>
+            <% p = @plans.first %>
+            <% plan_attribute_to_string = ->(attr) { attribute_to_string(p, attr)} %>
+            <div id="memberships" class="table-responsive">
+                <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
+                    <table class="table table-borderless table-striped mb-0">
+                        <thead class="table-secondary">
+                            <tr class="fs-6">
+                                <th class="text-primary text-begin fw-semibold">
+                                    <%= plan_attribute_to_string.('plan') %>
+                                </th>
+                                <th class="text-primary fw-semibold">
+                                    <%= plan_attribute_to_string.('cost') %>
+                                </th>
+                                <th class="text-primary fw-semibold">
+                                    <%= plan_attribute_to_string.('affiliated_cost') %>
+                                </th>
+                                <% if current_staff.admin? %>
+                                    <th class="text-primary text-end fw-semibold">
+                                        <%= t 'global.table.action' %>
+                                    </th>
+                                <% end %>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @plans.each do |plan| %>
+                                <tr class="align-middle">
+                                    <!-- Plan -->
+                                    <td>
+                                        <%= plan.humanize_plan %>
+                                    </td>
+
+                                    <!-- Cost -->
+                                    <td>
+                                        <%= number_to_currency plan.cost %>
+                                    </td>
+
+                                    <!-- Affiliated cost -->
+                                    <td>
+                                        <% cst = plan.affiliated_cost %>
+                                        <% if cst %>
+                                            <%= number_to_currency cst %>
+                                        <% end %>
+                                    </td>
+
+                                    <!-- Action buttons -->
+                                    <% if current_staff.admin? %>
+                                        <td class="text-end">
+
+                                            <%= link_to edit_activity_plan_path(plan, activity_id: activity.id),
+                                                        class: 'btn btn-warning btn-sm border border-secondary-subtle',
+                                                        data: { turbo_frame: "_top" } do %>
+                                                <i class="bi bi-pencil-fill"></i>
+                                            <% end %>
+
+                                            <%= button_to activity_plan_path(plan),
+                                                          class: 'btn btn-danger btn-sm border border-secondary-subtle',
+                                                          method: :delete,
+                                                          data: { turbo_frame: "_top", turbo_confirm: t('global.destroy_dialog') },
+                                                          form: {style: 'display:inline-block;'} do %>
+                                                <i class="bi bi-trash3-fill"></i>
+                                            <% end %>
+                                        </td>
+                                    <% end %>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <% end %>
+
     </div>
-</div>
 
-<hr/>
+    <div class="tab-pane fade"
+         id="pills-user"
+         role="tabpanel"
+         aria-labelledby="pills-user-tab"
+         tabindex="1">
 
-<!-- Activity Plans -->
-<div class="row mb-6">
-    <% plans = activity.activity_plans %>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="mb-0">
-            <%= model_to_string(ActivityPlan, plans.length) %>
-        </h4>
-
-        <%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-success' do %>
-            <i class="bi bi-activity"></i>
-            <span class="ms-1"><%= t '.add_plan' %></span>
+        <% if @subs && @subs.length > 0 %>
+            <%= render 'subscriptions/subscriptions_table',
+                       subscriptions: @subs,
+                       actv: true,
+                       generic: true
+            %>
+            <%== pagy_bootstrap_nav(@pagy) %>
+        <% else %>
+            <%= t 'global.no_subs' %>
         <% end %>
     </div>
-    <% if plans && plans.length > 0 %>
-        <% p = plans.first %>
-        <% plan_attribute_to_string = ->(attr) { attribute_to_string(p, attr)} %>
-        <div class="container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            <%= plan_attribute_to_string.('plan') %>
-                        </th>
-                        <th>
-                            <%= plan_attribute_to_string.('cost') %>
-                        </th>
-                        <th>
-                            <%= plan_attribute_to_string.('affiliated_cost') %>
-                        </th>
-                        <% if current_staff.admin? %>
-                            <th>
-                                <%= t 'global.table.action' %>
-                            </th>
-                        <% end %>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% plans.each do |plan| %>
-                        <tr>
-
-                            <!-- Plan -->
-                            <td>
-                                <%= plan.humanize_plan %>
-                            </td>
-
-                            <!-- Cost -->
-                            <td>
-                                <%= number_to_currency plan.cost %>
-                            </td>
-
-                            <!-- Affiliated cost -->
-                            <td>
-                                <% cst = plan.affiliated_cost %>
-                                <% if cst %>
-                                    <%= number_to_currency cst %>
-                                <% end %>
-                            </td>
-
-                            <% if current_staff.admin? %>
-                                <!-- Action buttons -->
-                                <td>
-
-                                    <%= link_to edit_activity_plan_path(plan, activity_id: activity.id), class: 'btn btn-warning' do %>
-                                        <i class="bi bi-pencil-fill"></i>
-                                    <% end %>
-
-                                    <%= button_to activity_plan_path(plan),
-                                                  class: 'btn btn-danger',
-                                                  method: :delete,
-                                                  data: { turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" },
-                                                  form: {style: 'display:inline-block;'} do %>
-                                        <i class="bi bi-trash3-fill"></i>
-                                    <% end %>
-                                </td>
-                            <% end %>
-                        </tr>
-                    <% end %>
-                </tbody>
-            </table>
-        </div>
-    <% end %>
 </div>

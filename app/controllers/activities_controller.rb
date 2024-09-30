@@ -25,6 +25,7 @@ class ActivitiesController < ApplicationController
         .subscriptions
         .load_async
     )
+    @plans = @activity.activity_plans.order(cost: :asc)
   end
 
   # GET /activities/:id/plans

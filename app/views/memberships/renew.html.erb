@@ -1,20 +1,10 @@
-<div class="card" id="<%= dom_id @membership %>">
-    <div class="card-header">
-        <h1 class="card-title">
-            <%= t '.title' %>
-        </h1>
-    </div>
+<p class="mb-b fs-3 fw-semibold text-secondary">
+    <%= t '.title' %>
+</p>
 
-    <!-- Card Body -->
-    <div class="card-body">
+<div class="bg-primary border border-secondary-subtle rounded-3 container">
+
+    <div class="py-3">
         <%= render "renew_form", membership: @membership %>
-    </div>
-
-    <!-- Card Footer -->
-    <div class="card-footer bg-light">
-        <div class="d-flex justify-content-end">
-            <%= link_to "Show this membership", @membership %> |
-            <%= link_to "Ritorna alla lista utenti", users_path %>
-        </div>
     </div>
 </div>

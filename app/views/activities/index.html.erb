@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <p class="mb-0 me-2 fs-3 fw-semibold text-secondary">
+    <p class="mb-0 fs-3 fw-semibold text-secondary">
         <%= model_to_string(Activity, 2) %>
     </p>
 
@@ -16,7 +16,7 @@
             <%= render 'partials/search_form_activities', path: activities_path, frame: :activities %>
         </div>
         <%= link_to new_activity_path, class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
-            <i class="bi bi-activity"></i>
+            <i class="bi bi-person-arms-up"></i>
             <span class="ms-1"><%= t('.add_activity') %></span>
         <% end %>
     </div>
@@ -44,11 +44,11 @@
                                 <td class="d-flex align-items-center">
                                     <!-- Add users to activity -->
                                     <% if npartecipants == 99 || (npartecipants != 99 && partecipants.length < npartecipants) %>
-                                        <%= link_to new_subscription_path(activity_id: activity), class: 'btn btn-success', data: { turbo_frame: "_top" } do %>
+                                        <%= link_to new_subscription_path(activity_id: activity), class: 'btn btn-success btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
                                             <i class="bi bi-person-plus-fill"></i>
                                         <% end %>
                                     <% else %>
-                                        <%= link_to new_waitlist_path(activity_id: activity), class: 'btn btn-info', data: { turbo_frame: "_top" } do %>
+                                        <%= link_to new_waitlist_path(activity_id: activity), class: 'btn btn-info btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
                                             <i class="bi bi-telephone-plus-fill"></i>
                                         <% end %>
                                     <% end %>
@@ -67,16 +67,20 @@
 
                                 <!-- Action buttons -->
                                 <td class="text-end">
-                                    <%= link_to activity_path(activity), class: 'btn btn-primary', data: { turbo_frame: "_top" } do %>
+                                    <%= link_to activity_path(activity), class: 'btn btn-sm btn-info border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
                                         <i class="bi bi-eye-fill"></i>
                                     <% end %>
 
-                                    <%= link_to edit_activity_path(activity), class: 'btn btn-warning', data: { turbo_frame: "_top" } do %>
-                                        <i class="bi bi-pencil-fill"></i>
-                                    <% end %>
-
                                     <% if current_staff.admin? %>
-                                        <%= button_to activity_path(activity), class: 'btn btn-danger', method: :delete, data: { turbo_frame: "_top", turbo_confirm: "Sicuro di voler eliminare questa attività? L'operazione non è reversibile" }, form: {style: 'display:inline-block;'} do %>
+                                        <%= link_to edit_activity_path(activity), class: 'btn btn-sm btn-warning border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
+                                            <i class="bi bi-pencil-fill"></i>
+                                        <% end %>
+
+                                        <%= button_to activity_path(activity),
+                                                      class: 'btn btn-sm btn-danger border border-secondary-subtle',
+                                                      method: :delete,
+                                                      data: { turbo_frame: "_top", turbo_confirm: t('global.destroy_dialog') },
+                                                      form: {style: 'display:inline-block;'} do %>
                                             <i class="bi bi-trash3-fill"></i>
                                         <% end %>
                                     <% end %>
