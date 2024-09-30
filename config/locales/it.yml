@@ -113,7 +113,9 @@ it:
         end_date: "Data scadenza"
         status: "Stato"
         user: "Utente"
+        user_id: "Utente"
         staff: "Collaboratore"
+        staff_id: "Collaboratore"
         updated_at: "Data aggiornamento"
         created_at: "Data creazione"
       membership/status:

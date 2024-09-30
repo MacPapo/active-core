@@ -80,7 +80,7 @@ class Subscription < ApplicationRecord
     open_subscription.present? || normal_subscription.present?
   end
 
-  def days_til_renwal
+  def days_til_renewal
     return -1 if start_date.blank? || end_date.blank?
 
     (end_date - Time.zone.today).to_i

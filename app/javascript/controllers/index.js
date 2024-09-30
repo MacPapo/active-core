@@ -13,6 +13,9 @@ application.register("agecheck", AgecheckController)
 import LegalguardianController from "./legalguardian_controller"
 application.register("legalguardian", LegalguardianController)
 
+import MessageController from "./message_controller"
+application.register("message", MessageController)
+
 import PopoverController from "./popover_controller"
 application.register("popover", PopoverController)
 

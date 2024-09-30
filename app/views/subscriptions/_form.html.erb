@@ -28,7 +28,7 @@
     <% if @user && !@activity %>
         <div class="row mb-2">
             <div class="col">
-                <%= form.label :activity_id, t('.sel_activity'), class: 'form-label fw-semibold text-secondary' %>
+                <%= form.label :activity_id, class: 'form-label fw-semibold text-secondary' %>
                 <%= form.collection_select :activity_id, @activities, :id, :name,
                     { prompt: "#{t('.sel_activity')}" },
                  { class: 'form-select', data: { action: "change->activity-search-user#loadPlans change->toggle-open#toggleOpenField" },
@@ -37,7 +37,7 @@
             </div>
 
             <div class="col">
-                <%= form.label :activity_plan_id, t('.sel_plan'), class: 'form-label fw-semibold text-secondary' %>
+                <%= form.label :activity_plan_id, class: 'form-label fw-semibold text-secondary' %>
                 <%= form.collection_select :activity_plan_id, @plans || [], :id, :humanize_plan, {}, { class: 'form-select', 'data-activity-search-user-target' => "plans" } %>
             </div>
         </div>
@@ -65,11 +65,9 @@
         <%= hidden_field_tag :direction, 1 %>
     <% end %>
 
-    <div class="form-check mb-2" data-toggle-open-target="openField">
-        <%= label_tag do %>
-            <%= check_box_tag(:open, class: 'form-check-input') %>
-            OPEN
-        <% end %>
+    <div class="form-check mt-4" data-toggle-open-target="openField">
+        <%= form.check_box :open, class: 'form-check-input' %>
+        <%= form.label :open, class: 'form-check-label fw-semibold text-secondary' %>
     </div>
 
     <%= form.hidden_field :staff_id, value: current_staff.id %>

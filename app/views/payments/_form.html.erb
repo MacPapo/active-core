@@ -13,32 +13,25 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                <%= form.label :date, class: 'form-label' %>
+                <%= form.label :date, class: 'form-label fw-semibold text-secondary' %>
                 <%= form.date_field :date, default: payment.date, class: 'form-control' %>
             </div>
         </div>
         <div class="col">
             <div class="mb-3">
-                <%= form.label :amount, class: 'form-label' %>
+                <%= form.label :amount, class: 'form-label fw-semibold text-secondary' %>
                 <%= form.number_field :amount, value: payment.amount, class: 'form-control', step: 'any' %>
             </div>
         </div>
     </div>
 
     <div class="mb-3">
-        <%= form.label :payment_method, class: 'form-label' %>
+        <%= form.label :payment_method, class: 'form-label fw-semibold text-secondary' %>
         <%= form.select :payment_method, Payment.humanize_payment_methods, {}, { class: 'form-select', selected: payment.payment_method } %>
     </div>
 
-    <% if current_staff.admin? %>
-        <div class="mb-3">
-            <%= form.label :entry_type, class: 'form-label' %>
-            <%= form.select :entry_type, Payment.humanize_entry_types, {}, { class: 'form-select', selected: payment.entry_type } %>
-        </div>
-    <% end %>
-
     <div class="mb-3">
-        <%= form.label :note, class: 'form-label' %>
+        <%= form.label :note, class: 'form-label fw-semibold text-secondary' %>
         <%= form.text_area :note, value: payment.note, class: 'form-control' %>
     </div>
 
@@ -46,7 +39,7 @@
     <%= form.hidden_field :payable_id %>
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 
-    <div class="actions">
-        <%= form.submit class: 'btn btn-success w-100' %>
+    <div class="mt-4">
+        <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
     </div>
 <% end %>

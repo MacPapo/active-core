@@ -13,7 +13,7 @@
 
     <div class="row mb-3">
         <div class="col">
-            <%= form.label :user_id, class: 'form-label' %>
+            <%= form.label :user_id, class: 'form-label fw-semibold text-secondary' %>
             <%= text_field_tag :q, nil, data: { 'activity-search-user-target' => "input", 'action' => "input->activity-search-user#search change->activity-search-user#selectUser" },
                                class: 'form-control', list: "datalistOptions", autocomplete: "off", placeholder: t('.sel_user') %>
             <datalist id="datalistOptions" data-activity-search-user-target="results"></datalist>
@@ -23,24 +23,24 @@
 
     <div class="row mb-3">
         <div class="col">
-            <%= form.label :nickname, class: 'form-label' %>
+            <%= form.label :nickname, class: 'form-label fw-semibold text-secondary' %>
             <%= form.text_field :nickname, class: 'form-control' %>
         </div>
 
         <div class="col">
-            <%= form.label :password, class: 'form-label' %>
+            <%= form.label :password, class: 'form-label fw-semibold text-secondary' %>
             <%= form.password_field :password, class: 'form-control' %>
         </div>
     </div>
 
     <div class="row mb-3">
         <div class="col">
-            <%= form.label :role, class: 'form-label' %>
+            <%= form.label :role, class: 'form-label fw-semibold text-secondary' %>
             <%= form.select :role, @roles, {}, { class: 'form-select' } %>
         </div>
     </div>
 
-    <div class="actions">
-        <%= form.submit class: 'btn btn-success w-100' %>
+    <div class="mt-4">
+        <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
     </div>
 <% end %>

@@ -12,11 +12,11 @@
 
     <div class="row mb-3">
         <div class="col">
-            <%= form.label :start_date, class: 'form-label' %>
+            <%= form.label :start_date, class: 'form-label fw-semibold text-secondary' %>
             <%= form.date_field :start_date, class: 'form-control' %>
         </div>
         <div class="col">
-            <%= form.label :end_date, class: 'form-label' %>
+            <%= form.label :end_date, class: 'form-label fw-semibold text-secondary' %>
             <%= form.date_field :end_date, class: 'form-control' %>
         </div>
     </div>
@@ -24,12 +24,12 @@
     <fieldset disabled>
         <div class="row mb-3">
             <div class="col">
-                <%= form.label :user_id, class: 'form-label' %>
+                <%= form.label :user_id, class: 'form-label fw-semibold text-secondary' %>
                 <%= form.text_field :activity_id, class: 'form-control', value: @subscription&.user&.full_name%>
             </div>
 
             <div class="col">
-                <%= form.label :activity_plan_id, class: 'form-label' %>
+                <%= form.label :activity_plan_id, class: 'form-label fw-semibold text-secondary' %>
                 <%= form.text_field :activity_plan_id, class: 'form-control', value: @subscription&.activity_plan&.humanize_plan %>
             </div>
         </div>
@@ -37,7 +37,7 @@
 
     <div class="form-check mb-3">
         <%= check_box_tag(:open, { id: 'open_checkbox', class: 'form-check-input', checked: @subscription&.open?, disabled: true }) %>
-        <%= label_tag 'open_checkbox', 'Open', class: 'form-check-label' %>
+        <%= label_tag 'open_checkbox', 'Open', class: 'form-check-label fw-semibold text-secondary' %>
         <%= hidden_field_tag(:open, @subscription&.open? ? "1" : "0") %>
     </div>
 
@@ -45,7 +45,7 @@
     <%= form.hidden_field :activity_id, value: @subscription&.activity&.id %>
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 
-    <div class="actions">
-        <%= form.submit class: 'btn btn-success w-100' %>
+    <div class="mt-4">
+        <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
     </div>
 <% end %>
