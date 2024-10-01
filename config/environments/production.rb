@@ -73,6 +73,8 @@ Rails.application.configure do
 
   # config.active_job.queue_name_prefix = "project_gym_production"
 
+  config.active_record.sqlite3_production_warning = false
+
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
