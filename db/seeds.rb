@@ -148,12 +148,12 @@ admin_user = User.create!(
   affiliated: false
 )
 
-puts "Admin User Added"
+puts 'Admin User Added'
 
 Staff.create!(
   user: admin_user,
   nickname: 'admin',
-  password: 'adminpassword',
+  password: 'admin',
   role: :admin
 )
 

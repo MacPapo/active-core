@@ -145,6 +145,9 @@ it:
         subscription: "Iscrizione"
 
   global:
+    all: 'Tutti'
+    filters: "Filtri"
+    add_filter: "Aggiungi filtro"
     full_name: "Nome e Cognome"
     search_name: "Cerca per Nome e Cognome ..."
     search_activity: "Cerca l'attività per Nome ..."
@@ -156,6 +159,10 @@ it:
     subscription: "Iscrizioni"
     membership: "Quote"
     no_subs: "Ancora nessun partecipante per questa Attività"
+
+    membership_status: "Stato Quota Associativa"
+    activity_status: "Stato Attività"
+    activity_name: "Nome Attività"
 
     edit_button: "Modifica"
     destroy_button: "Elimina"

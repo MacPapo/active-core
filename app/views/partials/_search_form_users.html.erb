@@ -1,10 +1,63 @@
-<div class="py-3">
-    <%= form_with url: path, method: :get, data: { turbo_frame: frame, turbo_action: 'advance', controller: 'usearch', action: 'input->usearch#submit' } do |f| %>
-        <div class="input-group">
-            <span class="input-group-text bg-secondary">
-                <i class="bi bi-search text-primary"></i>
-            </span>
-            <%= f.text_field :name, value: params[:name], placeholder: t('global.search_name'), class: 'form-control' %>
+<%= form_with url: path, method: :get, data: { turbo_frame: frame, turbo_action: 'advance', controller: 'usearch filters' } do |f| %>
+
+    <div class="d-flex align-items-center">
+
+        <div class="flex-grow-1 py-3">
+            <div class="input-group">
+                <span class="input-group-text bg-secondary">
+                    <i class="bi bi-search text-primary"></i>
+                </span>
+                <%= f.text_field :name, value: params[:name], placeholder: t('global.search_name'), class: 'form-control', data: { action: 'input->usearch#submit' } %>
+            </div>
         </div>
-    <% end %>
-</div>
+
+        <div class="ms-2 py-3 position-relative">
+
+            <!-- Filter Button -->
+            <button id="filter-toggle" class="btn btn-secondary text-primary border border-secondary-subtle"
+                    data-action="click->filters#toggle">
+                <i class="bi bi-funnel-fill"></i>
+                <%= t('global.filters') %>
+            </button>
+
+            <!-- Filters Panel -->
+            <div data-filters-target="panel" class="position-absolute mt-2 bg-white rounded shadow border border-secondary-subtle p-3"
+                 style="display:none; right: 0; min-width: 500px; max-width: 100vw;">
+
+
+                <% statuses = Subscription.humanize_statuses %>
+
+                <div class="row mb-2">
+
+                    <!-- Membership Status -->
+                    <div class="col">
+                        <%= f.label :membership_status, t('global.membership_status'), class: 'form-label' %>
+                        <%= f.select :membership_status, statuses, { prompt: t('global.all') },
+                         class: 'form-select',
+                         data: { action: 'change->filters#submit' } %>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+
+                    <!-- Activity Status -->
+                    <div class="col">
+                        <%= f.label :activity_status, t('global.activity_status'), class: 'form-label' %>
+                        <%= f.select :activity_status,  statuses, { prompt: t('global.all') },
+                         class: 'form-select',
+                         data: { action: 'change->filters#submit' } %>
+                    </div>
+
+                    <!-- Activity ID -->
+                    <div class="col">
+                        <%= f.label :activity_name, t('global.activity_name'), class: 'form-label' %>
+                        <%= f.select :activity_id, Activity.pluck(:name, :id), { prompt: t('global.all') },
+                         class: 'form-control',
+                         data: { action: 'change->filters#submit' } %>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+<% end %>

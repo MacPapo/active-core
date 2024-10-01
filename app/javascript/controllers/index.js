@@ -10,6 +10,9 @@ application.register("activity-search-user", ActivitySearchUserController)
 import AgecheckController from "./agecheck_controller"
 application.register("agecheck", AgecheckController)
 
+import FiltersController from "./filters_controller"
+application.register("filters", FiltersController)
+
 import LegalguardianController from "./legalguardian_controller"
 application.register("legalguardian", LegalguardianController)
 

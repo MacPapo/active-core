@@ -12,10 +12,10 @@
 
 <div class="bg-primary border border-secondary-subtle rounded-3 container">
     <div class="d-flex align-items-center">
-        <div class="flex-grow-1 me-2">
+        <div class="flex-fill">
             <%= render 'partials/search_form_users', path: users_path, frame: :users %>
         </div>
-        <%= link_to new_user_path, class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+        <%= link_to new_user_path, class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
             <i class="bi bi-person-fill-add"></i>
             <span class="ms-1"><%= t '.add_user' %></span>
         <% end %>

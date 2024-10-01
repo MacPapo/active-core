@@ -66,6 +66,12 @@ class Subscription < ApplicationRecord
       .order_by_updated_at
   end
 
+  def self.humanize_statuses(keys = statuses.keys)
+    keys.map do |key|
+      [Subscription.human_attribute_name("status.#{key}"), key]
+    end
+  end
+
   def humanize_status(status = self.status)
     Subscription.human_attribute_name("status.#{status}")
   end

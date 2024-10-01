@@ -28,29 +28,52 @@ class User < ApplicationRecord
   has_many   :receipts, dependent: :destroy
 
   scope :by_name, ->(query) do
-    if query.present?
-      where(
-        'name LIKE :q OR surname LIKE :q OR (surname LIKE :s AND name LIKE :n)',
-        q: "%#{query}%",
-        s: "%#{query.split.last}%",
-        n: "%#{query.split.first}%"
-      )
-    end
+    return if query.blank?
+
+    where(
+      'users.name LIKE :q OR users.surname LIKE :q OR (users.surname LIKE :s AND users.name LIKE :n)',
+      q: "%#{query}%",
+      s: "%#{query.split.last}%",
+      n: "%#{query.split.first}%"
+    )
+  end
+
+  scope :by_membership_status, ->(status) do
+    return if status.blank?
+
+    joins(:membership).where(membership: { status: status })
+  end
+
+  scope :by_activity_status, ->(status) do
+    return if status.blank?
+
+    joins(:subscriptions).where(subscriptions: { status: status })
+  end
+
+  scope :by_activity_id, ->(id) do
+    return if id.blank?
+
+    joins(:subscriptions).where('subscriptions.activity_id = ?', id)
   end
 
   scope :sorted, ->(sort_by, direction) do
-    if %w[name surname birth_day].include?(sort_by)
-      direction = %w[asc desc].include?(direction) ? direction : 'asc'
-      order("#{sort_by} #{direction}")
-    end
+    return unless %w[name surname birth_day updated_at].include?(sort_by)
+
+    sort_by = "users.#{sort_by}" if %w[name updated_at].include?(sort_by)
+    order("#{sort_by} #{direction}")
   end
 
-  scope :order_by_updated_at, -> { order('updated_at desc') }
+  def self.filter(params)
+    users = all
 
-  def self.filter(name, sort_by, direction)
-    by_name(name)
-      .sorted(sort_by, direction)
-      .order_by_updated_at
+    users = users.by_name(params[:name])
+    users = users.by_membership_status(params[:membership_status])
+    users = users.by_activity_status(params[:activity_status])
+    users = users.by_activity_id(params[:activity_id])
+
+    users = users.sorted(params[:sort_by], params[:direction] || 'desc')
+
+    users
   end
 
   def full_name
