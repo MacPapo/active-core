@@ -80,13 +80,13 @@
                                     <%= link_to subscription,
                                                 class: 'btn btn-info btn-sm border border-secondary-subtle',
                                                 data: { turbo_frame: "_top" } do %>
-                                        <i class="bi bi-eye-fill"></i>
+                                        <i class="bi text-secondary bi-eye-fill"></i>
                                     <% end %>
 
                                     <%= link_to edit_subscription_path(subscription),
                                                 class: 'btn btn-warning btn-sm border border-secondary-subtle',
                                                 data: { turbo_frame: "_top" } do %>
-                                        <i class="bi bi-pencil-fill"></i>
+                                        <i class="bi text-secondary bi-pencil-fill"></i>
                                     <% end %>
 
                                     <% if current_staff.admin? %>
@@ -95,7 +95,7 @@
                                                       method: :delete,
                                                       data: { turbo_frame: "_top", turbo_confirm: t('global.destroy_dialog') },
                                                       form: {style: 'display:inline-block;'} do %>
-                                            <i class="bi bi-trash3-fill"></i>
+                                            <i class="bi text-secondary bi-trash3-fill"></i>
                                         <% end %>
                                     <% end %>
                                 </td>

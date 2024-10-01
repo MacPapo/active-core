@@ -38,7 +38,7 @@ gem "discard", "~> 1.3"
 
 gem "receipts", "~> 2.4"
 
-gem "solid_queue", "~> 0.9.0"
+gem "solid_queue", "~> 1.0.0"
 
 gem "mission_control-jobs", "~> 0.3.1"
 

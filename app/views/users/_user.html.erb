@@ -249,14 +249,12 @@
 
         <!-- Subscriptions -->
         <div>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="d-flex align-items-center">
-                    <h3 class="mb-3"></h3>
-                </div>
-
-                <%= link_to new_subscription_path(user_id: user) ,class: 'btn btn-success'  do %>
-                    <i class="bi bi-person-fill-add"></i>
-                    <span class="ms-1"><%= t '.add_sub' %></span>
+            <div class="d-flex justify-content-end align-items-center mb-2">
+                <%= link_to new_subscription_path(user_id: user), class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+                    <i class="text-secondary bi bi-bar-chart-fill"></i>
+                    <span class="ms-1">
+                        <%= t '.add_sub' %>
+                    </span>
                 <% end %>
             </div>
 

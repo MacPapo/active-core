@@ -12,32 +12,49 @@
     <% end %>
 
 
-    <div class="row">
+    <div class="row g-3 mb-2">
         <div class="col">
-            <div class="mb-3">
-                <%= form.label :name, class: 'form-label' %>
-                <%= form.text_field :name, required: true, class: 'form-control' %>
+            <div class="d-flex">
+                <%= form.label :name, class: 'form-label fw-semibold text-secondary' %>*
             </div>
+            <%= form.text_field :name,
+                required: true,
+                placeholder: 'Cora',
+                class: 'form-control',
+                value: @user.name if @user.present?
+            %>
         </div>
-        <div class="col">
-            <div class="mb-3">
-                <%= form.label :surname, class: 'form-label' %>
-                <%= form.text_field :surname, required: true, class: 'form-control' %>
+        <div class="col mb-2">
+            <div class="d-flex">
+                <%= form.label :surname, class: 'form-label fw-semibold text-secondary' %>*
             </div>
+            <%= form.text_field :surname,
+                required: true,
+                placeholder: 'Trevisano',
+                class: 'form-control',
+                value: @user.surname if @user.present?
+            %>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-2">
         <div class="col">
-            <div class="mb-3">
-                <%= form.label :phone, class: 'form-label' %>
-                <%= form.text_field :phone, class: 'form-control' %>
+            <div class="d-flex">
+                <%= form.label :phone, class: 'form-label fw-semibold text-secondary' %>*
             </div>
+            <%= form.phone_field :phone,
+                required: true,
+                placeholder: '313 5041666',
+                class: 'form-control',
+                value: @user.phone if @user.present?
+            %>
         </div>
     </div>
 
-    <%= form.hidden_field :activity_id, value: @activity.id %>
+    <%= form.hidden_field :activity_id,
+        value: @activity.id
+    %>
 
-    <div>
-        <%= form.submit %>
+    <div class="mt-4">
+        <%= form.submit t('.add_user'), class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
     </div>
 <% end %>

@@ -16,7 +16,7 @@
             <%= render 'partials/search_form_activities', path: activities_path, frame: :activities %>
         </div>
         <%= link_to new_activity_path, class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
-            <i class="bi bi-person-arms-up"></i>
+            <i class="bi text-secondary bi-person-arms-up"></i>
             <span class="ms-1"><%= t('.add_activity') %></span>
         <% end %>
     </div>
@@ -45,11 +45,11 @@
                                     <!-- Add users to activity -->
                                     <% if npartecipants == 99 || (npartecipants != 99 && partecipants.length < npartecipants) %>
                                         <%= link_to new_subscription_path(activity_id: activity), class: 'btn btn-success btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                                            <i class="bi bi-person-plus-fill"></i>
+                                            <i class="bi text-secondary bi-person-plus-fill"></i>
                                         <% end %>
                                     <% else %>
                                         <%= link_to new_waitlist_path(activity_id: activity), class: 'btn btn-info btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                                            <i class="bi bi-telephone-plus-fill"></i>
+                                            <i class="bi text-secondary bi-telephone-plus-fill"></i>
                                         <% end %>
                                     <% end %>
                                     <div class="ms-1">
@@ -68,12 +68,12 @@
                                 <!-- Action buttons -->
                                 <td class="text-end">
                                     <%= link_to activity_path(activity), class: 'btn btn-sm btn-info border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                                        <i class="bi bi-eye-fill"></i>
+                                        <i class="bi text-secondary bi-eye-fill"></i>
                                     <% end %>
 
                                     <% if current_staff.admin? %>
                                         <%= link_to edit_activity_path(activity), class: 'btn btn-sm btn-warning border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                                            <i class="bi bi-pencil-fill"></i>
+                                            <i class="bi text-secondary bi-pencil-fill"></i>
                                         <% end %>
 
                                         <%= button_to activity_path(activity),
@@ -81,7 +81,7 @@
                                                       method: :delete,
                                                       data: { turbo_frame: "_top", turbo_confirm: t('global.destroy_dialog') },
                                                       form: {style: 'display:inline-block;'} do %>
-                                            <i class="bi bi-trash3-fill"></i>
+                                            <i class="bi text-secondary bi-trash3-fill"></i>
                                         <% end %>
                                     <% end %>
                                 </td>

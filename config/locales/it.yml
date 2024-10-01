@@ -240,7 +240,7 @@ it:
       no_membership: "Non è stata registrata la Quota Associativa per questo utente."
       add_membership: "Registra Quota Associativa"
       subs: "Attività"
-      add_sub: "Aggiungi una Attività"
+      add_sub: "Aggiungi ad una Attività"
 
   activities:
     edit:
@@ -256,10 +256,13 @@ it:
       info: "Informazioni"
       plan: "Piani"
       user: "Utenti"
+      waitlist: "Lista d'attesa"
       name: "Nome attività"
       num_participants: "Numero partecipanti"
       plans: "Piani per questa attività"
       add_plan: "Aggiungi Piano"
+      add_to_activity: "Aggiungi utente all'attività"
+      add_to_waitlist: "Aggiungi utente alla lista d'attesa"
     show:
       title: "Dettagli"
       list_users: "Lista utenti iscritti"
@@ -268,6 +271,12 @@ it:
         other: "piani registrati"
     new:
       title: "Inserimento Nuova Attività"
+    create:
+      create_succ: "L'attività è stata creata correttamente"
+    update:
+      update_succ: "L'attività è stata aggiornata correttamente"
+    destroy:
+      destroy_succ: "L'attività è stata eliminata correttamente"
 
   activity_plans:
     edit:
@@ -307,7 +316,7 @@ it:
     edit:
       title: "Modifica dei dati Pagamento"
     show:
-      payment_detail: "Dettagli Pagamento"
+      title: "Dettagli Pagamento"
     payment:
       payment_info: "Informazioni"
       amount: "Ammonatare"
@@ -425,8 +434,16 @@ it:
       membership_inactive: "Redirezionato qui per non rinnovare due volte la stessa Quota Associativa"
 
   waitlists:
+    form:
+      add_user: "Aggiungi utente"
     new:
       title: "Inserimento in Lista di Attesa"
+    create:
+      create_succ: "L'utente è stato aggiunto alla lista d'attesa correttamente"
+    update:
+      update_succ: "L'utente è stato aggiornato nella lista d'attesa correttamente"
+    destroy:
+      destroy_succ: "L'utente è stato eliminato dalla lista d'attesa correttamente"
 
   daily_cash:
     index:

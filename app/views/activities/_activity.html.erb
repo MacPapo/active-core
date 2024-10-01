@@ -43,6 +43,22 @@
             <%= t '.user' %>
         </button>
     </li>
+
+    <% if activity.waitlists.present? %>
+        <!-- Waitlists -->
+        <li class="nav-item" role="presentation">
+            <button class="nav-link border border-secondary-subtle fs-5"
+                    id="pills-waitlist-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#pills-waitlist"
+                    type="button"
+                    role="tab"
+                    aria-controls="pills-waitlist"
+                    aria-selected="false">
+                <%= t '.waitlist' %>
+            </button>
+        </li>
+    <% end %>
 </ul>
 
 <div class="tab-content" id="pills-tabContent">
@@ -106,20 +122,20 @@
 
         <% if @plans && @plans.length > 0 %>
             <% p = @plans.first %>
-            <% plan_attribute_to_string = ->(attr) { attribute_to_string(p, attr)} %>
+            <% user_attribute_to_string = ->(attr) { attribute_to_string(p, attr)} %>
             <div id="memberships" class="table-responsive">
                 <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
                     <table class="table table-borderless table-striped mb-0">
                         <thead class="table-secondary">
                             <tr class="fs-6">
                                 <th class="text-primary text-begin fw-semibold">
-                                    <%= plan_attribute_to_string.('plan') %>
+                                    <%= user_attribute_to_string.('plan') %>
                                 </th>
                                 <th class="text-primary fw-semibold">
-                                    <%= plan_attribute_to_string.('cost') %>
+                                    <%= user_attribute_to_string.('cost') %>
                                 </th>
                                 <th class="text-primary fw-semibold">
-                                    <%= plan_attribute_to_string.('affiliated_cost') %>
+                                    <%= user_attribute_to_string.('affiliated_cost') %>
                                 </th>
                                 <% if current_staff.admin? %>
                                     <th class="text-primary text-end fw-semibold">
@@ -182,9 +198,34 @@
          id="pills-user"
          role="tabpanel"
          aria-labelledby="pills-user-tab"
-         tabindex="1">
+         tabindex="2">
 
-        <% if @subs && @subs.length > 0 %>
+        <% if @limit == 99 || (@limit != 99 && @count < @limit) %>
+
+            <div class="d-flex justify-content-end align-items-center mb-2">
+                <%= link_to new_subscription_path(activity_id: activity),
+                            class: 'btn btn-dark text-secondary border border-secondary-subtle',
+                            data: { turbo_frame: "_top" } do %>
+                    <i class="text-secondary bi bi-person-arms-up"></i>
+                    <span class="ms-1">
+                        <%= t '.add_to_activity' %>
+                    </span>
+                <% end %>
+            </div>
+        <% else %>
+            <div class="d-flex justify-content-end align-items-center mb-2">
+                <%= link_to new_waitlist_path(activity_id: activity),
+                            class: 'btn btn-dark text-secondary border border-secondary-subtle',
+                            data: { turbo_frame: "_top" } do %>
+                    <i class="text-secondary bi bi-telephone-plus-fill"></i>
+                    <span class="ms-1">
+                        <%= t '.add_to_waitlist' %>
+                    </span>
+                <% end %>
+            </div>
+        <% end %>
+
+        <% if @subs && @count > 0 %>
             <%= render 'subscriptions/subscriptions_table',
                        subscriptions: @subs,
                        actv: true,
@@ -195,4 +236,78 @@
             <%= t 'global.no_subs' %>
         <% end %>
     </div>
+
+    <% if activity.waitlists.present? %>
+        <div class="tab-pane fade"
+             id="pills-waitlist"
+             role="tabpanel"
+             aria-labelledby="pills-waitlist-tab"
+             tabindex="3">
+
+            <!-- TODO list user in waitlist -->
+            <% waitlists = activity.waitlists %>
+            <% u = waitlists.first.user %>
+            <% user_attribute_to_string = ->(attr) { attribute_to_string(u, attr)} %>
+
+            <div id="waitlists" class="table-responsive">
+                <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
+                    <table class="table table-borderless table-striped mb-0">
+                        <thead class="table-secondary">
+                            <tr class="fs-6">
+                                <th class="text-primary text-begin fw-semibold">
+                                    <%= user_attribute_to_string.('name') %>
+                                </th>
+                                <th class="text-primary fw-semibold">
+                                    <%= user_attribute_to_string.('surname') %>
+                                </th>
+                                <th class="text-primary fw-semibold">
+                                    <%= user_attribute_to_string.('phone') %>
+                                </th>
+                                <th class="text-primary text-end fw-semibold">
+                                    <%= t('global.table.action') %>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% waitlists.each do |w| %>
+                                <tr class="align-middle">
+                                    <% user = w.user %>
+
+                                    <!-- Name -->
+                                    <td>
+                                        <%= user.name %>
+                                    </td>
+
+                                    <!-- Surname -->
+                                    <td>
+                                        <%= user.surname %>
+                                    </td>
+
+                                    <!-- Phone -->
+                                    <td>
+                                        <%= phone_to_string user.phone %>
+                                    </td>
+
+                                    <!-- Actions -->
+                                    <td class="text-end">
+                                        <%= link_to edit_waitlist_path(w, activity_id: activity.id), class: 'btn btn-warning btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
+                                            <i class="bi text-secondary bi-pencil-fill"></i>
+                                        <% end %>
+
+                                        <%= button_to w,
+                                                      class: 'btn btn-danger btn-sm border border-secondary-subtle',
+                                                      method: :delete,
+                                                      data: { turbo_confirm: t('global.destroy_dialog'), turbo_frame: "_top" },
+                                                      form: {style: 'display:inline-block;'} do %>
+                                            <i class="bi text-secondary bi-trash3-fill"></i>
+                                        <% end %>
+                                    </td>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <% end %>
 </div>

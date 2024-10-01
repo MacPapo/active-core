@@ -25,6 +25,8 @@ class ActivitiesController < ApplicationController
         .subscriptions
         .load_async
     )
+    @count = @subs.count
+    @limit = @activity.num_participants
     @plans = @activity.activity_plans.order(cost: :asc)
   end
 
@@ -35,7 +37,7 @@ class ActivitiesController < ApplicationController
 
     render json: { plans: plans.map { |plan| { id: plan.id, name: plan.humanize_plan } } }
   rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Attività non trovata' }, status: :not_found
+    render json: { error: t('.act_not_found') }, status: :not_found
   end
 
   # GET /activities/new
@@ -51,7 +53,7 @@ class ActivitiesController < ApplicationController
     @activity = Activity.new(activity_params)
 
     if @activity.save
-      redirect_to activity_url(@activity), notice: 'Activity was successfully created.'
+      redirect_to activity_url(@activity), notice: t('.create_succ')
     else
       render :new, status: :unprocessable_entity
     end
@@ -60,7 +62,7 @@ class ActivitiesController < ApplicationController
   # PATCH/PUT /activities/1
   def update
     if @activity.update(activity_params)
-      redirect_to activity_url(@activity), notice: 'Activity was successfully updated.'
+      redirect_to activity_url(@activity), notice: t('.update_succ')
     else
       render :edit, status: :unprocessable_entity
     end
@@ -70,7 +72,7 @@ class ActivitiesController < ApplicationController
   def destroy
     @activity.destroy!
 
-    redirect_to activities_url, notice: 'Activity was successfully destroyed.'
+    redirect_to activities_url, notice: t('.destroy_succ')
   end
 
   # GET /activities/1/name

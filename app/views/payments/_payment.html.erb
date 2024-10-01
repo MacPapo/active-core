@@ -1,41 +1,32 @@
-<h3 class="card-subtitle mb-4">
-    <%= t '.payment_info' %>
-</h3>
-
 <% payment_attribute_to_string = ->(attr) { attribute_to_string(payment, attr) } %>
-<div class="row mb-4">
+<div class="row mb-2">
+
+    <!-- Amount -->
     <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= payment_attribute_to_string.('amount') %>
-        </h5>
-        <div class="card-text">
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
             <%= number_to_currency payment.amount %>
         </div>
     </div>
+
+    <!-- Date -->
     <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= payment_attribute_to_string.('date') %>
-        </h5>
-        <div class="card-text">
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
             <%= l payment.date %>
         </div>
     </div>
-</div>
 
-<div class="row mb-4">
+    <!-- Payable Type -->
     <div class="col">
-        <h5 class="card-subtitle mb-2">
-            <%= payment_attribute_to_string.('payment_method') %>
-        </h5>
-        <div class="card-text">
-            <%= payment.humanize_payment_method %>
-        </div>
-    </div>
-    <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= payment_attribute_to_string.('payable_type') %>
-        </h5>
-        <div class="card-text">
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
             <%= payment.humanize_payable_type %>
         </div>
     </div>
@@ -43,37 +34,60 @@
 
 <div class="row mb-4">
     <div class="col">
-        <h5 class="card-subtitle mb-2">
-            <%= payment_attribute_to_string.('entry_type') %>
-        </h5>
-        <div class="card-text">
-            <%= payment.humanize_entry_type %>
+        <p class="fs-6 fw-light text-muted mb-2">
+            <%= payment_attribute_to_string.('payment_method') %>
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
+            <%= payment.humanize_payment_method %>
         </div>
     </div>
+
 </div>
 
 <div class="row mb-4">
     <div class="col">
-        <h5 class="card-subtitle mb-2">
+        <p class="fs-6 fw-light text-muted mb-2">
             <%= payment_attribute_to_string.('note') %>
-        </h5>
-        <div class="card-text">
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
             <%= payment.note %>
         </div>
     </div>
 </div>
 
-
 <% if current_staff.admin? %>
-    <hr/>
-    <div class="row mb-4">
-        <% staff = payment.staff %>
+
+    <div class="container py-1">
+        <hr>
+    </div>
+
+    <% staff = payment.staff %>
+    <div class="row mb-2">
         <div class="col">
-            <h5 class="card-subtitle mb-4">
+            <p class="fs-6 fw-light text-muted mb-2">
                 <%= payment_attribute_to_string.('staff') %>
-            </h5>
-            <div class="list-group">
-                <%= link_to "#{staff.full_name}",  staff, class: 'list-group-item list-group-item-action' %>
+            </p>
+            <div class="fs-5 fw-semibold text-secondary">
+                <% staff = payment.staff %>
+                <%= link_to "#{staff.nickname}", staff, class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2' %>
+            </div>
+        </div>
+
+        <div class="col">
+            <p class="fs-6 fw-light text-muted mb-2">
+                <%= payment_attribute_to_string.('updated_at') %>
+            </p>
+            <div class="fs-5 fw-semibold text-secondary">
+                <%= l payment.updated_at, format: :long %>
+            </div>
+        </div>
+
+        <div class="col">
+            <p class="fs-6 fw-light text-muted mb-2">
+                <%= payment_attribute_to_string.('created_at') %>
+            </p>
+            <div class="fs-5 fw-semibold text-secondary">
+                <%= l payment.created_at, format: :long %>
             </div>
         </div>
     </div>

@@ -1,14 +1,26 @@
-memberships_validation:
-  class: ValidateMembershipStatusJob
-  queue: background
-  schedule: every hour
+# production:
+#   periodic_cleanup:
+#     class: CleanSoftDeletedRecordsJob
+#     queue: background
+#     args: [ 1000, { batch_size: 500 } ]
+#     schedule: every hour
+#   periodic_command:
+#     command: "SoftDeletedRecord.due.delete_all"
+#     priority: 2
+#     schedule: at 5am every day
 
-subscriptions_validation:
-  class: ValidateSubscriptionStatusJob
-  queue: background
-  schedule: every hour
+production:
+  memberships_validation:
+    class: ValidateMembershipStatusJob
+    queue: background
+    schedule: every hour
 
-legal_guardian_cleanup:
-  class: DeleteStaleLegalGuardiansJob
-  queue: background
-  schedule: every hour
+  subscriptions_validation:
+    class: ValidateSubscriptionStatusJob
+    queue: background
+    schedule: every hour
+
+  legal_guardian_cleanup:
+    class: DeleteStaleLegalGuardiansJob
+    queue: background
+    schedule: every hour

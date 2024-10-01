@@ -138,7 +138,7 @@ Staff.destroy_all
 
 # Seed Staff Members
 admin_user = User.create!(
-  cf: Faker::Finance.vat_number,
+  cf: 'SRUDMN80A01L736P',
   name: 'Admin',
   surname: 'User',
   email: 'admin@example.com',

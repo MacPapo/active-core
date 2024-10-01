@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
+# WaitList Controller
 class WaitlistsController < ApplicationController
-  before_action :set_waitlist, only: %i[ show edit update destroy ]
-  before_action :set_activity, only: %i[ new create ]
+  before_action :set_waitlist, only: %i[show edit update destroy]
+  before_action :set_activity, only: %i[new create edit update]
 
   # GET /waitlists or /waitlists.json
   def index
@@ -18,41 +19,33 @@ class WaitlistsController < ApplicationController
   end
 
   # GET /waitlists/1/edit
-  def edit; end
+  def edit
+    @user = @waitlist.user
+  end
 
   # POST /waitlists or /waitlists.json
   def create
-    name = waitlist_params[:name]
-    surname = waitlist_params[:surname]
-    phone = Phonelib.parse(waitlist_params[:phone])
+    phone = Phonelib.parse(waitlist_params[:phone]).national
 
-    user = User.find_or_create_by!(name: name, surname: surname, phone: phone.e164)
-    @waitlist = Waitlist.build(
-      user: user,
-      activity: @activity
-    )
+    user = User.find_or_create_by!(name: waitlist_params[:name], surname: waitlist_params[:surname], phone:)
+    @waitlist = Waitlist.build(user:, activity: @activity)
 
-    respond_to do |format|
-      if @waitlist.save
-        format.html { redirect_to waitlist_url(@waitlist), notice: 'Waitlist was successfully created.' }
-        format.json { render :show, status: :created, location: @waitlist }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @waitlist.errors, status: :unprocessable_entity }
-      end
+    if @waitlist.save
+      redirect_to waitlist_url(@waitlist), notice: t('.create_succ')
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /waitlists/1 or /waitlists/1.json
   def update
-    respond_to do |format|
-      if @waitlist.update(waitlist_params)
-        format.html { redirect_to waitlist_url(@waitlist), notice: 'Waitlist was successfully updated.' }
-        format.json { render :show, status: :ok, location: @waitlist }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @waitlist.errors, status: :unprocessable_entity }
-      end
+    phone = Phonelib.parse(waitlist_params[:phone]).national
+    user = @waitlist.user
+
+    if user.update(name: waitlist_params[:name], surname: waitlist_params[:surname], phone:)
+      redirect_to waitlist_url(@waitlist), notice: t('.update_succ')
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -60,10 +53,7 @@ class WaitlistsController < ApplicationController
   def destroy
     @waitlist.destroy!
 
-    respond_to do |format|
-      format.html { redirect_to waitlists_url, notice: 'Waitlist was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to waitlists_url, notice: t('.destroy_succ')
   end
 
   private
