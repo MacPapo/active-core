@@ -12,10 +12,35 @@
 
 <div class="bg-primary border border-secondary-subtle rounded-3 container">
     <div class="d-flex align-items-center">
-        <div class="flex-grow-1 me-2">
-            <%= render 'partials/search_form_activities', path: activities_path, frame: :activities %>
+
+        <!-- Search Form -->
+        <div class="flex-fill">
+            <%= render 'partials/search_form', loc: t('global.search_activity'), path: activities_path, frame: :activities, size: '300px', ctrls: 'filters range' do |f| %>
+                <div class="row mb-2">
+
+                    <!-- Participants -->
+                    <div class="col">
+                        <span class="d-flex">
+                            <%= f.label :participants_range, t('global.activity_users'), class: 'form-label fw-semibold text-secondary' %>
+                            <span data-range-target="range" class="ms-2 text-secondary fw-semibold">0</span>
+                        </span>
+                        <%= f.range_field :participants_range, in: 0..@max, value: 0,
+                            class: 'form-range', data: { action: 'change->filters#submit input->range#updateRangeValue' } %>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <!-- Max Participants -->
+                    <div class="col">
+                        <%= f.label :max_participants, t('global.activity_max_users'), class: 'form-label fw-semibold text-secondary' %>
+                        <%= f.select :max_participants, Activity.pluck(:num_participants).uniq, { prompt: t('global.all-m') },
+                         class: 'form-select', data: { action: 'change->filters#submit' } %>
+                    </div>
+                </div>
+            <% end %>
         </div>
-        <%= link_to new_activity_path, class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+
+        <!-- Add Activity -->
+        <%= link_to new_activity_path, class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
             <i class="bi text-secondary bi-person-arms-up"></i>
             <span class="ms-1"><%= t('.add_activity') %></span>
         <% end %>
@@ -54,7 +79,7 @@
                                     <% end %>
                                     <div class="ms-1">
                                         <% if partecipants %>
-                                            <% plen = partecipants.length %>
+                                            <% plen = partecipants.count %>
                                             <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
                                         <% end %>
                                     </div>

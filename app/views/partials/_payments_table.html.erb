@@ -1,14 +1,15 @@
+<% payment_sortable_column = ->(col, title) { sortable_column(col, title, payments_path, frame, @sort_by, @direction) } %>
 <div class="table-responsive">
     <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
         <table class="table table-borderless table-striped mb-0">
             <thead class="table-secondary">
                 <tr class="fs-6">
-                    <th class="text-primary text-begin fw-semibold"><%= Payment.human_attribute_name('date') %></th>
+                    <th><%= payment_sortable_column.call('date', Payment.human_attribute_name('date')) %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('payable_type') %></th>
-                    <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('amount') %></th>
+                    <th><%= payment_sortable_column.call('amount', Payment.human_attribute_name('amount')) %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('payment_method') %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('note') %></th>
-                    <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('staff') %></th>
+                    <th><%= payment_sortable_column.call('staff', Payment.human_attribute_name('staff')) %></th>
                     <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
                 </tr>
             </thead>
@@ -40,14 +41,14 @@
                         <!-- Note -->
                         <td>
                             <span class="d-inline-block text-truncate" style="max-width: 250px;">
-                                <%= payment.note %>
+                                <%= highlight payment.note, params.dig(:name) %>
                             </span>
                         </td>
 
                         <!-- Staff -->
                         <% staff = payment.staff %>
                         <td>
-                            <%= staff.nickname %>
+                            <%= highlight staff.nickname, params.dig(:name) %>
                         </td>
 
                         <!-- Action buttons -->

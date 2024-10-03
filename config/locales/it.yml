@@ -90,6 +90,7 @@ it:
         status: "Stato"
         open: "Piano OPEN"
         user: "Utente"
+        plan: "Piano"
         user_id: "Utente"
         activity: "Attività"
         activity_id: "Attività"
@@ -145,12 +146,24 @@ it:
         subscription: "Iscrizione"
 
   global:
-    all: 'Tutti'
+    all-m: 'Tutti'
+    all-s: 'Tutte'
     filters: "Filtri"
+    lg_users: "Numero di Utenti associati"
     add_filter: "Aggiungi filtro"
     full_name: "Nome e Cognome"
+    activity_users: "Numero Partecipanti"
+    activity_max_users: "Numero Massimo Partecipanti"
+    activity_plan: "Piano"
+    activity_open: "OPEN"
+    activity_from: "Dalla data"
+    activity_to: "Alla data"
+    payable_type: "Tipo di pagamento"
+    payment_method: "Metodo di pagamento"
+    staff_role: "Ruolo"
     search_name: "Cerca per Nome e Cognome ..."
     search_activity: "Cerca l'attività per Nome ..."
+    search_payment: "Cerca il pagamento per Nickname collaboratore o contenuto delle note ..."
     logout: "Esci"
     daily_cash: "Cassa Giornaliera"
     user: "Utenti"
@@ -162,7 +175,7 @@ it:
 
     membership_status: "Stato Quota Associativa"
     activity_status: "Stato Attività"
-    activity_name: "Nome Attività"
+    activity_name: "Attività"
 
     edit_button: "Modifica"
     destroy_button: "Elimina"

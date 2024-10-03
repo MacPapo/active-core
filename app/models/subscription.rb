@@ -3,7 +3,7 @@
 # Subscription Model
 class Subscription < ApplicationRecord
   validates :start_date, :activity_id, :activity_plan_id, :user_id, :staff_id, presence: true
-  validates :end_date, comparison: { greater_than: :start_date }, if: -> { start_date.present? && end_date.present? }
+  validates :end_date, comparison: { greater_than_or_equal_to: :start_date }, if: -> { start_date.present? && end_date.present? }
   validate :active_membership?, if: -> { user.present? && activity.present? }
   validate :date_valid_for_membership?, if: -> { user&.membership&.active? }
 
@@ -20,17 +20,9 @@ class Subscription < ApplicationRecord
   belongs_to :activity, touch: true
   belongs_to :activity_plan
 
-  belongs_to :open_subscription,
-             inverse_of: :normal_subscription,
-             class_name: 'Subscription',
-             optional: true,
-             dependent: :destroy
+  belongs_to :open_subscription, inverse_of: :normal_subscription, class_name: 'Subscription', optional: true, dependent: :destroy
 
-  has_one :normal_subscription,
-          inverse_of: :open_subscription,
-          class_name: 'Subscription',
-          foreign_key: 'open_subscription_id',
-          dependent: :destroy
+  has_one :normal_subscription, inverse_of: :open_subscription, class_name: 'Subscription', foreign_key: 'open_subscription_id', dependent: :destroy
 
   has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
@@ -45,25 +37,52 @@ class Subscription < ApplicationRecord
     end
   end
 
+  scope :by_activity_id, ->(id) do
+    return if id.blank?
+
+    where('subscriptions.activity_id = ?', id.to_i)
+  end
+
+  scope :by_open, ->(open) do
+    open = ActiveModel::Type::Boolean.new.cast(open)
+    return if open.nil?
+
+    open ? where.associated(:open_subscription) : where.missing(:open_subscription)
+  end
+
+  scope :by_interval, ->(from = nil, to = nil) do
+    return if from.blank? && to.blank?
+
+    if from.present? && to.present?
+      where('subscriptions.start_date': from..to, 'subscriptions.end_date': from..to)
+    elsif from.present?
+      where('subscriptions.start_date >= ?', from)
+    elsif to.present?
+      where('subscriptions.end_date <= ?', to)
+    end
+  end
+
+  scope :by_plan_id, ->(id) { where('subscriptions.activity_plan_id' => ActivityPlan.where(plan: id).pluck(:id)) unless id.blank? }
+
   scope :sorted, ->(sort_by, direction) do
-    if %w[user_name activity_name surname start_date end_date].include?(sort_by)
+    if %w[name activity_name surname start_date end_date updated_at].include?(sort_by)
       direction = %w[asc desc].include?(direction) ? direction : 'asc'
 
-      if sort_by == 'user_name' || sort_by == 'activity_name'
-        sort_by = sort_by == 'user_name' ? 'users.name' : 'activities.name'
-      end
+      sort_by = "users.#{sort_by}" unless sort_by == 'activity_name'
+      sort_by = "activities.name" if sort_by == 'activity_name'
 
       order("#{sort_by} #{direction}")
     end
   end
 
-  scope :order_by_updated_at, -> { order('subscriptions.updated_at desc') }
-
-  def self.filter(name, sort_by, direction)
+  def self.filter(params)
     joins(:user)
-      .by_name(name)
-      .sorted(sort_by, direction)
-      .order_by_updated_at
+      .by_name(params[:name])
+      .by_activity_id(params[:activity])
+      .by_plan_id(params[:plan])
+      .by_open(params[:open])
+      .by_interval(params[:from], params[:to])
+      .sorted(params[:sort_by], params[:direction])
   end
 
   def self.humanize_statuses(keys = statuses.keys)

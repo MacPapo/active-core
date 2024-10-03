@@ -31,7 +31,7 @@ class WaitlistsController < ApplicationController
     @waitlist = Waitlist.build(user:, activity: @activity)
 
     if @waitlist.save
-      redirect_to waitlist_url(@waitlist), notice: t('.create_succ')
+      redirect_to activity_url(@waitlist.activity), notice: t('.create_succ')
     else
       render :new, status: :unprocessable_entity
     end
@@ -51,9 +51,10 @@ class WaitlistsController < ApplicationController
 
   # DELETE /waitlists/1 or /waitlists/1.json
   def destroy
+    activity = @waitlist.activity
     @waitlist.destroy!
 
-    redirect_to waitlists_url, notice: t('.destroy_succ')
+    redirect_to activity_path(activity), notice: t('.destroy_succ')
   end
 
   private

@@ -200,6 +200,7 @@
          aria-labelledby="pills-user-tab"
          tabindex="2">
 
+        <!-- TODO watch this!! -->
         <% if @limit == 99 || (@limit != 99 && @count < @limit) %>
 
             <div class="d-flex justify-content-end align-items-center mb-2">
@@ -244,7 +245,15 @@
              aria-labelledby="pills-waitlist-tab"
              tabindex="3">
 
-            <!-- TODO list user in waitlist -->
+            <div class="d-flex justify-content-end align-items-center mb-2">
+                <%= link_to new_waitlist_path(activity_id: activity.id), class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+                    <i class="text-secondary bi bi-telephone-plus-fill"></i>
+                    <span class="ms-1">
+                        <%= t '.add_to_waitlist' %>
+                    </span>
+                <% end %>
+            </div>
+
             <% waitlists = activity.waitlists %>
             <% u = waitlists.first.user %>
             <% user_attribute_to_string = ->(attr) { attribute_to_string(u, attr)} %>

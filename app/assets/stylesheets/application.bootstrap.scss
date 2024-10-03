@@ -193,3 +193,52 @@ $notice-shadow: rgba($dark, 0.1);
     transform: translateX(100%);
   }
 }
+
+// FORM RANGE
+
+$form-range-track-bg:             $dark;
+$form-range-thumb-bg:              $secondary;
+$form-range-thumb-box-shadow:      0 .1rem .25rem rgba($black, .1);
+$form-range-thumb-active-bg:       lighten($secondary, 20%);
+$form-range-thumb-disabled-bg:     $border;
+$form-range-thumb-focus-box-shadow: 0 0 0 1px $primary, $input-focus-box-shadow;
+
+// FORM CHECK
+// $form-check-input-width:                  1em;
+// $form-check-min-height:                   $font-size-base * $line-height-base;
+// $form-check-padding-start:                $form-check-input-width + .5em;
+// $form-check-margin-bottom:                .125rem;
+// $form-check-label-color:                  null;
+// $form-check-label-cursor:                 null;
+// $form-check-transition:                   null;
+
+$form-check-input-active-filter:          brightness(90%);
+
+$form-check-input-bg:                     $light;
+$form-check-input-border:                 var(--#{$prefix}border-width) solid $border;
+$form-check-input-border-radius:          .25em;
+$form-check-radio-border-radius:          50%;
+$form-check-input-focus-border:           $input-focus-border-color;
+$form-check-input-focus-box-shadow:       $dark;
+
+$form-check-input-checked-color:          $secondary;
+$form-check-input-checked-bg-color:       $dark;
+$form-check-input-checked-border-color:   $secondary;
+$form-check-input-checked-bg-image:       url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='#{$form-check-input-checked-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/></svg>");
+$form-check-radio-checked-bg-image:       url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='2' fill='#{$form-check-input-checked-color}'/></svg>");
+
+$form-check-input-indeterminate-color:          $component-active-color;
+$form-check-input-indeterminate-bg-color:       $component-active-bg;
+$form-check-input-indeterminate-border-color:   $form-check-input-indeterminate-bg-color;
+$form-check-input-indeterminate-bg-image:       url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='#{$form-check-input-indeterminate-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/></svg>");
+
+$form-check-input-disabled-opacity:        .5;
+$form-check-label-disabled-opacity:        $form-check-input-disabled-opacity;
+$form-check-btn-check-disabled-opacity:    $btn-disabled-opacity;
+
+$form-check-inline-margin-end:    1rem;
+
+
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/forms';

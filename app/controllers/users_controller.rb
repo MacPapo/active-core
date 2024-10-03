@@ -9,7 +9,6 @@ class UsersController < ApplicationController
     @sort_by = params[:sort_by] || 'updated_at'
     @direction = params[:direction] || 'desc'
 
-    # Filtri
     filters = {
       name: params[:name],
       membership_status: params[:membership_status],
@@ -19,11 +18,7 @@ class UsersController < ApplicationController
       direction: @direction
     }
 
-    @pagy, @users = pagy(
-      User.filter(filters)
-        .includes(:membership, :subscriptions, :legal_guardian)
-        .load_async
-    )
+    @pagy, @users = pagy(User.filter(filters).includes(:membership, :subscriptions, :legal_guardian).load_async)
   end
 
   def activity_search

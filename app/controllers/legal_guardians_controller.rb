@@ -6,16 +6,23 @@ class LegalGuardiansController < ApplicationController
 
   # GET /legal_guardians or /legal_guardians.json
   def index
+    @max = LegalGuardian.joins(:users).group(:legal_guardian_id).count.values.max || 0
+
     @sort_by = params[:sort_by] || 'updated_at'
     @direction = params[:direction] || 'desc'
 
+    filters = {
+      name: params[:name],
+      range: params[:users_range],
+      sort_by: @sort_by,
+      direction: @direction
+    }
+
     @pagy, @legal_guardians = pagy(
-      LegalGuardian.filter(params[:name], @sort_by, @direction)
+      LegalGuardian.filter(filters)
         .includes(:users)
         .load_async
     )
-
-    respond_to { |f| f.html }
   end
 
   # GET /legal_guardians/1 or /legal_guardians/1.json

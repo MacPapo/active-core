@@ -12,10 +12,21 @@
 
 <div class="bg-primary border border-secondary-subtle rounded-3 container">
     <div class="d-flex align-items-center">
-        <div class="flex-grow-1 me-2">
-            <%= render 'partials/search_form_users', path: staffs_path, frame: :staffs %>
+
+        <div class="flex-fill">
+            <%= render 'partials/search_form', loc: t('global.search_name'), path: staffs_path, frame: :staffs, size: '300px', ctrls: 'filters' do |f| %>
+                <div class="row mb-2">
+                    <!-- Activity Status -->
+                    <div class="col">
+                        <%= f.label :staff_role, t('global.staff_role'), class: 'form-label fw-semibold text-secondary' %>
+                        <%= f.select :staff_role, Staff.humanize_roles, { prompt: t('global.all-m') },
+                         class: 'form-select', data: { action: 'change->filters#submit' } %>
+                    </div>
+                </div>
+            <% end %>
         </div>
-        <%= link_to new_staff_path, class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+
+        <%= link_to new_staff_path, class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
             <i class="bi text-secondary bi-person-fill-add"></i>
             <span class="ms-1"><%= t '.add_staff' %></span>
         <% end %>

@@ -10,13 +10,14 @@ class StaffsController < ApplicationController
     @sort_by = params[:sort_by] || 'updated_at'
     @direction = params[:direction] || 'desc'
 
-    @pagy, @staffs = pagy(
-      Staff.filter(params[:name], @sort_by, @direction)
-        .includes(:user)
-        .load_async
-    )
+    filters = {
+      name: params[:name],
+      role: params[:staff_role],
+      sort_by: @sort_by,
+      direction: @direction
+    }
 
-    respond_to { |f| f.html }
+    @pagy, @staffs = pagy(Staff.filter(filters).includes(:user).load_async)
   end
 
   # GET /staffs/1

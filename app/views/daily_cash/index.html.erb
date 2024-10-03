@@ -54,13 +54,13 @@
              tabindex="0">
 
             <%= turbo_frame_tag :morning do %>
-                <%= render 'partials/payments_table', payments: @morning %>
+                <%= render 'partials/payments_table', payments: @morning, frame: :morning %>
                 <div class="d-flex justify-content-between align-items-center">
                     <%== pagy_bootstrap_nav(@pagy_morning) %>
 
                     <div class="d-flex align-items-center mb-3">
                         <p class="fs-4 fw-bold text-secondary mb-0"><%= number_to_currency @morning_cash %></p>
-                        <span class="fs-6 fw-light ps-2 text-muted">07-13</span>
+                        <span class="fs-6 fw-light ps-2 text-muted">07-14</span>
                     </div>
                 </div>
             <% end %>
@@ -74,13 +74,13 @@
              tabindex="0">
 
             <%= turbo_frame_tag :afternoon do %>
-                <%= render 'partials/payments_table', payments: @afternoon %>
+                <%= render 'partials/payments_table', payments: @afternoon, frame: :afternoon %>
                 <div class="d-flex justify-content-between align-items-center">
                     <%== pagy_bootstrap_nav(@pagy_afternoon) %>
 
                     <div class="d-flex align-items-center mb-3">
                         <p class="fs-4 fw-bold text-secondary mb-0"><%= number_to_currency @afternoon_cash %></p>
-                        <span class="fs-6 fw-light ps-2 text-muted">15-21</span>
+                        <span class="fs-6 fw-light ps-2 text-muted">14-21</span>
                     </div>
                 </div>
             <% end %>

@@ -12,10 +12,27 @@
 
 <div class="bg-primary border border-secondary-subtle rounded-3 container">
     <div class="d-flex align-items-center">
-        <div class="flex-grow-1 me-2">
-            <%= render 'partials/search_form_users', path: legal_guardians_path, frame: :legal_guardians %>
+        <div class="flex-fill">
+            <!-- Search form -->
+            <%= render 'partials/search_form', loc: t('global.search_name'), path: legal_guardians_path, frame: :legal_guardians, size: '300px', ctrls: 'filters range' do |f| %>
+                <div class="row mb-2">
+
+                    <!-- Membership Status -->
+                    <div class="col">
+                        <span class="d-flex">
+                            <%= f.label :users_range, t('global.lg_users'), class: 'form-label fw-semibold text-secondary' %>
+                            <span data-range-target="range" class="ms-2 text-secondary fw-semibold">0</span>
+                        </span>
+                        <%= f.range_field :users_range, in: 0..@max, value: 0,
+                             class: 'form-range', data: { action: 'change->filters#submit input->range#updateRangeValue' } %>
+                    </div>
+
+                </div>
+            <% end %>
         </div>
-        <%= link_to new_legal_guardian_path, class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+
+        <!-- Add Legal Guardian -->
+        <%= link_to new_legal_guardian_path, class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
             <i class="bi bi-person-fill-add"></i>
             <span class="ms-1"><%= t '.add_legal_guardian' %></span>
         <% end %>

@@ -10,13 +10,15 @@ class MembershipsController < ApplicationController
     @sort_by = params[:sort_by] || 'updated_at'
     @direction = params[:direction] || 'desc'
 
-    @pagy, @memberships = pagy(
-      Membership.filter(params[:name], @sort_by, @direction)
-        .includes(:user)
-        .load_async
-    )
+    filters = {
+      name: params[:name],
+      from: params[:date_from],
+      to: params[:date_to],
+      sort_by: @sort_by,
+      direction: @direction
+    }
 
-    respond_to { |f| f.html }
+    @pagy, @memberships = pagy(Membership.filter(filters).includes(:user).load_async)
   end
 
   # GET /memberships/1
@@ -81,7 +83,7 @@ class MembershipsController < ApplicationController
   def destroy
     @membership.destroy!
 
-    redirect_to memberships_url, notice: t('.destroy_succ')
+    redirect_back_or_to({ url: memberships_url, notice: t('.destroy_succ') })
   end
 
   private

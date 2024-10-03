@@ -13,18 +13,36 @@ class Activity < ApplicationRecord
   validates :num_participants, numericality: { greater_than: 0 }
 
   scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
+
+  scope :by_range, ->(range) do
+    return unless range.present? && range.to_i.positive?
+
+    joins(:subscriptions).group(:activity_id).having('COUNT(*) = ?', range.to_i)
+  end
+
+  scope :by_max_num, ->(num) do
+    return unless num.present? && num.to_i.positive?
+
+    where(num_participants: num.to_i)
+  end
+
   scope :sorted, ->(sort_by, direction) do
-    if %w[name num_participants].include?(sort_by)
-      direction = %w[asc desc].include?(direction) ? direction : 'asc'
-      order("#{sort_by} #{direction}")
-    end
+    return unless %w[name num_participants updated_at].include?(sort_by)
+
+    direction = %w[asc desc].include?(direction) ? direction : 'asc'
+    order("activities.#{sort_by} #{direction}")
   end
 
   scope :order_by_updated_at, -> { order('updated_at desc') }
 
-  def self.filter(name, sort_by, direction)
-    by_name(name)
-      .sorted(sort_by, direction)
-      .order_by_updated_at
+  def self.filter(params)
+    act = all
+
+    act = act.by_name(params[:name])
+    act = act.by_range(params[:range])
+    act = act.by_max_num(params[:number])
+    act = act.sorted(params[:sort_by], params[:direction])
+
+    act
   end
 end

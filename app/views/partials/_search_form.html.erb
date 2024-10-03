@@ -1,0 +1,35 @@
+<%= form_with url: path, method: :get, data: { turbo_frame: frame, turbo_action: 'advance', controller: ctrls } do |f| %>
+
+    <div class="d-flex align-items-center">
+
+        <div class="flex-grow-1 py-3">
+            <div class="input-group">
+                <span class="input-group-text bg-secondary">
+                    <i class="bi bi-search text-primary"></i>
+                </span>
+                <%= f.text_field :name, value: params[:name], placeholder: loc, autocomplete: 'off', class: 'form-control', data: { action: 'input->filters#submit' } %>
+            </div>
+        </div>
+
+        <div class="ms-2 py-3 position-relative">
+
+            <!-- Filter Button -->
+            <button id="filter-toggle" class="btn btn-secondary text-primary border border-secondary-subtle"
+                    data-action="click->filters#toggle">
+                <i class="bi bi-funnel-fill"></i>
+                <%= t('global.filters') %>
+            </button>
+
+            <!-- Filters Panel -->
+            <div data-filters-target="panel" class="position-absolute mt-2 bg-white rounded shadow border border-secondary-subtle p-3"
+                 style="display:none; right: 0; min-width: <%= size %>">
+
+
+                <fieldset>
+                    <!-- Yield the form field for the filters!! -->
+                    <%= yield f %>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+<% end %>

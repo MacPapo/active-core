@@ -11,7 +11,51 @@
 </div>
 
 <div class="bg-primary border border-secondary-subtle rounded-3 container">
-    <%= render 'partials/search_form_users', path: subscriptions_path, frame: :subscriptions %>
+    <div class="flex-fill">
+        <%= render 'partials/search_form', loc: t('global.search_name'), path: subscriptions_path, frame: :subscriptions, size: '600px', ctrls: 'filters' do |f| %>
+
+            <div class="row g-2 mb-2">
+                <!-- Activity ID -->
+                <div class="col">
+                    <%= f.label :activity_id, t('global.activity_name'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.select :activity_id, Activity.pluck(:name, :id), { prompt: t('global.all-s') },
+                     class: 'form-select', data: { action: 'change->filters#submit' } %>
+                </div>
+
+                <!-- Plan ID -->
+                <div class="col">
+                    <%= f.label :plan_id, t('global.activity_plan'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.select :plan_id, ActivityPlan.humanize_plans(ActivityPlan.pluck(:plan).uniq), { prompt: t('global.all-s') },
+                     class: 'form-select', data: { action: 'change->filters#submit' } %>
+                </div>
+
+                <!-- OPEN -->
+                <div class="col-md-2">
+                    <%= f.label :sub_open, t('global.activity_open'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.select :sub_open, [[t('true'), true], [t('false'), false]], { prompt: t('global.all-m') },
+                     class: 'form-select', data: { action: 'change->filters#submit' } %>
+                </div>
+            </div>
+
+            <% max = Subscription.maximum(:end_date) %>
+            <% min = Subscription.minimum(:start_date) %>
+            <div class="row g-2 mb-2">
+                <!-- DATE FROM -->
+                <div class="col">
+                    <%= f.label :date_from, t('global.activity_from'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.date_field :date_from, max: , min: ,
+                     class: 'form-control', data: { action: 'change->filters#submit' } %>
+                </div>
+
+                <!-- DATE TO -->
+                <div class="col">
+                    <%= f.label :date_to, t('global.activity_to'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.date_field :date_to, max: , min: ,
+                     class: 'form-control', data: { action: 'change->filters#submit' } %>
+                </div>
+            </div>
+        <% end %>
+    </div>
 
     <%= turbo_frame_tag :subscriptions do %>
         <% sub_sortable_column = ->(col, title) { sortable_column(col, title, subscriptions_path, :subscriptions, @sort_by, @direction) } %>
@@ -20,7 +64,7 @@
                 <table class="table table-borderless table-striped mb-0">
                     <thead class="table-secondary">
                         <tr class="fs-6">
-                            <th><%= sub_sortable_column.call('user_name', User.human_attribute_name('name')) %></th>
+                            <th><%= sub_sortable_column.call('name', User.human_attribute_name('name')) %></th>
                             <th><%= sub_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
                             <th><%= sub_sortable_column.call('activity_name', Subscription.human_attribute_name('activity')) %></th>
                             <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('open') %></th>

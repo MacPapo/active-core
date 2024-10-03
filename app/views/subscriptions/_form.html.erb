@@ -66,8 +66,8 @@
     <% end %>
 
     <div class="form-check mt-4" data-toggle-open-target="openField">
-        <%= form.check_box :open, class: 'form-check-input' %>
-        <%= form.label :open, class: 'form-check-label fw-semibold text-secondary' %>
+        <%= label_tag 'open', 'Open', class: 'text-secondary fw-semibold form-label' %>
+        <%= check_box_tag(:open, class: 'form-check-input') %>
     </div>
 
     <%= form.hidden_field :staff_id, value: current_staff.id %>

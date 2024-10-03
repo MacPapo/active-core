@@ -6,16 +6,20 @@ class ActivitiesController < ApplicationController
 
   # GET /activities
   def index
+    @max = Activity.joins(:subscriptions).group(:activity_id).count.values.max || 0
+
     @sort_by = params[:sort_by] || 'updated_at'
     @direction = params[:direction] || 'desc'
 
-    @pagy, @activities = pagy(
-      Activity.filter(params[:name], @sort_by, @direction)
-        .includes(:subscriptions)
-        .load_async
-    )
+    filters = {
+      name: params[:name],
+      range: params[:participants_range],
+      number: params[:max_participants],
+      sort_by: @sort_by,
+      direction: @direction
+    }
 
-    respond_to { |f| f.html }
+    @pagy, @activities = pagy(Activity.filter(filters).includes(:subscriptions).load_async)
   end
 
   # GET /activities/1
@@ -53,7 +57,7 @@ class ActivitiesController < ApplicationController
     @activity = Activity.new(activity_params)
 
     if @activity.save
-      redirect_to activity_url(@activity), notice: t('.create_succ')
+      redirect_to new_activity_plan_path(activity_id: @activity.id), notice: t('.create_succ')
     else
       render :new, status: :unprocessable_entity
     end

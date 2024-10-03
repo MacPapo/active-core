@@ -30,12 +30,10 @@
             <%= form.label :activity_plan_id, class: 'form-label fw-semibold text-secondary' %>
             <%= form.collection_select :activity_plan_id, @plans, :id, :humanize_plan, {}, { class: 'form-select' } %>
         </div>
-        <div class="col align-self-center" data-toggle-open-target="openField">
-            <div class="form-check mt-4">
-                <%= form.check_box :open, class: 'form-check-input' %>
-                <%= form.label :open, class: 'form-check-label fw-semibold text-secondary' %>
-            </div>
-        </div>
+    </div>
+    <div class="form-check mt-4" data-toggle-open-target="openField">
+        <%= label_tag 'open', 'OPEN', class: 'text-secondary fw-semibold form-label' %>
+        <%= check_box_tag(:open, class: 'form-check-input') %>
     </div>
 
 

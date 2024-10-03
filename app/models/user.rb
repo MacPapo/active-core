@@ -53,27 +53,21 @@ class User < ApplicationRecord
   scope :by_activity_id, ->(id) do
     return if id.blank?
 
-    joins(:subscriptions).where('subscriptions.activity_id = ?', id)
+    joins(:subscriptions).where('subscriptions.activity_id = ?', id.to_i)
   end
 
   scope :sorted, ->(sort_by, direction) do
     return unless %w[name surname birth_day updated_at].include?(sort_by)
 
-    sort_by = "users.#{sort_by}" if %w[name updated_at].include?(sort_by)
-    order("#{sort_by} #{direction}")
+    order("users.#{sort_by} #{direction}")
   end
 
   def self.filter(params)
-    users = all
-
-    users = users.by_name(params[:name])
-    users = users.by_membership_status(params[:membership_status])
-    users = users.by_activity_status(params[:activity_status])
-    users = users.by_activity_id(params[:activity_id])
-
-    users = users.sorted(params[:sort_by], params[:direction] || 'desc')
-
-    users
+    by_name(params[:name])
+      .by_membership_status(params[:membership_status])
+      .by_activity_status(params[:activity_status])
+      .by_activity_id(params[:activity_id])
+      .sorted(params[:sort_by], params[:direction] || 'desc')
   end
 
   def full_name

@@ -22,8 +22,8 @@ application.register("message", MessageController)
 import PopoverController from "./popover_controller"
 application.register("popover", PopoverController)
 
+import RangeController from "./range_controller"
+application.register("range", RangeController)
+
 import ToggleOpenController from "./toggle_open_controller"
 application.register("toggle-open", ToggleOpenController)
-
-import UsearchController from "./usearch_controller"
-application.register("usearch", UsearchController)

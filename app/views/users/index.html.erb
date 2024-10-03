@@ -13,8 +13,37 @@
 <div class="bg-primary border border-secondary-subtle rounded-3 container">
     <div class="d-flex align-items-center">
         <div class="flex-fill">
-            <%= render 'partials/search_form_users', path: users_path, frame: :users %>
+
+            <!-- Search form -->
+            <%= render 'partials/search_form', loc: t('global.search_name'), path: users_path, frame: :users, size: '500px', ctrls: 'filters' do |f| %>
+                <div class="row mb-2">
+                    <!-- Membership Status -->
+                    <div class="col">
+                        <%= f.label :membership_status, t('global.membership_status'), class: 'form-label fw-semibold text-secondary' %>
+                        <%= f.select :membership_status, Subscription.humanize_statuses, { prompt: t('global.all-m') },
+                         class: 'form-select', data: { action: 'change->filters#submit' } %>
+                    </div>
+                </div>
+
+                <div class="row g-2 mb-2">
+                    <!-- Activity Status -->
+                    <div class="col">
+                        <%= f.label :activity_status, t('global.activity_status'), class: 'form-label fw-semibold text-secondary' %>
+                        <%= f.select :activity_status, Subscription.humanize_statuses, { prompt: t('global.all-m') },
+                         class: 'form-select', data: { action: 'change->filters#submit' } %>
+                    </div>
+
+                    <!-- Activity ID -->
+                    <div class="col">
+                        <%= f.label :activity_id, t('global.activity_name'), class: 'form-label fw-semibold text-secondary' %>
+                        <%= f.select :activity_id, Activity.pluck(:name, :id), { prompt: t('global.all-s') },
+                         class: 'form-select', data: { action: 'change->filters#submit' } %>
+                    </div>
+                </div>
+            <% end %>
         </div>
+
+        <!-- Add User -->
         <%= link_to new_user_path, class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
             <i class="bi bi-person-fill-add"></i>
             <span class="ms-1"><%= t '.add_user' %></span>

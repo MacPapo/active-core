@@ -24,7 +24,7 @@ class Staff < ApplicationRecord
   scope :by_name, ->(query) do
     if query.present?
       where(
-        'name LIKE :q OR surname LIKE :q OR (surname LIKE :s AND name LIKE :n)',
+        'users.name LIKE :q OR users.surname LIKE :q OR (users.surname LIKE :s AND users.name LIKE :n)',
         q: "%#{query}%",
         s: "%#{query.split.last}%",
         n: "%#{query.split.first}%"
@@ -32,20 +32,25 @@ class Staff < ApplicationRecord
     end
   end
 
-  scope :sorted, ->(sort_by, direction) do
-    if %w[name surname birth_day].include?(sort_by)
-      direction = %w[asc desc].include?(direction) ? direction : 'asc'
-      order("#{sort_by} #{direction}")
-    end
+  scope :by_role, ->(role) do
+    return unless role.present?
+
+    where(role: role.to_sym)
   end
 
-  scope :order_by_updated_at, -> { order('staffs.updated_at desc') }
+  scope :sorted, ->(sort_by, direction) do
+    return unless %w[name surname birth_day updated_at].include?(sort_by)
 
-  def self.filter(name, sort_by, direction)
+    direction = %w[asc desc].include?(direction) ? direction : 'asc'
+    sort_by = sort_by == 'updated_at' ? "staffs.#{sort_by}" : "users.#{sort_by}"
+    order("#{sort_by} #{direction}")
+  end
+
+  def self.filter(params)
     joins(:user)
-      .by_name(name)
-      .sorted(sort_by, direction)
-      .order_by_updated_at
+      .by_name(params[:name])
+      .by_role(params[:role])
+      .sorted(params[:sort_by], params[:direction])
   end
 
   def email_required?

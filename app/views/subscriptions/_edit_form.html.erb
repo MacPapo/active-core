@@ -37,7 +37,7 @@
 
     <div class="form-check mb-3">
         <%= check_box_tag(:open, { id: 'open_checkbox', class: 'form-check-input', checked: @subscription&.open?, disabled: true }) %>
-        <%= label_tag 'open_checkbox', 'Open', class: 'form-check-label fw-semibold text-secondary' %>
+        <%= label_tag 'open', 'Open', class: 'form-check-label fw-semibold text-secondary' %>
         <%= hidden_field_tag(:open, @subscription&.open? ? "1" : "0") %>
     </div>
 

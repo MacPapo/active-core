@@ -7,12 +7,20 @@ class PaymentsController < ApplicationController
 
   # GET /payments
   def index
-    @pagy, @payments = pagy(
-      Payment
-        .filter(params[:date], params[:type], params[:method], params[:direction])
-        .includes(:staff)
-        .load_async
-    )
+    @sort_by = params[:sort_by] || 'updated_at'
+    @direction = params[:direction] || 'desc'
+
+    filters = {
+      name: params[:name],
+      type: params[:payable_type],
+      method: params[:payment_method],
+      from: params[:date_from],
+      to: params[:date_to],
+      sort_by: @sort_by,
+      direction: @direction
+    }
+
+    @pagy, @payments = pagy(Payment.filter(filters).includes(:staff).load_async)
   end
 
   # GET /payments/1

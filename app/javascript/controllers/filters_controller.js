@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import debounce from "debounce";
 
 // Connects to data-controller="filters"
 export default class extends Controller {
@@ -8,12 +9,15 @@ export default class extends Controller {
         console.log("Filters Controller connected");
     }
 
+    initialize() {
+        this.submit = debounce(this.submit.bind(this), 200);
+    }
+
     toggle() {
         this.panelTarget.style.display = this.panelTarget.style.display === "none" ? "block" : "none";
     }
 
     submit(event) {
-        console.log("SUBMITTED");
         event.target.form.requestSubmit();
     }
 }

@@ -14,26 +14,46 @@ class Payment < ApplicationRecord
   enum :payment_method, { pos: 0, cash: 1, bank_transfer: 2 }, default: :cash
   enum :entry_type, { income: 0, expense: 1 }, default: :income
 
+  scope :by_interval, ->(from, to) do
+    return if from.blank? && to.blank?
+
+    if from.present? && to.present?
+      where('payments.date': from..to)
+    elsif from.present?
+      where('payments.date >= ?', from)
+    else
+      where('payments.date <= ?', to)
+    end
+  end
+
+  scope :by_created_at, ->(from, to) { where(created_at: from..to).order(created_at: :desc) }
+  scope :by_name, ->(query) { where('staffs.nickname LIKE :q OR payments.note LIKE :q', q: "%#{query}%") }
   scope :by_type, ->(type) { where(payable_type: type.capitalize) if type.present? }
   scope :by_method, ->(method) { where(payment_method: method) if method.present? }
-  scope :order_by_date, ->(date) { order("date #{date&.upcase}") if date.present? }
-  scope :order_by_updated_at, ->(direction) { order("updated_at #{direction.blank? ? 'DESC' : direction&.upcase}") }
 
-  scope :by_time_interval, ->(from, to) { where(created_at: from..to).order(created_at: :desc) }
+  scope :sorted, ->(sort_by, direction) do
+    return unless %w[date amount staff updated_at].include?(sort_by)
 
-  def self.filter(date, type, method, direction)
-    by_type(type).by_method(method).order_by_date(date).order_by_updated_at(direction)
+    sort_by = sort_by == 'staff' ? 'staffs.nickname' : "payments.#{sort_by}"
+    order("#{sort_by} #{direction}")
+  end
+
+  def self.filter(params)
+    joins(:staff)
+      .by_name(params[:name])
+      .by_type(params[:type])
+      .by_method(params[:method])
+      .by_interval(params[:from], params[:to])
+      .sorted(params[:sort_by], params[:direction])
   end
 
   def self.daily_cash(arg)
     return nil if arg.blank?
 
     mid = Time.zone.now.beginning_of_day
-    select_range = ->(y) { by_time_interval(mid + y.first, mid + y.last) }
+    select_range = ->(y) { by_created_at(mid + y.first, mid + y.last) }
 
-    select_range.call(
-      arg == :morning ? [7.hours, 13.hours] : [15.hours, 21.hours]
-    )
+    select_range.call(arg == :morning ? [7.hours, 14.hours] : [14.hours, 21.hours])
   end
 
   def payment_summary
@@ -56,16 +76,19 @@ class Payment < ApplicationRecord
     Payment.human_attribute_name("type.#{type}")
   end
 
+  def self.humanize_payable_types
+    Payment
+      .select(:payable_type)
+      .distinct
+      .pluck(:payable_type).map { |x| [Payment.human_attribute_name("payable.#{x.downcase}"), x] }
+  end
+
   def self.humanize_payment_methods
-    payment_methods.keys.map do |key|
-      [Payment.human_attribute_name("method.#{key}"), key]
-    end
+    payment_methods.keys.map { |key| [Payment.human_attribute_name("method.#{key}"), key] }
   end
 
   def self.humanize_entry_types
-    entry_types.keys.map do |key|
-      [Payment.human_attribute_name("type.#{key}"), key]
-    end
+    entry_types.keys.map { |key| [Payment.human_attribute_name("type.#{key}"), key] }
   end
 
   private

@@ -11,78 +11,96 @@
 </div>
 
 <div class="bg-primary border border-secondary-subtle rounded-3 container">
-    <%= render 'partials/search_form_users', path: memberships_path, frame: :memberships %>
+    <div class="flex-fill">
+        <%= render 'partials/search_form', loc: t('global.search_name'), path: memberships_path, frame: :memberships, size: '600px', ctrls: 'filters' do |f| %>
+            <% max = Membership.maximum(:end_date) %>
+            <% min = Membership.minimum(:start_date) %>
+            <div class="row g-2 mb-2">
+                <!-- DATE FROM -->
+                <div class="col">
+                    <%= f.label :date_from, t('global.activity_from'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.date_field :date_from, max: , min: ,
+                     class: 'form-control', data: { action: 'change->filters#submit' } %>
+                </div>
 
-    <%= turbo_frame_tag :memberships do %>
-        <% mem_sortable_column = ->(col, title) { sortable_column(col, title, memberships_path, :memberships, @sort_by, @direction) } %>
-        <div id="memberships" class="table-responsive">
-            <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
-                <table class="table table-borderless table-striped mb-0">
-                    <thead class="table-secondary">
-                        <tr class="fs-6">
-                            <th><%= mem_sortable_column.call('name', User.human_attribute_name('name')) %></th>
-                            <th><%= mem_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
-                            <th><%= mem_sortable_column.call('start_date', Membership.human_attribute_name('start_date')) %></th>
-                            <th><%= mem_sortable_column.call('end_date', Membership.human_attribute_name('end_date')) %></th>
-                            <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% @memberships.each do |membership| %>
-                            <tr class="align-middle">
-
-                                <!-- Name -->
-                                <% user = membership.user %>
-                                <td>
-                                    <%= highlight user.name, params.dig(:name) %>
-                                </td>
-
-                                <!-- Surname -->
-                                <td>
-                                    <%= highlight user.surname, params.dig(:name) %>
-                                </td>
-
-                                <!-- Start Date -->
-                                <td>
-                                    <%= l membership.start_date %>
-                                </td>
-
-                                <!-- End Date -->
-                                <td>
-                                    <%= l membership.end_date %>
-                                </td>
-
-                                <!-- Action -->
-                                <td class="text-end">
-                                    <%= link_to membership,
-                                                class: 'btn btn-info btn-sm border border-secondary-subtle',
-                                                data: { turbo_frame: "_top" } do %>
-                                        <i class="bi text-secondary bi-eye-fill"></i>
-                                    <% end %>
-
-                                    <%= link_to edit_membership_path(membership, user_id: user.id),
-                                                class: 'btn btn-warning btn-sm border border-secondary-subtle',
-                                                data: { turbo_frame: "_top" } do %>
-                                        <i class="bi text-secondary bi-pencil-fill"></i>
-                                    <% end %>
-
-                                    <% if current_staff.admin? %>
-                                        <%= button_to membership,
-                                                      class: 'btn btn-danger btn-sm border border-secondary-subtle',
-                                                      method: :delete,
-                                                      data: { turbo_frame: "_top", turbo_confirm: t('global.destroy_dialog') },
-                                                      form: {style: 'display:inline-block;'} do %>
-                                            <i class="bi text-secondary bi-trash3-fill"></i>
-                                        <% end %>
-                                    <% end %>
-                                </td>
-                            </tr>
-                        <% end %>
-                    </tbody>
-                </table>
+                <!-- DATE TO -->
+                <div class="col">
+                    <%= f.label :date_to, t('global.activity_to'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.date_field :date_to, max: , min: ,
+                        class: 'form-control', data: { action: 'change->filters#submit' } %>
+                </div>
             </div>
+        <% end %>
+        <%= turbo_frame_tag :memberships do %>
+            <% mem_sortable_column = ->(col, title) { sortable_column(col, title, memberships_path, :memberships, @sort_by, @direction) } %>
+            <div id="memberships" class="table-responsive">
+                <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
+                    <table class="table table-borderless table-striped mb-0">
+                        <thead class="table-secondary">
+                            <tr class="fs-6">
+                                <th><%= mem_sortable_column.call('name', User.human_attribute_name('name')) %></th>
+                                <th><%= mem_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
+                                <th><%= mem_sortable_column.call('start_date', Membership.human_attribute_name('start_date')) %></th>
+                                <th><%= mem_sortable_column.call('end_date', Membership.human_attribute_name('end_date')) %></th>
+                                <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @memberships.each do |membership| %>
+                                <tr class="align-middle">
 
-            <%== pagy_bootstrap_nav(@pagy) %>
-        </div>
-    <% end %>
-</div>
+                                    <!-- Name -->
+                                    <% user = membership.user %>
+                                    <td>
+                                        <%= highlight user.name, params.dig(:name) %>
+                                    </td>
+
+                                    <!-- Surname -->
+                                    <td>
+                                        <%= highlight user.surname, params.dig(:name) %>
+                                    </td>
+
+                                    <!-- Start Date -->
+                                    <td>
+                                        <%= l membership.start_date %>
+                                    </td>
+
+                                    <!-- End Date -->
+                                    <td>
+                                        <%= l membership.end_date %>
+                                    </td>
+
+                                    <!-- Action -->
+                                    <td class="text-end">
+                                        <%= link_to membership,
+                                                    class: 'btn btn-info btn-sm border border-secondary-subtle',
+                                                    data: { turbo_frame: "_top" } do %>
+                                            <i class="bi text-secondary bi-eye-fill"></i>
+                                        <% end %>
+
+                                        <%= link_to edit_membership_path(membership, user_id: user.id),
+                                                    class: 'btn btn-warning btn-sm border border-secondary-subtle',
+                                                    data: { turbo_frame: "_top" } do %>
+                                            <i class="bi text-secondary bi-pencil-fill"></i>
+                                        <% end %>
+
+                                        <% if current_staff.admin? %>
+                                            <%= button_to membership,
+                                                          class: 'btn btn-danger btn-sm border border-secondary-subtle',
+                                                          method: :delete,
+                                                          data: { turbo_frame: "_top", turbo_confirm: t('global.destroy_dialog') },
+                                                          form: {style: 'display:inline-block;'} do %>
+                                                <i class="bi text-secondary bi-trash3-fill"></i>
+                                            <% end %>
+                                        <% end %>
+                                    </td>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <%== pagy_bootstrap_nav(@pagy) %>
+            </div>
+        <% end %>
+    </div>
