@@ -54,17 +54,11 @@
         <% end %>
     </div>
 
-    <div class="d-grid gap-1">
-
-        <!-- Staff Profile button -->
-        <%= link_to current_staff, class: 'btn btn-outline-info border-0' do %>
-            <i class="bi bi-person-badge-fill"></i> <%= current_staff.nickname %>
-        <% end %>
-
+    <div class="d-grid gap-3">
         <!-- Log-out button -->
-        <%= button_to destroy_staff_session_path, method: :delete, class: 'btn btn-outline-danger border-0 w-100' do %>
-            <i class="bi bi-box-arrow-right"></i>
-            <span class="ps-3"><%= t('global.logout') %></span>
+        <%= button_to destroy_staff_session_path, method: :delete, class: 'btn btn-bd-secondary border border-secondary-subtle d-flex align-items-center w-100' do %>
+            <i class="bi bi-box-arrow-right text-danger"></i>
+            <span class="ps-3 text-danger"><%= t('global.logout') %> <%= t('global.from') %> <%= current_staff.nickname %></span>
         <% end %>
     </div>
 </div>

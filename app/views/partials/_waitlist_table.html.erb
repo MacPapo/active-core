@@ -1,0 +1,61 @@
+<% u = waitlists.first.user %>
+<% user_attribute_to_string = ->(attr) { attribute_to_string(u, attr)} %>
+<div id="waitlists" class="table-responsive">
+    <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
+        <table class="table table-borderless table-striped mb-0">
+            <thead class="table-secondary">
+                <tr class="fs-6">
+                    <th class="text-primary text-begin fw-semibold">
+                        <%= user_attribute_to_string.('name') %>
+                    </th>
+                    <th class="text-primary fw-semibold">
+                        <%= user_attribute_to_string.('surname') %>
+                    </th>
+                    <th class="text-primary fw-semibold">
+                        <%= user_attribute_to_string.('phone') %>
+                    </th>
+                    <th class="text-primary text-end fw-semibold">
+                        <%= t('global.table.action') %>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% waitlists.each do |w| %>
+                    <tr class="align-middle">
+                        <% user = w.user %>
+
+                        <!-- Name -->
+                        <td>
+                            <%= user.name %>
+                        </td>
+
+                        <!-- Surname -->
+                        <td>
+                            <%= user.surname %>
+                        </td>
+
+                        <!-- Phone -->
+                        <td>
+                            <%= phone_to_string user.phone %>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-end">
+                            <%= link_to edit_waitlist_path(w, activity_id: activity.id), class: 'btn btn-warning btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
+                                <i class="bi text-secondary bi-pencil-fill"></i>
+                            <% end %>
+
+                            <%= button_to w,
+                                          class: 'btn btn-danger btn-sm border border-secondary-subtle',
+                                          method: :delete,
+                                          data: { turbo_confirm: t('global.destroy_dialog'), turbo_frame: "_top" },
+                                          form: {style: 'display:inline-block;'} do %>
+                                <i class="bi text-secondary bi-trash3-fill"></i>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+</div>

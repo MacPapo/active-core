@@ -44,6 +44,8 @@ it:
         legal_guardian_id: "Tutore Legale"
         membership: "Quota Associativa"
         activity: "Attività"
+        updated_at: "Data aggiornamento"
+        created_at: "Data creazione"
 
       staff:
         id: "ID"
@@ -98,7 +100,8 @@ it:
         activity_plan_id: "Piano per questa Attività"
         staff: "Collaboratore"
         open_subscription: "Attività collegata (OPEN)"
-        updated_at: "Ultimo Aggiornamento"
+        updated_at: "Data aggiornamento"
+        created_at: "Data creazione"
       subscription/status:
         inactive: "Inattivo"
         active: "Attivo"
@@ -146,6 +149,7 @@ it:
         subscription: "Iscrizione"
 
   global:
+    from: "da"
     all-m: 'Tutti'
     all-s: 'Tutte'
     filters: "Filtri"
@@ -172,6 +176,7 @@ it:
     subscription: "Iscrizioni"
     membership: "Quote"
     no_subs: "Ancora nessun partecipante per questa Attività"
+    no_waitlists: "Ancora nessun utente in lista d'attesa per questa Attività"
 
     membership_status: "Stato Quota Associativa"
     activity_status: "Stato Attività"

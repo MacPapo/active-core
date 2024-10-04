@@ -223,6 +223,43 @@
                 </div>
             </div>
 
+
+            <% if current_staff.admin? %>
+
+                <div class="container py-1">
+                    <hr>
+                </div>
+
+                <% staff = membership.staff %>
+                <div class="row mb-2">
+                    <div class="col">
+                        <p class="fs-6 fw-light text-muted mb-2">
+                            <%= user_attribute_to_string.('staff') %>
+                        </p>
+                        <div class="card-text">
+                            <%= link_to "#{staff.nickname}", staff, class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2' %>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <p class="fs-6 fw-light text-muted mb-2">
+                            <%= user_attribute_to_string.('updated_at') %>
+                        </p>
+                        <div class="fs-5 fw-semibold text-secondary">
+                            <%= l membership.updated_at, format: :long %>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <p class="fs-6 fw-light text-muted mb-2">
+                            <%= user_attribute_to_string.('created_at') %>
+                        </p>
+                        <div class="fs-5 fw-semibold text-secondary">
+                            <%= l membership.created_at, format: :long %>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
         <% else %>
 
             <div class="d-flex align-items-center">

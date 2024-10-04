@@ -36,7 +36,7 @@ Rails.application.routes.draw do
 
   resources :activity_plans, except: %i[new create destory edit]
 
-  resources :waitlists
+  resources :waitlists, except: %i[index show]
   get 'receipt/show'
 
   resources :daily_cash

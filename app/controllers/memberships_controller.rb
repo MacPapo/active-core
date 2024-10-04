@@ -72,8 +72,7 @@ class MembershipsController < ApplicationController
   # PATCH/PUT /memberships/1
   def update
     if @membership.update(membership_params)
-      redirect_to membership_path(@membership),
-                  notice: t('.update_succ')
+      redirect_to @membership, notice: t('.update_succ')
     else
       render :edit, status: :unprocessable_entity
     end
@@ -83,7 +82,7 @@ class MembershipsController < ApplicationController
   def destroy
     @membership.destroy!
 
-    redirect_back_or_to({ url: memberships_url, notice: t('.destroy_succ') })
+    redirect_to memberships_url, notice: t('.destroy_succ')
   end
 
   private

@@ -1,0 +1,36 @@
+<%= form_with(model: staff) do |form| %>
+    <% if staff.errors.any? %>
+        <div style="color: red">
+            <h2><%= t('global.forms.messages.errors', count: staff.errors.count) %></h2>
+
+            <ul>
+                <% staff.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div class="row mb-3">
+        <div class="col">
+            <%= form.label :nickname, class: 'form-label fw-semibold text-secondary' %>
+            <%= form.text_field :nickname, class: 'form-control' %>
+        </div>
+
+        <div class="col">
+            <%= form.label :password, class: 'form-label fw-semibold text-secondary' %>
+            <%= form.password_field :password, class: 'form-control' %>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <%= form.label :role, class: 'form-label fw-semibold text-secondary' %>
+            <%= form.select :role, @roles, {}, { class: 'form-select' } %>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
+    </div>
+<% end %>
