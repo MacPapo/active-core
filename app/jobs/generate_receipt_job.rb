@@ -41,7 +41,7 @@ class GenerateReceiptJob < ApplicationJob
 
   def generate_pdf(receipt)
     Receipts::Receipt.new(
-      page_size: 'A4',
+      page_size: 'A5',
       title: 'Ricevuta',
       details: generate_details(receipt),
       logo_height: 90,
