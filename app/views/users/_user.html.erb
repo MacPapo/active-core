@@ -226,7 +226,7 @@
 
             <% if current_staff.admin? %>
 
-                <div class="container py-1">
+                <div class="container-fluid py-1">
                     <hr>
                 </div>
 
@@ -262,14 +262,16 @@
             <% end %>
         <% else %>
 
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center justify-content-between">
                 <p class="fs-5 fw-light text-secondary me-3 mb-0">
                     <%= t('.no_membership') %>
                 </p>
 
-                <%= link_to new_membership_path(user_id: user&.id), class: "btn border border-secondary-subtle fs-6 fw-semibold text-secondary bg-dark" do %>
-                    <i class="me-2 bi bi-plus-lg"></i>
-                    <%= t('.add_membership') %>
+                <%= link_to new_membership_path(user_id: user&.id), class: "btn border border-secondary-subtle fs-6 text-secondary bg-dark" do %>
+                    <i class="text-secondary bi bi-plus-lg"></i>
+		    <span class="ms-1">
+			<%= t('.add_membership') %>
+		    </span>
                 <% end %>
             </div>
 
@@ -285,7 +287,7 @@
 
 
         <!-- Subscriptions -->
-        <div>
+        <% if user.subscriptions.length > 0 %>
             <div class="d-flex justify-content-end align-items-center mb-2">
                 <%= link_to new_subscription_path(user_id: user), class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
                     <i class="text-secondary bi bi-bar-chart-fill"></i>
@@ -296,16 +298,29 @@
             </div>
 
 
-            <% if user.subscriptions.length > 0 %>
-                <%= render 'subscriptions/subscriptions_table',
-                           subscriptions: user.subscriptions,
-                           actv: false,
-                           generic: true
-                %>
 
-            <% else %>
-                <%= t '.no_subs' %>
-            <% end %>
-        </div>
+            <%= render 'subscriptions/subscriptions_table',
+                       subscriptions: user.subscriptions,
+                       actv: false,
+                       generic: true
+            %>
+
+        <% else %>
+
+	    <div class="d-flex align-items-center justify-content-between">
+                <p class="fs-5 fw-light text-secondary me-3 mb-0">
+                    <%= t '.no_subs' %>
+                </p>
+
+		<%= link_to new_subscription_path(user_id: user), class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+                    <i class="text-secondary bi bi-bar-chart-fill"></i>
+                    <span class="ms-1">
+                        <%= t '.add_sub' %>
+                    </span>
+                <% end %>
+            </div>
+
+        <% end %>
+
     </div>
 </div>

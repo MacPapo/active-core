@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<div class="bg-primary border border-secondary-subtle rounded-3 container">
+<div class="bg-primary border border-secondary-subtle rounded-3 container-fluid">
     <div class="flex-fill">
         <%= render 'partials/search_form', loc: t('global.search_name'), path: memberships_path, frame: :memberships, size: '600px', ctrls: 'filters' do |f| %>
             <% max = Membership.maximum(:end_date) %>
