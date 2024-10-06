@@ -2,6 +2,8 @@
 
 # Payment Model
 class Payment < ApplicationRecord
+  include Discard::Model
+
   validates :payment_method, :entry_type, :payable, :staff, presence: true
 
   after_save :activate_membership_or_subscription

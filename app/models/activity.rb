@@ -2,6 +2,8 @@
 
 # Activity Model
 class Activity < ApplicationRecord
+  include Discard::Model
+
   has_many :subscriptions, dependent: :destroy
   has_many :waitlists, dependent: :destroy
   has_many :activity_plans, dependent: :destroy

@@ -2,6 +2,8 @@
 
 # Membership Model
 class Membership < ApplicationRecord
+  include Discard::Model
+
   validates :start_date, presence: true
   validates :end_date, comparison: { greater_than: :start_date }, if: -> { start_date.present? && end_date.present? }
 
@@ -13,7 +15,6 @@ class Membership < ApplicationRecord
   belongs_to :user, touch: true
   belongs_to :staff, touch: true
 
-  has_many :membership_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
 
   enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive

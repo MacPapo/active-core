@@ -2,7 +2,7 @@
 
 # User Controller
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[show edit update destroy]
+  before_action :set_user, only: %i[show edit update destroy restore]
 
   # GET /users
   def index
@@ -74,9 +74,14 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    @user.destroy!
-
+    @user.discard
     redirect_to users_url, notice: t('.destroy_succ')
+  end
+
+  # PATCH /users/1
+  def restore
+    @user.undiscard
+    redirect_to users_url, notice: t('.restore_succ')
   end
 
   private

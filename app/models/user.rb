@@ -2,6 +2,8 @@
 
 # User Model
 class User < ApplicationRecord
+  include Discard::Model
+
   validates :name, :surname, presence: true
   validates :affiliated, inclusion: { in: [true, false] }
 
@@ -18,9 +20,20 @@ class User < ApplicationRecord
 
   after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor?
 
+  # After Discard
+  after_discard do
+    staff&.discard
+  end
+
+  # After Undiscard
+  after_undiscard do
+    staff&.undiscard
+  end
+
   belongs_to :legal_guardian, optional: true
 
   has_one    :staff, dependent: :destroy
+
   has_one    :membership, dependent: :destroy
 
   has_many   :subscriptions, dependent: :destroy

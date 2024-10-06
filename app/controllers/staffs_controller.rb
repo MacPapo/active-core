@@ -51,10 +51,9 @@ class StaffsController < ApplicationController
     end
   end
 
-  # DELETE /staffs/1 or /staffs/1.json
+  # DELETE /staffs/1
   def destroy
-    @staff.destroy!
-
+    @staff.discard
     redirect_to staffs_url, notice: t('.destroy_succ')
   end
 

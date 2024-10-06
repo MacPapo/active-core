@@ -183,10 +183,11 @@ it:
     activity_name: "Attività"
 
     edit_button: "Modifica"
-    destroy_button: "Elimina"
+    delete_button: "Elimina"
     receipt_button: "Stampa Ricevuta"
 
-    destroy_dialog: "Sicuro di voler eliminare? L'operazione non è reversibile"
+    delete_dialog: "Sicuro di voler eliminare? L'operazione puo' essere invertita con il tasto Ripristino"
+    restore_dialog: "Sicuro di voler ripristinare? L'operazione ripristina l'oggetto e tutti i dati collegati ad esso"
 
     devise:
       sign_in: "Hey, autenticati!"
@@ -249,6 +250,10 @@ it:
       update_succ: "L'utente è stato aggiornato correttamente"
     destroy:
       destroy_succ: "L'utente è stato eliminato correttamente"
+    erase:
+      erase_succ: "L'utente è stato eliminato permanentemente!"
+    restore:
+      restore_succ: "L'utente è stato ripristinato correttamente"
     index:
       title: "Utenti"
       add_user: "Aggiungi Utente"
@@ -457,6 +462,10 @@ it:
     renew:
       title: "Rinnovo Quota Associativa"
       membership_inactive: "Redirezionato qui per non rinnovare due volte la stessa Quota Associativa"
+
+  receipts:
+    destroy:
+      delete_succ: "La ricevuta è stata eliminata correttamente"
 
   waitlists:
     form:

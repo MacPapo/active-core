@@ -117,8 +117,7 @@ class SubscriptionsController < ApplicationController
   # DELETE /subscriptions/1
   def destroy
     user = @subscription.user
-    @subscription.destroy!
-
+    @subscription.discard
     redirect_to user_url(user), notice: t('.destroy_succ')
   end
 

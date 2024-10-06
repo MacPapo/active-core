@@ -24,6 +24,8 @@ $border: #abb2ba;
 $light: #F3F4F6;
 $dark: #DBFC75;
 
+$light-yellow: #F1EB9C;
+
 
 // Override dei colori del form
 $input-border-color: $border;
@@ -52,6 +54,69 @@ $input-focus-border-color: $secondary;
   --bs-btn-active-border-color: #{$border};
 }
 
+// VIEW BUTTON COMPONENTS
+.btn-view {
+    --bs-btn-font-weight: 400;
+    --bs-btn-color: #{$secondary};
+    --bs-btn-bg: #{$info};
+
+    --bs-btn-hover-color: #{$secondary};
+    --bs-btn-hover-bg: #{$dark};
+    --bs-btn-hover-border-color: #{$dark};
+    --bs-btn-focus-shadow-rgb: #{$dark};
+
+    --bs-btn-active-color: #{$primary};
+    --bs-btn-active-bg: #{$secondary};
+    --bs-btn-active-border-color: #{$border};
+}
+
+// EDIT BUTTON COMPONENTS
+.btn-edit {
+    --bs-btn-font-weight: 400;
+    --bs-btn-color: #{$secondary};
+    --bs-btn-bg: #{$warning};
+
+    --bs-btn-hover-color: #{$secondary};
+    --bs-btn-hover-bg: #{$dark};
+    --bs-btn-hover-border-color: #{$dark};
+    --bs-btn-focus-shadow-rgb: #{$dark};
+
+    --bs-btn-active-color: #{$primary};
+    --bs-btn-active-bg: #{$secondary};
+    --bs-btn-active-border-color: #{$border};
+}
+
+// DELETE BUTTON COMPONENTS
+.btn-delete {
+    --bs-btn-font-weight: 400;
+    --bs-btn-color: #{$secondary};
+    --bs-btn-bg: #{$danger};
+
+    --bs-btn-hover-color: #{$secondary};
+    --bs-btn-hover-bg: #{$dark};
+    --bs-btn-hover-border-color: #{$dark};
+    --bs-btn-focus-shadow-rgb: #{$dark};
+
+    --bs-btn-active-color: #{$primary};
+    --bs-btn-active-bg: #{$secondary};
+    --bs-btn-active-border-color: #{$border};
+}
+
+// RESTORE BUTTON COMPONENTS
+.btn-restore {
+    --bs-btn-font-weight: 400;
+    --bs-btn-color: #{$secondary};
+    --bs-btn-bg: #{$light-yellow};
+
+    --bs-btn-hover-color: #{$secondary};
+    --bs-btn-hover-bg: #{$dark};
+    --bs-btn-hover-border-color: #{$dark};
+    --bs-btn-focus-shadow-rgb: #{$dark};
+
+    --bs-btn-active-color: #{$primary};
+    --bs-btn-active-bg: #{$secondary};
+    --bs-btn-active-border-color: #{$border};
+}
 
 // PAGY COMPONENTS
 

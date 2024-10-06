@@ -2,6 +2,8 @@
 
 # Subscription Model
 class Subscription < ApplicationRecord
+  include Discard::Model
+
   validates :start_date, :activity_id, :activity_plan_id, :user_id, :staff_id, presence: true
   validates :end_date, comparison: { greater_than_or_equal_to: :start_date }, if: -> { start_date.present? && end_date.present? }
   validate :active_membership?, if: -> { user.present? && activity.present? }
@@ -24,7 +26,6 @@ class Subscription < ApplicationRecord
 
   has_one :normal_subscription, inverse_of: :open_subscription, class_name: 'Subscription', foreign_key: 'open_subscription_id', dependent: :destroy
 
-  has_many :subscription_histories, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
 
   enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive

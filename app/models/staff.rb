@@ -2,6 +2,8 @@
 
 # Staff Model
 class Staff < ApplicationRecord
+  include Discard::Model
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
   devise :database_authenticatable, :timeoutable, :trackable, authentication_keys: [:nickname]
@@ -51,6 +53,10 @@ class Staff < ApplicationRecord
       .by_name(params[:name])
       .by_role(params[:role])
       .sorted(params[:sort_by], params[:direction])
+  end
+
+  def active_for_authentication?
+    super && !discarded?
   end
 
   def email_required?

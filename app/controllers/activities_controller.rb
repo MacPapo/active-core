@@ -74,8 +74,7 @@ class ActivitiesController < ApplicationController
 
   # DELETE /activities/1
   def destroy
-    @activity.destroy!
-
+    @activity.discard
     redirect_to activities_url, notice: t('.destroy_succ')
   end
 

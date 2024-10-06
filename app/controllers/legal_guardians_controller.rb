@@ -25,7 +25,7 @@ class LegalGuardiansController < ApplicationController
     )
   end
 
-  # GET /legal_guardians/1 or /legal_guardians/1.json
+  # GET /legal_guardians/1
   def show; end
 
   def find_by_email
@@ -47,42 +47,30 @@ class LegalGuardiansController < ApplicationController
   # GET /legal_guardians/1/edit
   def edit; end
 
-  # POST /legal_guardians or /legal_guardians.json
+  # POST /legal_guardians
   def create
     @legal_guardian = LegalGuardian.new(legal_guardian_params)
 
-    respond_to do |format|
-      if @legal_guardian.save
-        format.html { redirect_to legal_guardian_url(@legal_guardian), notice: t('.create_succ') }
-        format.json { render :show, status: :created, location: @legal_guardian }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @legal_guardian.errors, status: :unprocessable_entity }
-      end
+    if @legal_guardian.save
+      redirect_to legal_guardian_url(@legal_guardian), notice: t('.create_succ')
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /legal_guardians/1 or /legal_guardians/1.json
+  # PATCH/PUT /legal_guardians/1
   def update
-    respond_to do |format|
-      if @legal_guardian.update(legal_guardian_params)
-        format.html { redirect_to legal_guardian_url(@legal_guardian), notice: t('.update_succ') }
-        format.json { render :show, status: :ok, location: @legal_guardian }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @legal_guardian.errors, status: :unprocessable_entity }
-      end
+    if @legal_guardian.update(legal_guardian_params)
+      redirect_to legal_guardian_url(@legal_guardian), notice: t('.update_succ')
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /legal_guardians/1 or /legal_guardians/1.json
+  # DELETE /legal_guardians/1
   def destroy
-    @legal_guardian.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to legal_guardians_url, notice: t('.destroy_succ') }
-      format.json { head :no_content }
-    end
+    @legal_guardian.discard
+    redirect_to legal_guardians_url, notice: t('.destroy_succ')
   end
 
   private

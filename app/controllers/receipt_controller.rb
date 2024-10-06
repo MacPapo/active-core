@@ -2,6 +2,7 @@
 
 # Receipt Controller
 class ReceiptController < ApplicationController
+  before_action :set_receipt, only: [:destroy]
   before_action :set_payment, only: [:show]
 
   def show
@@ -10,10 +11,20 @@ class ReceiptController < ApplicationController
     end
   end
 
+  # TODO
+  def destroy
+    @receipt.discard
+    redirect_to users_path, notice: t('.delete_succ')
+  end
+
   private
 
   def set_payment
     @payment = Payment.find(params[:payment_id])
+  end
+
+  def set_receipt
+    @receipt = Receipt.find(params[:id])
   end
 
   def send_pdf

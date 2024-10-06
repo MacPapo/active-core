@@ -2,6 +2,8 @@
 
 # Receipt Model
 class Receipt < ApplicationRecord
+  include Discard::Model
+
   belongs_to :payment
   belongs_to :user
 

@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resources :payments, only: [:index]
     resources :subscriptions, only: [:index]
     resources :memberships, only: [:index]
-    resources :users, only: [:destroy]
+    resources :users, only: [:erase]
     resources :legal_guardians, only: [:destroy]
     resources :activities, only: %i[destroy edit]
     resources :activity_plans, only: %i[new create destory edit]
@@ -15,9 +15,14 @@ Rails.application.routes.draw do
     mount MissionControl::Jobs::Engine, at: '/jobs'
   end
 
-  resources :users, except: [:destroy] do
+  resources :users, except: [:erase] do
     collection do
       get :activity_search
+    end
+
+    member do
+      delete :erase
+      patch :restore
     end
   end
 

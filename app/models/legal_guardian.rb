@@ -2,6 +2,8 @@
 
 # LegalGuardian Model
 class LegalGuardian < ApplicationRecord
+  include Discard::Model
+
   before_save :normalize_phone
 
   has_many :users, dependent: :nullify

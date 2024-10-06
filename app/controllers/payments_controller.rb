@@ -62,8 +62,7 @@ class PaymentsController < ApplicationController
 
   # DELETE /payments/1
   def destroy
-    @payment.destroy!
-
+    @payment.discard
     redirect_to payments_url, notice: t('.destroy_succ')
   end
 
