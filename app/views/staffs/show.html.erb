@@ -20,9 +20,9 @@
         <%= button_to @staff,
                       class: 'btn btn-danger fs-5 text-secondary',
                       method: :delete,
-                      data: { turbo_confirm: t('global.destroy_dialog') } do %>
+                      data: { turbo_confirm: t('global.delete_dialog') } do %>
             <i class="bi bi-trash3-fill"></i>
-            <%= t('global.destroy_button') %>
+            <%= t('global.delete_button') %>
         <% end %>
     </div>
 </div>

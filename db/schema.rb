@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_06_185620) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_07_101204) do
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
     t.integer "num_participants", default: 0, null: false
@@ -29,7 +29,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_06_185620) do
     t.integer "activity_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
     t.index ["activity_id"], name: "index_activity_plans_on_activity_id"
+    t.index ["discarded_at"], name: "index_activity_plans_on_discarded_at"
   end
 
   create_table "legal_guardians", force: :cascade do |t|

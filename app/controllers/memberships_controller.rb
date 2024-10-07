@@ -2,7 +2,7 @@
 
 # Membership Controller
 class MembershipsController < ApplicationController
-  before_action :set_membership, only: %i[show edit renew renew_update update destroy]
+  before_action :set_membership, only: %i[show edit renew renew_update update destroy restore]
   before_action :set_user, only: %i[edit new renew create update renew_update]
 
   # GET /memberships
@@ -11,6 +11,7 @@ class MembershipsController < ApplicationController
     @direction = params[:direction] || 'desc'
 
     filters = {
+      visibility: params[:visibility],
       name: params[:name],
       from: params[:date_from],
       to: params[:date_to],
@@ -80,9 +81,13 @@ class MembershipsController < ApplicationController
 
   # DELETE /memberships/1
   def destroy
-    @membership.destroy!
-
+    @membership.discard
     redirect_to memberships_url, notice: t('.destroy_succ')
+  end
+
+  def restore
+    @membership.undiscard
+    redirect_to memberships_url, notice: t('.restore_succ')
   end
 
   private

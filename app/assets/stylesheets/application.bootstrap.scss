@@ -6,7 +6,6 @@ $secondary: #2C3E50;
 $secondary-10: #7eb1e5;
 $secondary-80: #395168;
 
-
 $info: #57e5e5;
 
 $success: #5be599;
@@ -26,7 +25,6 @@ $dark: #DBFC75;
 
 $light-yellow: #F1EB9C;
 
-
 // Override dei colori del form
 $input-border-color: $border;
 $input-bg: $primary;
@@ -38,11 +36,25 @@ $input-focus-border-color: $secondary;
 @import 'bootstrap-icons/font/bootstrap-icons';
 
 // SIDEBAR BUTTON COMPONENTS
-
 .btn-bd-secondary {
   --bs-btn-font-weight: 400;
   --bs-btn-color: #{$secondary};
   // --bs-btn-bg: #{$primary};
+
+  --bs-btn-hover-color: #{$secondary};
+  --bs-btn-hover-bg: #{$dark};
+  --bs-btn-hover-border-color: #{$dark};
+  --bs-btn-focus-shadow-rgb: #{$dark};
+
+  --bs-btn-active-color: #{$primary};
+  --bs-btn-active-bg: #{$secondary};
+  --bs-btn-active-border-color: #{$border};
+}
+
+.btn-bd-danger {
+  --bs-btn-font-weight: 400;
+  --bs-btn-color: #{$primary};
+  --bs-btn-bg: #{$danger};
 
   --bs-btn-hover-color: #{$secondary};
   --bs-btn-hover-bg: #{$dark};

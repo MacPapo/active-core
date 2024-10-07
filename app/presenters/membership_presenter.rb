@@ -16,12 +16,21 @@ class MembershipPresenter
       new_payment_path(payable_type: 'Membership', payable_id: @membership.id)
     when :expired
       renew_membership_path(@membership, user_id: user&.id)
+    when :deleted
+      restore_membership_path(@membership)
     else
       new_membership_path(user_id: user&.id)
     end
   end
 
+  def method
+    return :patch if membership_handler == :deleted
+
+    :get
+  end
+
   def link_title
+    return I18n.t('global.restore') if membership_handler == :deleted
     return @membership.humanize_status unless membership_handler == :empty
 
     I18n.t('empty')
@@ -35,6 +44,8 @@ class MembershipPresenter
       'me-1 text-secondary bi bi-credit-card'
     when :expired
       'me-1 text-secondary bi bi-arrow-clockwise'
+    when :deleted
+      'me-1 text-secondary bi bi-recycle'
     else
       'me-1 text-secondary bi bi-plus-circle-fill'
     end
@@ -48,6 +59,8 @@ class MembershipPresenter
       'info'
     when :expired
       'warning'
+    when :deleted
+      'restore'
     else
       'danger'
     end
@@ -56,11 +69,11 @@ class MembershipPresenter
   private
 
   def membership_handler
-    return :empty unless @membership
+    return :deleted if @membership&.discarded?
 
-    return :active if @membership.active?
-    return :inactive if @membership.inactive?
-    return :expired if @membership.expired?
+    return :active if @membership&.active?
+    return :inactive if @membership&.inactive?
+    return :expired if @membership&.expired?
 
     :empty
   end

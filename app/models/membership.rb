@@ -12,6 +12,16 @@ class Membership < ApplicationRecord
   after_save -> { ValidateMembershipStatusJob.perform_later }
   after_destroy -> { AfterDeleteMembershipCleanupSubsJob.perform_later }
 
+  after_discard do
+    user&.subscriptions&.discard_all
+    payments&.discard_all
+  end
+
+  after_undiscard do
+    user&.subscriptions&.undiscard_all
+    payments&.undiscard_all
+  end
+
   belongs_to :user, touch: true
   belongs_to :staff, touch: true
 
@@ -62,7 +72,14 @@ class Membership < ApplicationRecord
   scope :order_by_updated_at, -> { order('memberships.updated_at desc') }
 
   def self.filter(params)
-    joins(:user)
+    case params[:visibility]
+    when 'all'
+      all
+    when 'deleted'
+      discarded
+    else
+      kept
+    end.joins(:user)
       .by_name(params[:name])
       .by_interval(params[:from], params[:to])
       .sorted(params[:sort_by], params[:direction])

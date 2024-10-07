@@ -72,6 +72,7 @@ Rails.application.configure do
   config.assets.check_precompiled_asset = false # DELETE ME
 
   config.active_job.queue_adapter = :solid_queue
+
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # Raises error for missing translations.

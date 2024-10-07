@@ -2,7 +2,7 @@
 
 # Subscription Controller
 class SubscriptionsController < ApplicationController
-  before_action :set_subscription, only: %i[show edit update renew renew_update destroy]
+  before_action :set_subscription, only: %i[show edit update renew renew_update destroy restore]
   before_action :set_activity, only: %i[create update renew_update]
   before_action :set_plans, only: %i[create update renew_update]
   before_action :set_weight_room_activity, only: %i[create renew_update update]
@@ -16,6 +16,7 @@ class SubscriptionsController < ApplicationController
     @direction = params[:direction] || 'desc'
 
     filters = {
+      visibility: params[:visibility],
       name: params[:name],
       activity: params[:activity_id],
       plan: params[:plan_id],
@@ -116,16 +117,21 @@ class SubscriptionsController < ApplicationController
 
   # DELETE /subscriptions/1
   def destroy
-    user = @subscription.user
     @subscription.discard
-    redirect_to user_url(user), notice: t('.destroy_succ')
+    redirect_to user_url(@subscription.user), notice: t('.destroy_succ')
+  end
+
+  # PATCH /users/1
+  def restore
+    @subscription.undiscard
+    redirect_to users_url, notice: t('.restore_succ')
   end
 
   private
 
   def set_user_and_activities(uid)
     set_user(uid)
-    @activities = Activity.all
+    @activities = Activity.kept
   end
 
   def set_activity_and_plan(aid)
@@ -142,7 +148,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def set_plans(activity = @activity)
-    @plans = activity.activity_plans
+    @plans = activity.activity_plans.kept
   end
 
   def set_user(uid = subscription_params[:user_id])

@@ -7,21 +7,19 @@ Rails.application.routes.draw do
     resources :payments, only: [:index]
     resources :subscriptions, only: [:index]
     resources :memberships, only: [:index]
-    resources :users, only: [:erase]
     resources :legal_guardians, only: [:destroy]
-    resources :activities, only: %i[destroy edit]
+    resources :activities, only: %i[destroy renew edit]
     resources :activity_plans, only: %i[new create destory edit]
 
     mount MissionControl::Jobs::Engine, at: '/jobs'
   end
 
-  resources :users, except: [:erase] do
+  resources :users do
     collection do
       get :activity_search
     end
 
     member do
-      delete :erase
       patch :restore
     end
   end
@@ -34,9 +32,13 @@ Rails.application.routes.draw do
 
   resources :payments, except: [:index]
 
-  resources :activities, except: %i[destroy edit] do
+  resources :activities, except: %i[destroy edit restore] do
     get 'plans', on: :member
     get 'name', on: :member
+
+    member do
+      patch :restore
+    end
   end
 
   resources :activity_plans, except: %i[new create destory edit]
@@ -50,6 +52,7 @@ Rails.application.routes.draw do
     member do
       get   :renew
       patch :renew_update
+      patch :restore
     end
   end
 
@@ -57,6 +60,7 @@ Rails.application.routes.draw do
     member do
       get   :renew
       patch :renew_update
+      patch :restore
     end
   end
 

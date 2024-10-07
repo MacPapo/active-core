@@ -10,8 +10,7 @@
             <% end %>
         </div>
 
-        <%= active_link_to users_path,
-                           class: 'btn btn-bd-secondary d-flex align-items-center' do %>
+        <%= active_link_to users_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
             <i class="bi bi-people-fill"></i>
             <span class="ps-3"><%= model_to_string(User, 2) %></span>
         <% end %>
@@ -56,9 +55,9 @@
 
     <div class="d-grid gap-3">
         <!-- Log-out button -->
-        <%= button_to destroy_staff_session_path, method: :delete, class: 'btn btn-bd-secondary border border-secondary-subtle d-flex align-items-center w-100' do %>
-            <i class="bi bi-box-arrow-right text-danger"></i>
-            <span class="ps-3 text-danger"><%= t('global.logout') %> <%= t('global.from') %> <%= current_staff.nickname %></span>
+        <%= button_to destroy_staff_session_path, method: :delete, class: 'btn btn-bd-danger border border-secondary-subtle d-flex align-items-center w-100' do %>
+            <i class="bi bi-box-arrow-right"></i>
+            <span class="ps-3"><%= t('global.logout') %> <%= t('global.from') %> <%= current_staff.nickname %></span>
         <% end %>
     </div>
 </div>

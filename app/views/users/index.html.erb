@@ -40,6 +40,15 @@
                          class: 'form-select', data: { action: 'change->filters#submit' } %>
                     </div>
                 </div>
+
+		<div class="row mb-2">
+                    <!-- Visibility -->
+		    <div class="col">
+			<%= f.label :visibility, t('global.user_visibility'), class: 'form-label fw-semibold text-secondary' %>
+			<%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+			 class: 'form-select', data: { action: 'change->filters#submit' } %>
+		    </div>
+		</div>
             <% end %>
         </div>
 
@@ -63,8 +72,6 @@
                             <th><%= user_sortable_column.call('birth_day', User.human_attribute_name('birth_day')) %></th>
                             <th class="text-primary fw-semibold"><%= User.human_attribute_name('membership') %></th>
                             <th class="text-primary fw-semibold"><%= User.human_attribute_name('activity') %></th>
-			    <!-- DISCARD -->
-			    <th class="text-primary fw-semibold">DISCARDED</th>
                             <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
                         </tr>
                     </thead>
@@ -107,7 +114,10 @@
                                 <!-- Membership -->
                                 <td>
                                     <% presenter = MembershipPresenter.new(user.membership) %>
-                                    <%= link_to presenter.appropriate_path(user), class: "btn text-secondary border border-secondary-subtle badge rounded-pill text-bg-#{presenter.css_color}", data: { turbo_frame: "_top" } do %>
+                                    <%= link_to presenter.appropriate_path(user),
+						method: presenter.method,
+						class: "btn btn-#{presenter.css_color} text-secondary border border-secondary-subtle badge rounded-pill",
+						data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
                                         <i class="<%= presenter.link_icon %>"></i>
                                         <%= presenter.link_title %>
                                     <% end %>
@@ -115,18 +125,17 @@
 
                                 <!-- Activities -->
                                 <td>
-                                    <% subs = user.subscriptions.where.missing(:normal_subscription) %>
+                                    <% subs = user.subscriptions.kept.where.missing(:normal_subscription) %>
                                     <% subs.each do |sub| %>
                                         <% presenter = SubscriptionPresenter.new(sub) %>
-                                        <%= link_to presenter.appropriate_path(user), class: "btn text-secondary border border-secondary-subtle badge rounded-pill text-bg-#{ presenter.css_color }", data: { turbo_frame: "_top" } do %>
+                                        <%= link_to presenter.appropriate_path(user),
+						    method: presenter.method,
+						    class: "btn btn-#{ presenter.css_color } text-secondary border border-secondary-subtle badge rounded-pill",
+						    data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
                                             <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
                                         <% end %>
                                     <% end %>
                                 </td>
-
-				<td>
-				    <%= user.discarded? %>
-				</td>
 
                                 <!-- Action buttons -->
                                 <td class="text-end">

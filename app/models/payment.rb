@@ -8,6 +8,16 @@ class Payment < ApplicationRecord
 
   after_save :activate_membership_or_subscription
 
+  # After Discard
+  after_discard do
+    receipt&.discard
+  end
+
+  # After Undiscard
+  after_undiscard do
+    receipt&.undiscard
+  end
+
   belongs_to :payable, polymorphic: true
   belongs_to :staff
 
@@ -41,7 +51,14 @@ class Payment < ApplicationRecord
   end
 
   def self.filter(params)
-    joins(:staff)
+    case params[:visibility]
+    when 'all'
+      all
+    when 'deleted'
+      discarded
+    else
+      kept
+    end.joins(:staff)
       .by_name(params[:name])
       .by_type(params[:type])
       .by_method(params[:method])
@@ -53,7 +70,7 @@ class Payment < ApplicationRecord
     return nil if arg.blank?
 
     mid = Time.zone.now.beginning_of_day
-    select_range = ->(y) { by_created_at(mid + y.first, mid + y.last) }
+    select_range = ->(y) { kept.by_created_at(mid + y.first, mid + y.last) }
 
     select_range.call(arg == :morning ? [7.hours, 14.hours] : [14.hours, 21.hours])
   end

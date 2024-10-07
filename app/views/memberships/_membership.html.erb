@@ -44,12 +44,13 @@
         <p class="fs-6 fw-light text-muted mb-2">
             <%= mem_attribute_to_string.('status') %>
         </p>
-        <%= link_to presenter.appropriate_path(user),
-                    class: "btn fs-6 border border-secondary-subtle fw-semibold text-secondary text-bg-#{presenter.css_color}",
-                    data: { turbo_frame: "_top" } do %>
-            <i class="<%= presenter.link_icon %>"></i>
-            <%= presenter.link_title %>
-        <% end %>
+	<%= link_to presenter.appropriate_path(user),
+		    method: presenter.method,
+		    class: "btn btn-#{presenter.css_color} fs-6 border border-secondary-subtle fw-semibold text-secondary",
+		    data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
+	    <i class="<%= presenter.link_icon %>"></i>
+	    <%= presenter.link_title %>
+	<% end %>
     </div>
 </div>
 

@@ -11,6 +11,7 @@ class PaymentsController < ApplicationController
     @direction = params[:direction] || 'desc'
 
     filters = {
+      visibility: params[:visibility],
       name: params[:name],
       type: params[:payable_type],
       method: params[:payment_method],

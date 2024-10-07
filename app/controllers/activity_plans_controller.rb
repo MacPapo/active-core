@@ -42,10 +42,8 @@ class ActivityPlansController < ApplicationController
 
   # DELETE /activity_plans/1
   def destroy
-    actv = @activity_plan.activity
-    @activity_plan.destroy!
-
-    redirect_to activity_path(actv), notice: t('.destroy_succ')
+    @activity_plan.discard
+    redirect_to activity_path(@activity_plan.activity), notice: t('.destroy_succ')
   end
 
   private

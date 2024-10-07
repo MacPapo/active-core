@@ -69,8 +69,9 @@
             <%= sub_attribute_to_string.('status') %>
         </p>
         <%= link_to presenter.appropriate_path(user),
-                    class: "btn fs-6 border border-secondary-subtle fw-semibold text-secondary text-bg-#{presenter.css_color}",
-                    data: { turbo_frame: "_top" } do %>
+		    method: presenter.method,
+                    class: "btn btn-#{presenter.css_color} fs-6 border border-secondary-subtle fw-semibold",
+                    data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
             <i class="<%= presenter.link_icon %>"></i>
             <%= presenter.link_title %>
         <% end %>
@@ -110,7 +111,7 @@
 
 <% if current_staff.admin? %>
 
-    <div class="container py-1">
+    <div class="container-fluid py-1">
         <hr>
     </div>
 

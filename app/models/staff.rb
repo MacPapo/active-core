@@ -49,7 +49,14 @@ class Staff < ApplicationRecord
   end
 
   def self.filter(params)
-    joins(:user)
+    case params[:visibility]
+    when 'all'
+      all
+    when 'deleted'
+      discarded
+    else
+      kept
+    end.joins(:user)
       .by_name(params[:name])
       .by_role(params[:role])
       .sorted(params[:sort_by], params[:direction])

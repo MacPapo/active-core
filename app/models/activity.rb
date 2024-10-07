@@ -4,6 +4,7 @@
 class Activity < ApplicationRecord
   include Discard::Model
 
+  has_many :users, through: :subscriptions
   has_many :subscriptions, dependent: :destroy
   has_many :waitlists, dependent: :destroy
   has_many :activity_plans, dependent: :destroy
@@ -13,6 +14,19 @@ class Activity < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :num_participants, presence: true
   validates :num_participants, numericality: { greater_than: 0 }
+
+  # After Discard
+  after_discard do
+    subscriptions&.discard_all
+    waitlists&.destroy_all
+    activity_plans&.discard_all
+  end
+
+  # After Undiscard
+  after_undiscard do
+    subscriptions&.undiscard_all
+    activity_plans&.undiscard_all
+  end
 
   scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
 
@@ -38,13 +52,16 @@ class Activity < ApplicationRecord
   scope :order_by_updated_at, -> { order('updated_at desc') }
 
   def self.filter(params)
-    act = all
-
-    act = act.by_name(params[:name])
-    act = act.by_range(params[:range])
-    act = act.by_max_num(params[:number])
-    act = act.sorted(params[:sort_by], params[:direction])
-
-    act
+    case params[:visibility]
+    when 'all'
+      all
+    when 'deleted'
+      discarded
+    else
+      kept
+    end.by_name(params[:name])
+      .by_range(params[:range])
+      .by_max_num(params[:number])
+      .sorted(params[:sort_by], params[:direction])
   end
 end

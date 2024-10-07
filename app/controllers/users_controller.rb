@@ -10,12 +10,13 @@ class UsersController < ApplicationController
     @direction = params[:direction] || 'desc'
 
     filters = {
+      visibility: params[:visibility],
       name: params[:name],
       membership_status: params[:membership_status],
       activity_status: params[:activity_status],
       activity_id: params[:activity_id],
-      sort_by: @sort_by,
-      direction: @direction
+      sort_by: @sort_by || 'updated_at',
+      direction: @direction || 'desc'
     }
 
     @pagy, @users = pagy(User.filter(filters).includes(:membership, :subscriptions, :legal_guardian).load_async)
@@ -24,7 +25,7 @@ class UsersController < ApplicationController
   def activity_search
     query = params[:query]
     if query.present?
-      @users = User.joins(:membership).where('membership.status' => :active)
+      @users = User.kept.joins(:membership).where('membership.status' => :active)
 
       query.split.each { |term| @users = @users.where('name LIKE ? OR surname LIKE ?', "%#{term}%", "%#{term}%") }
     else
@@ -35,7 +36,20 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1
-  def show; end
+  def show
+    @activities = @user.activities.pluck(:name, :id)
+
+    filters = {
+      visibility: params[:visibility],
+      name: params[:name],
+      activity_id: params[:activity_id],
+      open: params[:sub_open],
+      sort_by: @sort_by || 'updated_at',
+      direction: @direction || 'desc'
+    }
+
+    @pagy, @subscriptions = pagy(@user.sfilter(filters))
+  end
 
   # GET /users/new
   def new

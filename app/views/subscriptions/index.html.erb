@@ -44,14 +44,23 @@
                 <div class="col">
                     <%= f.label :date_from, t('global.activity_from'), class: 'form-label fw-semibold text-secondary' %>
                     <%= f.date_field :date_from, max: , min: ,
-                     class: 'form-control', data: { action: 'change->filters#submit' } %>
+			class: 'form-control', data: { action: 'change->filters#submit' } %>
                 </div>
 
                 <!-- DATE TO -->
                 <div class="col">
                     <%= f.label :date_to, t('global.activity_to'), class: 'form-label fw-semibold text-secondary' %>
                     <%= f.date_field :date_to, max: , min: ,
-                     class: 'form-control', data: { action: 'change->filters#submit' } %>
+			class: 'form-control', data: { action: 'change->filters#submit' } %>
+                </div>
+            </div>
+
+	    <div class="row mb-2">
+                <!-- Visibility -->
+                <div class="col">
+                    <%= f.label :visibility, t('global.subscription_visibility'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+                     class: 'form-select', data: { action: 'change->filters#submit' } %>
                 </div>
             </div>
         <% end %>
@@ -133,15 +142,23 @@
                                         <i class="bi text-secondary bi-pencil-fill"></i>
                                     <% end %>
 
-                                    <% if current_staff.admin? %>
-                                        <%= button_to subscription,
-                                                      class: 'btn btn-danger btn-sm border border-secondary-subtle',
-                                                      method: :delete,
-                                                      data: { turbo_frame: "_top", turbo_confirm: t('global.destroy_dialog') },
-                                                      form: {style: 'display:inline-block;'} do %>
-                                            <i class="bi text-secondary bi-trash3-fill"></i>
-                                        <% end %>
-                                    <% end %>
+
+                                    <% if subscription.discarded? %>
+					<%= button_to restore_subscription_path(subscription),
+						      class: 'btn btn-restore btn-sm border border-secondary-subtle',
+						      method: :patch,
+						      data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
+						      form: {style: 'display:inline-block;'} do %>
+					    <i class="bi bi-recycle"></i>
+					<% end %>
+				    <% else %>
+					<%= button_to subscription_path(subscription),
+						      class: 'btn btn-danger btn-sm border border-secondary-subtle',
+						      method: :delete,
+						      data: { turbo_confirm: t('global.delete_dialog') }, form: {style: 'display:inline-block;'} do %>
+					    <i class="bi bi-trash3-fill"></i>
+					<% end %>
+				    <% end %>
                                 </td>
                             </tr>
                         <% end %>

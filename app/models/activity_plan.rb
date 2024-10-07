@@ -2,6 +2,8 @@
 
 # ActivityPlan Model
 class ActivityPlan < ApplicationRecord
+  include Discard::Model
+
   belongs_to :activity
 
   enum :plan, { one_entrance: 0,

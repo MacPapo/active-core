@@ -2,16 +2,17 @@
 
 # Activity Controller
 class ActivitiesController < ApplicationController
-  before_action :set_activity, only: %i[show edit update destroy]
+  before_action :set_activity, only: %i[show edit update destroy restore]
 
   # GET /activities
   def index
-    @max = Activity.joins(:subscriptions).group(:activity_id).count.values.max || 0
+    @max = Activity.kept.joins(:subscriptions).group(:activity_id).count.values.max || 0
 
     @sort_by = params[:sort_by] || 'updated_at'
     @direction = params[:direction] || 'desc'
 
     filters = {
+      visibility: params[:visibility],
       name: params[:name],
       range: params[:participants_range],
       number: params[:max_participants],
@@ -37,7 +38,7 @@ class ActivitiesController < ApplicationController
   # GET /activities/:id/plans
   def plans
     activity = Activity.find(params[:id])
-    plans = activity.activity_plans
+    plans = activity.activity_plans.kept
 
     render json: { plans: plans.map { |plan| { id: plan.id, name: plan.humanize_plan } } }
   rescue ActiveRecord::RecordNotFound
@@ -76,6 +77,12 @@ class ActivitiesController < ApplicationController
   def destroy
     @activity.discard
     redirect_to activities_url, notice: t('.destroy_succ')
+  end
+
+  # PATCH /users/1
+  def restore
+    @activity.undiscard
+    redirect_to activities_url, notice: t('.restore_succ')
   end
 
   # GET /activities/1/name

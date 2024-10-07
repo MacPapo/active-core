@@ -70,7 +70,7 @@ it:
 
       activity:
         name: "Nome Attività"
-        num_participants: "Numero massimo di partecipanti"
+        num_participants: "Numero partecipanti"
 
       activity_plan:
         plan: "Piano di iscrizione"
@@ -149,6 +149,9 @@ it:
         subscription: "Iscrizione"
 
   global:
+    restore: "Ripristina"
+    visible: "Attivi"
+    invisible: "Eliminati"
     from: "da"
     all-m: 'Tutti'
     all-s: 'Tutte'
@@ -157,6 +160,12 @@ it:
     add_filter: "Aggiungi filtro"
     full_name: "Nome e Cognome"
     activity_users: "Numero Partecipanti"
+    activity_visibility: "Visibilità Attività"
+    user_visibility: "Visibilità Utenti"
+    staff_visibility: "Visibilità Collaboratori"
+    membership_visibility: "Visibilità Quote Associative"
+    subscription_visibility: "Visibilità Iscrizioni"
+    payment_visibility: "Visibilità Pagamenti"
     activity_max_users: "Numero Massimo Partecipanti"
     activity_plan: "Piano"
     activity_open: "OPEN"
@@ -275,6 +284,8 @@ it:
   activities:
     edit:
       title: "Modifica Attività"
+    restore:
+      restore_succ: "L'attività è stata ripristinata correttamente"
     index:
       title: "Attività"
       add_activity: "Aggiungi Attività"
@@ -405,6 +416,8 @@ it:
     form:
       sel_activity: "Seleziona una attività..."
       sel_user: "Cerca un utente..."
+    restore:
+      restore_succ: "L'iscrizione è stata ripristinata correttamente"
     renew_update:
       renew_succ: "L'abbonamento è stato aggiornato correttamente, per attivarlo procedi al pagamento."
     create:
@@ -434,6 +447,8 @@ it:
       subscription_already_inactive: "Redirezionato qui per non rinnovare due volte la stessa Iscrizione"
 
   memberships:
+    restore:
+      restore_succ: "La Quota Associativa è stata ripristinata correttamente"
     renew_form:
       date_help: "La DATA INIZIO si riferisce alla data in cui si vuole rinnovare la quota associativa."
     renew_update:

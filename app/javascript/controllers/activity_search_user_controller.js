@@ -46,13 +46,11 @@ export default class extends Controller {
     loadPlans(event) {
         const activityId = event.target.value;
 
-        // Se l'activityId è vuoto o corrisponde al prompt, interrompi la funzione
         if (!activityId) {
-            this.plansTarget.innerHTML = ""; // Resetta i piani selezionabili
+            this.plansTarget.innerHTML = "";
             return;
         }
 
-        // Effettua una chiamata AJAX per ottenere i piani associati all'attività selezionata
         fetch(`/activities/${activityId}/plans`)
             .then(response => response.json())
             .then(data => {

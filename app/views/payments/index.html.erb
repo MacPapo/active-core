@@ -46,6 +46,15 @@
                         class: 'form-control', data: { action: 'change->filters#submit' } %>
                 </div>
             </div>
+
+	    <div class="row mb-2">
+                <!-- Visibility -->
+                <div class="col">
+                    <%= f.label :visibility, t('global.payment_visibility'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+                     class: 'form-select', data: { action: 'change->filters#submit' } %>
+                </div>
+            </div>
         <% end %>
     </div>
 

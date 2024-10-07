@@ -62,7 +62,7 @@
                                     <i class="bi text-secondary bi-pencil-fill"></i>
                                 <% end %>
 
-                                <%= button_to payment, class: 'btn text-secondary btn-danger btn-sm border border-secondary-subtle', method: :delete, data: { turbo_frame: "_top", turbo_confirm: t('global.destroy_dialog') }, form: {style: 'display:inline-block;'} do %>
+                                <%= button_to payment, class: 'btn text-secondary btn-danger btn-sm border border-secondary-subtle', method: :delete, data: { turbo_frame: "_top", turbo_confirm: t('global.delete_dialog') }, form: {style: 'display:inline-block;'} do %>
                                     <i class="bi bi-trash3-fill"></i>
                                 <% end %>
                             <% end %>

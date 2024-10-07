@@ -20,7 +20,7 @@
                 <div class="col">
                     <%= f.label :date_from, t('global.activity_from'), class: 'form-label fw-semibold text-secondary' %>
                     <%= f.date_field :date_from, max: , min: ,
-                     class: 'form-control', data: { action: 'change->filters#submit' } %>
+			class: 'form-control', data: { action: 'change->filters#submit' } %>
                 </div>
 
                 <!-- DATE TO -->
@@ -28,6 +28,15 @@
                     <%= f.label :date_to, t('global.activity_to'), class: 'form-label fw-semibold text-secondary' %>
                     <%= f.date_field :date_to, max: , min: ,
                         class: 'form-control', data: { action: 'change->filters#submit' } %>
+                </div>
+            </div>
+
+	    <div class="row mb-2">
+                <!-- Visibility -->
+                <div class="col">
+                    <%= f.label :visibility, t('global.membership_visibility'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+                     class: 'form-select', data: { action: 'change->filters#submit' } %>
                 </div>
             </div>
         <% end %>
@@ -84,15 +93,23 @@
                                             <i class="bi text-secondary bi-pencil-fill"></i>
                                         <% end %>
 
-                                        <% if current_staff.admin? %>
+					<% if membership.discarded? %>
+					    <%= button_to restore_membership_path(membership),
+							  class: 'btn btn-restore btn-sm border border-secondary-subtle',
+							  method: :patch,
+							  data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
+							  form: {style: 'display:inline-block;'} do %>
+						<i class="bi bi-recycle"></i>
+					    <% end %>
+					<% else %>
                                             <%= button_to membership,
-                                                          class: 'btn btn-danger btn-sm border border-secondary-subtle',
-                                                          method: :delete,
-                                                          data: { turbo_frame: "_top", turbo_confirm: t('global.destroy_dialog') },
-                                                          form: {style: 'display:inline-block;'} do %>
-                                                <i class="bi text-secondary bi-trash3-fill"></i>
+							  class: 'btn btn-danger btn-sm border border-secondary-subtle',
+							  method: :delete,
+							  data: { turbo_frame: "_top", turbo_confirm: t('global.delete_dialog') },
+							  form: {style: 'display:inline-block;'} do %>
+						<i class="bi text-secondary bi-trash3-fill"></i>
                                             <% end %>
-                                        <% end %>
+					<% end %>
                                     </td>
                                 </tr>
                             <% end %>

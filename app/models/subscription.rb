@@ -17,6 +17,16 @@ class Subscription < ApplicationRecord
 
   after_save -> { ValidateSubscriptionStatusJob.perform_later }
 
+  after_discard do
+    open_subscription&.discard
+    payments&.discard_all
+  end
+
+  after_undiscard do
+    open_subscription&.undiscard
+    payments&.undiscard_all
+  end
+
   belongs_to :user, touch: true
   belongs_to :staff, touch: true
   belongs_to :activity, touch: true
@@ -63,6 +73,12 @@ class Subscription < ApplicationRecord
     end
   end
 
+  scope :by_activity_name, ->(name) do
+    return if name.blank?
+
+    joins(:activity).where('activities.name LIKE ?', "%#{name}%")
+  end
+
   scope :by_plan_id, ->(id) { where('subscriptions.activity_plan_id' => ActivityPlan.where(plan: id).pluck(:id)) unless id.blank? }
 
   scope :sorted, ->(sort_by, direction) do
@@ -77,7 +93,14 @@ class Subscription < ApplicationRecord
   end
 
   def self.filter(params)
-    joins(:user)
+    case params[:visibility]
+    when 'all'
+      all
+    when 'deleted'
+      discarded
+    else
+      kept
+    end.joins(:user)
       .by_name(params[:name])
       .by_activity_id(params[:activity])
       .by_plan_id(params[:plan])

@@ -23,22 +23,27 @@ class User < ApplicationRecord
   # After Discard
   after_discard do
     staff&.discard
+    membership&.discard
+    subscriptions&.discard_all
+    receipts&.discard_all
   end
 
   # After Undiscard
   after_undiscard do
     staff&.undiscard
+    membership&.undiscard
+    subscriptions&.undiscard_all
+    receipts&.undiscard_all
   end
 
   belongs_to :legal_guardian, optional: true
-
   has_one    :staff, dependent: :destroy
-
   has_one    :membership, dependent: :destroy
 
   has_many   :subscriptions, dependent: :destroy
   has_many   :waitlists, dependent: :destroy
   has_many   :receipts, dependent: :destroy
+  has_many   :activities, through: :subscriptions
 
   scope :by_name, ->(query) do
     return if query.blank?
@@ -76,11 +81,32 @@ class User < ApplicationRecord
   end
 
   def self.filter(params)
-    by_name(params[:name])
+    case params[:visibility]
+    when 'all'
+      all
+    when 'deleted'
+      discarded
+    else
+      kept
+    end.by_name(params[:name])
       .by_membership_status(params[:membership_status])
       .by_activity_status(params[:activity_status])
       .by_activity_id(params[:activity_id])
       .sorted(params[:sort_by], params[:direction] || 'desc')
+  end
+
+  def sfilter(params)
+    case params[:visibility]
+    when 'all'
+      subscriptions.all
+    when 'deleted'
+      subscriptions.discarded
+    else
+      subscriptions.kept
+    end.by_activity_name(params[:name])
+      .by_activity_id(params[:activity_id])
+      .by_open(params[:open])
+      # .sorted(params[:sort_by], params[:direction] || 'desc')
   end
 
   def full_name
@@ -115,7 +141,7 @@ class User < ApplicationRecord
   end
 
   def verify_compliance
-    avoid = %w[id cf affiliated legal_guardian_id created_at updated_at]
+    avoid = %w[id cf affiliated legal_guardian_id created_at updated_at discarded_at]
     avoid_minor = %w[email phone]
 
     attribute_names.map do |x|
