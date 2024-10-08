@@ -64,4 +64,15 @@ class Activity < ApplicationRecord
       .by_max_num(params[:number])
       .sorted(params[:sort_by], params[:direction])
   end
+
+  def pfilter(params)
+    case params[:visibility]
+    when 'all'
+      activity_plans.all
+    when 'deleted'
+      activity_plans.discarded
+    else
+      activity_plans.kept
+    end.by_cost
+  end
 end

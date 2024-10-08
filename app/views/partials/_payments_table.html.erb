@@ -6,6 +6,8 @@
                 <tr class="fs-6">
                     <th><%= payment_sortable_column.call('date', Payment.human_attribute_name('date')) %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('payable_type') %></th>
+                    <th><%= payment_sortable_column.call('name', User.human_attribute_name('name')) %></th>
+                    <th><%= payment_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
                     <th><%= payment_sortable_column.call('amount', Payment.human_attribute_name('amount')) %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('payment_method') %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('note') %></th>
@@ -20,12 +22,23 @@
 
                         <!-- Created At -->
                         <td>
-                            <%= l payment.created_at, format: :short %>
+                            <%= l payment.created_at.to_date, format: :default %>
                         </td>
 
                         <!-- Payable Type -->
                         <td>
                             <%= payment.humanize_payable_type %>
+                        </td>
+
+                        <!-- User name -->
+                        <% user = payment.user %>
+                        <td>
+                            <%= highlight user.name, params.dig(:name) %>
+                        </td>
+
+                        <!-- User surname -->
+                        <td>
+                            <%= highlight user.surname, params.dig(:name) %>
                         </td>
 
                         <!-- Amount -->

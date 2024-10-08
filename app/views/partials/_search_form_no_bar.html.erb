@@ -1,0 +1,23 @@
+<%= form_with url: path, method: :get, data: { turbo_frame: frame, turbo_action: 'advance', controller: ctrls } do |f| %>
+
+    <div class="ms-2 py-3 position-relative">
+
+        <!-- Filter Button -->
+        <button id="filter-toggle" class="btn btn-secondary text-primary border border-secondary-subtle"
+                data-action="click->filters#toggle">
+            <i class="bi bi-funnel-fill"></i>
+            <%= t('global.filters') %>
+        </button>
+
+        <!-- Filters Panel -->
+        <div data-filters-target="panel" class="position-absolute mt-2 bg-white rounded shadow border border-secondary-subtle p-3"
+             style="display:none; right: 0; min-width: <%= size %>">
+
+
+            <fieldset>
+                <!-- Yield the form field for the filters!! -->
+                <%= yield f %>
+            </fieldset>
+        </div>
+    </div>
+<% end %>

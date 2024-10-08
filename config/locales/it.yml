@@ -129,9 +129,9 @@ it:
 
       payment:
         amount: "Ammontare"
-        date: "Data pagamento"
-        payment_method: "Metodo di pagamento"
-        payable_type: "Tipo di pagamento"
+        date: "Data"
+        payment_method: "Metodo"
+        payable_type: "Tipo di Pagamento"
         entry_type: "Tipo Movimento"
         note: "Note eventuali"
         staff: "Collaboratore"
@@ -162,6 +162,7 @@ it:
     activity_users: "Numero Partecipanti"
     activity_visibility: "Visibilità Attività"
     user_visibility: "Visibilità Utenti"
+    plans_visibility: "Visibilità Piani"
     staff_visibility: "Visibilità Collaboratori"
     membership_visibility: "Visibilità Quote Associative"
     subscription_visibility: "Visibilità Iscrizioni"

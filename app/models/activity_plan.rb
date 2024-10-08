@@ -18,6 +18,8 @@ class ActivityPlan < ApplicationRecord
   validates :plan, presence: true
   validates :cost, numericality: { greater_than: 0 }
 
+  scope :by_cost, -> { order('activity_plans.cost ASC') }
+
   def self.humanize_plans(keys = plans.keys)
     keys.map do |key|
       [ActivityPlan.human_attribute_name("plan.#{key}"), key]

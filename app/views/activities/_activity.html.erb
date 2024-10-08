@@ -106,97 +106,111 @@
          aria-labelledby="pills-plan-tab"
          tabindex="1">
 
-        <% if current_staff.admin? %>
-            <div class="d-flex justify-content-end align-items-center mb-2">
-                <%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+        <div class="d-flex align-items-center justify-content-end">
+
+	    <!-- Search form -->
+	    <%= render 'partials/search_form_no_bar', path: activity_path, frame: :plans, size: '200px', ctrls: 'filters' do |f| %>
+		<div class="row mb-2">
+		    <!-- Visibility -->
+		    <div class="col">
+			<%= f.label :visibility, t('global.plans_visibility'), class: 'form-label fw-semibold text-secondary' %>
+			<%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+			 class: 'form-select', data: { action: 'change->filters#submit' } %>
+		    </div>
+		</div>
+	    <% end %>
+
+            <% if current_staff.admin? %>
+		<%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
                     <i class="text-secondary bi bi-bar-chart-fill"></i>
                     <span class="ms-1">
                         <%= t '.add_plan' %>
                     </span>
                 <% end %>
-            </div>
-        <% end %>
+            <% end %>
+	</div>
 
-        <!-- Activity Plans -->
-        <% if @plans && @plans.length > 0 %>
-            <% p = @plans.first %>
-            <% user_attribute_to_string = ->(attr) { attribute_to_string(p, attr)} %>
-            <div id="memberships" class="table-responsive">
-                <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
-                    <table class="table table-borderless table-striped mb-0">
-                        <thead class="table-secondary">
-                            <tr class="fs-6">
-                                <th class="text-primary text-begin fw-semibold">
-                                    <%= user_attribute_to_string.('plan') %>
-                                </th>
-                                <th class="text-primary fw-semibold">
-                                    <%= user_attribute_to_string.('cost') %>
-                                </th>
-                                <th class="text-primary fw-semibold">
-                                    <%= user_attribute_to_string.('affiliated_cost') %>
-                                </th>
-
-				<!-- DISCARD -->
-				<th class="text-primary fw-semibold">DISCARDED</th>
-
-                                <% if current_staff.admin? %>
-                                    <th class="text-primary text-end fw-semibold">
-                                        <%= t 'global.table.action' %>
+        <%= turbo_frame_tag :plans do %>
+            <!-- Activity Plans -->
+            <% if @plans && @plans.length > 0 %>
+                <% p = @plans.first %>
+                <% user_attribute_to_string = ->(attr) { attribute_to_string(p, attr)} %>
+                <div id="memberships" class="table-responsive">
+                    <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
+                        <table class="table table-borderless table-striped mb-0">
+                            <thead class="table-secondary">
+                                <tr class="fs-6">
+                                    <th class="text-primary text-begin fw-semibold">
+                                        <%= user_attribute_to_string.('plan') %>
                                     </th>
-                                <% end %>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% @plans.each do |plan| %>
-                                <tr class="align-middle">
-                                    <!-- Plan -->
-                                    <td>
-                                        <%= plan.humanize_plan %>
-                                    </td>
+                                    <th class="text-primary fw-semibold">
+                                        <%= user_attribute_to_string.('cost') %>
+                                    </th>
+                                    <th class="text-primary fw-semibold">
+                                        <%= user_attribute_to_string.('affiliated_cost') %>
+                                    </th>
 
-                                    <!-- Cost -->
-                                    <td>
-                                        <%= number_to_currency plan.cost %>
-                                    </td>
-
-                                    <!-- Affiliated cost -->
-                                    <td>
-                                        <% cst = plan.affiliated_cost %>
-                                        <% if cst %>
-                                            <%= number_to_currency cst %>
-                                        <% end %>
-                                    </td>
 				    <!-- DISCARD -->
-				    <td>
-					<%= plan.discarded? %>
-				    </td>
-                                    <!-- Action buttons -->
+				    <th class="text-primary fw-semibold">DISCARDED</th>
+
                                     <% if current_staff.admin? %>
-                                        <td class="text-end">
-
-                                            <%= link_to edit_activity_plan_path(plan, activity_id: activity.id),
-                                                        class: 'btn btn-warning btn-sm border border-secondary-subtle',
-                                                        data: { turbo_frame: "_top" } do %>
-                                                <i class="bi bi-pencil-fill"></i>
-                                            <% end %>
-
-                                            <%= button_to activity_plan_path(plan),
-                                                          class: 'btn btn-danger btn-sm border border-secondary-subtle',
-                                                          method: :delete,
-                                                          data: { turbo_frame: "_top", turbo_confirm: t('global.delete_dialog') },
-                                                          form: {style: 'display:inline-block;'} do %>
-                                                <i class="bi bi-trash3-fill"></i>
-                                            <% end %>
-                                        </td>
+                                        <th class="text-primary text-end fw-semibold">
+                                            <%= t 'global.table.action' %>
+                                        </th>
                                     <% end %>
                                 </tr>
-                            <% end %>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        <% end %>
+                            </thead>
+                            <tbody>
+                                <% @plans.each do |plan| %>
+                                    <tr class="align-middle">
+                                        <!-- Plan -->
+                                        <td>
+                                            <%= plan.humanize_plan %>
+                                        </td>
 
+                                        <!-- Cost -->
+                                        <td>
+                                            <%= number_to_currency plan.cost %>
+                                        </td>
+
+                                        <!-- Affiliated cost -->
+                                        <td>
+                                            <% cst = plan.affiliated_cost %>
+                                            <% if cst %>
+                                                <%= number_to_currency cst %>
+                                            <% end %>
+                                        </td>
+				        <!-- DISCARD -->
+				        <td>
+					    <%= plan.discarded? %>
+				        </td>
+                                        <!-- Action buttons -->
+                                        <% if current_staff.admin? %>
+                                            <td class="text-end">
+
+                                                <%= link_to edit_activity_plan_path(plan, activity_id: activity.id),
+                                                            class: 'btn btn-warning btn-sm border border-secondary-subtle',
+                                                            data: { turbo_frame: "_top" } do %>
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                <% end %>
+
+                                                <%= button_to activity_plan_path(plan),
+                                                              class: 'btn btn-danger btn-sm border border-secondary-subtle',
+                                                              method: :delete,
+                                                              data: { turbo_frame: "_top", turbo_confirm: t('global.delete_dialog') },
+                                                              form: {style: 'display:inline-block;'} do %>
+                                                    <i class="bi bi-trash3-fill"></i>
+                                                <% end %>
+                                            </td>
+                                        <% end %>
+                                    </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <% end %>
+        <% end %>
     </div>
 
     <div class="tab-pane fade"

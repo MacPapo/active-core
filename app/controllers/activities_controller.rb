@@ -30,17 +30,20 @@ class ActivitiesController < ApplicationController
         .subscriptions
         .load_async
     )
+
+    filters = { visibility: params[:visibility] }
+
     @count = @subs.count
     @limit = @activity.num_participants
-    @plans = @activity.activity_plans.order(cost: :asc)
+    @plans = @activity.pfilter(filters)
   end
 
   # GET /activities/:id/plans
   def plans
     activity = Activity.find(params[:id])
-    plans = activity.activity_plans.kept
+    @plans = activity.activity_plans.kept
 
-    render json: { plans: plans.map { |plan| { id: plan.id, name: plan.humanize_plan } } }
+    render json: { plans: @plans.map { |plan| { id: plan.id, name: plan.humanize_plan } } }
   rescue ActiveRecord::RecordNotFound
     render json: { error: t('.act_not_found') }, status: :not_found
   end
