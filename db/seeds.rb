@@ -13,8 +13,6 @@
 # Subscription.destroy_all
 # SubscriptionType.destroy_all
 # LegalGuardian.destroy_all
-User.destroy_all
-Staff.destroy_all
 
 # Seed LegalGuardians
 # 100.times do
@@ -137,25 +135,25 @@ Staff.destroy_all
 # puts "Updated Users with activities"
 
 # Seed Staff Members
-admin_user = User.create!(
-  cf: 'SRUDMN80A01L736P',
-  name: 'Admin',
-  surname: 'User',
-  email: 'admin@example.com',
-  phone: '+39 341 4488 935',
-  birth_day: Faker::Date.birthday(min_age: 30, max_age: 60),
-  med_cert_issue_date: nil,
-  affiliated: false
-)
+# admin_user = User.create!(
+#   cf: 'SRUDMN80A01L736P',
+#   name: 'Admin',
+#   surname: 'User',
+#   email: 'admin@example.com',
+#   phone: '+39 341 4488 935',
+#   birth_day: Faker::Date.birthday(min_age: 30, max_age: 60),
+#   med_cert_issue_date: nil,
+#   affiliated: false
+# )
 
-puts 'Admin User Added'
+# puts 'Admin User Added'
 
-Staff.create!(
-  user: admin_user,
-  nickname: 'admin',
-  password: 'admin',
-  role: :admin
-)
+# Staff.create!(
+#   user: admin_user,
+#   nickname: 'admin',
+#   password: 'admin',
+#   role: :admin
+# )
 
 # normal_user = User.create!(
 #   cf: Faker::Finance.vat_number,
@@ -177,29 +175,6 @@ Staff.create!(
 #   role: :contributor
 # )
 
-# puts "Admin Staff Added"
-
-# 10.times do
-#   user = User.create!(
-#     cf: Faker::Finance.vat_number,
-#     name: Faker::Name.first_name,
-#     surname: Faker::Name.last_name,
-#     email: Faker::Internet.unique.email,
-#     phone: '+39 341 4488 936',
-#     birth_day: Faker::Date.birthday(min_age: 18, max_age: 60),
-#     med_cert_issue_date: nil,
-#     affiliated: false
-#   )
-
-#   Staff.create!(
-#     user: user,
-#     nickname: Faker::Internet.username(specifier: 5..10),
-#     password: 'password',
-#     role: [0, 1].sample
-#   )
-# end
-
-# puts "Staff Added"
 
 # staff = Staff.all
 # subscriptions = Subscription.all
@@ -220,4 +195,47 @@ Staff.create!(
 
 # puts "Payments Added"
 
-puts "Seeding completed successfully!"
+# puts "Seeding completed successfully!"
+
+User.destroy_all
+Staff.destroy_all
+
+# CSV Import
+
+require 'csv'
+
+# REMEMBER TO PUT RES.CSV in LIB/SEEDS
+csv_file = File.read(Rails.root.join('lib/seeds/res.csv'))
+csv = CSV.parse(csv_file, headers: true)
+
+csv.each do |row|
+  u = User.new
+
+  u.cf = row['Codice Fiscale'].length == 16 ? row['Codice Fiscale'] : nil
+  u.surname = row['Cognome']
+  u.name = row['Nome']
+  u.birth_day = row['Data di Nascita']
+  u.email = row['Email']
+  u.phone = Phonelib.parse(row['Cellulare']).valid? ? row['Cellulare'] :nil
+
+  u.save
+end
+
+# Seed Staff Members
+admin_user = User.create!(
+  cf: 'SRUDMN80A01L736P',
+  name: 'Admin',
+  surname: 'User',
+  email: 'admin@example.com',
+  phone: '+39 341 4488 935',
+  birth_day: Faker::Date.birthday(min_age: 30, max_age: 60),
+  med_cert_issue_date: nil,
+  affiliated: false
+)
+
+Staff.create!(
+  user: admin_user,
+  nickname: 'admin',
+  password: Rails.application.credentials.admin_pwd,
+  role: :admin
+)

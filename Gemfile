@@ -16,6 +16,8 @@ gem "puma", ">= 5.0"
 gem "devise", "~> 4.9"
 gem "devise-i18n", "~> 1.12"
 
+gem "csv", "~> 3.3"
+
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 

@@ -53,8 +53,8 @@ $input-focus-border-color: $secondary;
 
 .btn-bd-danger {
   --bs-btn-font-weight: 400;
-  --bs-btn-color: #{$primary};
-  --bs-btn-bg: #{$danger};
+  --bs-btn-color: #{$danger};
+  --bs-btn-bg: #{$light};
 
   --bs-btn-hover-color: #{$secondary};
   --bs-btn-hover-bg: #{$dark};
