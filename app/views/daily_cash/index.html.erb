@@ -1,15 +1,9 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <p class="mb-0 fs-3 fw-semibold text-secondary">
-        <%= t '.title' %>
-    </p>
+<%= content_for :counter do %>
+    <p class="fs-3 fw-bold text-secondary mb-0"><%= number_to_currency @total %></p>
+    <span class="fs-6 fw-light ps-2 text-muted"><%= t('.total') %></span>
+<% end %>
 
-    <div class="d-flex align-items-center">
-        <p class="fs-3 fw-bold text-secondary mb-0"><%= number_to_currency @total %></p>
-        <span class="fs-6 fw-light ps-2 text-muted"><%= t('.total') %></span>
-    </div>
-</div>
-
-<div id="daily_cash" class="bg-primary border border-secondary-subtle rounded-3 container-fluid">
+<%= render 'partials/index_container', title: t('.title'), tframe: :daily_cash do %>
     <!-- Tab List -->
     <% is_afternoon = Time.zone.now.after?(Time.zone.parse('14:00')) %>
     <ul class="nav nav-pills py-3 gap-2" id="pills-tab" role="tablist">
@@ -24,7 +18,7 @@
                     role="tab"
                     aria-controls="pills-morning"
                     aria-selected="<%= !is_afternoon %>">
-                <%= t '.morning' %>
+                <%= t 'daily_cash.index.morning' %>
             </button>
         </li>
 
@@ -38,7 +32,7 @@
                     role="tab"
                     aria-controls="pills-afternoon"
                     aria-selected="<%= is_afternoon %>">
-                <%= t '.afternoon' %>
+                <%= t 'daily_cash.index.afternoon' %>
             </button>
         </li>
     </ul>
@@ -54,7 +48,7 @@
              tabindex="0">
 
             <%= turbo_frame_tag :morning do %>
-                <%= render 'partials/payments_table', payments: @morning, frame: :morning %>
+                <%= render 'partials/payments_table', payments: @morning, frame: :morning, fmt: :short %>
                 <div class="d-flex justify-content-between align-items-center">
                     <%== pagy_bootstrap_nav(@pagy_morning) %>
 
@@ -74,7 +68,7 @@
              tabindex="0">
 
             <%= turbo_frame_tag :afternoon do %>
-                <%= render 'partials/payments_table', payments: @afternoon, frame: :afternoon %>
+                <%= render 'partials/payments_table', payments: @afternoon, frame: :afternoon, fmt: :short %>
                 <div class="d-flex justify-content-between align-items-center">
                     <%== pagy_bootstrap_nav(@pagy_afternoon) %>
 
@@ -87,4 +81,5 @@
 
         </div>
     </div>
-</div>
+    </div>
+<% end %>

@@ -14,6 +14,10 @@ Rails.application.routes.draw do
     mount MissionControl::Jobs::Engine, at: '/jobs'
   end
 
+  # TODO
+  resources :receipts
+  resources :payments
+
   resources :users do
     collection do
       get :activity_search

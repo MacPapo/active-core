@@ -1,10 +1,11 @@
-<%= form_with(model: payment) do |form| %>
+<%= form_with(model: payment, url: payments_path(eid: @eid, type: @type)) do |form| %>
     <% if payment.errors.any? %>
-        <div id="error_explanation">
-            <h2><%= t('global.forms.messages.errors', count: payment.errors.count) %></h2>
+        <div style="color: red">
+            <h2><%= pluralize(payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
+
             <ul>
-                <% payment.errors.full_messages.each do |message| %>
-                    <li><%= message %></li>
+                <% payment.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
                 <% end %>
             </ul>
         </div>
@@ -23,11 +24,19 @@
                 <%= form.number_field :amount, value: payment.amount, class: 'form-control', step: 'any' %>
             </div>
         </div>
+        <% unless %w[mem sub].include? @type %>
+            <div class="col-md-2 align-self-center mt-3">
+                <div class="form-check">
+                    <%= form.check_box :income, class: 'form-check-input' %>
+                    <%= form.label :income, class: 'form-check-label fw-semibold text-secondary' %>
+                </div>
+            </div>
+        <% end %>
     </div>
 
     <div class="mb-3">
-        <%= form.label :payment_method, class: 'form-label fw-semibold text-secondary' %>
-        <%= form.select :payment_method, Payment.humanize_payment_methods, {}, { class: 'form-select', selected: payment.payment_method } %>
+        <%= form.label :method, class: 'form-label fw-semibold text-secondary' %>
+        <%= form.select :method, Payment.humanize_payment_methods, {}, { class: 'form-select', selected: payment.method } %>
     </div>
 
     <div class="mb-3">
@@ -35,8 +44,6 @@
         <%= form.text_area :note, value: payment.note, class: 'form-control' %>
     </div>
 
-    <%= form.hidden_field :payable_type %>
-    <%= form.hidden_field :payable_id %>
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 
     <div class="mt-4">

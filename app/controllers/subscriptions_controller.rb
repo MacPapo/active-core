@@ -64,7 +64,7 @@ class SubscriptionsController < ApplicationController
             create_open_subscription
           end
 
-          redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription), notice: t('.create_succ')
+          redirect_to new_payment_path(eid: @subscription.id, type: 'sub'), notice: t('.create_succ')
         else
           raise t('.create_failed')
         end

@@ -1,16 +1,10 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <p class="mb-0 fs-3 fw-semibold text-secondary">
-        <%= model_to_string(Subscription, 2) %>
-    </p>
+<%= content_for :counter do %>
+    <% count = Subscription.count %>
+    <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
+    <span class="fs-6 fw-light ps-2 text-muted"><%= t('.registered', count:) %></span>
+<% end %>
 
-    <div class="d-flex align-items-center">
-        <% count = Subscription.count %>
-        <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
-        <span class="fs-6 fw-light ps-2 text-muted"><%= t('.registered', count:) %></span>
-    </div>
-</div>
-
-<div class="bg-primary border border-secondary-subtle rounded-3 container-fluid">
+<%= content_for :search do %>
     <div class="flex-fill">
         <%= render 'partials/search_form', loc: t('global.search_name'), path: subscriptions_path, frame: :subscriptions, size: '600px', ctrls: 'filters' do |f| %>
 
@@ -65,108 +59,12 @@
             </div>
         <% end %>
     </div>
+<% end %>
 
-    <%= turbo_frame_tag :subscriptions do %>
-        <% sub_sortable_column = ->(col, title) { sortable_column(col, title, subscriptions_path, :subscriptions, @sort_by, @direction) } %>
-        <div id="subscriptions" class="table-responsive">
-            <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
-                <table class="table table-borderless table-striped mb-0">
-                    <thead class="table-secondary">
-                        <tr class="fs-6">
-                            <th><%= sub_sortable_column.call('name', User.human_attribute_name('name')) %></th>
-                            <th><%= sub_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
-                            <th><%= sub_sortable_column.call('activity_name', Subscription.human_attribute_name('activity')) %></th>
-                            <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('open') %></th>
-                            <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('plan') %></th>
-                            <th><%= sub_sortable_column.call('start_date', Subscription.human_attribute_name('start_date')) %></th>
-		            <th><%= sub_sortable_column.call('end_date', Subscription.human_attribute_name('end_date')) %></th>
-                            <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
-                        </tr>
-                    </thead>
+<%= render 'partials/index_container', title: model_to_string(Subscription, 2), tframe: :subscriptions do %>
 
-                    <tbody class="table-group-divider">
-
-                        <% @subscriptions.each do |subscription| %>
-
-                            <tr class="align-middle">
-
-                                <!-- Name -->
-                                <% user = subscription.user %>
-                                <td class="text-begin">
-                                    <%= highlight user.name, params.dig(:name) %>
-                                </td>
-
-                                <!-- Surname -->
-                                <td>
-                                    <%= highlight user.surname, params.dig(:name) %>
-                                </td>
-
-                                <!-- Activity -->
-                                <% activity = subscription.activity %>
-                                <% plan = subscription.activity_plan %>
-                                <td>
-                                    <%= activity.name %>
-                                </td>
-
-                                <!-- OPEN -->
-                                <td>
-                                    <%= t subscription.open? %>
-                                </td>
-
-                                <!-- ActivityPlan -->
-                                <td>
-                                    <%= plan.humanize_plan %>
-                                </td>
-
-                                <!-- Start Date -->
-                                <td>
-                                    <%= l subscription.start_date %>
-                                </td>
-
-                                <!-- End Date -->
-                                <td>
-                                    <%= l subscription.end_date %>
-		                </td>
-
-                                <!-- Action -->
-                                <td class="text-end">
-                                    <%= link_to subscription,
-                                                class: 'btn btn-info btn-sm border border-secondary-subtle',
-                                                data: { turbo_frame: "_top" } do %>
-                                        <i class="bi text-secondary bi-eye-fill"></i>
-                                    <% end %>
-
-                                    <%= link_to edit_subscription_path(subscription),
-                                                class: 'btn btn-warning btn-sm border border-secondary-subtle',
-                                                data: { turbo_frame: "_top" } do %>
-                                        <i class="bi text-secondary bi-pencil-fill"></i>
-                                    <% end %>
-
-
-                                    <% if subscription.discarded? %>
-					<%= button_to restore_subscription_path(subscription),
-						      class: 'btn btn-restore btn-sm border border-secondary-subtle',
-						      method: :patch,
-						      data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
-						      form: {style: 'display:inline-block;'} do %>
-					    <i class="bi bi-recycle"></i>
-					<% end %>
-				    <% else %>
-					<%= button_to subscription_path(subscription),
-						      class: 'btn btn-danger btn-sm border border-secondary-subtle',
-						      method: :delete,
-						      data: { turbo_confirm: t('global.delete_dialog') }, form: {style: 'display:inline-block;'} do %>
-					    <i class="bi bi-trash3-fill"></i>
-					<% end %>
-				    <% end %>
-                                </td>
-                            </tr>
-                        <% end %>
-                    </tbody>
-                </table>
-            </div>
-
-            <%== pagy_bootstrap_nav(@pagy) %>
-        </div>
-    <% end %>
-</div>
+    <div id="subscriptions" class="table-responsive">
+        <%= render 'partials/subscription_table', subscriptions: @subscriptions %>
+        <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
+<% end %>

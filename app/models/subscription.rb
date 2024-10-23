@@ -6,8 +6,9 @@ class Subscription < ApplicationRecord
 
   validates :start_date, :activity_id, :activity_plan_id, :user_id, :staff_id, presence: true
   validates :end_date, comparison: { greater_than_or_equal_to: :start_date }, if: -> { start_date.present? && end_date.present? }
-  validate :active_membership?, if: -> { user.present? && activity.present? }
-  validate :date_valid_for_membership?, if: -> { user&.membership&.active? }
+
+  # validate :active_membership?, if: -> { user.present? && activity.present? }
+  # validate :date_valid_for_membership?, if: -> { user&.membership&.active? }
 
   delegate :cost, :affiliated_cost, prefix: 'plan', to: :activity_plan
   delegate :active_membership?, to: :user
@@ -17,14 +18,13 @@ class Subscription < ApplicationRecord
 
   after_save -> { ValidateSubscriptionStatusJob.perform_later }
 
+  # TODO
   after_discard do
     open_subscription&.discard
-    payments&.discard_all
   end
 
   after_undiscard do
     open_subscription&.undiscard
-    payments&.undiscard_all
   end
 
   belongs_to :user, touch: true
@@ -36,7 +36,11 @@ class Subscription < ApplicationRecord
 
   has_one :normal_subscription, inverse_of: :open_subscription, class_name: 'Subscription', foreign_key: 'open_subscription_id', dependent: :destroy
 
-  has_many :payments, as: :payable, dependent: :destroy
+  has_many :payment_subscriptions, dependent: :destroy
+  has_many :receipt_subscriptions, dependent: :destroy
+
+  has_many :payments, through: :payment_subscriptions
+  has_many :receipts, through: :receipt_subscriptions
 
   enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive
 

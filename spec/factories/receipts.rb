@@ -3,9 +3,8 @@
 FactoryBot.define do
   factory :receipt do
     payment { nil }
-    user { nil }
-    amount { 1.5 }
-    cause { 'MyString' }
-    date { '2024-08-26' }
+    amount { '9.99' }
+    date { '2024-10-09' }
+    staff { nil }
   end
 end

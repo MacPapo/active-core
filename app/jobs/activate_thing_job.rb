@@ -5,14 +5,14 @@ class ActivateThingJob < ApplicationJob
   queue_as :real_time
 
   def perform(*args)
-    payable_type, payable_id = args
+    type, eid = args
 
-    case payable_type
-    when 'Membership'
-      membership = Membership.find(payable_id)
+    case type
+    when 'mem'
+      membership = Membership.find(eid)
       membership.active!
-    when 'Subscription'
-      subscription = Subscription.find(payable_id)
+    when 'sub'
+      subscription = Subscription.find(eid)
       subscription.active!
 
       subscription.open_subscription&.active! if subscription.open?

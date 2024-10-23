@@ -1,4 +1,4 @@
-<ul class="nav nav-pills py-3 gap-2" id="pills-tab" role="tablist">
+<ul class="nav nav-pills pb-3 gap-2" id="pills-tab" role="tablist">
 
     <!-- Personal Data -->
     <li class="nav-item" role="presentation">
@@ -41,6 +41,22 @@
             <%= t '.subs' %>
         </button>
     </li>
+
+    <!-- Payments -->
+    <% if user.has_payments? %>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link border border-secondary-subtle fs-5"
+                    id="pills-subscription-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#pills-payment"
+                    type="button"
+                    role="tab"
+                    aria-controls="pills-payment"
+                    aria-selected="false">
+                <%= t '.payments' %>
+            </button>
+        </li>
+    <% end %>
 </ul>
 
 <!-- Tab List Body -->
@@ -330,7 +346,6 @@
 	    </div>
 
 	    <%= turbo_frame_tag :usersubscriptions do %>
-		<%#= render 'subscriptions/subscriptions_table', subscriptions: @subscriptions, actv: false, generic: true %>
 		<div class="table-responsive">
 		    <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
 			<table class="table table-borderless table-striped mb-0">
@@ -355,10 +370,9 @@
 
 					<!-- Activity Name -->
 					<td>
-					    <%= activity.name %>
+					    <%= highlight activity.name, params.dig(:name) %>
 					</td>
 
-					<!-- TODO i18n Plan -->
 					<td>
 					    <%= plan.humanize_plan %>
 					</td>
@@ -424,7 +438,7 @@
 
 	    <% end %>
 
-	    <%== pagy_bootstrap_nav(@pagy) %>
+	    <%== pagy_bootstrap_nav(@pagy_sub) %>
         <% else %>
 
 	    <div class="d-flex align-items-center justify-content-between">
@@ -443,4 +457,21 @@
         <% end %>
 
     </div>
+
+    <% if user.has_payments? %>
+        <div class="tab-pane fade"
+             id="pills-payment"
+             role="tabpanel"
+             aria-labelledby="pills-payment-tab"
+             tabindex="3">
+
+            <!-- TODO fix and add filters -->
+            <%= turbo_frame_tag :userpayments do %>
+                <div id="payments" class="table-responsive">
+                    <%= render 'partials/payments_table', payments: @payments, frame: :userpayments, fmt: :long %>
+                    <%== pagy_bootstrap_nav(@pagy_pay) %>
+                </div>
+            <% end %>
+        </div>
+    <% end %>
 </div>

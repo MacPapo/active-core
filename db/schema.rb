@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_07_101204) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_10_080023) do
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
     t.integer "num_participants", default: 0, null: false
@@ -19,13 +19,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_07_101204) do
     t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_activities_on_discarded_at"
     t.index ["name"], name: "index_activities_on_name", unique: true
-    t.index ["num_participants"], name: "index_activities_on_num_participants"
   end
 
   create_table "activity_plans", force: :cascade do |t|
     t.integer "plan", default: 0, null: false
-    t.float "cost", null: false
-    t.float "affiliated_cost"
+    t.decimal "cost", precision: 8, scale: 2, null: false
+    t.decimal "affiliated_cost", precision: 8, scale: 2
     t.integer "activity_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -42,13 +41,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_07_101204) do
     t.date "birth_day", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "discarded_at"
-    t.index ["birth_day"], name: "index_legal_guardians_on_birth_day"
-    t.index ["discarded_at"], name: "index_legal_guardians_on_discarded_at"
     t.index ["email"], name: "index_legal_guardians_on_email", unique: true
-    t.index ["name"], name: "index_legal_guardians_on_name"
-    t.index ["phone"], name: "index_legal_guardians_on_phone"
-    t.index ["surname"], name: "index_legal_guardians_on_surname"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -61,52 +54,94 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_07_101204) do
     t.datetime "updated_at", null: false
     t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_memberships_on_discarded_at"
-    t.index ["end_date"], name: "index_memberships_on_end_date"
     t.index ["staff_id"], name: "index_memberships_on_staff_id"
-    t.index ["start_date"], name: "index_memberships_on_start_date"
-    t.index ["status"], name: "index_memberships_on_status"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
-  create_table "payments", force: :cascade do |t|
-    t.float "amount", null: false
-    t.date "date", null: false
-    t.integer "payment_method", default: 0, null: false
-    t.integer "entry_type", default: 0, null: false
-    t.text "note"
-    t.integer "staff_id"
-    t.string "payable_type"
-    t.integer "payable_id"
+  create_table "payment_memberships", force: :cascade do |t|
+    t.integer "payment_id", null: false
+    t.integer "membership_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "discarded_at"
-    t.index ["created_at"], name: "index_payments_on_created_at"
-    t.index ["date"], name: "index_payments_on_date"
+    t.index ["discarded_at"], name: "index_payment_memberships_on_discarded_at"
+    t.index ["membership_id"], name: "index_payment_memberships_on_membership_id"
+    t.index ["payment_id", "id"], name: "index_payment_memberships_on_payment_id_and_id", unique: true
+    t.index ["payment_id"], name: "index_payment_memberships_on_payment_id"
+    t.index ["user_id"], name: "index_payment_memberships_on_user_id"
+  end
+
+  create_table "payment_subscriptions", force: :cascade do |t|
+    t.integer "payment_id", null: false
+    t.integer "subscription_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_payment_subscriptions_on_discarded_at"
+    t.index ["payment_id", "id"], name: "index_payment_subscriptions_on_payment_id_and_id", unique: true
+    t.index ["payment_id"], name: "index_payment_subscriptions_on_payment_id"
+    t.index ["subscription_id"], name: "index_payment_subscriptions_on_subscription_id"
+    t.index ["user_id"], name: "index_payment_subscriptions_on_user_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.decimal "amount", precision: 8, scale: 2, null: false
+    t.date "date", null: false
+    t.integer "method", default: 0, null: false
+    t.boolean "income", default: true, null: false
+    t.text "note"
+    t.integer "staff_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_payments_on_discarded_at"
-    t.index ["entry_type"], name: "index_payments_on_entry_type"
-    t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
-    t.index ["payment_method"], name: "index_payments_on_payment_method"
     t.index ["staff_id"], name: "index_payments_on_staff_id"
-    t.index ["updated_at"], name: "index_payments_on_updated_at"
+  end
+
+  create_table "receipt_memberships", force: :cascade do |t|
+    t.integer "receipt_id", null: false
+    t.integer "membership_id", null: false
+    t.integer "user_id", null: false
+    t.integer "number", default: 0, null: false
+    t.integer "year", default: 2024, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_receipt_memberships_on_discarded_at"
+    t.index ["membership_id"], name: "index_receipt_memberships_on_membership_id"
+    t.index ["receipt_id", "id"], name: "index_receipt_memberships_on_receipt_id_and_id", unique: true
+    t.index ["receipt_id"], name: "index_receipt_memberships_on_receipt_id"
+    t.index ["user_id"], name: "index_receipt_memberships_on_user_id"
+  end
+
+  create_table "receipt_subscriptions", force: :cascade do |t|
+    t.integer "receipt_id", null: false
+    t.integer "subscription_id", null: false
+    t.integer "user_id", null: false
+    t.integer "number", default: 0, null: false
+    t.integer "year", default: 2024, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_receipt_subscriptions_on_discarded_at"
+    t.index ["receipt_id", "id"], name: "index_receipt_subscriptions_on_receipt_id_and_id", unique: true
+    t.index ["receipt_id"], name: "index_receipt_subscriptions_on_receipt_id"
+    t.index ["subscription_id"], name: "index_receipt_subscriptions_on_subscription_id"
+    t.index ["user_id"], name: "index_receipt_subscriptions_on_user_id"
   end
 
   create_table "receipts", force: :cascade do |t|
-    t.integer "sub_num", null: false
-    t.integer "mem_num", null: false
     t.integer "payment_id", null: false
-    t.integer "user_id", null: false
-    t.float "amount", null: false
     t.date "date", null: false
-    t.string "cause"
+    t.integer "staff_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "discarded_at"
-    t.index ["date"], name: "index_receipts_on_date"
     t.index ["discarded_at"], name: "index_receipts_on_discarded_at"
-    t.index ["mem_num", "date"], name: "index_receipts_on_mem_num_and_date"
     t.index ["payment_id"], name: "index_receipts_on_payment_id"
-    t.index ["sub_num", "date"], name: "index_receipts_on_sub_num_and_date"
-    t.index ["user_id"], name: "index_receipts_on_user_id"
+    t.index ["staff_id"], name: "index_receipts_on_staff_id"
   end
 
   create_table "staffs", force: :cascade do |t|
@@ -160,11 +195,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_07_101204) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "discarded_at"
-    t.index ["birth_day"], name: "index_users_on_birth_day"
     t.index ["discarded_at"], name: "index_users_on_discarded_at"
     t.index ["legal_guardian_id"], name: "index_users_on_legal_guardian_id"
-    t.index ["name"], name: "index_users_on_name"
-    t.index ["surname"], name: "index_users_on_surname"
   end
 
   create_table "waitlists", force: :cascade do |t|
@@ -179,9 +211,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_07_101204) do
   add_foreign_key "activity_plans", "activities"
   add_foreign_key "memberships", "staffs"
   add_foreign_key "memberships", "users"
+  add_foreign_key "payment_memberships", "memberships"
+  add_foreign_key "payment_memberships", "payments"
+  add_foreign_key "payment_memberships", "users"
+  add_foreign_key "payment_subscriptions", "payments"
+  add_foreign_key "payment_subscriptions", "subscriptions"
+  add_foreign_key "payment_subscriptions", "users"
   add_foreign_key "payments", "staffs"
+  add_foreign_key "receipt_memberships", "memberships"
+  add_foreign_key "receipt_memberships", "receipts"
+  add_foreign_key "receipt_memberships", "users"
+  add_foreign_key "receipt_subscriptions", "receipts"
+  add_foreign_key "receipt_subscriptions", "subscriptions"
+  add_foreign_key "receipt_subscriptions", "users"
   add_foreign_key "receipts", "payments"
-  add_foreign_key "receipts", "users"
+  add_foreign_key "receipts", "staffs"
   add_foreign_key "staffs", "users"
   add_foreign_key "subscriptions", "activities"
   add_foreign_key "subscriptions", "activity_plans"

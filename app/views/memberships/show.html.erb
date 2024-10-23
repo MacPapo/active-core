@@ -1,38 +1,22 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <p class="mb-0 fs-3 fw-semibold text-secondary">
-        <%= t '.title' %>
-    </p>
+<%= content_for :counter do %>
+    <% count = @membership&.num_of_days_til_renewal %>
+    <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
+    <span class="fs-6 fw-light ps-2 text-muted"><%= t('global.remaining', count:) %></span>
+<% end %>
 
-    <div class="d-flex align-items-center">
-        <% count = @membership&.num_of_days_til_renewal %>
-        <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
-        <span class="fs-6 fw-light ps-2 text-muted"><%= t('global.remaining', count:) %></span>
-    </div>
-</div>
-
-<div class="bg-primary border border-secondary-subtle rounded-3 container-fluid">
-
-    <div class="py-3">
-        <%= render @membership %>
-    </div>
-
-    <% if current_staff.admin? %>
-        <div class="pb-3 d-flex justify-content-end">
-
-            <!-- Edit -->
-            <%= link_to edit_membership_path(@membership, user_id: @membership.user.id), class: 'btn btn-warning me-2 fs-5 text-secondary' do %>
-                <i class="bi bi-pencil-fill me-1"></i>
-                <%= t('global.edit_button') %>
-            <% end %>
-
-            <!-- Destroy -->
-            <%= button_to @membership,
-                          class: 'btn btn-danger fs-5 text-secondary',
-                          method: :delete,
-                          data: { turbo_confirm: t('global.delete_dialog') } do %>
-                <i class="bi bi-trash3-fill"></i>
-                <%= t('global.delete_button') %>
-            <% end %>
-        </div>
+<%= render 'partials/container', obj: @membership, title: t('.title') do %>
+    <!-- Edit -->
+    <%= link_to edit_membership_path(@membership, user_id: @membership.user.id), class: 'btn btn-warning me-2 fs-5 text-secondary' do %>
+        <i class="bi bi-pencil-fill me-1"></i>
+        <%= t('global.edit_button') %>
     <% end %>
-</div>
+
+    <!-- Destroy -->
+    <%= button_to @membership,
+                  class: 'btn btn-danger fs-5 text-secondary',
+                  method: :delete,
+                  data: { turbo_confirm: t('global.delete_dialog') } do %>
+        <i class="bi bi-trash3-fill"></i>
+        <%= t('global.delete_button') %>
+    <% end %>
+<% end %>

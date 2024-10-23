@@ -2,42 +2,28 @@
 
 # Receipt Model
 class Receipt < ApplicationRecord
+  # TODO
   include Discard::Model
 
   belongs_to :payment
-  belongs_to :user
+  belongs_to :staff
 
-  validates :date, :amount, :cause, presence: true
+  has_one :receipt_membership, dependent: :destroy
+  has_one :receipt_subscription, dependent: :destroy
 
-  delegate :number_to_currency, to: ActiveSupport::NumberHelper
+  has_one :muser, through: :receipt_membership, source: :user
+  has_one :suser, through: :receipt_subscription, source: :user
 
-  COMPANY = {
-    name: 'ASD Querini Fit',
-    email: 'asdquerinifit@gmail.com',
-    phone: '+39 0413088379',
-    address: 'C. de le Capucine, 6576b',
-    logo: Rails.root.join('app/assets/images/asd-querini.png')
-  }.freeze
+  delegate :amount_to_currency, to: :payment
 
-  def company
-    COMPANY
+  BEGIN_FISCAL_YEAR = { day: 1, month: 1 }.freeze
+  END_FISCAL_YEAR   = { day: 31, month: 12 }.freeze
+
+  def self.beginning_of_fiscal_year(year = Time.zone.today.year)
+    Date.new(year, BEGIN_FISCAL_YEAR[:month], BEGIN_FISCAL_YEAR[:day])
   end
 
-  def self.generate_number(date, type)
-    end_year = Date.new((date + 1.year).year, 9, 1)
-    last = Receipt.where(date: date.beginning_of_year..end_year).last
-
-    case type
-    when 'Membership'
-      [last.blank? ? 0 : last.sub_num, last.blank? ? 1 : last.mem_num + 1]
-    when 'Subscription'
-      [last.blank? ? 1 : last.sub_num + 1, last.blank? ? 0 : last.mem_num]
-    else
-      p 'GEN NUM ELSE'
-    end
-  end
-
-  def amount_to_currency
-    number_to_currency(amount)
+  def self.ending_of_fiscal_year(year = Time.zone.today.year + 1)
+    Date.new(year, END_FISCAL_YEAR[:month], END_FISCAL_YEAR[:day])
   end
 end

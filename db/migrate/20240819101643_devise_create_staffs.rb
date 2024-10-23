@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
+# Devise Staff Migration
 class DeviseCreateStaffs < ActiveRecord::Migration[7.1]
   def change
     create_table :staffs do |t|
       ## Database authenticatable
-      t.string :nickname,           null: false, default: ''
+      t.string :nickname, null: false, default: ''
       t.string :encrypted_password, null: false, default: ''
 
       ## Trackable
@@ -20,6 +21,6 @@ class DeviseCreateStaffs < ActiveRecord::Migration[7.1]
       t.timestamps null: false
     end
 
-    add_index :staffs, :nickname,             unique: true
+    add_index :staffs, :nickname, unique: true
   end
 end

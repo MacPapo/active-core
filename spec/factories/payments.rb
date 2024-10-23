@@ -1,6 +1,12 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :payment do
-    payment_method { %i[pos cash bank_transfer].sample }
-    entry_type { %i[income expense].sample }
+    amount { '9.99' }
+    date { '2024-10-09' }
+    type { 1 }
+    income { false }
+    note { 'MyText' }
+    staff { nil }
   end
 end

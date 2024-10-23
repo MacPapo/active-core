@@ -20,12 +20,12 @@ class User < ApplicationRecord
 
   after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor?
 
+  # TODO
   # After Discard
   after_discard do
     staff&.discard
     membership&.discard
     subscriptions&.discard_all
-    receipts&.discard_all
   end
 
   # After Undiscard
@@ -33,17 +33,40 @@ class User < ApplicationRecord
     staff&.undiscard
     membership&.undiscard
     subscriptions&.undiscard_all
-    receipts&.undiscard_all
   end
 
   belongs_to :legal_guardian, optional: true
-  has_one    :staff, dependent: :destroy
-  has_one    :membership, dependent: :destroy
 
-  has_many   :subscriptions, dependent: :destroy
-  has_many   :waitlists, dependent: :destroy
-  has_many   :receipts, dependent: :destroy
-  has_many   :activities, through: :subscriptions
+  has_one :staff, dependent: :destroy
+  has_one :membership, dependent: :destroy
+
+  has_many :subscriptions, dependent: :destroy
+  has_many :waitlists, dependent: :destroy
+  has_many :activities, through: :subscriptions
+
+  # Payments
+  has_many :payment_memberships, through: :membership, dependent: :destroy
+  has_many :mpayments, through: :payment_memberships, source: :payment
+
+  has_many :payment_subscriptions, through: :subscriptions, dependent: :destroy
+  has_many :spayments, through: :payment_subscriptions, source: :payment
+
+  def payments
+    ids = mpayments.ids + spayments.ids
+    Payment.where(id: ids).order(created_at: :desc)
+  end
+
+  # Receipts
+  has_many :receipt_memberships, through: :membership, dependent: :destroy
+  has_many :mreceipts, through: :receipt_memberships, source: :receipt
+
+  has_many :receipt_subscriptions, through: :subscriptions, dependent: :destroy
+  has_many :sreceipts, through: :receipt_subscriptions, source: :receipt
+
+  def receipts
+    ids = mreceipts.ids + sreceipts.ids
+    Receipt.where(id: ids).order(created_at: :desc)
+  end
 
   scope :by_name, ->(query) do
     return if query.blank?
@@ -138,6 +161,10 @@ class User < ApplicationRecord
 
   def active_membership?
     membership&.active?
+  end
+
+  def has_payments?
+    !spayments&.empty? || !mpayments&.empty?
   end
 
   def verify_compliance

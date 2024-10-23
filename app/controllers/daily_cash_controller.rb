@@ -2,6 +2,8 @@
 
 # Daily Cash Controller
 class DailyCashController < ApplicationController
+
+  # TODO fix filters
   def index
     @morning_item = Payment.daily_cash(:morning).includes(:staff)
     @afternoon_item = Payment.daily_cash(:afternoon).includes(:staff)

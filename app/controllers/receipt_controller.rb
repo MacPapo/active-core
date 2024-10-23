@@ -2,10 +2,11 @@
 
 # Receipt Controller
 class ReceiptController < ApplicationController
-  before_action :set_receipt, only: [:destroy]
-  before_action :set_payment, only: [:show]
+  before_action :set_receipt, only: [:show, :destroy]
 
   def show
+    @pdf = generate_receipt
+
     respond_to do |format|
       format.pdf { send_pdf }
     end
@@ -19,18 +20,18 @@ class ReceiptController < ApplicationController
 
   private
 
-  def set_payment
-    @payment = Payment.find(params[:payment_id])
+  def set_receipt
+    @receipt =
+      params[:payment_id].present? ? Receipt.find_by(payment_id: params[:payment_id]) : Receipt.find(params[:id])
   end
 
-  def set_receipt
-    @receipt = Receipt.find(params[:id])
+  def generate_receipt
+    GenerateReceiptJob.perform_now(:print, @receipt)
   end
 
   def send_pdf
-    receipt = GenerateReceiptJob.perform_now(:print, @payment)
-    send_data receipt.render,
-              filename: "#{@payment.created_at.strftime('%s')}-ricevuta.pdf",
+    send_data @pdf.render,
+              filename: "#{@receipt.created_at.strftime('%s')}-ricevuta.pdf",
               type: 'application/pdf',
               disposition: :inline
   end

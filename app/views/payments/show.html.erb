@@ -1,21 +1,15 @@
-<p class="mb-3 fs-3 fw-semibold text-secondary">
-    <%= t '.title' %>
-</p>
+<%= render 'partials/container_with_receipt', obj: @payment, title: t('.title') do %>
 
-<div class="bg-primary border border-secondary-subtle rounded-3 container-fluid">
-
-    <div class="py-3">
-        <%= render @payment %>
+    <div>
+        <% unless @payment.method == 'voucher' %>
+            <%= link_to receipt_show_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2 fs-5 text-secondary' do %>
+                <i class="bi bi-receipt me-1"></i>
+                <%= t('global.receipt_button') %>
+            <% end %>
+        <% end %>
     </div>
 
-    <div class="pb-3 d-flex justify-content-end">
-
-
-        <%= link_to receipt_show_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2 fs-5 text-secondary' do %>
-            <i class="bi bi-receipt me-1"></i>
-            <%= t('global.receipt_button') %>
-        <% end %>
-
+    <div class="d-flex">
         <% if current_staff.admin? %>
             <!-- Edit -->
             <%= link_to edit_payment_path(@payment), class: 'btn btn-warning me-2 fs-5 text-secondary' do %>
@@ -33,4 +27,5 @@
             <% end %>
         <% end %>
     </div>
-</div>
+
+<% end %>

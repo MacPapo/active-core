@@ -1,10 +1,6 @@
-<p style="color: green"><%= notice %></p>
+<%= render 'partials/container', obj: @waitlist, title: t('.title') do %>
+    <%= link_to "Edit this waitlist", edit_waitlist_path(@waitlist) %> |
+    <%= link_to "Back to waitlists", waitlists_path %>
 
-<%= render @waitlist %>
-
-<div>
-  <%= link_to "Edit this waitlist", edit_waitlist_path(@waitlist) %> |
-  <%= link_to "Back to waitlists", waitlists_path %>
-
-  <%= button_to "Destroy this waitlist", @waitlist, method: :delete %>
-</div>
+    <%= button_to "Destroy this waitlist", @waitlist, method: :delete %>
+<% end %>

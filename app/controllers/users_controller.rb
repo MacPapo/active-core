@@ -48,7 +48,8 @@ class UsersController < ApplicationController
       direction: @direction || 'desc'
     }
 
-    @pagy, @subscriptions = pagy(@user.sfilter(filters))
+    @pagy_sub, @subscriptions = pagy(@user.sfilter(filters))
+    @pagy_pay, @payments = pagy(@user.payments)
   end
 
   # GET /users/new

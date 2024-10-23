@@ -2,53 +2,23 @@
 
 # Payment Model
 class Payment < ApplicationRecord
+  # TODO
   include Discard::Model
 
-  validates :payment_method, :entry_type, :payable, :staff, presence: true
-
-  after_save :activate_membership_or_subscription
-
-  # After Discard
-  after_discard do
-    receipt&.discard
-  end
-
-  # After Undiscard
-  after_undiscard do
-    receipt&.undiscard
-  end
-
-  belongs_to :payable, polymorphic: true
   belongs_to :staff
 
+  has_one :payment_membership, dependent: :destroy
+  has_one :payment_subscription, dependent: :destroy
   has_one :receipt, dependent: :destroy
 
-  enum :payment_method, { pos: 0, cash: 1, bank_transfer: 2 }, default: :cash
-  enum :entry_type, { income: 0, expense: 1 }, default: :income
+  has_one :muser, through: :payment_membership, source: :user
+  has_one :suser, through: :payment_subscription, source: :user
 
-  scope :by_interval, ->(from, to) do
-    return if from.blank? && to.blank?
+  validates :amount, numericality: { greater_than_or_equal_to: 0 }
 
-    if from.present? && to.present?
-      where('payments.date': from..to)
-    elsif from.present?
-      where('payments.date >= ?', from)
-    else
-      where('payments.date <= ?', to)
-    end
-  end
+  enum :method, { cash: 0, pos: 1, bank_transfer: 2, voucher: 3 }, default: :cash
 
   scope :by_created_at, ->(from, to) { where(created_at: from..to).order(created_at: :desc) }
-  scope :by_name, ->(query) { where('staffs.nickname LIKE :q OR payments.note LIKE :q', q: "%#{query}%") }
-  scope :by_type, ->(type) { where(payable_type: type.capitalize) if type.present? }
-  scope :by_method, ->(method) { where(payment_method: method) if method.present? }
-
-  scope :sorted, ->(sort_by, direction) do
-    return unless %w[date amount staff updated_at].include?(sort_by)
-
-    sort_by = sort_by == 'staff' ? 'staffs.nickname' : "payments.#{sort_by}"
-    order("#{sort_by} #{direction}")
-  end
 
   def self.filter(params)
     case params[:visibility]
@@ -58,66 +28,38 @@ class Payment < ApplicationRecord
       discarded
     else
       kept
-    end.joins(:staff)
-      .by_name(params[:name])
-      .by_type(params[:type])
-      .by_method(params[:method])
-      .by_interval(params[:from], params[:to])
-      .sorted(params[:sort_by], params[:direction])
+    end
   end
 
-  def self.daily_cash(arg)
-    return nil if arg.blank?
+  def self.daily_cash(period)
+    return if period.blank?
 
     mid = Time.zone.now.beginning_of_day
     select_range = ->(y) { kept.by_created_at(mid + y.first, mid + y.last) }
 
-    select_range.call(arg == :morning ? [7.hours, 14.hours] : [14.hours, 21.hours])
-  end
-
-  def payment_summary
-    payable.summary
-  end
-
-  def user
-    payable&.user
-  end
-
-  def humanize_payable_type(type = payable_type)
-    Payment.human_attribute_name("payable.#{type.downcase}")
-  end
-
-  def humanize_payment_method(method = payment_method)
-    Payment.human_attribute_name("method.#{method}")
-  end
-
-  def humanize_entry_type(type = entry_type)
-    Payment.human_attribute_name("type.#{type}")
-  end
-
-  def self.humanize_payable_types
-    Payment
-      .select(:payable_type)
-      .distinct
-      .pluck(:payable_type).map { |x| [Payment.human_attribute_name("payable.#{x.downcase}"), x] }
+    select_range.call(period == :morning ? [7.hours, 14.hours] : [14.hours, 21.hours])
   end
 
   def self.humanize_payment_methods
-    payment_methods.keys.map { |key| [Payment.human_attribute_name("method.#{key}"), key] }
+    methods.keys.map { |key| [Payment.human_attribute_name("method.#{key}"), key] }
   end
 
-  def self.humanize_entry_types
-    entry_types.keys.map { |key| [Payment.human_attribute_name("type.#{key}"), key] }
+  def humanize_payment_method(method = self.method)
+    Payment.human_attribute_name("method.#{method}")
   end
 
-  private
+  def humanize_payable_type
+    mem = payment_membership
+    sub = payment_subscription
 
-  def set_default_date
-    self.date ||= Time.zone.today
+    return unless mem.present? || sub.present?
+
+    type = mem.present? ? 'membership' : 'subscription'
+
+    Payment.human_attribute_name("payable.#{type}")
   end
 
-  # TODO undo activation if payment is destroyed
-  def activate_membership_or_subscription
-    ActivateThingJob.perform_later(payable_type, payable_id)
+  def amount_to_currency
+    ActionController::Base.helpers.number_to_currency amount
   end
 end

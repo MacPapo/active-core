@@ -12,20 +12,23 @@ class Membership < ApplicationRecord
   after_save -> { ValidateMembershipStatusJob.perform_later }
   after_destroy -> { AfterDeleteMembershipCleanupSubsJob.perform_later }
 
+  # TODO
   after_discard do
     user&.subscriptions&.discard_all
-    payments&.discard_all
   end
 
   after_undiscard do
     user&.subscriptions&.undiscard_all
-    payments&.undiscard_all
   end
 
   belongs_to :user, touch: true
   belongs_to :staff, touch: true
 
-  has_many :payments, as: :payable, dependent: :destroy
+  has_many :payment_memberships, dependent: :destroy
+  has_many :receipt_memberships, dependent: :destroy
+
+  has_many :payments, through: :payment_memberships
+  has_many :receipts, through: :receipt_memberships
 
   enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive
 

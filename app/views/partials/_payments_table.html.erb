@@ -22,7 +22,7 @@
 
                         <!-- Created At -->
                         <td>
-                            <%= l payment.created_at.to_date, format: :default %>
+                            <%= l payment.created_at, format: fmt %>
                         </td>
 
                         <!-- Payable Type -->
@@ -30,16 +30,24 @@
                             <%= payment.humanize_payable_type %>
                         </td>
 
-                        <!-- User name -->
-                        <% user = payment.user %>
-                        <td>
-                            <%= highlight user.name, params.dig(:name) %>
-                        </td>
+                        <% user = payment.muser || payment.suser %>
+                        <% if user.present? %>
+                            <!-- User name -->
+                            <td>
+                                <%= highlight user.name, params.dig(:name) %>
+                            </td>
 
-                        <!-- User surname -->
-                        <td>
-                            <%= highlight user.surname, params.dig(:name) %>
-                        </td>
+                            <!-- User surname -->
+                            <td>
+                                <%= highlight user.surname, params.dig(:name) %>
+                            </td>
+                        <% else %>
+                            <!-- User name -->
+                            <td></td>
+
+                            <!-- User surname -->
+                            <td></td>
+                        <% end %>
 
                         <!-- Amount -->
                         <td>
@@ -53,9 +61,7 @@
 
                         <!-- Note -->
                         <td>
-                            <span class="d-inline-block text-truncate" style="max-width: 250px;">
-                                <%= highlight payment.note, params.dig(:name) %>
-                            </span>
+                            <%= highlight truncate(payment.note, lenght: 50), params.dig(:name) %>
                         </td>
 
                         <!-- Staff -->

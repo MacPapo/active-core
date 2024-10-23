@@ -1,0 +1,19 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <p class="mb-0 fs-3 fw-semibold text-secondary">
+        <%= title %>
+    </p>
+
+    <div class="d-flex align-items-center">
+        <%= yield :counter %>
+    </div>
+</div>
+
+<div class="bg-primary border border-secondary-subtle rounded-3 container-fluid">
+    <div class="d-flex align-items-center">
+        <%= yield :search %>
+    </div>
+
+    <%= turbo_frame_tag tframe do %>
+        <%= yield %>
+    <% end %>
+</div>

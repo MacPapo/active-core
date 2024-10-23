@@ -1,144 +1,57 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <p class="mb-0 fs-3 fw-semibold text-secondary">
-        <%= model_to_string(Activity, 2) %>
-    </p>
+<%= content_for :counter do %>
+    <% count = Activity.count %>
+    <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
+    <span class="fs-6 fw-light ps-2 text-muted"><%= t('global.registered', count:) %></span>
+<% end %>
 
-    <div class="d-flex align-items-center">
-        <% count = Activity.count %>
-        <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
-        <span class="fs-6 fw-light ps-2 text-muted"><%= t('.registered', count:) %></span>
-    </div>
-</div>
+<%= content_for :search do %>
+    <div class="flex-fill">
 
-<div class="bg-primary border border-secondary-subtle rounded-3 container-fluid">
-    <div class="d-flex align-items-center">
+        <!-- Search form -->
+        <%= render 'partials/search_form', loc: t('global.search_activity'), path: activities_path, frame: :activities, size: '300px', ctrls: 'filters range' do |f| %>
 
-        <!-- Search Form -->
-        <div class="flex-fill">
-            <%= render 'partials/search_form', loc: t('global.search_activity'), path: activities_path, frame: :activities, size: '300px', ctrls: 'filters range' do |f| %>
-
-                <div class="row mb-2">
-                    <!-- Participants -->
-                    <div class="col">
-                        <span class="d-flex">
-                            <%= f.label :participants_range, t('global.activity_users'), class: 'form-label fw-semibold text-secondary' %>
-                            <span data-range-target="range" class="ms-2 text-secondary fw-semibold">0</span>
-                        </span>
-                        <%= f.range_field :participants_range, in: 0..@max, value: 0,
-                             class: 'form-range', data: { action: 'change->filters#submit input->range#updateRangeValue' } %>
-                    </div>
+            <div class="row mb-2">
+                <!-- Participants -->
+                <div class="col">
+                    <span class="d-flex">
+                        <%= f.label :participants_range, t('global.activity_users'), class: 'form-label fw-semibold text-secondary' %>
+                        <span data-range-target="range" class="ms-2 text-secondary fw-semibold">0</span>
+                    </span>
+                    <%= f.range_field :participants_range, in: 0..@max, value: 0,
+                         class: 'form-range', data: { action: 'change->filters#submit input->range#updateRangeValue' } %>
                 </div>
-
-                <div class="row mb-2">
-                    <!-- Max Participants -->
-                    <div class="col">
-                        <%= f.label :max_participants, t('global.activity_max_users'), class: 'form-label fw-semibold text-secondary' %>
-                        <%= f.select :max_participants, Activity.pluck(:num_participants).uniq, { prompt: t('global.all-m') },
-                         class: 'form-select', data: { action: 'change->filters#submit' } %>
-                    </div>
-                </div>
-
-                <div class="row mb-2">
-                    <!-- Visibility -->
-                    <div class="col">
-                        <%= f.label :visibility, t('global.activity_visibility'), class: 'form-label fw-semibold text-secondary' %>
-                        <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
-                         class: 'form-select', data: { action: 'change->filters#submit' } %>
-                    </div>
-                </div>
-            <% end %>
-        </div>
-
-	<% if current_staff.admin? %>
-            <!-- Add Activity -->
-            <%= link_to new_activity_path, class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
-		<i class="bi text-secondary bi-person-arms-up"></i>
-		<span class="ms-1"><%= t('.add_activity') %></span>
-            <% end %>
-	<% end %>
-    </div>
-
-    <%= turbo_frame_tag :activities do %>
-        <% activity_sortable_column = ->(col, title) { sortable_column(col, title, activities_path, :activities, @sort_by, @direction) } %>
-        <div id="activities" class="table-responsive">
-            <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
-                <table class="table table-borderless table-striped mb-0">
-                    <thead class="table-secondary">
-                        <tr class="fs-6">
-                            <th style="width: 15%;"><%= activity_sortable_column.call('num_participants', t('.num_participants')) %></th>
-                            <th><%= activity_sortable_column.call('name', Activity.human_attribute_name('name')) %></th>
-                            <th class="text-primary fw-semibold text-end"><%= t 'global.table.action' %></th>
-                        </tr>
-                    </thead>
-
-                    <tbody class="table-group-divider">
-                        <% @activities.each do |activity| %>
-                            <tr class="align-middle">
-                                <% partecipants = activity.subscriptions %>
-                                <% npartecipants = activity.num_participants %>
-
-                                <!-- Number  -->
-                                <td class="d-flex align-items-center">
-                                    <!-- Add users to activity -->
-                                    <% if npartecipants == 99 || (npartecipants != 99 && partecipants.length < npartecipants) %>
-                                        <%= link_to new_subscription_path(activity_id: activity), class: 'btn btn-success btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                                            <i class="bi text-secondary bi-person-plus-fill"></i>
-                                        <% end %>
-                                    <% else %>
-                                        <%= link_to new_waitlist_path(activity_id: activity), class: 'btn btn-info btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                                            <i class="bi text-secondary bi-telephone-plus-fill"></i>
-                                        <% end %>
-                                    <% end %>
-                                    <div class="ms-3">
-                                        <% if partecipants %>
-                                            <% plen = partecipants.kept.count %>
-                                            <%= npartecipants == 99 ? "#{plen}" : "#{plen}/#{npartecipants}" %>
-                                        <% end %>
-                                    </div>
-                                </td>
-
-                                <!-- Name -->
-                                <td>
-                                    <%= highlight activity.name, params.dig(:name) %>
-                                </td>
-
-                                <!-- Action buttons -->
-                                <td class="text-end">
-                                    <%= link_to activity_path(activity), class: 'btn btn-sm btn-info border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                                        <i class="bi text-secondary bi-eye-fill"></i>
-                                    <% end %>
-
-                                    <% if current_staff.admin? %>
-                                        <%= link_to edit_activity_path(activity), class: 'btn btn-sm btn-warning border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                                            <i class="bi text-secondary bi-pencil-fill"></i>
-                                        <% end %>
-
-					<% if activity.discarded? %>
-					    <%= button_to restore_activity_path(activity),
-							  class: 'btn btn-restore btn-sm border border-secondary-subtle',
-							  method: :patch,
-							  data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
-							  form: {style: 'display:inline-block;'} do %>
-						<i class="bi bi-recycle"></i>
-					<% end %>
-					<% else %>
-                                            <%= button_to activity_path(activity),
-							  class: 'btn btn-sm btn-danger border border-secondary-subtle',
-							  method: :delete,
-							  data: { turbo_frame: "_top", turbo_confirm: t('global.delete_dialog') },
-							  form: {style: 'display:inline-block;'} do %>
-						<i class="bi text-secondary bi-trash3-fill"></i>
-                                            <% end %>
-					<% end %>
-                                    <% end %>
-                                </td>
-                            </tr>
-                        <% end %>
-                    </tbody>
-                </table>
             </div>
 
-            <%== pagy_bootstrap_nav(@pagy) %>
-        </div>
+            <div class="row mb-2">
+                <!-- Max Participants -->
+                <div class="col">
+                    <%= f.label :max_participants, t('global.activity_max_users'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.select :max_participants, Activity.pluck(:num_participants).uniq, { prompt: t('global.all-m') },
+                     class: 'form-select', data: { action: 'change->filters#submit' } %>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <!-- Visibility -->
+                <div class="col">
+                    <%= f.label :visibility, t('global.activity_visibility'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+                     class: 'form-select', data: { action: 'change->filters#submit' } %>
+                </div>
+            </div>
+        <% end %>
+    </div>
+
+    <!-- Add Activity -->
+    <%= link_to new_activity_path, class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
+	<i class="bi text-secondary bi-person-arms-up"></i>
+	<span class="ms-1"><%= t('.add_activity') %></span>
     <% end %>
-</div>
+<% end %>
+
+<%= render 'partials/index_container', title: model_to_string(Activity, 2), tframe: :activities do %>
+    <div id="activities" class="table-responsive">
+        <%= render 'partials/activity_table', activities: @activities %>
+        <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
+<% end %>

@@ -1,68 +1,31 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <p class="mb-0 fs-3 fw-semibold text-secondary">
-        <%= model_to_string(Payment, 2) %>
-    </p>
+<%= content_for :counter do %>
+    <% count = Payment.count %>
+    <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
+    <span class="fs-6 fw-light ps-2 text-muted"><%= t('global.registered', count:) %></span>
+<% end %>
 
-    <div class="d-flex align-items-center">
-        <% count = Payment.count %>
-        <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
-        <span class="fs-6 fw-light ps-2 text-muted"><%= t('global.registered', count:) %></span>
-    </div>
-</div>
-
-<div class="bg-primary border border-secondary-subtle rounded-3 container-fluid">
+<%= content_for :search do %>
     <div class="flex-fill">
         <%= render 'partials/search_form', loc: t('global.search_payment'), path: payments_path, frame: :payments, size: '600px', ctrls: 'filters' do |f| %>
             <div class="row g-2 mb-2">
                 <!-- Payable Type -->
-                <div class="col">
-                    <%= f.label :payable_type, t('global.payable_type'), class: 'form-label fw-semibold text-secondary' %>
-                    <%= f.select :payable_type, Payment.humanize_payable_types, { prompt: t('global.all-m') },
-                     class: 'form-select', data: { action: 'change->filters#submit' } %>
-                </div>
 
-                <!-- Payable Method -->
-                <div class="col">
-                    <%= f.label :payment_method, t('global.payment_method'), class: 'form-label fw-semibold text-secondary' %>
-                    <%= f.select :payment_method, Payment.humanize_payment_methods, { prompt: t('global.all-m') },
-                     class: 'form-select', data: { action: 'change->filters#submit' } %>
-                </div>
-            </div>
-
-            <% max = Payment.maximum(:date) %>
-            <% min = Payment.minimum(:date) %>
-            <div class="row g-2 mb-2">
-                <!-- DATE FROM -->
-                <div class="col">
-                    <%= f.label :date_from, t('global.activity_from'), class: 'form-label fw-semibold text-secondary' %>
-                    <%= f.date_field :date_from, max: , min: ,
-                        class: 'form-control', data: { action: 'change->filters#submit' } %>
-                </div>
-
-                <!-- DATE TO -->
-                <div class="col">
-                    <%= f.label :date_to, t('global.activity_to'), class: 'form-label fw-semibold text-secondary' %>
-                    <%= f.date_field :date_to, max: , min: ,
-                        class: 'form-control', data: { action: 'change->filters#submit' } %>
-                </div>
-            </div>
-
-	    <div class="row mb-2">
-                <!-- Visibility -->
-                <div class="col">
-                    <%= f.label :visibility, t('global.payment_visibility'), class: 'form-label fw-semibold text-secondary' %>
-                    <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
-                     class: 'form-select', data: { action: 'change->filters#submit' } %>
+	        <div class="row mb-2">
+                    <!-- Visibility -->
+                    <div class="col">
+                        <%= f.label :visibility, t('global.payment_visibility'), class: 'form-label fw-semibold text-secondary' %>
+                        <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+                         class: 'form-select', data: { action: 'change->filters#submit' } %>
+                    </div>
                 </div>
             </div>
         <% end %>
     </div>
+<% end %>
 
-    <%= turbo_frame_tag :payments do %>
-        <div id="payments">
-            <%= render 'partials/payments_table', payments: @payments, frame: :payments %>
-            <%== pagy_bootstrap_nav(@pagy) %>
-        </div>
-    <% end %>
-
-</div>
+<%= render 'partials/index_container', title: model_to_string(Payment, 2), tframe: :payments do %>
+    <div id="payments" class="table-responsive">
+        <%= render 'partials/payments_table', payments: @payments, frame: :payments, fmt: :long %>
+        <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
+<% end %>

@@ -1,30 +1,17 @@
-<p class="mb-b fs-3 fw-semibold text-secondary">
-    <%= t '.user_detail' %>
-</p>
+<%= render 'partials/container', obj: @user, title: t('.user_detail') do %>
+    <!-- Edit -->
+    <%= link_to edit_user_path(@user), class: 'btn btn-edit me-2 fs-5 text-secondary' do %>
+        <i class="bi bi-pencil-fill me-1"></i>
+        <%= t('global.edit_button') %>
+    <% end %>
 
-<div class="bg-primary border border-secondary-subtle rounded-3 container-fluid">
 
-    <div>
-        <%= render @user %>
-    </div>
-
-    <div class="py-3 d-flex justify-content-end">
-
-        <!-- Edit -->
-        <%= link_to edit_user_path(@user), class: 'btn btn-edit me-2 fs-5 text-secondary' do %>
-            <i class="bi bi-pencil-fill me-1"></i>
-            <%= t('global.edit_button') %>
-        <% end %>
-
-        <% if current_staff.admin? %>
-            <!-- Delete -->
-            <%= button_to @user,
-                          class: 'btn btn-delete fs-5 text-secondary',
-                          method: :delete,
-                          data: { turbo_confirm: t('global.delete_dialog') } do %>
-                <i class="bi bi-trash3-fill"></i>
-                <%= t('global.delete_button') %>
-            <% end %>
-        <% end %>
-    </div>
-</div>
+    <!-- Delete -->
+    <%= button_to @user,
+                  class: 'btn btn-delete fs-5 text-secondary',
+                  method: :delete,
+                  data: { turbo_confirm: t('global.delete_dialog') } do %>
+        <i class="bi bi-trash3-fill"></i>
+        <%= t('global.delete_button') %>
+    <% end %>
+<% end %>

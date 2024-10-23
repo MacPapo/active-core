@@ -1,0 +1,93 @@
+<% sub_sortable_column = ->(col, title) { sortable_column(col, title, subscriptions_path, :subscriptions, @sort_by, @direction) } %>
+
+<%= content_for :header do %>
+    <tr class="fs-6">
+        <th><%= sub_sortable_column.call('name', User.human_attribute_name('name')) %></th>
+        <th><%= sub_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
+        <th><%= sub_sortable_column.call('activity_name', Subscription.human_attribute_name('activity')) %></th>
+        <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('open') %></th>
+        <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('plan') %></th>
+        <th><%= sub_sortable_column.call('start_date', Subscription.human_attribute_name('start_date')) %></th>
+	<th><%= sub_sortable_column.call('end_date', Subscription.human_attribute_name('end_date')) %></th>
+        <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
+    </tr>
+<% end %>
+
+<%= render 'partials/table' do %>
+    <% subscriptions.each do |subscription| %>
+
+        <tr class="align-middle">
+
+            <!-- Name -->
+            <% user = subscription.user %>
+            <td class="text-begin">
+                <%= highlight user.name, params.dig(:name) %>
+            </td>
+
+            <!-- Surname -->
+            <td>
+                <%= highlight user.surname, params.dig(:name) %>
+            </td>
+
+            <!-- Activity -->
+            <% activity = subscription.activity %>
+            <% plan = subscription.activity_plan %>
+            <td>
+                <%= highlight activity.name, params.dig(:name) %>
+            </td>
+
+            <!-- OPEN -->
+            <td>
+                <%= t subscription.open? %>
+            </td>
+
+            <!-- ActivityPlan -->
+            <td>
+                <%= plan.humanize_plan %>
+            </td>
+
+            <!-- Start Date -->
+            <td>
+                <%= l subscription.start_date %>
+            </td>
+
+            <!-- End Date -->
+            <td>
+                <%= l subscription.end_date %>
+	    </td>
+
+            <!-- Action -->
+            <td class="text-end">
+                <%= link_to subscription,
+                            class: 'btn btn-info btn-sm border border-secondary-subtle',
+                            data: { turbo_frame: "_top" } do %>
+                    <i class="bi text-secondary bi-eye-fill"></i>
+                <% end %>
+
+                <%= link_to edit_subscription_path(subscription),
+                            class: 'btn btn-warning btn-sm border border-secondary-subtle',
+                            data: { turbo_frame: "_top" } do %>
+                    <i class="bi text-secondary bi-pencil-fill"></i>
+                <% end %>
+
+
+                <% if subscription.discarded? %>
+		    <%= button_to restore_subscription_path(subscription),
+				  class: 'btn btn-restore btn-sm border border-secondary-subtle',
+				  method: :patch,
+				  data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
+				  form: {style: 'display:inline-block;'} do %>
+			<i class="bi bi-recycle"></i>
+		    <% end %>
+		<% else %>
+		    <%= button_to subscription_path(subscription),
+				  class: 'btn btn-danger btn-sm border border-secondary-subtle',
+				  method: :delete,
+				  data: { turbo_confirm: t('global.delete_dialog') }, form: {style: 'display:inline-block;'} do %>
+			<i class="bi bi-trash3-fill"></i>
+		    <% end %>
+		<% end %>
+            </td>
+        </tr>
+    <% end %>
+<% end %>

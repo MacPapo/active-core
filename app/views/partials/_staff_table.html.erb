@@ -1,0 +1,61 @@
+<% staff_sortable_column = ->(col, title) { sortable_column(col, title, staffs_path, :staffs, @sort_by, @direction) } %>
+
+<%= content_for :header do %>
+    <tr class="fs-6">
+        <th><%= staff_sortable_column.call('name' ,User.human_attribute_name('name')) %></th>
+        <th><%= staff_sortable_column.call('surname' ,User.human_attribute_name('surname')) %></th>
+        <th><%= staff_sortable_column.call('birth_day' ,User.human_attribute_name('birth_day')) %></th>
+        <th class="text-primary fw-semibold"><%= Staff.human_attribute_name('role') %></th>
+        <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
+    </tr>
+<% end %>
+
+<%= render 'partials/table' do %>
+    <% staffs.each do |staff| %>
+        <tr class="align-middle">
+            <!-- Name -->
+            <td>
+                <%= highlight staff.name, params.dig(:name) %>
+            </td>
+
+            <!-- Surname -->
+            <td>
+                <%= highlight staff.surname, params.dig(:name) %>
+            </td>
+
+            <!-- Birth Day -->
+            <td>
+                <%= l staff.birth_day %>
+            </td>
+
+            <!-- Role -->
+            <td>
+                <%= staff.humanize_role %>
+            </td>
+
+            <!-- Action -->
+            <td class="text-end">
+                <%= link_to staff,
+                            class: 'btn btn-info btn-sm border border-secondary-subtle',
+                            data: { turbo_frame: "_top" } do %>
+                    <i class="bi text-secondary bi-eye-fill"></i>
+                <% end %>
+
+
+                <%= link_to edit_staff_path(staff),
+                            class: 'btn btn-warning btn-sm border border-secondary-subtle',
+                            data: { turbo_frame: "_top" } do %>
+                    <i class="bi text-secondary bi-pencil-fill"></i>
+                <% end %>
+
+                <%= button_to staff,
+                              class: 'btn btn-danger btn-sm border border-secondary-subtle',
+                              method: :delete,
+                              data: { turbo_frame: "_top", turbo_confirm: t('global.delete_dialog') },
+                              form: {style: 'display:inline-block;'} do %>
+                    <i class="bi text-secondary bi-trash3-fill"></i>
+                <% end %>
+            </td>
+        </tr>
+    <% end %>
+<% end %>

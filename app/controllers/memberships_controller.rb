@@ -44,8 +44,7 @@ class MembershipsController < ApplicationController
     @membership = Membership.build(membership_params)
 
     if @membership.save
-      redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id),
-                  notice: t('.create_succ')
+      redirect_to new_payment_path(eid: @membership.id, type: 'mem'), notice: t('.create_succ')
     else
       render :new, user_id:, status: :unprocessable_entity
     end

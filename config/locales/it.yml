@@ -149,6 +149,15 @@ it:
         subscription: "Iscrizione"
 
   global:
+    receipt:
+      title: 'Ricevuta'
+      to: 'Ricevuta per:'
+      number: 'Numero progressivo:'
+      date: 'Data:'
+      method: 'Metodo di pagamento:'
+      description: 'Descrizione'
+      amount: 'Ammontare'
+      no_receipt_found: 'Non è stata trovata nessuna ricevuta per questo pagamento!'
     restore: "Ripristina"
     visible: "Attivi"
     invisible: "Eliminati"
@@ -280,6 +289,7 @@ it:
       no_membership: "Non è stata registrata la Quota Associativa per questo utente."
       add_membership: "Registra Quota Associativa"
       subs: "Attività"
+      payments: "Pagamenti"
       add_sub: "Aggiungi ad una Attività"
 
   activities:
