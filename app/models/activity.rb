@@ -18,8 +18,8 @@ class Activity < ApplicationRecord
   # After Discard
   after_discard do
     subscriptions&.discard_all
-    waitlists&.destroy_all
     activity_plans&.discard_all
+    waitlists&.destroy_all
   end
 
   # After Undiscard

@@ -62,9 +62,6 @@
 <% end %>
 
 <%= render 'partials/index_container', title: model_to_string(Subscription, 2), tframe: :subscriptions do %>
-
-    <div id="subscriptions" class="table-responsive">
-        <%= render 'partials/subscription_table', subscriptions: @subscriptions %>
-        <%== pagy_bootstrap_nav(@pagy) %>
-    </div>
+    <%= render 'partials/subscription_table', subscriptions: @subscriptions %>
+    <%== pagy_bootstrap_nav(@pagy) %>
 <% end %>

@@ -27,26 +27,30 @@ csv.each do |row|
   u.name = row['Nome']
   u.birth_day = row['Data di Nascita']
   u.email = row['Email']
-  u.phone = Phonelib.parse(row['Cellulare']).valid? ? row['Cellulare'] :nil
+  u.phone = Phonelib.parse(row['Cellulare']).valid? ? row['Cellulare'] : nil
 
   u.save
 end
 
 # Seed Staff Members
-admin_user = User.create!(
+admin_user = User.new(
   cf: 'SRUDMN80A01L736P',
   name: 'Admin',
   surname: 'User',
   email: 'admin@example.com',
   phone: '+39 341 4488 935',
-  birth_day: Faker::Date.birthday(min_age: 30, max_age: 60),
+  birth_day: Date.new(2001, 3, 18),
   med_cert_issue_date: nil,
   affiliated: false
 )
 
-Staff.create!(
+admin_user.save
+
+staff_admin = Staff.new(
   user: admin_user,
   nickname: 'admin',
   password: Rails.application.credentials.admin_pwd,
   role: :admin
 )
+
+staff_admin.save

@@ -2,12 +2,21 @@
 
 # Receipt Subscription Model
 class ReceiptSubscription < ApplicationRecord
-  # TODO
   include Discard::Model
 
   belongs_to :receipt, dependent: :destroy
   belongs_to :subscription
   belongs_to :user
+
+  after_discard do
+    receipt&.discard
+    subscription&.discard
+  end
+
+  after_undiscard do
+    receipt&.undiscard
+    subscription&.undiscard
+  end
 
   has_one :activity, through: :subscription
 

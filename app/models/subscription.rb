@@ -7,7 +7,6 @@ class Subscription < ApplicationRecord
   validates :start_date, :activity_id, :activity_plan_id, :user_id, :staff_id, presence: true
   validates :end_date, comparison: { greater_than_or_equal_to: :start_date }, if: -> { start_date.present? && end_date.present? }
 
-  # validate :active_membership?, if: -> { user.present? && activity.present? }
   # validate :date_valid_for_membership?, if: -> { user&.membership&.active? }
 
   delegate :cost, :affiliated_cost, prefix: 'plan', to: :activity_plan
@@ -17,15 +16,6 @@ class Subscription < ApplicationRecord
   after_validation  :set_start_date, if: -> { will_save_change_to_attribute?('start_date') }
 
   after_save -> { ValidateSubscriptionStatusJob.perform_later }
-
-  # TODO
-  after_discard do
-    open_subscription&.discard
-  end
-
-  after_undiscard do
-    open_subscription&.undiscard
-  end
 
   belongs_to :user, touch: true
   belongs_to :staff, touch: true
@@ -41,6 +31,19 @@ class Subscription < ApplicationRecord
 
   has_many :payments, through: :payment_subscriptions
   has_many :receipts, through: :receipt_subscriptions
+
+  after_discard do
+    open_subscription&.discard
+    payments&.discard_all
+    receipts&.discard_all
+  end
+
+  after_undiscard do
+    user&.membership&.undiscard
+    open_subscription&.undiscard
+    payments&.undiscard_all
+    receipts&.undiscard_all
+  end
 
   enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive
 
@@ -68,12 +71,14 @@ class Subscription < ApplicationRecord
   scope :by_interval, ->(from = nil, to = nil) do
     return if from.blank? && to.blank?
 
-    if from.present? && to.present?
-      where('subscriptions.start_date': from..to, 'subscriptions.end_date': from..to)
-    elsif from.present?
-      where('subscriptions.start_date >= ?', from)
-    elsif to.present?
-      where('subscriptions.end_date <= ?', to)
+    if from.blank?
+      end_date = DateTime.parse(to).end_of_day
+      where('subscriptions.created_at': ..end_date)
+    elsif to.blank?
+      where('subscriptions.created_at': from..)
+    else
+      end_date = to.is_a?(String) ? DateTime.parse(to).end_of_day : to
+      where('subscriptions.created_at': from..end_date)
     end
   end
 
@@ -86,13 +91,20 @@ class Subscription < ApplicationRecord
   scope :by_plan_id, ->(id) { where('subscriptions.activity_plan_id' => ActivityPlan.where(plan: id).pluck(:id)) unless id.blank? }
 
   scope :sorted, ->(sort_by, direction) do
-    if %w[name activity_name surname start_date end_date updated_at].include?(sort_by)
+    if %w[name surname activity_name start_date end_date updated_at].include?(sort_by)
       direction = %w[asc desc].include?(direction) ? direction : 'asc'
 
-      sort_by = "users.#{sort_by}" unless sort_by == 'activity_name'
-      sort_by = "activities.name" if sort_by == 'activity_name'
+      res =
+        case sort_by
+        when 'name', 'surname'
+          "users.#{sort_by}"
+        when 'activity_name'
+          "activities.name"
+        else
+          "subscriptions.#{sort_by}"
+        end
 
-      order("#{sort_by} #{direction}")
+      order("#{res} #{direction}")
     end
   end
 

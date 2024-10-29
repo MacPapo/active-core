@@ -43,9 +43,11 @@
     </div>
 
     <!-- Add Activity -->
-    <%= link_to new_activity_path, class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
-	<i class="bi text-secondary bi-person-arms-up"></i>
-	<span class="ms-1"><%= t('.add_activity') %></span>
+    <% if current_staff.admin? %>
+        <%= link_to new_activity_path, class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
+	    <i class="bi text-secondary bi-person-arms-up"></i>
+	    <span class="ms-1"><%= t('.add_activity') %></span>
+        <% end %>
     <% end %>
 <% end %>
 

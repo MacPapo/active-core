@@ -10,7 +10,13 @@ class ReceiptsController < ApplicationController
   end
 
   # GET /receipts/1 or /receipts/1.json
-  def show; end
+  def show
+    @pdf = generate_receipt
+
+    respond_to do |format|
+      format.pdf { send_pdf }
+    end
+  end
 
   # GET /receipts/new
   def new
@@ -50,10 +56,11 @@ class ReceiptsController < ApplicationController
 
   # DELETE /receipts/1 or /receipts/1.json
   def destroy
-    @receipt.destroy!
+    @receipt.discard
 
+    # WATCH
     respond_to do |format|
-      format.html { redirect_to receipts_path, status: :see_other, notice: 'Receipt was successfully destroyed.' }
+      format.html { redirect_to users_path, status: :see_other, notice: t('.delete_succ') }
       format.json { head :no_content }
     end
   end
@@ -62,7 +69,19 @@ class ReceiptsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_receipt
-    @receipt = Receipt.find(params[:id])
+    @receipt =
+      params[:payment_id].present? ? Receipt.find_by(payment_id: params[:payment_id]) : Receipt.find(params[:id])
+  end
+
+  def generate_receipt
+    GenerateReceiptJob.perform_now(:print, @receipt)
+  end
+
+  def send_pdf
+    send_data @pdf.render,
+              filename: "#{@receipt.created_at.strftime('%s')}-ricevuta.pdf",
+              type: 'application/pdf',
+              disposition: :inline
   end
 
   # Only allow a list of trusted parameters through.

@@ -2,7 +2,7 @@
 
     <div>
         <% unless @payment.method == 'voucher' %>
-            <%= link_to receipt_show_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2 fs-5 text-secondary' do %>
+            <%= link_to receipt_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2 fs-5 text-secondary' do %>
                 <i class="bi bi-receipt me-1"></i>
                 <%= t('global.receipt_button') %>
             <% end %>

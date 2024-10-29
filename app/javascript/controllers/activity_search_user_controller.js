@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import debounce from "debounce";
 
 // Connects to data-controller="activity-search-user"
 export default class extends Controller {
@@ -8,13 +9,16 @@ export default class extends Controller {
         console.log("User search controller connected!")
     }
 
+    initialize() {
+        this.search = debounce(this.search.bind(this), 200);
+    }
+
     search() {
         const query = this.inputTarget.value
 
-        if (query.length > 2) {
-            fetch(`/users/activity_search?query=${query}`, {
-                headers: { "Accept": "application/json" }
-            })
+        fetch(`/users/activity_search?query=${query}`, {
+            headers: { "Accept": "application/json" }
+        })
             .then(response => response.json())
             .then(data => {
                 this.resultsTarget.innerHTML = data.map(user => `
@@ -23,9 +27,6 @@ export default class extends Controller {
                     </option>
                 `).join("")
             })
-        } else {
-            this.resultsTarget.innerHTML = ""
-        }
     }
 
     selectUser() {
@@ -55,7 +56,7 @@ export default class extends Controller {
             .then(response => response.json())
             .then(data => {
                 const plansSelect = this.plansTarget;
-                plansSelect.innerHTML = ""; // Svuota il select
+                plansSelect.innerHTML = "";
 
                 data.plans.forEach(plan => {
                     const option = document.createElement("option");

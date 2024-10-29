@@ -62,8 +62,7 @@ class MembershipsController < ApplicationController
   def renew_update
     if @membership.update(membership_params)
       @membership.inactive!
-      redirect_to new_payment_path(payable_type: 'Membership', payable_id: @membership.id),
-                  notice: t('.renew_succ')
+      redirect_to new_payment_path(eid: @membership.id, type: 'mem'), notice: t('.renew_succ')
     else
       render :renew, status: :unprocessable_entity
     end

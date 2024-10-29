@@ -2,7 +2,6 @@
 
 # Payment Subscription Model
 class PaymentSubscription < ApplicationRecord
-  # TODO
   include Discard::Model
 
   belongs_to :payment, dependent: :destroy
@@ -10,4 +9,14 @@ class PaymentSubscription < ApplicationRecord
   belongs_to :user
 
   has_one :activity, through: :subscription
+
+  after_discard do
+    payment&.discard
+    subscription&.discard
+  end
+
+  after_undiscard do
+    payment&.undiscard
+    subscription&.undiscard
+  end
 end

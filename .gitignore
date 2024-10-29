@@ -39,3 +39,4 @@
 
 /node_modules
 /lib/seeds/
+db/backups/*.sqlite3

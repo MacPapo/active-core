@@ -38,8 +38,6 @@
 <% end %>
 
 <%= render 'partials/index_container', title: model_to_string(Membership, 2), tframe: :memberships do %>
-    <div id="memberships" class="table-responsive">
-        <%= render 'partials/membership_table', memberships: @memberships %>
-        <%== pagy_bootstrap_nav(@pagy) %>
-    </div>
+    <%= render 'partials/membership_table', memberships: @memberships %>
+    <%== pagy_bootstrap_nav(@pagy) %>
 <% end %>

@@ -2,7 +2,6 @@
 
 # Receipt Model
 class Receipt < ApplicationRecord
-  # TODO
   include Discard::Model
 
   belongs_to :payment
@@ -13,6 +12,16 @@ class Receipt < ApplicationRecord
 
   has_one :muser, through: :receipt_membership, source: :user
   has_one :suser, through: :receipt_subscription, source: :user
+
+  after_discard do
+    receipt_membership&.discard
+    receipt_subscription&.discard
+  end
+
+  after_undiscard do
+    receipt_membership&.undiscard
+    receipt_subscription&.undiscard
+  end
 
   delegate :amount_to_currency, to: :payment
 

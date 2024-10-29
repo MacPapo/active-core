@@ -467,10 +467,8 @@
 
             <!-- TODO fix and add filters -->
             <%= turbo_frame_tag :userpayments do %>
-                <div id="payments" class="table-responsive">
-                    <%= render 'partials/payments_table', payments: @payments, frame: :userpayments, fmt: :long %>
-                    <%== pagy_bootstrap_nav(@pagy_pay) %>
-                </div>
+                <%= render 'partials/payments_table', payments: @payments, frame: :userpayments, path: user_path, fmt: :long %>
+                <%== pagy_bootstrap_nav(@pagy_pay) %>
             <% end %>
         </div>
     <% end %>

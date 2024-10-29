@@ -12,15 +12,6 @@ class Membership < ApplicationRecord
   after_save -> { ValidateMembershipStatusJob.perform_later }
   after_destroy -> { AfterDeleteMembershipCleanupSubsJob.perform_later }
 
-  # TODO
-  after_discard do
-    user&.subscriptions&.discard_all
-  end
-
-  after_undiscard do
-    user&.subscriptions&.undiscard_all
-  end
-
   belongs_to :user, touch: true
   belongs_to :staff, touch: true
 
@@ -29,6 +20,18 @@ class Membership < ApplicationRecord
 
   has_many :payments, through: :payment_memberships
   has_many :receipts, through: :receipt_memberships
+
+  after_discard do
+    user&.subscriptions&.discard_all
+    payments&.discard_all
+    receipts&.discard_all
+  end
+
+  after_undiscard do
+    user&.subscriptions&.undiscard_all
+    payments&.undiscard_all
+    receipts&.undiscard_all
+  end
 
   enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive
 
@@ -48,13 +51,14 @@ class Membership < ApplicationRecord
   scope :by_interval, ->(from = nil, to = nil) do
     return if from.blank? && to.blank?
 
-    # TODO watch this
-    if from.present? && to.present?
-      where('memberships.start_date': from..to, 'memberships.end_date': from..to)
-    elsif from.present?
-      where('memberships.start_date >= ?', from)
+    if from.blank?
+      end_date = DateTime.parse(to).end_of_day
+      where('memberships.created_at': ..end_date)
+    elsif to.blank?
+      where('memberships.created_at': from..)
     else
-      where('memberships.end_date <= ?', to)
+      end_date = to.is_a?(String) ? DateTime.parse(to).end_of_day : to
+      where('memberships.created_at': from..end_date)
     end
   end
 

@@ -1,79 +1,104 @@
 Rails.application.routes.draw do
   devise_for :staffs
 
-  authenticated :staff, -> { _1.admin? } do
-    resources :staffs
-
-    resources :payments, only: [:index]
-    resources :subscriptions, only: [:index]
-    resources :memberships, only: [:index]
-    resources :legal_guardians, only: [:destroy]
-    resources :activities, only: %i[destroy renew edit]
-    resources :activity_plans, only: %i[new create destory edit]
-
-    mount MissionControl::Jobs::Engine, at: '/jobs'
-  end
-
-  # TODO
-  resources :receipts
-  resources :payments
-
-  resources :users do
-    collection do
-      get :activity_search
-    end
-
-    member do
-      patch :restore
+  unauthenticated do
+    as :staff do
+      root to: 'devise/sessions#new', as: :login
     end
   end
 
-  resources :legal_guardians, except: [:destroy] do
-    collection do
-      get 'find_by_email'
+  authenticate do
+    resources :users do
+      collection do
+        get :activity_search
+      end
+
+      member do
+        patch :restore
+      end
+    end
+
+    resources :daily_cash
+    resources :receipts, only: [:show]
+    resources :waitlists
+
+    authenticated :staff, -> { !_1.admin? } do
+      resources :legal_guardians, except: [:destroy] do
+        collection do
+          get 'find_by_email'
+        end
+      end
+
+      resources :activities, except: %i[new edit update create destory restore] do
+        member do
+          get 'plans'
+          get 'name'
+          patch :restore
+        end
+      end
+
+      resources :activity_plans, except: %i[new edit create destory]
+
+      resources :payments, except: [:index]
+
+      resources :memberships, except: [:index] do
+        member do
+          get   :renew
+          patch :renew_update
+          patch :restore
+        end
+      end
+
+      resources :subscriptions, except: [:index] do
+        member do
+          get   :renew
+          patch :renew_update
+          patch :restore
+        end
+      end
+    end
+
+    # Only for authenticated ADMIN!
+    authenticated :staff, -> { _1.admin? } do
+      resources :staffs
+      resources :legal_guardians do
+        collection do
+          get 'find_by_email'
+        end
+      end
+      resources :activities do
+        member do
+          get 'plans'
+          get 'name'
+          patch :restore
+        end
+      end
+      resources :activity_plans
+      resources :payments
+
+      resources :memberships do
+        member do
+          get   :renew
+          patch :renew_update
+          patch :restore
+        end
+      end
+
+      resources :subscriptions do
+        member do
+          get   :renew
+          patch :renew_update
+          patch :restore
+        end
+      end
+
+      mount MissionControl::Jobs::Engine, at: '/jobs'
     end
   end
-
-  resources :payments, except: [:index]
-
-  resources :activities, except: %i[destroy edit restore] do
-    get 'plans', on: :member
-    get 'name', on: :member
-
-    member do
-      patch :restore
-    end
-  end
-
-  resources :activity_plans, except: %i[new create destory edit]
-
-  resources :waitlists, except: %i[index show]
-  get 'receipt/show'
-
-  resources :daily_cash
-
-  resources :memberships, except: [:index] do
-    member do
-      get   :renew
-      patch :renew_update
-      patch :restore
-    end
-  end
-
-  resources :subscriptions, except: [:index] do
-    member do
-      get   :renew
-      patch :renew_update
-      patch :restore
-    end
-  end
-
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get 'up' => 'rails/health#show', as: :rails_health_check
 
-  # Defines the root path route ("/")
-  root 'users#index'
+  root to: 'users#index'
 end

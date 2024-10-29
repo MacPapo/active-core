@@ -1,15 +1,15 @@
-<% payment_sortable_column = ->(col, title) { sortable_column(col, title, payments_path, frame, @sort_by, @direction) } %>
+<% payment_sortable_column = ->(col, title) { sortable_column(col, title, path, frame, @sort_by, @direction) } %>
 <div class="table-responsive">
     <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
         <table class="table table-borderless table-striped mb-0">
             <thead class="table-secondary">
                 <tr class="fs-6">
-                    <th><%= payment_sortable_column.call('date', Payment.human_attribute_name('date')) %></th>
+                    <th><%= payment_sortable_column.call('created_at', Payment.human_attribute_name('date')) %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('payable_type') %></th>
-                    <th><%= payment_sortable_column.call('name', User.human_attribute_name('name')) %></th>
-                    <th><%= payment_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
+                    <th class="text-primary fw-semibold"><%= User.human_attribute_name('name') %></th>
+                    <th class="text-primary fw-semibold"><%= User.human_attribute_name('surname') %></th>
                     <th><%= payment_sortable_column.call('amount', Payment.human_attribute_name('amount')) %></th>
-                    <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('payment_method') %></th>
+                    <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('method') %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('note') %></th>
                     <th><%= payment_sortable_column.call('staff', Payment.human_attribute_name('staff')) %></th>
                     <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
@@ -34,12 +34,12 @@
                         <% if user.present? %>
                             <!-- User name -->
                             <td>
-                                <%= highlight user.name, params.dig(:name) %>
+                                <%= user.name %>
                             </td>
 
                             <!-- User surname -->
                             <td>
-                                <%= highlight user.surname, params.dig(:name) %>
+                                <%= user.surname %>
                             </td>
                         <% else %>
                             <!-- User name -->

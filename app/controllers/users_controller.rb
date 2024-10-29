@@ -29,7 +29,7 @@ class UsersController < ApplicationController
 
       query.split.each { |term| @users = @users.where('name LIKE ? OR surname LIKE ?', "%#{term}%", "%#{term}%") }
     else
-      @users = User.none
+      @users = User.kept.joins(:membership).where('membership.status' => :active).limit(50)
     end
 
     respond_to { |f| f.json { render json: localize_activity_search_result(@users.select(:id, :name, :surname, :birth_day)) } }

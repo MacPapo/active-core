@@ -106,7 +106,7 @@
          aria-labelledby="pills-plan-tab"
          tabindex="1">
 
-        <div class="d-flex align-items-center justify-content-end">
+        <div class="d-flex align-items-center justify-content-end mb-2">
 
 	    <!-- Search form -->
 	    <%= render 'partials/search_form_no_bar', path: activity_path, frame: :plans, size: '200px', ctrls: 'filters' do |f| %>
@@ -229,7 +229,6 @@
                 </span>
             <% end %>
         </div>
-
 
         <% if @subs && @count > 0 %>
             <%= render 'subscriptions/subscriptions_table',

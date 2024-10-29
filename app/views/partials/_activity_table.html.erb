@@ -1,7 +1,7 @@
 <% activity_sortable_column = ->(col, title) { sortable_column(col, title, activities_path, :activities, @sort_by, @direction) } %>
 <%= content_for :header do %>
     <tr class="fs-6">
-        <th style="width: 15%;"><%= activity_sortable_column.call('num_participants', t('.num_participants')) %></th>
+        <th><%= activity_sortable_column.call('num_participants', Activity.human_attribute_name('num_participants')) %></th>
         <th><%= activity_sortable_column.call('name', Activity.human_attribute_name('name')) %></th>
         <th class="text-primary fw-semibold text-end"><%= t 'global.table.action' %></th>
     </tr>

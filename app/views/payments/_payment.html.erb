@@ -21,7 +21,17 @@
         </div>
     </div>
 
-    <!-- Payable Type -->
+    <!-- Method -->
+    <div class="col">
+        <p class="fs-6 fw-light text-muted mb-2">
+            <%= payment_attribute_to_string.('method') %>
+        </p>
+        <div class="fs-5 fw-semibold text-secondary">
+            <%= payment.humanize_payment_method %>
+        </div>
+    </div>
+
+    <!-- Type -->
     <div class="col">
         <p class="fs-6 fw-light text-muted mb-2">
             <%= payment_attribute_to_string.('payable_type') %>
@@ -30,18 +40,6 @@
             <%= payment.humanize_payable_type %>
         </div>
     </div>
-</div>
-
-<div class="row mb-4">
-    <div class="col">
-        <p class="fs-6 fw-light text-muted mb-2">
-            <%= payment_attribute_to_string.('payment_method') %>
-        </p>
-        <div class="fs-5 fw-semibold text-secondary">
-            <%= payment.humanize_payment_method %>
-        </div>
-    </div>
-
 </div>
 
 <div class="row mb-4">

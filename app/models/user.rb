@@ -20,21 +20,6 @@ class User < ApplicationRecord
 
   after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor?
 
-  # TODO
-  # After Discard
-  after_discard do
-    staff&.discard
-    membership&.discard
-    subscriptions&.discard_all
-  end
-
-  # After Undiscard
-  after_undiscard do
-    staff&.undiscard
-    membership&.undiscard
-    subscriptions&.undiscard_all
-  end
-
   belongs_to :legal_guardian, optional: true
 
   has_one :staff, dependent: :destroy
@@ -68,6 +53,28 @@ class User < ApplicationRecord
     Receipt.where(id: ids).order(created_at: :desc)
   end
 
+  # After Discard
+  after_discard do
+    staff&.discard
+    membership&.discard
+    subscriptions&.discard_all
+    mpayments&.discard_all
+    spayments&.discard_all
+    mreceipts&.discard_all
+    sreceipts&.discard_all
+  end
+
+  # After Undiscard
+  after_undiscard do
+    staff&.undiscard
+    membership&.undiscard
+    subscriptions&.undiscard_all
+    mpayments&.undiscard_all
+    spayments&.undiscard_all
+    mreceipts&.undiscard_all
+    sreceipts&.undiscard_all
+  end
+
   scope :by_name, ->(query) do
     return if query.blank?
 
@@ -94,7 +101,7 @@ class User < ApplicationRecord
   scope :by_activity_id, ->(id) do
     return if id.blank?
 
-    joins(:subscriptions).where('subscriptions.activity_id = ?', id.to_i)
+    joins(:subscriptions).where('subscriptions.activity_id = ? AND subscriptions.discarded_at IS NULL', id.to_i)
   end
 
   scope :sorted, ->(sort_by, direction) do

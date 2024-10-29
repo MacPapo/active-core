@@ -13,7 +13,7 @@ class SubscriptionPresenter
     when :active
       subscription_path(@subscription)
     when :inactive
-      new_payment_path(payable_type: 'Subscription', payable_id: @subscription.id)
+      new_payment_path(eid: @subscription.id, type: 'sub')
     when :expired
       renew_subscription_path(@subscription, user_id: user&.id)
     when :deleted

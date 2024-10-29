@@ -87,8 +87,8 @@ class PaymentsController < ApplicationController
   end
 
   def set_type_and_id
-    @type ||= params[:type]
-    @eid  ||= params[:eid]
+    @type = params[:type]
+    @eid  = params[:eid]
   end
 
   def payment_handler(eid = @eid, type = @type)

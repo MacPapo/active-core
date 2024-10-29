@@ -13,7 +13,7 @@ class MembershipPresenter
     when :active
       membership_path(@membership)
     when :inactive
-      new_payment_path(payable_type: 'Membership', payable_id: @membership.id)
+      new_payment_path(eid: @membership.id, type: 'mem')
     when :expired
       renew_membership_path(@membership, user_id: user&.id)
     when :deleted

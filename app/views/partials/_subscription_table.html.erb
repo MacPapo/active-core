@@ -80,10 +80,11 @@
 			<i class="bi bi-recycle"></i>
 		    <% end %>
 		<% else %>
-		    <%= button_to subscription_path(subscription),
+		    <%= button_to subscription,
 				  class: 'btn btn-danger btn-sm border border-secondary-subtle',
 				  method: :delete,
-				  data: { turbo_confirm: t('global.delete_dialog') }, form: {style: 'display:inline-block;'} do %>
+				  data: { turbo_frame: "_top", turbo_confirm: t('global.delete_dialog') },
+                                  form: {style: 'display:inline-block;'} do %>
 			<i class="bi bi-trash3-fill"></i>
 		    <% end %>
 		<% end %>

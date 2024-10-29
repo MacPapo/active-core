@@ -44,6 +44,7 @@ it:
         legal_guardian_id: "Tutore Legale"
         membership: "Quota Associativa"
         activity: "Attività"
+        staff: "Collaboratore"
         updated_at: "Data aggiornamento"
         created_at: "Data creazione"
 
@@ -130,8 +131,9 @@ it:
       payment:
         amount: "Ammontare"
         date: "Data"
-        payment_method: "Metodo"
+        method: "Metodo"
         payable_type: "Tipo di Pagamento"
+        income: 'Entrata'
         entry_type: "Tipo Movimento"
         note: "Note eventuali"
         staff: "Collaboratore"
@@ -164,6 +166,8 @@ it:
     from: "da"
     all-m: 'Tutti'
     all-s: 'Tutte'
+    mem: 'Quota Associativa'
+    sub: 'Iscrizioni'
     filters: "Filtri"
     lg_users: "Numero di Utenti associati"
     add_filter: "Aggiungi filtro"

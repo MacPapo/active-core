@@ -24,3 +24,18 @@ production:
     class: DeleteStaleLegalGuardiansJob
     queue: background
     schedule: every hour
+
+  cleanup_eol_records:
+    class: CleanupEolRecordsJob
+    queue: background
+    schedule: every day
+
+  database_backup:
+    calss: DatabaseBackupJob
+    queue: background
+    schedule: every day
+
+  database_backup:
+    calss: DeleteStaleLegalGuardiansJob
+    queue: background
+    schedule: every day

@@ -48,7 +48,7 @@
              tabindex="0">
 
             <%= turbo_frame_tag :morning do %>
-                <%= render 'partials/payments_table', payments: @morning, frame: :morning, fmt: :short %>
+                <%= render 'partials/payments_table', payments: @morning, frame: :morning, path: daily_cash_index_path, fmt: :short %>
                 <div class="d-flex justify-content-between align-items-center">
                     <%== pagy_bootstrap_nav(@pagy_morning) %>
 
@@ -68,7 +68,7 @@
              tabindex="0">
 
             <%= turbo_frame_tag :afternoon do %>
-                <%= render 'partials/payments_table', payments: @afternoon, frame: :afternoon, fmt: :short %>
+                <%= render 'partials/payments_table', payments: @afternoon, frame: :afternoon, path: daily_cash_index_path, fmt: :short %>
                 <div class="d-flex justify-content-between align-items-center">
                     <%== pagy_bootstrap_nav(@pagy_afternoon) %>
 

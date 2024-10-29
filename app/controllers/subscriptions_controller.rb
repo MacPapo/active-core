@@ -100,7 +100,7 @@ class SubscriptionsController < ApplicationController
   def renew_update
     if @subscription.update(subscription_params)
       @subscription.inactive!
-      redirect_to new_payment_path(payable_type: 'Subscription', payable_id: @subscription.id), notice: t('.renew_succ')
+      redirect_to new_payment_path(eid: @subscription.id, type: 'sub'), notice: t('.renew_succ')
     else
       render :renew, status: :unprocessable_entity
     end
