@@ -29,19 +29,6 @@ class Payment < ApplicationRecord
 
   enum :method, { cash: 0, pos: 1, bank_transfer: 2, voucher: 3 }, default: :cash
 
-  scope :by_visibility, ->(visibility) do
-    return if visibility.blank?
-
-    case visibility
-    when 'all'
-      all
-    when 'deleted'
-      discarded
-    else
-      kept
-    end
-  end
-
   scope :by_created_at, ->(from, to) do
     return if from.blank? && to.blank?
 
@@ -89,12 +76,19 @@ class Payment < ApplicationRecord
   end
 
   def self.filter(params)
-    by_visibility(params[:visibility])
+    case params[:visibility]
+    when 'all'
+      all
+    when 'deleted'
+      discarded
+    else
+      kept
+    end
       .joins(:staff)
+      .by_created_at(params[:from], params[:to])
       .by_name(params[:name])
       .by_type(params[:type])
       .by_method(params[:method])
-      .by_created_at(params[:from], params[:to])
       .sorted(params[:sort_by], params[:direction])
   end
 

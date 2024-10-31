@@ -2,7 +2,7 @@
 
 # Payment Controller
 class PaymentsController < ApplicationController
-  before_action :set_payment, only: %i[show edit update destroy]
+  before_action :set_payment, only: %i[show edit update destroy restore]
   before_action :set_ordering, only: [:index]
   before_action :set_filters, only: [:index]
   before_action :set_type_and_id, only: %i[new create]
@@ -66,12 +66,17 @@ class PaymentsController < ApplicationController
 
   # DELETE /payments/1 or /payments/1.json
   def destroy
-    @payment.destroy!
+    @payment.discard
 
     respond_to do |format|
       format.html { redirect_to payments_path, status: :see_other, notice: t('.destroy_succ') }
       format.json { head :no_content }
     end
+  end
+
+  def restore
+    @payment.undiscard
+    redirect_to payments_url, notice: t('.restore_succ')
   end
 
   private

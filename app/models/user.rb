@@ -38,7 +38,7 @@ class User < ApplicationRecord
 
   def payments
     ids = mpayments.ids + spayments.ids
-    Payment.where(id: ids).order(created_at: :desc)
+    Payment.where(id: ids)
   end
 
   # Receipts
@@ -118,7 +118,8 @@ class User < ApplicationRecord
       discarded
     else
       kept
-    end.by_name(params[:name])
+    end
+      .by_name(params[:name])
       .by_membership_status(params[:membership_status])
       .by_activity_status(params[:activity_status])
       .by_activity_id(params[:activity_id])
@@ -133,10 +134,28 @@ class User < ApplicationRecord
       subscriptions.discarded
     else
       subscriptions.kept
-    end.by_activity_name(params[:name])
+    end
+      .by_activity_name(params[:name])
       .by_activity_id(params[:activity_id])
       .by_open(params[:open])
-      # .sorted(params[:sort_by], params[:direction] || 'desc')
+    #.sorted(params[:sort_by], params[:direction] || 'desc')
+  end
+
+  def pfilter(params)
+    case params[:visibility]
+    when 'all'
+      payments.all
+    when 'deleted'
+      payments.discarded
+    else
+      payments.kept
+    end
+      .joins(:staff)
+      .by_created_at(params[:from], params[:to])
+      .by_name(params[:name])
+      .by_type(params[:type])
+      .by_method(params[:method])
+      .sorted(params[:sort_by], params[:direction])
   end
 
   def full_name

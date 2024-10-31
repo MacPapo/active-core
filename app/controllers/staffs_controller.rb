@@ -2,7 +2,7 @@
 
 # Staff Controller
 class StaffsController < ApplicationController
-  before_action :set_staff, only: %i[show edit update destroy]
+  before_action :set_staff, only: %i[show edit update destroy restore]
   before_action :set_roles, only: %i[new edit]
 
   # GET /staffs
@@ -56,6 +56,12 @@ class StaffsController < ApplicationController
   def destroy
     @staff.discard
     redirect_to staffs_url, notice: t('.destroy_succ')
+  end
+
+  # PATCH /staffs/1/restore
+  def restore
+    @staff.undiscard
+    redirect_to staffs_url, notice: t('.restore_succ')
   end
 
   private

@@ -37,19 +37,32 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
+    @sort_by = params[:sort_by] || 'updated_at'
+    @direction = params[:direction] || 'desc'
     @activities = @user.activities.pluck(:name, :id)
 
-    filters = {
+    sfilters = {
       visibility: params[:visibility],
       name: params[:name],
       activity_id: params[:activity_id],
       open: params[:sub_open],
-      sort_by: @sort_by || 'updated_at',
-      direction: @direction || 'desc'
+      sort_by: @sort_by,
+      direction: @direction
     }
 
-    @pagy_sub, @subscriptions = pagy(@user.sfilter(filters))
-    @pagy_pay, @payments = pagy(@user.payments)
+    pfilters = {
+      visibility: params[:visibility],
+      name: params[:name],
+      type: params[:payable_type],
+      method: params[:payment_method],
+      from: params[:date_from],
+      to: params[:date_to],
+      sort_by: @sort_by,
+      direction: @direction
+    }
+
+    @pagy_sub, @subscriptions = pagy(@user.sfilter(sfilters))
+    @pagy_pay, @payments = pagy(@user.pfilter(pfilters))
   end
 
   # GET /users/new

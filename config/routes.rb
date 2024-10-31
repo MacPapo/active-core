@@ -60,12 +60,18 @@ Rails.application.routes.draw do
 
     # Only for authenticated ADMIN!
     authenticated :staff, -> { _1.admin? } do
-      resources :staffs
+      resources :staffs do
+        member do
+          patch :restore
+        end
+      end
+
       resources :legal_guardians do
         collection do
           get 'find_by_email'
         end
       end
+
       resources :activities do
         member do
           get 'plans'
@@ -73,8 +79,18 @@ Rails.application.routes.draw do
           patch :restore
         end
       end
-      resources :activity_plans
-      resources :payments
+
+      resources :activity_plans do
+        member do
+          patch :restore
+        end
+      end
+
+      resources :payments do
+        member do
+          patch :restore
+        end
+      end
 
       resources :memberships do
         member do

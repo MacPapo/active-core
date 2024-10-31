@@ -14,5 +14,4 @@ module TableHelper
       )
     end
   end
-
 end

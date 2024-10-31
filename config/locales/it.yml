@@ -68,7 +68,8 @@ it:
         phone: "Numero di Telefono"
         birth_day: "Data di Nascita"
         users: "Utenti Associati"
-
+        updated_at: "Data aggiornamento"
+        created_at: "Data creazione"
       activity:
         name: "Nome Attività"
         num_participants: "Numero partecipanti"
@@ -340,11 +341,13 @@ it:
     new:
       title: "Inserimento di un Nuovo Piano per questa Attività"
     create:
-      create_succ: "Il Piano è stato creato correttamente"
+      create_succ: "Il piano è stato creato correttamente"
     update:
-      update_succ: "Il Piano è stato aggiornato correttamente"
+      update_succ: "Il piano è stato aggiornato correttamente"
     destroy:
-      destroy_succ: "Il Piano è stato eliminato correttamente"
+      destroy_succ: "Il piano è stato eliminato correttamente"
+    restore:
+      restore_succ: "Il piano è stato ripristinato correttamente"
 
   payments:
     index:
@@ -366,6 +369,8 @@ it:
       update_succ: "Il pagamento è stato aggiornato correttamente."
     destroy:
       destroy_succ: "Il pagamento è stato distrutto correttamente."
+    restore:
+      restore_succ: "Il pagamento è stato ripristinato correttamente"
     new:
       title: "Inserimento di un Nuovo Pagamento"
       payment_already_registered: "Ridirezionato qui per non inserire un pagamento doppio"
@@ -387,11 +392,13 @@ it:
     form:
       sel_user: "Cerca l'utente per nome..."
     create:
-      create_succ: "Il Collaboratore è stato creato correttamente"
+      create_succ: "Il collaboratore è stato creato correttamente"
     update:
-      update_succ: "Il Collaboratore è stato aggiornato correttamente"
+      update_succ: "Il collaboratore è stato aggiornato correttamente"
     destroy:
-      destroy_succ: "Il Collaboratore è stato eliminato correttamente"
+      destroy_succ: "Il collaboratore è stato eliminato correttamente"
+    restore:
+      restore_succ: "Il collaboratore è stato ripristinato correttamente"
     edit:
       title: "Modifica Collaboratore"
     new:
@@ -463,7 +470,7 @@ it:
 
   memberships:
     restore:
-      restore_succ: "La Quota Associativa è stata ripristinata correttamente"
+      restore_succ: "La quota associativa è stata ripristinata correttamente"
     renew_form:
       date_help: "La DATA INIZIO si riferisce alla data in cui si vuole rinnovare la quota associativa."
     renew_update:

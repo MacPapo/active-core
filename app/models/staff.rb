@@ -25,6 +25,10 @@ class Staff < ApplicationRecord
            :age, :email, :phone, :birth_day, 'affiliated?',
            :med_cert_issue_date, :med_cert_exp_date, to: :user
 
+  after_undiscard do
+    user&.undiscard
+  end
+
   scope :by_name, ->(query) do
     if query.present?
       where(

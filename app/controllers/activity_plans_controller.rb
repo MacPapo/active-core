@@ -2,7 +2,7 @@
 
 # Activity Plans Controller
 class ActivityPlansController < ApplicationController
-  before_action :set_activity_plan, only: %i[edit update destroy]
+  before_action :set_activity_plan, only: %i[edit update destroy restore]
   before_action :set_activity, only: %i[new]
 
   # GET /activity_plans/new
@@ -44,6 +44,11 @@ class ActivityPlansController < ApplicationController
   def destroy
     @activity_plan.discard
     redirect_to activity_path(@activity_plan.activity), notice: t('.destroy_succ')
+  end
+
+  def restore
+    @activity_plan.undiscard
+    redirect_to activities_url, notice: t('.restore_succ')
   end
 
   private

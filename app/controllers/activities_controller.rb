@@ -82,7 +82,7 @@ class ActivitiesController < ApplicationController
     redirect_to activities_url, notice: t('.destroy_succ')
   end
 
-  # PATCH /users/1
+  # PATCH /activities/1/restore
   def restore
     @activity.undiscard
     redirect_to activities_url, notice: t('.restore_succ')

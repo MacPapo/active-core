@@ -81,9 +81,24 @@
                                     <i class="bi text-secondary bi-pencil-fill"></i>
                                 <% end %>
 
-                                <%= button_to payment, class: 'btn text-secondary btn-danger btn-sm border border-secondary-subtle', method: :delete, data: { turbo_frame: "_top", turbo_confirm: t('global.delete_dialog') }, form: {style: 'display:inline-block;'} do %>
-                                    <i class="bi bi-trash3-fill"></i>
-                                <% end %>
+                                <% if payment.discarded? %>
+		                    <%= button_to restore_payment_path(payment),
+				                  class: 'btn btn-restore btn-sm border border-secondary-subtle',
+				                  method: :patch,
+				                  data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
+				                  form: {style: 'display:inline-block;'} do %>
+			                <i class="bi bi-recycle"></i>
+		                    <% end %>
+		                <% else %>
+                                    <%= button_to payment,
+                                                  class: 'btn text-secondary btn-danger btn-sm border border-secondary-subtle',
+                                                  method: :delete,
+                                                  data: { turbo_frame: "_top", turbo_confirm: t('global.delete_dialog') },
+                                                  form: {style: 'display:inline-block;'} do %>
+                                        <i class="bi bi-trash3-fill"></i>
+                                    <% end %>
+		                <% end %>
+
                             <% end %>
                         </td>
                     </tr>
