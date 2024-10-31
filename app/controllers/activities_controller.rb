@@ -50,7 +50,6 @@ class ActivitiesController < ApplicationController
 
   # GET /activities/new
   def new
-    p 'VENGO CHIAMATOOOO???--------------------------------------------------------------------------------'
     @activity = Activity.new
   end
 

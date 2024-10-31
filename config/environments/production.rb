@@ -1,6 +1,9 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # Stop Prawn to warn about fonts
+  Prawn::Fonts::AFM.hide_m17n_warning = true
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -28,6 +31,7 @@ Rails.application.configure do
 
   # Do not fall back to assets pipeline if a precompiled asset is missed.
   config.assets.compile = true
+  config.assets.check_precompiled_asset = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"

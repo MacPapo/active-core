@@ -5,13 +5,13 @@ default: &default
   workers:
     - queues: "*"
       threads: 3
+      polling_interval: 2
       processes: <%= ENV.fetch("JOB_CONCURRENCY", 1) %>
-      polling_interval: 0.1
 
     - queues: [ real_time, background ]
-      threads: 3
+      threads: 5
+      polling_interval: 1
       processes: <%= ENV.fetch("JOB_CONCURRENCY", 2) %>
-      polling_interval: 0.1
 
 development:
   <<: *default
