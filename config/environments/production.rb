@@ -56,7 +56,8 @@ Rails.application.configure do
   config.force_ssl = false
 
   # Log to STDOUT by default
-  config.logger = ActiveSupport::Logger.new(STDOUT)
+  # Changed to file-based logging
+  config.logger = ActiveSupport::Logger.new("log/#{Time.now.strftime('%Y%m%d%H%M%S')}.log")
     .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
     .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
 

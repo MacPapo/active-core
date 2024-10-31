@@ -30,6 +30,9 @@
 /tmp/storage/*
 !/tmp/storage/.keep
 
+# Ignore CSV files to be imported
+/lib/seeds/*.csv
+
 # Ignore assets.
 /node_modules/
 /app/assets/builds/*
