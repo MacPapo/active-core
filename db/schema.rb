@@ -111,6 +111,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_10_080023) do
     t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_receipt_memberships_on_discarded_at"
     t.index ["membership_id"], name: "index_receipt_memberships_on_membership_id"
+    t.index ["number", "year"], name: "index_receipt_memberships_on_number_and_year", unique: true
     t.index ["receipt_id", "id"], name: "index_receipt_memberships_on_receipt_id_and_id", unique: true
     t.index ["receipt_id"], name: "index_receipt_memberships_on_receipt_id"
     t.index ["user_id"], name: "index_receipt_memberships_on_user_id"
@@ -126,6 +127,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_10_080023) do
     t.datetime "updated_at", null: false
     t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_receipt_subscriptions_on_discarded_at"
+    t.index ["number", "year"], name: "index_receipt_subscriptions_on_number_and_year", unique: true
     t.index ["receipt_id", "id"], name: "index_receipt_subscriptions_on_receipt_id_and_id", unique: true
     t.index ["receipt_id"], name: "index_receipt_subscriptions_on_receipt_id"
     t.index ["subscription_id"], name: "index_receipt_subscriptions_on_subscription_id"

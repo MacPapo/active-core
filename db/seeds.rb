@@ -49,7 +49,7 @@ admin_user.save
 staff_admin = Staff.new(
   user: admin_user,
   nickname: 'admin',
-  password: Rails.application.credentials.admin_pwd,
+  password: Rails.application.credentials.dig(:development, :admin, :password),
   role: :admin
 )
 

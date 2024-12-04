@@ -40,7 +40,7 @@ gem "discard", "~> 1.3"
 
 gem "receipts", "~> 2.4"
 
-gem "solid_queue", "~> 1.0.0"
+gem "solid_queue", "~> 1.0.2"
 
 gem "mission_control-jobs", "~> 0.3.1"
 
@@ -61,7 +61,6 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows]
@@ -69,6 +68,7 @@ group :development, :test do
   gem "pry", "~> 0.14.2"
   gem "pry-rails", "~> 0.3.11"
 
+  gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
   gem "factory_bot_rails", "~> 6.4"
   gem "rspec-rails", "~> 6.1"
