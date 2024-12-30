@@ -27,6 +27,8 @@ class Payment < ApplicationRecord
     receipt&.undiscard
   end
 
+  after_update :sync_receipt_date, if: -> { saved_change_to_date? }
+
   enum :method, { cash: 0, pos: 1, bank_transfer: 2, voucher: 3 }, default: :cash
 
   scope :by_created_at, ->(from, to) do
@@ -75,6 +77,10 @@ class Payment < ApplicationRecord
     order("#{sort_by} #{direction}")
   end
 
+  def sync_receipt_date
+    receipt&.update(date: date)
+  end
+
   def self.filter(params)
     case params[:visibility]
     when 'all'
@@ -96,7 +102,7 @@ class Payment < ApplicationRecord
     return if period.blank? || params.blank?
 
     mid = Time.zone.now.beginning_of_day
-    select_range = ->(y) { kept.by_created_at(mid + y.first, mid + y.last).sorted(params[:sort_by], params[:direction]) }
+    select_range = ->(y) { kept.by_method('cash').by_created_at(mid + y.first, mid + y.last).sorted(params[:sort_by], params[:direction]) }
 
     select_range.call(period == :morning ? [7.hours, 14.hours] : [14.hours, 21.hours])
   end

@@ -31,11 +31,6 @@ production:
     schedule: every day
 
   database_backup:
-    calss: DatabaseBackupJob
-    queue: background
-    schedule: every day
-
-  database_backup:
-    calss: DeleteStaleLegalGuardiansJob
+    class: DatabaseBackupJob
     queue: background
     schedule: every day

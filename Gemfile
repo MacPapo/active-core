@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.3.5"
+ruby "3.3.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.3", ">= 7.1.3.4"
@@ -40,7 +40,7 @@ gem "discard", "~> 1.3"
 
 gem "receipts", "~> 2.4"
 
-gem "solid_queue", "~> 1.0.2"
+gem "solid_queue"
 
 gem "mission_control-jobs", "~> 0.3.1"
 

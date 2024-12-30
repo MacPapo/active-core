@@ -55,8 +55,9 @@ class SubscriptionsController < ApplicationController
       ActiveRecord::Base.transaction do
         @subscription = Subscription.build(subscription_params)
 
-        check_if_user_already_subscribed(user_id)
+        raise t('.create_no_membership') unless @user.active_membership?
 
+        check_if_user_already_subscribed(user_id)
         if @subscription.save
           if params[:open] && params[:open].to_i == 1
             raise t('.create_duplicate_open') if open_already_exists(user_id)
@@ -72,7 +73,7 @@ class SubscriptionsController < ApplicationController
     rescue => e
       real_direction = params[:direction]&.to_i
       set_user_and_activities(user_id) if real_direction.zero?
-      set_activity_and_plan(subscription_params[:activity_id]) if !real_direction.zero?
+      set_activity_and_plan(subscription_params[:activity_id]) unless real_direction.zero?
       flash.now[:alert] = e
       render :new, status: :unprocessable_entity
     end

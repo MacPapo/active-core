@@ -188,7 +188,7 @@
                         <%= t '.legal_guardian' %>
                     </p>
 
-                    <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2' %>
+                    <%= link_to "#{lg.full_name}",  legal_guardian_path(lg), class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2', data: { turbo_frame: "_top" } %>
                 </div>
             <% end %>
         </div>
@@ -255,7 +255,7 @@
                             <%= user_attribute_to_string.('staff') %>
                         </p>
                         <div class="card-text">
-                            <%= link_to "#{staff.nickname}", staff, class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2' %>
+                            <%= link_to "#{staff.nickname}", staff, class: 'fs-5 fw-semibold link-secondary link-underline-dark link-offset-2', data: { turbo_frame: "_top" } %>
                         </div>
                     </div>
 
@@ -285,7 +285,9 @@
                     <%= t('.no_membership') %>
                 </p>
 
-                <%= link_to new_membership_path(user_id: user&.id), class: "btn border border-secondary-subtle fs-6 text-secondary bg-dark" do %>
+                <%= link_to new_membership_path(user_id: user&.id),
+														class: "btn border border-secondary-subtle fs-6 text-secondary bg-dark",
+														data: { turbo_frame: "_top" } do %>
                     <i class="text-secondary bi bi-plus-lg"></i>
 		    <span class="ms-1">
 			<%= t('.add_membership') %>
@@ -337,7 +339,9 @@
 		    <% end %>
 		</div>
 
-		<%= link_to new_subscription_path(user_id: user), class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
+		<%= link_to new_subscription_path(user_id: user),
+								class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2',
+								data: { turbo_frame: "_top" } do %>
 		    <i class="text-secondary bi bi-bar-chart-fill"></i>
 		    <span class="ms-1">
                         <%= t '.add_sub' %>
@@ -404,11 +408,15 @@
 
 					<!-- Action buttons -->
 					<td class="text-end">
-					    <%= link_to subscription_path(subscription), class: 'btn btn-info btn-sm border border-secondary-subtle' do %>
+					    <%= link_to subscription_path(subscription),
+													class: 'btn btn-info btn-sm border border-secondary-subtle',
+													data: { turbo_frame: "_top" } do %>
 						<i class="bi bi-eye-fill"></i>
 					    <% end %>
 
-					    <%= link_to edit_subscription_path(subscription), class: 'btn btn-warning btn-sm border border-secondary-subtle' do %>
+					    <%= link_to edit_subscription_path(subscription),
+													class: 'btn btn-warning btn-sm border border-secondary-subtle',
+													data: { turbo_frame: "_top" } do %>
 						<i class="bi bi-pencil-fill"></i>
 					    <% end %>
 
@@ -446,7 +454,9 @@
 		    <%= t '.no_subs' %>
 		</p>
 
-		<%= link_to new_subscription_path(user_id: user), class: 'btn btn-dark text-secondary border border-secondary-subtle' do %>
+		<%= link_to new_subscription_path(user_id: user),
+								class: 'btn btn-dark text-secondary border border-secondary-subtle',
+								data: { turbo_frame: "_top" } do %>
 		    <i class="text-secondary bi bi-bar-chart-fill"></i>
 		    <span class="ms-1">
 			<%= t '.add_sub' %>

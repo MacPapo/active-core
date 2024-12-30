@@ -1,4 +1,6 @@
-<%= form_with(model: user, data: { controller: 'agecheck' }) do |form| %>
+<%= form_with(model: user
+    # data: { controller: 'agecheck' }
+    ) do |form| %>
     <% if user.errors.any? %>
         <div style="color: red">
             <h2><%= t('global.forms.messages.errors', count: user.errors.count) %></h2>
@@ -22,9 +24,10 @@
             <%= form.date_field :birth_day,
                 min: 90.years.ago,
                 max: 2.years.ago,
-                class: 'form-control',
-                'data-agecheck-target' => "birthDate",
-                data: { action: "change->agecheck#checkAge" } %>
+                class: 'form-control'
+                # 'data-agecheck-target' => "birthDate",
+                # data: { action: "change->agecheck#checkAge" }
+            %>
         </div>
     </div>
 
@@ -67,10 +70,14 @@
         </div>
     </div>
 
-    <!-- Target del tutore legale -->
-    <div id="legal-guardian-fields" class="mb-3" data-agecheck-target="guardianSection" style="display: none;">
+  <!-- TODO: da riguardare quando si modificherà il modulo -->
+  <% if false %>
+    <div id="legal-guardian-fields" class="mb-3"
 
-        <div class="container-fluid py-1">
+         style="display: none;">
+<!--      data-agecheck-target="guardianSection"-->
+
+      <div class="container-fluid py-1">
             <hr>
         </div>
 
@@ -137,6 +144,7 @@
             </div>
         <% end %>
     </div>
+    <% end %>
 
     <div class="mt-4">
         <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>

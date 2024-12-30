@@ -55,7 +55,7 @@
 
 <%= render 'partials/index_container', title: model_to_string(Payment, 2), tframe: :payments do %>
     <div id="payments" class="table-responsive">
-        <%= render 'partials/payments_table', payments: @payments, frame: :payments, path: payments_path, fmt: :long %>
+        <%= render 'partials/payments_table', payments: @payments, frame: :payments, path: payments_path, fmt: :simple %>
         <%== pagy_bootstrap_nav(@pagy) %>
     </div>
 <% end %>

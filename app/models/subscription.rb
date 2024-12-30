@@ -152,7 +152,7 @@ class Subscription < ApplicationRecord
   end
 
   def summary
-    "#{self.class.model_name.human} - #{activity.name} (#{activity_plan.humanize_plan}) #{open? ? 'OPEN' : ''} (#{I18n.l(start_date)} al #{I18n.l(end_date)})"
+    "#{I18n.t('receipts.subscription')} - #{activity.name} (#{activity_plan.humanize_plan}) #{open? ? 'OPEN' : ''} (#{I18n.l(start_date)} al #{I18n.l(end_date)})"
   end
 
   private
@@ -160,12 +160,12 @@ class Subscription < ApplicationRecord
   def set_start_date
     return if activity_plan.blank? || activity_plan.one_entrance?
 
-    date = start_date
+    sd = start_date
 
-    self.start_date = date.beginning_of_month
+    self.start_date = sd.at_beginning_of_month.to_date
     return unless activity_plan.half_month?
 
-    self.start_date += 14.days if date.after?(start_date + 14.days)
+    self.start_date += 14.days if activity_plan.half_month? && sd.day > 14
   end
 
   def set_end_date_if_blank
@@ -179,7 +179,7 @@ class Subscription < ApplicationRecord
 
     case activity_plan
     when -> { _1.one_year? }
-      user.membership.end_date
+      user.membership&.end_date
     when -> { _1.three_months? }
       start_date.months_since(2).at_end_of_month
     else
@@ -188,16 +188,16 @@ class Subscription < ApplicationRecord
   end
 
   def months_handler(plan)
-    return start_date.at_end_of_month unless plan.half_month?
+    return half_month_handler if plan.half_month?
 
-    half_month_handler
+    start_date.at_end_of_month.to_date
   end
 
   def half_month_handler
     date = start_date
-    half = date.beginning_of_month + 14.days
+    half = (date.beginning_of_month + 14.days).to_date
 
-    date <= half ? half : start_date.at_end_of_month
+    date <= half ? half : start_date.at_end_of_month.to_date
   end
 
   # FIX THIS

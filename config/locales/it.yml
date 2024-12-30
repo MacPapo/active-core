@@ -1,4 +1,8 @@
 it:
+  time:
+    formats:
+      simple: "%d/%m/%Y %H:%M"
+      hours: "%H:%M"
   empty: "Da Inserire"
   true: "Si"
   false: "No"
@@ -160,6 +164,7 @@ it:
       method: 'Metodo di pagamento:'
       description: 'Descrizione'
       amount: 'Ammontare'
+      footer: '<b>Grazie per il tuo sostegno!</b><br>ASD Querini Fit promuove il benessere fisico e lo sport per tutti.<br>Per ulteriori informazioni o per conoscere le nostre attività, visita il nostro sito o contattaci al numero/email indicato.<br> <b>Restiamo in movimento insieme!</b>'
       no_receipt_found: 'Non è stata trovata nessuna ricevuta per questo pagamento!'
     restore: "Ripristina"
     visible: "Attivi"
@@ -236,7 +241,6 @@ it:
 
     table:
       direction: "Direzione"
-      activity: "Attività"
       status: "Stato"
       name: "Nome"
       surname: "Cognome"
@@ -443,6 +447,7 @@ it:
     renew_update:
       renew_succ: "L'abbonamento è stato aggiornato correttamente, per attivarlo procedi al pagamento."
     create:
+      create_no_membership: "L'utente non ha pagato la Quota Associativa!"
       create_duplicate_user: "L'utente è già registrato a questo corso, controlla!"
       create_duplicate_open: "L'utente è già registrato a ad un corso con modalità OPEN, controlla!"
       merge_failed: "Errore nella fusione tra l'attività richiesta e l'abbonamento alla Sala pesi nell'operazione di OPEN"
@@ -501,6 +506,7 @@ it:
       membership_inactive: "Redirezionato qui per non rinnovare due volte la stessa Quota Associativa"
 
   receipts:
+    subscription: "Quota Istituzionale"
     destroy:
       delete_succ: "La ricevuta è stata eliminata correttamente"
 

@@ -4,15 +4,13 @@
 class Staff < ApplicationRecord
   include Discard::Model
 
-  # TODO on delete nullify!! If I delete a staff I delete also all the operation that has done
-
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
   devise :database_authenticatable, :timeoutable, :trackable, authentication_keys: [:nickname]
   belongs_to :user
 
-  has_many :memberships, dependent: :destroy
-  has_many :subscriptions, dependent: :destroy
+  has_many :memberships, dependent: :nullify
+  has_many :subscriptions, dependent: :nullify
 
   has_many :subscription_payments, through: :subscriptions
   has_many :membership_payments, through: :membership

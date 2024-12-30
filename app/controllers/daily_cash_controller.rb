@@ -5,7 +5,6 @@ class DailyCashController < ApplicationController
   before_action :set_ordering, only: [:index]
   before_action :set_filters, only: [:index]
 
-  # TODO fix filters
   def index
     @morning_item = Payment.daily_cash(:morning, @filters).includes(:staff)
     @afternoon_item = Payment.daily_cash(:afternoon, @filters).includes(:staff)

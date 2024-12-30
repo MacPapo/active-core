@@ -69,7 +69,7 @@ class LegalGuardiansController < ApplicationController
 
   # DELETE /legal_guardians/1
   def destroy
-    @legal_guardian.discard
+    @legal_guardian.destroy!
     redirect_to legal_guardians_url, notice: t('.destroy_succ')
   end
 

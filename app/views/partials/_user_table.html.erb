@@ -62,13 +62,21 @@
             <!-- Activities -->
             <td>
                 <% subs = user.subscriptions.kept.where.missing(:normal_subscription) %>
-                <% subs.each do |sub| %>
-                    <% presenter = SubscriptionPresenter.new(sub) %>
-                    <%= link_to presenter.appropriate_path(user),
-				method: presenter.method,
-				class: "btn btn-#{ presenter.css_color } text-secondary border border-secondary-subtle badge rounded-pill",
-				data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
+                <% if subs.nil? || subs.empty? %>
+                    <%= link_to new_subscription_path(user_id: user.id),
+                                class: "btn btn-dark text-secondary border border-secondary-subtle badge rounded-pill",
+                                data: { turbo_frame: "_top" } do %>
+                      <i class="me-2 text-secondary bi bi-plus-circle-fill"></i> <%= t('activities.activity.add_to_activity') %>
+                    <% end %>
+                  <% else %>
+                    <% subs.each do |sub| %>
+                      <% presenter = SubscriptionPresenter.new(sub) %>
+                      <%= link_to presenter.appropriate_path(user),
+                                  method: presenter.method,
+                                  class: "btn btn-#{ presenter.css_color } text-secondary border border-secondary-subtle badge rounded-pill",
+                                  data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
                         <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
+                      <% end %>
                     <% end %>
                 <% end %>
             </td>

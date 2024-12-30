@@ -4,13 +4,10 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
     static targets = ["email", "name", "surname", "phone", "birthDay"]
 
-    connect() {
-    }
-
     findGuardian() {
         const email = this.emailTarget.value
 
-        console.log("Finding guardian with email:", email); // Aggiungi questo per debug
+        console.log("Finding guardian with email:", email);
 
         if (email === "") {
             this.clearFields()
