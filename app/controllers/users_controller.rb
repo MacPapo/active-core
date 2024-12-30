@@ -92,7 +92,8 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(extract_user_params(user_params))
-      update_this_lg(@user, params.dig(:user, :legal_guardian))
+      # TODO: review membership papers
+      # update_this_lg(@user, params.dig(:user, :legal_guardian))
 
       redirect_to user_url(@user), notice: t('.update_succ')
     else
