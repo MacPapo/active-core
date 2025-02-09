@@ -32,7 +32,11 @@ class UsersController < ApplicationController
       @users = User.kept.joins(:membership).where('membership.status' => :active).limit(50)
     end
 
-    respond_to { |f| f.json { render json: localize_activity_search_result(@users.select(:id, :name, :surname, :birth_day)) } }
+    respond_to do |f|
+      f.json do
+        render json: localize_activity_search_result(@users.select(:id, :name, :surname, :birth_day))
+      end
+    end
   end
 
   # GET /users/1

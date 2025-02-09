@@ -12,6 +12,7 @@ class Subscription < ApplicationRecord
   delegate :cost, :affiliated_cost, prefix: 'plan', to: :activity_plan
   delegate :active_membership?, to: :user
 
+  # TODO
   before_validation :set_end_date_if_blank
   after_validation  :set_start_date, if: -> { will_save_change_to_attribute?('start_date') }
 

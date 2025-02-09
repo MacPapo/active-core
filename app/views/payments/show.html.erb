@@ -1,7 +1,7 @@
 <%= render 'partials/container_with_receipt', obj: @payment, title: t('.title') do %>
 
     <div>
-        <% unless @payment.method == 'voucher' %>
+        <% if @payment.method == 'cash' %>
             <%= link_to receipt_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2 fs-5 text-secondary' do %>
                 <i class="bi bi-receipt me-1"></i>
                 <%= t('global.receipt_button') %>

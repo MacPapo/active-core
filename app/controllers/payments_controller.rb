@@ -7,7 +7,7 @@ class PaymentsController < ApplicationController
   before_action :set_filters, only: [:index]
   before_action :set_type_and_id, only: %i[new create]
 
-  after_action :create_receipt, only: [:create], if: ->{ @payment.persisted? }
+  after_action :create_receipt, only: [:create], if: -> { @payment.persisted? }
 
   # GET /payments or /payments.json
   def index

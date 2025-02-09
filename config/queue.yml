@@ -5,10 +5,10 @@ default: &default
       concurrency_maintenance_interval: 300
   workers:
     - queues: "*"
-      threads: 3
+      threads: 1
       polling_interval: 2
     - queues: [ real_time, background ]
-      threads: 5
+      threads: 1
       polling_interval: 0.5
 
 development:

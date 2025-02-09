@@ -1,4 +1,4 @@
-<%= form_with(model: subscription, data: { controller: 'activity-search-user' }) do |form| %>
+<%= form_with(model: subscription, data: { controller: 'activity-search-user toggle-open' }) do |form| %>
     <% if subscription.errors.any? %>
         <div style="color: red">
             <h2><%= t('global.forms.messages.errors', count: subscription.errors.count) %></h2>
@@ -21,28 +21,35 @@
         </div>
     </div>
 
-    <fieldset disabled>
-        <div class="row mb-3">
-            <div class="col">
-                <%= form.label :user_id, class: 'form-label fw-semibold text-secondary' %>
-                <%= form.text_field :activity_id, class: 'form-control', value: @subscription&.user&.full_name%>
-            </div>
-
-            <div class="col">
-                <%= form.label :activity_plan_id, class: 'form-label fw-semibold text-secondary' %>
-                <%= form.text_field :activity_plan_id, class: 'form-control', value: @subscription&.activity_plan&.humanize_plan %>
-            </div>
+    <div class="row mb-3">
+      <% if @activities %>
+      <div class="col">
+        <%= form.label :activity_id, class: 'form-label fw-semibold text-secondary' %>
+        <%= form.collection_select :activity_id, @activities, :id, :name,
+            { prompt: "#{t('.sel_activity')}" },
+            { class: 'form-select', data: { action: "change->activity-search-user#loadPlans change->toggle-open#toggleOpenField" },
+            'data-toggle-open-target' => 'activitySelect' }
+        %>
+      </div>
+      <% else %>
+        <div class="col">
+          <%= form.label :activity_id, class: 'form-label fw-semibold text-secondary' %>
+          <%= form.text_field :activity_id, class: 'form-control', value: @subscription&.activity.name, disabled: true %>
         </div>
-    </fieldset>
+        <%= form.hidden_field :activity_id, value: @subscription&.activity&.id %>
+      <% end %>
+      <div class="col">
+        <%= form.label :activity_plan_id, class: 'form-label fw-semibold text-secondary' %>
+        <%= form.collection_select :activity_plan_id, @plans || [], :id, :humanize_plan, {}, { class: 'form-select', 'data-activity-search-user-target' => "plans" } %>
+      </div>
+    </div>
 
-    <div class="form-check mb-3">
-        <%= check_box_tag(:open, { id: 'open_checkbox', class: 'form-check-input', checked: @subscription&.open?, disabled: true }) %>
-        <%= label_tag 'open', 'Open', class: 'form-check-label fw-semibold text-secondary' %>
-        <%= hidden_field_tag(:open, @subscription&.open? ? "1" : "0") %>
+    <div class="form-check mt-4" data-toggle-open-target="openField">
+      <%= label_tag 'open', 'Open', class: 'text-secondary fw-semibold form-label' %>
+      <%= check_box_tag(:open, { class: 'form-check-input', checked: @subscription.open?, disabled: !(current_staff.admin? || @activities) }) %>
     </div>
 
     <%= form.hidden_field :user_id, value: @subscription&.user&.id %>
-    <%= form.hidden_field :activity_id, value: @subscription&.activity&.id %>
     <%= form.hidden_field :staff_id, value: current_staff.id %>
 
     <div class="mt-4">

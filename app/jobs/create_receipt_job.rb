@@ -6,7 +6,7 @@ class CreateReceiptJob < ApplicationJob
 
   def perform(*args)
     @type, @payment, eid = args
-    return if @payment.present? && @payment.method == 'voucher'
+    return if @payment.present? && @payment.method != 'cash'
 
     @current_year = Time.zone.today.year
     ActiveRecord::Base.transaction do

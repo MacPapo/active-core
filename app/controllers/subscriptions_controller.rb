@@ -45,6 +45,9 @@ class SubscriptionsController < ApplicationController
   # GET /subscriptions/1/edit
   def edit
     @activity = @subscription.activity
+    if (@subscription&.user&.id && @subscription.inactive?) || current_staff.admin?
+      set_user_and_activities(@subscription.user.id)
+    end
     set_plans(@activity)
   end
 
@@ -58,19 +61,17 @@ class SubscriptionsController < ApplicationController
         raise t('.create_no_membership') unless @user.active_membership?
 
         check_if_user_already_subscribed(user_id)
-        if @subscription.save
-          if params[:open] && params[:open].to_i == 1
-            raise t('.create_duplicate_open') if open_already_exists(user_id)
+        raise t('.create_failed') unless @subscription.save
 
-            create_open_subscription
-          end
+        if params[:open] && params[:open].to_i == 1
+          raise t('.create_duplicate_open') if open_already_exists(user_id)
 
-          redirect_to new_payment_path(eid: @subscription.id, type: 'sub'), notice: t('.create_succ')
-        else
-          raise t('.create_failed')
+          create_open_subscription
         end
+
+        redirect_to new_payment_path(eid: @subscription.id, type: 'sub'), notice: t('.create_succ')
       end
-    rescue => e
+    rescue StandardError => e
       real_direction = params[:direction]&.to_i
       set_user_and_activities(user_id) if real_direction.zero?
       set_activity_and_plan(subscription_params[:activity_id]) unless real_direction.zero?
@@ -212,6 +213,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def connect_weight_room
+    set_user if @user.nil?
     weight_room_sub = @user.subscriptions.find_by(activity: Activity.find_by(name: 'Sala pesi'))
     weight_room_plans = weight_room_sub.activity.activity_plans
     plan = weight_room_plans.find_by(plan: :one_month)
@@ -223,12 +225,10 @@ class SubscriptionsController < ApplicationController
       staff_id: subscription_params[:staff_id]
     )
 
-    if weight_room_sub.save
-      @subscription.update(open_subscription_id: weight_room_sub.id)
-      @subscription.save
-    else
-      raise t('.merge_failed')
-    end
+    raise t('.merge_failed') unless weight_room_sub.save
+
+    @subscription.update(open_subscription_id: weight_room_sub.id)
+    @subscription.save
   end
 
   # Only allow a list of trusted parameters through.

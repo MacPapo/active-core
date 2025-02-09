@@ -9,13 +9,14 @@
         <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('plan') %></th>
         <th><%= sub_sortable_column.call('start_date', Subscription.human_attribute_name('start_date')) %></th>
 	<th><%= sub_sortable_column.call('end_date', Subscription.human_attribute_name('end_date')) %></th>
+        <th class="text-primary text-begin fw-semibold"><%= t 'global.table.status' %></th>
         <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
     </tr>
 <% end %>
 
 <%= render 'partials/table' do %>
     <% subscriptions.each do |subscription| %>
-
+        <% presenter = SubscriptionPresenter.new(subscription) %>
         <tr class="align-middle">
 
             <!-- Name -->
@@ -55,6 +56,16 @@
             <td>
                 <%= l subscription.end_date %>
 	    </td>
+
+            <!-- Status -->
+            <td>
+	      <%= link_to presenter.appropriate_path(user),
+		  method: presenter.method,
+		  class: "btn btn-#{ presenter.css_color } text-secondary badge rounded-pill",
+		  data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
+	      <i class="<%= presenter.link_icon %>"></i> <%= presenter.status_title  %>
+	      <% end %>
+            </td>
 
             <!-- Action -->
             <td class="text-end">
