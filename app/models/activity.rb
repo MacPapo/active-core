@@ -30,24 +30,24 @@ class Activity < ApplicationRecord
 
   scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
 
-  scope :by_range, ->(range) do
+  scope :by_range, lambda { |range|
     return unless range.present? && range.to_i.positive?
 
     joins(:subscriptions).group(:activity_id).having('COUNT(*) = ?', range.to_i)
-  end
+  }
 
-  scope :by_max_num, ->(num) do
+  scope :by_max_num, lambda { |num|
     return unless num.present? && num.to_i.positive?
 
     where(num_participants: num.to_i)
-  end
+  }
 
-  scope :sorted, ->(sort_by, direction) do
+  scope :sorted, lambda { |sort_by, direction|
     return unless %w[name num_participants updated_at].include?(sort_by)
 
     direction = %w[asc desc].include?(direction) ? direction : 'asc'
     order("activities.#{sort_by} #{direction}")
-  end
+  }
 
   scope :order_by_updated_at, -> { order('updated_at desc') }
 
