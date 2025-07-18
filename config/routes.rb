@@ -29,7 +29,8 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :activities, except: %i[new edit update create destory restore] do
+      # Removed restore
+      resources :activities, except: %i[new edit update create destroy] do
         member do
           get 'plans'
           get 'name'
@@ -37,7 +38,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :activity_plans, except: %i[new edit create destory]
+      resources :activity_plans, except: %i[new edit create destroy]
 
       resources :payments, except: [:index]
 
