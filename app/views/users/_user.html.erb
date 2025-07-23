@@ -230,14 +230,14 @@
                         <%= membership_attribute_to_string.('status') %>
                     </p>
 
-		    <% presenter = MembershipPresenter.new(user.membership) %>
-		    <%= link_to presenter.appropriate_path(user),
-				method: presenter.method,
-				class: "btn btn-#{presenter.css_color} fs-6 border border-secondary-subtle fw-semibold text-secondary",
-				data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
-			<i class="<%= presenter.link_icon %>"></i>
-			<%= presenter.link_title %>
-		    <% end %>
+                    <% presenter = MembershipPresenter.new(user.membership) %>
+                    <%= link_to presenter.appropriate_path(user),
+                                method: presenter.method,
+                                class: "btn btn-#{presenter.css_color} fs-6 border border-secondary-subtle fw-semibold text-secondary",
+                                data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
+                        <i class="<%= presenter.link_icon %>"></i>
+                        <%= presenter.link_title %>
+                    <% end %>
                 </div>
             </div>
 
@@ -284,15 +284,7 @@
                 <p class="fs-5 fw-light text-secondary me-3 mb-0">
                     <%= t('.no_membership') %>
                 </p>
-
-                <%= link_to new_membership_path(user_id: user&.id),
-														class: "btn border border-secondary-subtle fs-6 text-secondary bg-dark",
-														data: { turbo_frame: "_top" } do %>
-                    <i class="text-secondary bi bi-plus-lg"></i>
-		    <span class="ms-1">
-			<%= t('.add_membership') %>
-		    </span>
-                <% end %>
+                <%= add_button_to new_membership_path(user_id: user), text: t('.add_membership') %>
             </div>
 
         <% end %>
@@ -309,160 +301,146 @@
         <!-- Subscriptions -->
         <% if user.subscriptions.length > 0 %>
 
-	    <div class="d-flex align-items-center">
-		<div class="flex-fill">
-		    <!-- Search form -->
-		    <%= render 'partials/search_form', loc: t('global.search_activity'), path: user_path, frame: :usersubscriptions, size: '500px', ctrls: 'filters' do |f| %>
-			<div class="row g-2 mb-2">
-			    <!-- Activity ID -->
-			    <div class="col">
-				<%= f.label :activity_id, t('global.activity_name'), class: 'form-label fw-semibold text-secondary' %>
-				<%= f.select :activity_id, @activities, { prompt: t('global.all-s') },
-				 class: 'form-select', data: { action: 'change->filters#submit' } %>
-			    </div>
+            <div class="d-flex align-items-center">
+                <div class="flex-fill">
+                    <!-- Search form -->
+                    <%= render 'partials/search_form', loc: t('global.search_activity'), path: user_path, frame: :usersubscriptions, size: '500px', ctrls: 'filters' do |f| %>
+                        <div class="row g-2 mb-2">
+                            <!-- Activity ID -->
+                            <div class="col">
+                                <%= f.label :activity_id, t('global.activity_name'), class: 'form-label fw-semibold text-secondary' %>
+                                <%= f.select :activity_id, @activities, { prompt: t('global.all-s') },
+                                 class: 'form-select', data: { action: 'change->filters#submit' } %>
+                            </div>
 
-			    <!-- OPEN -->
-			    <div class="col-md-2">
-				<%= f.label :sub_open, t('global.activity_open'), class: 'form-label fw-semibold text-secondary' %>
-				<%= f.select :sub_open, [[t('true'), true], [t('false'), false]], { prompt: t('global.all-m') },
-				 class: 'form-select', data: { action: 'change->filters#submit' } %>
-			    </div>
-			</div>
-			<div class="row mb-2">
-			    <!-- Visibility -->
-			    <div class="col">
-				<%= f.label :visibility, t('global.activity_visibility'), class: 'form-label fw-semibold text-secondary' %>
-				<%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
-				 class: 'form-select', data: { action: 'change->filters#submit' } %>
-			    </div>
-			</div>
-		    <% end %>
-		</div>
+                            <!-- OPEN -->
+                            <div class="col-md-2">
+                                <%= f.label :sub_open, t('global.activity_open'), class: 'form-label fw-semibold text-secondary' %>
+                                <%= f.select :sub_open, [[t('true'), true], [t('false'), false]], { prompt: t('global.all-m') },
+                                 class: 'form-select', data: { action: 'change->filters#submit' } %>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <!-- Visibility -->
+                            <div class="col">
+                                <%= f.label :visibility, t('global.activity_visibility'), class: 'form-label fw-semibold text-secondary' %>
+                                <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+                                 class: 'form-select', data: { action: 'change->filters#submit' } %>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
 
-		<%= link_to new_subscription_path(user_id: user),
-								class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2',
-								data: { turbo_frame: "_top" } do %>
-		    <i class="text-secondary bi bi-bar-chart-fill"></i>
-		    <span class="ms-1">
-                        <%= t '.add_sub' %>
-		    </span>
-                <% end %>
-	    </div>
+                <%= add_button_to new_subscription_path(user_id: user), text: t('.add_sub') %>
+            </div>
 
-	    <%= turbo_frame_tag :usersubscriptions do %>
-		<div class="table-responsive">
-		    <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
-			<table class="table table-borderless table-striped mb-0">
-			    <thead class="table-secondary">
-				<tr class="fs-6">
-				    <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('activity') %></th>
-				    <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('activity_plan') %></th>
-				    <th  class="text-primary fw-semibold"><%= Subscription.human_attribute_name('start_date') %></th>
-				    <th  class="text-primary fw-semibold"><%= Subscription.human_attribute_name('end_date') %></th>
-				    <th  class="text-primary fw-semibold"><%= Subscription.human_attribute_name('open') %></th>
-				    <th  class="text-primary fw-semibold"><%= Subscription.human_attribute_name('status') %></th>
-				    <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
-				</tr>
-			    </thead>
+            <%= turbo_frame_tag :usersubscriptions do %>
+                <div class="table-responsive">
+                    <div class="rounded-3 border border-secondary-subtle overflow-hidden mb-3">
+                        <table class="table table-borderless table-striped mb-0">
+                            <thead class="table-secondary">
+                                <tr class="fs-6">
+                                    <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('activity') %></th>
+                                    <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('activity_plan') %></th>
+                                    <th  class="text-primary fw-semibold"><%= Subscription.human_attribute_name('start_date') %></th>
+                                    <th  class="text-primary fw-semibold"><%= Subscription.human_attribute_name('end_date') %></th>
+                                    <th  class="text-primary fw-semibold"><%= Subscription.human_attribute_name('open') %></th>
+                                    <th  class="text-primary fw-semibold"><%= Subscription.human_attribute_name('status') %></th>
+                                    <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
+                                </tr>
+                            </thead>
 
-			    <tbody>
-				<% @subscriptions.each do |subscription| %>
-				    <tr class="align-middle">
-					<% presenter = SubscriptionPresenter.new(subscription) %>
-					<% activity = subscription.activity %>
-					<% plan = subscription.activity_plan %>
+                            <tbody>
+                                <% @subscriptions.each do |subscription| %>
+                                    <tr class="align-middle">
+                                        <% presenter = SubscriptionPresenter.new(subscription) %>
+                                        <% activity = subscription.activity %>
+                                        <% plan = subscription.activity_plan %>
 
-					<!-- Activity Name -->
-					<td>
-					    <%= highlight activity.name, params.dig(:name) %>
-					</td>
+                                        <!-- Activity Name -->
+                                        <td>
+                                            <%= highlight activity.name, params.dig(:name) %>
+                                        </td>
 
-					<td>
-					    <%= plan.humanize_plan %>
-					</td>
+                                        <td>
+                                            <%= plan.humanize_plan %>
+                                        </td>
 
-					<!-- Start date -->
-					<td>
-					    <%= l subscription.start_date %>
-					</td>
+                                        <!-- Start date -->
+                                        <td>
+                                            <%= l subscription.start_date %>
+                                        </td>
 
-					<!-- End date -->
-					<td>
-					    <%= l subscription.end_date %> (<%= t 'datetime.distance_in_words.x_days', count: subscription.days_til_renewal %>)
-					</td>
+                                        <!-- End date -->
+                                        <td>
+                                            <%= l subscription.end_date %> (<%= t 'datetime.distance_in_words.x_days', count: subscription.days_til_renewal %>)
+                                        </td>
 
-					<!-- OPEN? -->
-					<td>
-					    <%= t subscription.open? %>
-					</td>
+                                        <!-- OPEN? -->
+                                        <td>
+                                            <%= t subscription.open? %>
+                                        </td>
 
-					<!-- STATUS -->
-					<td>
-					    <%= link_to presenter.appropriate_path(user),
-							method: presenter.method,
-							class: "btn btn-#{ presenter.css_color } text-secondary badge rounded-pill",
-							data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
-						<i class="<%= presenter.link_icon %>"></i> <%= presenter.status_title  %>
-					    <% end %>
-					</td>
+                                        <!-- STATUS -->
+                                        <td>
+                                            <%= link_to presenter.appropriate_path(user),
+                                                        method: presenter.method,
+                                                        class: "btn btn-#{ presenter.css_color } text-secondary badge rounded-pill",
+                                                        data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
+                                                <i class="<%= presenter.link_icon %>"></i> <%= presenter.status_title  %>
+                                            <% end %>
+                                        </td>
 
-					<!-- Action buttons -->
-					<td class="text-end">
-					    <%= link_to subscription_path(subscription),
-													class: 'btn btn-info btn-sm border border-secondary-subtle',
-													data: { turbo_frame: "_top" } do %>
-						<i class="bi bi-eye-fill"></i>
-					    <% end %>
+                                        <!-- Action buttons -->
+                                        <td class="text-end">
+                                            <%= link_to subscription_path(subscription),
+                                                        class: 'btn btn-info btn-sm border border-secondary-subtle',
+                                                        data: { turbo_frame: "_top" } do %>
+                                                <%= icon("info") %>
+                                            <% end %>
 
-					    <%= link_to edit_subscription_path(subscription),
-													class: 'btn btn-warning btn-sm border border-secondary-subtle',
-													data: { turbo_frame: "_top" } do %>
-						<i class="bi bi-pencil-fill"></i>
-					    <% end %>
+                                            <%= link_to edit_subscription_path(subscription),
+                                                                                                        class: 'btn btn-warning btn-sm border border-secondary-subtle',
+                                                                                                        data: { turbo_frame: "_top" } do %>
+                                                <%= icon("edit") %>
+                                            <% end %>
 
-					    <% if subscription.discarded? %>
-						<%= button_to restore_subscription_path(subscription),
-							      class: 'btn btn-restore btn-sm border border-secondary-subtle',
-							      method: :patch,
-							      data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
-							      form: {style: 'display:inline-block;'} do %>
-						    <i class="bi bi-recycle"></i>
-						<% end %>
-					    <% else %>
-						<%= button_to subscription_path(subscription),
-							      class: 'btn btn-danger btn-sm border border-secondary-subtle',
-							      method: :delete,
-							      data: { turbo_confirm: t('global.delete_dialog') }, form: {style: 'display:inline-block;'} do %>
-						    <i class="bi bi-trash3-fill"></i>
-						<% end %>
-					    <% end %>
-					</td>
-				    </tr>
-				<% end %>
-			    </tbody>
-			</table>
-		    </div>
-		</div>
+                                            <% if subscription.discarded? %>
+                                                <%= button_to restore_subscription_path(subscription),
+                                                              class: 'btn btn-restore btn-sm border border-secondary-subtle',
+                                                              method: :patch,
+                                                              data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
+                                                              form: {style: 'display:inline-block;'} do %>
+                                                    <i class="bi bi-recycle"></i>
+                                                <% end %>
+                                            <% else %>
+                                                <%= button_to subscription_path(subscription),
+                                                              class: 'btn btn-danger btn-sm border border-secondary-subtle',
+                                                              method: :delete,
+                                                              data: { turbo_confirm: t('global.delete_dialog') }, form: {style: 'display:inline-block;'} do %>
+                                                    <%= icon("delete") %>
+                                                <% end %>
+                                            <% end %>
+                                        </td>
+                                    </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-	    <% end %>
+            <% end %>
 
-	    <%== pagy_bootstrap_nav(@pagy_sub) %>
+            <%== pagy_bootstrap_nav(@pagy_sub) %>
         <% else %>
 
-	    <div class="d-flex align-items-center justify-content-between">
-		<p class="fs-5 fw-light text-secondary me-3 mb-0">
-		    <%= t '.no_subs' %>
-		</p>
+            <div class="d-flex align-items-center justify-content-between">
+                <p class="fs-5 fw-light text-secondary me-3 mb-0">
+                    <%= t '.no_subs' %>
+                </p>
 
-		<%= link_to new_subscription_path(user_id: user),
-								class: 'btn btn-dark text-secondary border border-secondary-subtle',
-								data: { turbo_frame: "_top" } do %>
-		    <i class="text-secondary bi bi-bar-chart-fill"></i>
-		    <span class="ms-1">
-			<%= t '.add_sub' %>
-		    </span>
-		<% end %>
-	    </div>
+                <%= add_button_to new_subscription_path(user_id: user), text: t('.add_sub') %>
+            </div>
 
         <% end %>
 
@@ -515,14 +493,14 @@
                         </div>
 
 
-	                <div class="row mb-2">
+                        <div class="row mb-2">
                             <!-- Visibility -->
-		            <div class="col">
-		                <%= f.label :visibility, t('global.payment_visibility'), class: 'form-label fw-semibold text-secondary' %>
-		                <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
-		                 class: 'form-select', data: { action: 'change->filters#submit' } %>
-		            </div>
-	                </div>
+                            <div class="col">
+                                <%= f.label :visibility, t('global.payment_visibility'), class: 'form-label fw-semibold text-secondary' %>
+                                <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+                                 class: 'form-select', data: { action: 'change->filters#submit' } %>
+                            </div>
+                        </div>
                     <% end %>
                 </div>
 
@@ -583,32 +561,26 @@
 
                                         <!-- Action buttons -->
                                         <td class="text-end">
-                                            <%= link_to payment, class: 'btn btn-info btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                                                <i class="bi text-secondary bi-eye-fill"></i>
+                                            <%= link_to payment, class: 'btn btn-view btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
+                                                <%= icon("info") %>
                                             <% end %>
 
                                             <% if current_staff.admin? %>
-                                                <%= link_to edit_payment_path(payment), class: 'btn btn-warning btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                                                    <i class="bi text-secondary bi-pencil-fill"></i>
+                                                <%= link_to edit_payment_path(payment), class: 'btn btn-edit btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
+                                                    <%= icon("edit") %>
                                                 <% end %>
 
                                                 <% if payment.discarded? %>
-		                                    <%= button_to restore_payment_path(payment),
-				                                  class: 'btn btn-restore btn-sm border border-secondary-subtle',
-				                                  method: :patch,
-				                                  data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
-				                                  form: {style: 'display:inline-block;'} do %>
-			                                <i class="bi bi-recycle"></i>
-		                                    <% end %>
-		                                <% else %>
-                                                    <%= button_to payment,
-                                                                  class: 'btn text-secondary btn-danger btn-sm border border-secondary-subtle',
-                                                                  method: :delete,
-                                                                  data: { turbo_frame: "_top", turbo_confirm: t('global.delete_dialog') },
+                                                    <%= button_to restore_payment_path(payment),
+                                                                  class: 'btn btn-restore btn-sm border border-secondary-subtle',
+                                                                  method: :patch,
+                                                                  data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
                                                                   form: {style: 'display:inline-block;'} do %>
-                                                        <i class="bi bi-trash3-fill"></i>
+                                                        <i class="bi bi-recycle"></i>
                                                     <% end %>
-		                                <% end %>
+                                                <% else %>
+                                                    <%= delete_button_to(payment) %>
+                                                <% end %>
 
                                             <% end %>
                                         </td>

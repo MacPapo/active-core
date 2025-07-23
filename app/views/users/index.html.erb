@@ -5,7 +5,7 @@
 <% end %>
 
 <%= content_for :search do %>
-    <div class="flex-fill">
+    <div class="flex-fill me-2">
 
         <!-- Search form -->
         <%= render 'partials/search_form', loc: t('global.search_name'), path: users_path, frame: :users, size: '500px', ctrls: 'filters' do |f| %>
@@ -34,22 +34,19 @@
                 </div>
             </div>
 
-	    <div class="row mb-2">
+            <div class="row mb-2">
                 <!-- Visibility -->
-		<div class="col">
-		    <%= f.label :visibility, t('global.user_visibility'), class: 'form-label fw-semibold text-secondary' %>
-		    <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
-		     class: 'form-select', data: { action: 'change->filters#submit' } %>
-		</div>
-	    </div>
+                <div class="col">
+                    <%= f.label :visibility, t('global.user_visibility'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+                     class: 'form-select', data: { action: 'change->filters#submit' } %>
+                </div>
+            </div>
         <% end %>
     </div>
 
     <!-- Add User -->
-    <%= link_to new_user_path, class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
-        <i class="bi bi-person-fill-add"></i>
-        <span class="ms-1"><%= t '.add_user' %></span>
-    <% end %>
+    <%= add_button_to new_user_path, text: t('.add_user'), classes: "" %>
 <% end %>
 
 <%= render 'partials/index_container', title: model_to_string(User, 2), tframe: :users do %>

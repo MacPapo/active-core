@@ -27,7 +27,11 @@
                         data-popover-target="button"
                         class="btn border border-secondary-subtle badge rounded-pill text-bg-<%= is_compliance ? 'success' : 'warning' %>"
                     >
-                        <i class="text-secondary bi bi-person-fill-<%= is_compliance ? 'check' : 'exclamation' %>"></i>
+                        <% if is_compliance %>
+                            <%= icon("user_ok", size: 16, aria_label: "user has ok info svg") %>
+                        <% else %>
+                            <%= icon("user_alert", size: 16, aria_label: "user has missing info svg") %>
+                        <% end %>
                     </span>
                 </div>
             </td>
@@ -49,14 +53,7 @@
 
             <!-- Membership -->
             <td>
-                <% presenter = MembershipPresenter.new(user.membership) %>
-                <%= link_to presenter.appropriate_path(user),
-			    method: presenter.method,
-			    class: "btn btn-#{presenter.css_color} text-secondary border border-secondary-subtle badge rounded-pill",
-			    data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
-                    <i class="<%= presenter.link_icon %>"></i>
-                    <%= presenter.link_title %>
-                <% end %>
+                <%= presenter_button(MembershipPresenter.new(user.membership), obj: user) %>
             </td>
 
             <!-- Activities -->
@@ -66,48 +63,32 @@
                     <%= link_to new_subscription_path(user_id: user.id),
                                 class: "btn btn-dark text-secondary border border-secondary-subtle badge rounded-pill",
                                 data: { turbo_frame: "_top" } do %>
-                      <i class="me-2 text-secondary bi bi-plus-circle-fill"></i> <%= t('activities.activity.add_to_activity') %>
+                        <%= icon("add") %>
+                        <%= t('activities.activity.add_to_activity') %>
                     <% end %>
-                  <% else %>
+                <% else %>
                     <% subs.each do |sub| %>
-                      <% presenter = SubscriptionPresenter.new(sub) %>
-                      <%= link_to presenter.appropriate_path(user),
-                                  method: presenter.method,
-                                  class: "btn btn-#{ presenter.css_color } text-secondary border border-secondary-subtle badge rounded-pill",
-                                  data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
-                        <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
-                      <% end %>
+                        <% presenter = SubscriptionPresenter.new(sub) %>
+                        <%= link_to presenter.appropriate_path(user),
+                                    method: presenter.method,
+                                    class: "btn btn-#{ presenter.css_color } text-secondary border border-secondary-subtle badge rounded-pill",
+                                    data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
+                            <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
+                        <% end %>
                     <% end %>
                 <% end %>
             </td>
 
             <!-- Action buttons -->
             <td class="text-end">
-                <%= link_to user, class: 'btn btn-view btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                    <i class="bi text-secondary bi-eye-fill"></i>
-                <% end %>
+                <%= view_button_to(user) %>
+                <%= edit_button_to(user) %>
 
-                <%= link_to edit_user_path(user), class: 'btn btn-edit btn-sm border border-secondary-subtle', data: { turbo_frame: "_top" } do %>
-                    <i class="bi text-secondary bi-pencil-fill"></i>
+                <% if user.discarded? %>
+                    <%= restore_button_to(user) %>
+                <% else %>
+                    <%= delete_button_to(user) %>
                 <% end %>
-
-		<% if user.discarded? %>
-		    <%= button_to restore_user_path(user),
-				  class: 'btn btn-restore btn-sm border border-secondary-subtle',
-				  method: :patch,
-				  data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
-				  form: {style: 'display:inline-block;'} do %>
-			<i class="bi bi-recycle"></i>
-		    <% end %>
-		<% else %>
-		    <%= button_to user_path(user),
-                                  class: 'btn btn-delete text-secondary btn-sm border border-secondary-subtle',
-                                  method: :delete,
-                                  data: { turbo_confirm: t('global.delete_dialog'), turbo_frame: "_top" },
-                                  form: {style: 'display:inline-block;'} do %>
-                        <i class="bi bi-trash3-fill"></i>
-		    <% end %>
-		<% end %>
             </td>
         </tr>
     <% end %>

@@ -11,44 +11,44 @@
         </div>
 
         <%= active_link_to users_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
-            <i class="bi bi-people-fill"></i>
+            <%= icon("users") %>
             <span class="ps-3"><%= model_to_string(User, 2) %></span>
         <% end %>
 
         <%= active_link_to legal_guardians_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
-            <i class="bi bi-person-fill"></i>
+            <%= icon("legal_guardians") %>
             <span class="ps-3"><%= model_to_string(LegalGuardian, 2) %></span>
         <% end %>
 
         <%= active_link_to activities_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
-            <i class="bi bi-person-arms-up"></i>
+            <%= icon("activities") %>
             <span class="ps-3"><%= model_to_string(Activity) %></span>
         <% end %>
 
         <% if current_staff && current_staff.admin? %>
             <%= active_link_to staffs_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
-                <i class="bi bi-person-workspace"></i>
+                <%= icon("admin") %>
                 <span class="ps-3"><%= model_to_string(Staff, 2) %></span>
             <% end %>
 
             <%= active_link_to subscriptions_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
-                <i class="bi bi-clipboard-data-fill"></i>
+                <%= icon("subscriptions") %>
                 <span class="ps-3"><%= model_to_string(Subscription, 2) %></span>
             <% end %>
 
             <%= active_link_to memberships_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
-                <i class="bi bi-pie-chart-fill"></i>
+                <%= icon("memberships") %>
                 <span class="ps-3"><%= model_to_string(Membership, 2) %></span>
             <% end %>
 
             <%= active_link_to payments_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
-                <i class="bi bi-cash-stack"></i>
+                <%= icon("payments") %>
                 <span class="ps-3"><%= model_to_string(Payment, 2) %></span>
             <% end %>
         <% end %>
 
         <%= active_link_to daily_cash_index_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
-            <i class="bi bi-piggy-bank-fill"></i>
+            <%= icon("daily_cash") %>
             <span class="ps-3"><%= t 'global.daily_cash' %></span>
         <% end %>
     </div>
@@ -56,7 +56,7 @@
     <div class="d-grid gap-3">
         <!-- Log-out button -->
         <%= button_to destroy_staff_session_path, method: :delete, class: 'btn btn-bd-danger border border-secondary-subtle d-flex align-items-center w-100' do %>
-            <i class="bi bi-box-arrow-right"></i>
+            <%= icon("logout") %>
             <span class="ps-3"><%= t('global.logout') %> <%= t('global.from') %> <%= current_staff.nickname %></span>
         <% end %>
     </div>

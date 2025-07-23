@@ -39,15 +39,15 @@ class MembershipPresenter
   def link_icon
     case membership_handler
     when :active
-      'me-1 text-secondary bi bi-eye-fill'
+      'ok'
     when :inactive
-      'me-1 text-secondary bi bi-credit-card'
+      'inactive'
     when :expired
-      'me-1 text-secondary bi bi-arrow-clockwise'
+      'expired'
     when :deleted
-      'me-1 text-secondary bi bi-recycle'
+      'delete'
     else
-      'me-1 text-secondary bi bi-plus-circle-fill'
+      'add'
     end
   end
 

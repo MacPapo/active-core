@@ -108,27 +108,27 @@
 
         <div class="d-flex align-items-center justify-content-end mb-2">
 
-	    <!-- Search form -->
-	    <%= render 'partials/search_form_no_bar', path: activity_path, frame: :plans, size: '200px', ctrls: 'filters' do |f| %>
-		<div class="row mb-2">
-		    <!-- Visibility -->
-		    <div class="col">
-			<%= f.label :visibility, t('global.plans_visibility'), class: 'form-label fw-semibold text-secondary' %>
-			<%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
-			 class: 'form-select', data: { action: 'change->filters#submit' } %>
-		    </div>
-		</div>
-	    <% end %>
+            <!-- Search form -->
+            <%= render 'partials/search_form_no_bar', path: activity_path, frame: :plans, size: '200px', ctrls: 'filters' do |f| %>
+                <div class="row mb-2">
+                    <!-- Visibility -->
+                    <div class="col">
+                        <%= f.label :visibility, t('global.plans_visibility'), class: 'form-label fw-semibold text-secondary' %>
+                        <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+                         class: 'form-select', data: { action: 'change->filters#submit' } %>
+                    </div>
+                </div>
+            <% end %>
 
             <% if current_staff.admin? %>
-		<%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
+                <%= link_to new_activity_plan_path(activity_id: activity.id), class: 'btn btn-dark text-secondary border border-secondary-subtle ms-2' do %>
                     <i class="text-secondary bi bi-bar-chart-fill"></i>
                     <span class="ms-1">
                         <%= t '.add_plan' %>
                     </span>
                 <% end %>
             <% end %>
-	</div>
+        </div>
 
         <%= turbo_frame_tag :plans do %>
             <!-- Activity Plans -->
@@ -188,14 +188,14 @@
                                                 <% end %>
 
                                                 <% if plan.discarded? %>
-			                            <%= button_to restore_activity_plan_path(plan),
-				                                  class: 'btn btn-restore btn-sm border border-secondary-subtle',
-				                                  method: :patch,
-				                                  data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
-				                                  form: {style: 'display:inline-block;'} do %>
-			                                <i class="bi bi-recycle"></i>
-			                            <% end %>
-		                                <% else %>
+                                                    <%= button_to restore_activity_plan_path(plan),
+                                                                  class: 'btn btn-restore btn-sm border border-secondary-subtle',
+                                                                  method: :patch,
+                                                                  data: { turbo_confirm: t('global.restore_dialog'), turbo_frame: "_top" },
+                                                                  form: {style: 'display:inline-block;'} do %>
+                                                        <i class="bi bi-recycle"></i>
+                                                    <% end %>
+                                                <% else %>
                                                     <%= button_to activity_plan_path(plan),
                                                                   class: 'btn btn-danger btn-sm border border-secondary-subtle',
                                                                   method: :delete,
@@ -203,7 +203,7 @@
                                                                   form: {style: 'display:inline-block;'} do %>
                                                         <i class="bi bi-trash3-fill"></i>
                                                     <% end %>
-		                                <% end %>
+                                                <% end %>
                                             </td>
                                         <% end %>
                                     </tr>

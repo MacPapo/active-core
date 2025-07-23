@@ -36,99 +36,98 @@ $input-color: $secondary;
 $input-focus-border-color: $secondary;
 // $input-focus-shadow-rgba: $secondary;
 
-// SIDEBAR BUTTON COMPONENTS
-.btn-bd-secondary {
-  --bs-btn-font-weight: 400;
-  --bs-btn-color: #{$secondary};
-  // --bs-btn-bg: #{$primary};
+@mixin custom-btn($color, $bg, $hover-bg, $active-bg) {
+    font-weight: 400;
+    color: $color;
+    background-color: $bg;
+    border-color: $bg;
 
-  --bs-btn-hover-color: #{$secondary};
-  --bs-btn-hover-bg: #{$dark};
-  --bs-btn-hover-border-color: #{$dark};
-  --bs-btn-focus-shadow-rgb: #{$dark};
+    &:hover {
+        background-color: $hover-bg;
+        border-color: $hover-bg;
+        color: $color;
+    }
 
-  --bs-btn-active-color: #{$primary};
-  --bs-btn-active-bg: #{$secondary};
-  --bs-btn-active-border-color: #{$border};
+    &:focus {
+        box-shadow: 0 0 0 0.25rem rgba($hover-bg, 0.5);
+    }
+
+    &:active {
+        background-color: $active-bg;
+        border-color: $border;
+        color: $primary;
+    }
 }
 
-.btn-bd-danger {
-  --bs-btn-font-weight: 400;
-  --bs-btn-color: #{$danger};
-  --bs-btn-bg: #{$light};
+// SIDEBAR BUTTON COMPONENTS
+.btn.btn-bd-secondary {
+    font-weight: 400;
+    color: $secondary;
+    background-color: transparent;
+    border-color: transparent;
 
-  --bs-btn-hover-color: #{$secondary};
-  --bs-btn-hover-bg: #{$dark};
-  --bs-btn-hover-border-color: #{$dark};
-  --bs-btn-focus-shadow-rgb: #{$dark};
+    &:hover {
+        color: $secondary;
+        background-color: $dark;
+        border-color: $dark;
+    }
 
-  --bs-btn-active-color: #{$primary};
-  --bs-btn-active-bg: #{$secondary};
-  --bs-btn-active-border-color: #{$border};
+    &:focus {
+        box-shadow: 0 0 0 0.25rem rgba($dark, 0.5);
+    }
+
+    &:active,
+    &.active,
+    &:active:focus {
+        color: $primary;
+        background-color: $secondary;
+        border-color: $border;
+    }
+}
+
+.btn.btn-bd-danger {
+    font-weight: 400;
+    color: $danger;
+    background-color: $light;
+    border-color: transparent;
+
+    &:hover {
+        color: $secondary;
+        background-color: $dark;
+        border-color: $dark;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.25rem rgba($dark, 0.5);
+    }
+
+    &:active,
+    &.active,
+    &:active:focus {
+        color: $primary;
+        background-color: $secondary;
+        border-color: $border;
+    }
 }
 
 // VIEW BUTTON COMPONENTS
-.btn-view {
-    --bs-btn-font-weight: 400;
-    --bs-btn-color: #{$secondary};
-    --bs-btn-bg: #{$info};
-
-    --bs-btn-hover-color: #{$secondary};
-    --bs-btn-hover-bg: #{$dark};
-    --bs-btn-hover-border-color: #{$dark};
-    --bs-btn-focus-shadow-rgb: #{$dark};
-
-    --bs-btn-active-color: #{$primary};
-    --bs-btn-active-bg: #{$secondary};
-    --bs-btn-active-border-color: #{$border};
+.btn.btn-view {
+    @include custom-btn($secondary, $info, $dark, $secondary);
 }
 
 // EDIT BUTTON COMPONENTS
-.btn-edit {
-    --bs-btn-font-weight: 400;
-    --bs-btn-color: #{$secondary};
-    --bs-btn-bg: #{$warning};
-
-    --bs-btn-hover-color: #{$secondary};
-    --bs-btn-hover-bg: #{$dark};
-    --bs-btn-hover-border-color: #{$dark};
-    --bs-btn-focus-shadow-rgb: #{$dark};
-
-    --bs-btn-active-color: #{$primary};
-    --bs-btn-active-bg: #{$secondary};
-    --bs-btn-active-border-color: #{$border};
+.btn.btn-edit {
+    @include custom-btn($secondary, $warning, $dark, $secondary);
 }
 
 // DELETE BUTTON COMPONENTS
-.btn-delete {
-    --bs-btn-font-weight: 400;
-    --bs-btn-color: #{$secondary};
-    --bs-btn-bg: #{$danger};
-
-    --bs-btn-hover-color: #{$secondary};
-    --bs-btn-hover-bg: #{$dark};
-    --bs-btn-hover-border-color: #{$dark};
-    --bs-btn-focus-shadow-rgb: #{$dark};
-
-    --bs-btn-active-color: #{$primary};
-    --bs-btn-active-bg: #{$secondary};
-    --bs-btn-active-border-color: #{$border};
+.btn.btn-delete {
+    @include custom-btn($secondary, $danger, $dark, $secondary);
 }
 
 // RESTORE BUTTON COMPONENTS
-.btn-restore {
-    --bs-btn-font-weight: 400;
-    --bs-btn-color: #{$secondary};
-    --bs-btn-bg: #{$light-yellow};
-
-    --bs-btn-hover-color: #{$secondary};
-    --bs-btn-hover-bg: #{$dark};
-    --bs-btn-hover-border-color: #{$dark};
-    --bs-btn-focus-shadow-rgb: #{$dark};
-
-    --bs-btn-active-color: #{$primary};
-    --bs-btn-active-bg: #{$secondary};
-    --bs-btn-active-border-color: #{$border};
+.btn.btn-restore {
+    @include custom-btn($secondary, $light-yellow, $dark, $secondary);
 }
 
 // PAGY COMPONENTS
@@ -152,8 +151,6 @@ $input-focus-border-color: $secondary;
   background-color: lightgrey; // Hover color for page links
   border-color: lightgrey;     // Hover border color
 }
-
-@import "bootstrap";
 
 // HIGHLIHT COMPONENTS
 
@@ -273,6 +270,8 @@ $notice-shadow: rgba($dark, 0.1);
     transform: translateX(100%);
   }
 }
+
+@import "bootstrap";
 
 // FORM RANGE
 

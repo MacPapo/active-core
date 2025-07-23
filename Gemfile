@@ -81,3 +81,5 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
 end
+
+gem "inline_svg", "~> 1.10"
