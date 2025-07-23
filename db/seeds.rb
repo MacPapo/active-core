@@ -8,29 +8,29 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-User.destroy_all
-Staff.destroy_all
+# User.destroy_all
+# Staff.destroy_all
 
-# CSV Import
+# # CSV Import
 
-require 'csv'
+# require 'csv'
 
-# REMEMBER TO PUT RES.CSV in LIB/SEEDS
-csv_file = File.read(Rails.root.join('lib/seeds/res.csv'))
-csv = CSV.parse(csv_file, headers: true)
+# # REMEMBER TO PUT RES.CSV in LIB/SEEDS
+# csv_file = File.read(Rails.root.join('lib/seeds/res.csv'))
+# csv = CSV.parse(csv_file, headers: true)
 
-csv.each do |row|
-  u = User.new
+# csv.each do |row|
+#   u = User.new
 
-  u.cf = row['Codice Fiscale'].length == 16 ? row['Codice Fiscale'] : nil
-  u.surname = row['Cognome']
-  u.name = row['Nome']
-  u.birth_day = row['Data di Nascita']
-  u.email = row['Email']
-  u.phone = Phonelib.parse(row['Cellulare']).valid? ? row['Cellulare'] : nil
+#   u.cf = row['Codice Fiscale'].length == 16 ? row['Codice Fiscale'] : nil
+#   u.surname = row['Cognome']
+#   u.name = row['Nome']
+#   u.birth_day = row['Data di Nascita']
+#   u.email = row['Email']
+#   u.phone = Phonelib.parse(row['Cellulare']).valid? ? row['Cellulare'] : nil
 
-  u.save
-end
+#   u.save
+# end
 
 # Seed Staff Members
 admin_user = User.new(

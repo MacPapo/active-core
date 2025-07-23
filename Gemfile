@@ -33,6 +33,8 @@ gem 'cssbundling-rails'
 # Bundle and process JS
 gem 'jsbundling-rails', '~> 1.3'
 
+gem "propshaft"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
 
@@ -43,8 +45,6 @@ gem 'receipts', '~> 2.4'
 gem 'solid_queue'
 
 gem 'mission_control-jobs', '~> 0.3.1'
-
-gem 'sprockets-rails', '~> 3.5'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[windows jruby]
