@@ -1,4 +1,10 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
+import "controllers"
+
+import "popper";
+import "bootstrap";
+
 import "@hotwired/turbo-rails"
-import "./controllers"
-import "./popovers.js"   // Import BOOTSTRAP and POPOVERS
+
+import "initialize-popovers"
+

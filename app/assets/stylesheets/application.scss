@@ -1,4 +1,6 @@
-@import "bootstrap/scss/functions";
+// Custom bootstrap variables must be set or imported *before* bootstrap.
+
+@import "bootstrap/functions";
 
 $primary: #FCFCFD;
 
@@ -23,6 +25,8 @@ $border: #abb2ba;
 $light: #F3F4F6;
 $dark: #DBFC75;
 
+$black: #000;
+
 $light-yellow: #F1EB9C;
 
 // Override dei colori del form
@@ -31,9 +35,6 @@ $input-bg: $primary;
 $input-color: $secondary;
 $input-focus-border-color: $secondary;
 // $input-focus-shadow-rgba: $secondary;
-
-@import 'bootstrap/scss/bootstrap';
-@import 'bootstrap-icons/font/bootstrap-icons';
 
 // SIDEBAR BUTTON COMPONENTS
 .btn-bd-secondary {
@@ -151,6 +152,8 @@ $input-focus-border-color: $secondary;
   background-color: lightgrey; // Hover color for page links
   border-color: lightgrey;     // Hover border color
 }
+
+@import "bootstrap";
 
 // HIGHLIHT COMPONENTS
 
@@ -314,8 +317,3 @@ $form-check-label-disabled-opacity:        $form-check-input-disabled-opacity;
 $form-check-btn-check-disabled-opacity:    $btn-disabled-opacity;
 
 $form-check-inline-margin-end:    1rem;
-
-
-@import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/forms';

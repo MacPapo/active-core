@@ -1,86 +1,79 @@
 source 'https://rubygems.org'
 
-ruby '3.4.4'
-
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 8.0.2'
 gem 'rails-i18n', '~> 8.0.0'
 
-# Use sqlite3 as the database for Active Record
-gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
-gem "sqlite3", "~> 2.7"
-
-# Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 6.6"
-
-gem "devise", "~> 4.9"
-gem "devise-i18n", "~> 1.14"
-
-gem 'csv', '~> 3.3'
-
-# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem 'importmap-rails'
-
-# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem 'turbo-rails'
-
-# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem 'stimulus-rails'
-
-# Bundle and process CSS [https://github.com/rails/cssbundling-rails]
-gem 'cssbundling-rails'
-
-# Bundle and process JS
-gem 'jsbundling-rails', '~> 1.3'
-
+# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-
+# Use sqlite3 as the database for Active Record
+gem "sqlite3", ">= 2.1"
+# Use the Puma web server [https://github.com/puma/puma]
+gem "puma", ">= 5.0"
+# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+gem "importmap-rails"
+# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem "turbo-rails"
+# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem 'jbuilder'
+gem "jbuilder"
 
-gem 'discard', '~> 1.3'
+gem "devise"
+gem "devise-i18n"
 
-gem 'receipts', '~> 2.4'
+gem 'discard'
+gem 'receipts'
 
-gem 'solid_queue'
-
-gem 'mission_control-jobs', '~> 0.3.1'
+# Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
+gem "solid_cache"
+gem "solid_queue"
+gem "solid_cable"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i[windows jruby]
+gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Vaildate phone numbers
-gem 'phonelib', '~> 0.8.9'
+gem 'phonelib'
 
 # Add pagination to queries
-gem "pagy", "~> 8.6"
+gem "pagy"
+
+# Add BOOTSTRAP and SCSS COMPILER
+gem "bootstrap", "~> 5.3"
+gem "dartsass-rails", "~> 0.5.1"
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', require: false
+gem "bootsnap", require: false
+
+# Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
+gem "kamal", require: false
+
+# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
+gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'debug', platforms: %i[mri windows]
-  gem 'faker', '~> 3.4'
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "bullet"
 
+  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  gem "brakeman", require: false
+
+  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+  gem "rubocop-rails-omakase", require: false
+  gem "mission_control-jobs", "~> 1.0"
   gem 'factory_bot_rails', '~> 6.4'
-  gem 'rspec-rails', '~> 6.1'
-  gem 'rubocop', require: false
-  gem 'rubocop-rails', require: false
+  gem 'rspec-rails'
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem 'web-console'
-
-  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  gem 'rack-mini-profiler'
-
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
+  gem "web-console"
+  gem "hotwire-spark"
 end
 
 group :test do
