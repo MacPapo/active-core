@@ -108,8 +108,6 @@ Rails.application.routes.draw do
           patch :restore
         end
       end
-
-      mount MissionControl::Jobs::Engine, at: '/jobs'
     end
   end
 
