@@ -19,7 +19,7 @@ class UsersController < ApplicationController
       direction: @direction || 'desc'
     }
 
-    @pagy, @users = pagy(User.filter(filters).includes(:membership, :subscriptions, :legal_guardian).load_async)
+    @pagy, @users = pagy(User.filter(filters).includes(:membership).load_async)
   end
 
   def activity_search

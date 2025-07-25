@@ -1,56 +1,79 @@
 module ButtonHelper
-  def delete_button_to(record, options = {})
-    build_button(
+  def delete_button_to(record, id:, text: nil, size: 24, classes: nil, turbo: { turbo_frame: "_top", turbo_confirm: t("global.delete_dialog") })
+    base_classes = "btn-delete"
+    classes = safe_join([ base_classes, classes ], " ")
+    build_button_prepared(
       record,
+      id:,
       method: :delete,
-      icon: options.delete(:icon) || "delete",
-      btn_class: "btn-delete",
-      confirm: options.delete(:confirm) || t('global.delete_dialog'),
-      size: options.delete(:size)
+      text:,
+      icon: "delete",
+      size:,
+      classes:,
+      turbo:,
     )
   end
 
-  def restore_button_to(path, options = {})
-    build_button(
-      path,
+  def restore_button_to(record, id:, text: nil, size: 24, classes: nil, turbo: { turbo_frame: "_top", turbo_confirm: t("global.restore_dialog") })
+    base_classes = "btn-restore"
+    classes = safe_join([ base_classes, classes ], " ")
+    build_button_prepared(
+      record,
+      id:,
       method: :patch,
-      icon: options.delete(:icon_html) || '<i class="bi bi-recycle"></i>'.html_safe,
-      btn_class: "btn-restore",
-      confirm: options.delete(:confirm) || t('global.restore_dialog'),
-      size: options.delete(:size)
+      text:,
+      icon: "restore",
+      size:,
+      classes:,
+      turbo:,
     )
   end
 
-  def edit_button_to(path, options = {})
-    link_to path,
-            class: build_btn_class("btn-edit", options.delete(:size)),
-            data: { turbo_frame: "_top" } do
-      icon(options.delete(:icon) || "edit")
-    end
+  def edit_button_to(path, text: nil, size: 24, classes: nil)
+    base_classes = "btn-edit"
+    classes = safe_join([ base_classes, classes ], " ")
+    build_link_prepared(
+      path,
+      text:,
+      icon: "edit",
+      size:,
+      classes:
+    )
   end
 
-  def view_button_to(path, options = {})
-    link_to path,
-            class: build_btn_class("btn-view", options.delete(:size)),
-            data: { turbo_frame: "_top" } do
-      icon(options.delete(:icon) || "info")
-    end
+  def view_button_to(path, text: nil, size: 24, classes: nil)
+    base_classes = "btn-view"
+    classes = safe_join([ base_classes, classes ], " ")
+    build_link_prepared(
+      path,
+      text:,
+      icon: "info",
+      size:,
+      classes:
+    )
   end
 
   def add_button_to(path, text: nil, icon: "add", size: 24, classes: "btn-sm")
+    text_span = text.nil? ? nil : content_tag(:span, text)
     link_to path,
             class: "btn border border-secondary-subtle text-secondary bg-dark d-inline-flex align-items-center gap-1 #{classes}",
             data: { turbo_frame: "_top" } do
-      icon(icon, size: size) + content_tag(:span, text || t('.add'))
+      icon(icon, size: size) + text_span
     end
   end
 
-  def filter_toggle_button(text = t('global.filters'), icon: 'filter', classes: '')
-    tag.button(
-      icon(icon) + tag.span(text),
-      id: "filter-toggle",
-      class: "btn btn-secondary text-primary border border-secondary-subtle d-inline-flex align-items-center gap-1 #{classes}",
-      data: { action: 'click->filters#toggle' }
+  def filter_toggle_button(id: "filter-toggle", text: t("global.filters"), icon: "filter", size: 24, classes: nil, turbo: { action: "click->filters#toggle" })
+    base_classes = "btn btn-secondary text-primary border border-secondary-subtle"
+    classes = safe_join([ base_classes, classes ], " ")
+    build_button(
+      nil,
+      id:,
+      method: :get,
+      text:,
+      icon: "filter",
+      size:,
+      classes:,
+      turbo:
     )
   end
 
@@ -59,27 +82,63 @@ module ButtonHelper
             method: presenter.method,
             class: "btn btn-#{presenter.css_color} text-secondary border border-secondary-subtle badge rounded-pill d-inline-flex align-items-center gap-1 #{extra_classes}",
             data: { turbo_method: presenter.method, turbo_frame: turbo_frame } do
-      safe_join([
-                  icon(presenter.link_icon, size: icon_size),
-                  presenter.link_title
-                ], " ")
+      safe_join([ icon(presenter.link_icon, size: icon_size), presenter.link_title ], " ")
     end
   end
 
   private
 
-  def build_button(path, method:, icon:, btn_class:, confirm:, size: nil)
-    button_to path,
-              method: method,
-              class: build_btn_class(btn_class, size),
-              data: { turbo_frame: "_top", turbo_confirm: confirm },
-              form: { style: 'display:inline-block;' } do
-      icon.is_a?(String) && icon.start_with?('<') ? icon : icon(icon)
+  def build_link_prepared(path, text: nil, icon: nil, size: 24, classes: nil, turbo: { turbo_frame: "_top" })
+    base_classes = "btn border border-secondary-subtle text-secondary"
+    classes = safe_join([ base_classes, classes ], " ")
+    build_link(
+      path,
+      text:,
+      icon:,
+      size:,
+      classes:,
+      turbo:
+    )
+  end
+
+  def build_button_prepared(path, id:, method:, text: nil, icon: nil, size: 24, classes: nil, turbo: { turbo_frame: "_top" })
+    base_classes = "btn border border-secondary-subtle text-secondary"
+    classes = safe_join([ base_classes, classes ], " ")
+    build_button(
+      path,
+      id:,
+      method:,
+      text:,
+      icon:,
+      size:,
+      classes:,
+      turbo:
+    )
+  end
+
+  def build_link(path, text: nil, icon: nil, size: 24, classes: nil, turbo: { turbo_frame: "_top" })
+    icon_tag = icon.nil? ? nil : icon(icon, size:)
+    text_tag = text.nil? ? nil : text
+    base_classes = "d-inline-flex align-items-center gap-1"
+    classes = safe_join([ base_classes, classes ], " ")
+    link_to path,
+            class: classes,
+            data: turbo do
+      safe_join([ icon_tag, text_tag ], " ")
     end
   end
 
-  def build_btn_class(base_class, size)
-    size ||= "btn-sm"
-    "btn #{base_class} #{size} border border-secondary-subtle"
+  def build_button(path, id:, method:, text: nil, icon: nil, size: 24, classes: nil, turbo: { turbo_frame: "_top" })
+    icon_tag = icon.nil? ? nil : icon(icon, size:)
+    text_tag = text.nil? ? nil : text
+    base_classes = "d-inline-flex align-items-center gap-1"
+    classes = safe_join([ base_classes, classes ], " ")
+    button_to path,
+              id:,
+              method:,
+              class: classes,
+              data: turbo do
+      safe_join([ icon_tag, text_tag ], " ")
+    end
   end
 end

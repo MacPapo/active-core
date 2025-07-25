@@ -151,6 +151,7 @@ class User < ApplicationRecord
       payments.kept
     end
       .joins(:staff)
+      .includes(:staff, :payment_membership, :payment_subscription)
       .by_created_at(params[:from], params[:to])
       .by_name(params[:name])
       .by_type(params[:type])

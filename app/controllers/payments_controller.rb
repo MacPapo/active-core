@@ -14,7 +14,8 @@ class PaymentsController < ApplicationController
     @pagy, @payments = pagy(
       Payment
         .filter(@filters)
-        .includes(:staff, :receipt, :payment_membership, :payment_subscription)
+        .includes(:staff, :muser, :suser, :receipt, :payment_membership, :payment_subscription)
+        .joins(:payment_membership, :payment_subscription)
         .load_async
     )
   end

@@ -59,35 +59,27 @@
             <!-- Activities -->
             <td>
                 <% subs = user.subscriptions.kept.where.missing(:normal_subscription) %>
-                <% if subs.nil? || subs.empty? %>
-                    <%= link_to new_subscription_path(user_id: user.id),
-                                class: "btn btn-dark text-secondary border border-secondary-subtle badge rounded-pill",
-                                data: { turbo_frame: "_top" } do %>
-                        <%= icon("add") %>
-                        <%= t('activities.activity.add_to_activity') %>
-                    <% end %>
-                <% else %>
-                    <% subs.each do |sub| %>
-                        <% presenter = SubscriptionPresenter.new(sub) %>
-                        <%= link_to presenter.appropriate_path(user),
-                                    method: presenter.method,
-                                    class: "btn btn-#{ presenter.css_color } text-secondary border border-secondary-subtle badge rounded-pill",
-                                    data: { turbo_method: presenter.method, turbo_frame: "_top" } do %>
-                            <i class="<%= presenter.link_icon %>"></i> <%= presenter.link_title %>
-                        <% end %>
-                    <% end %>
+                <%= add_button_to new_subscription_path(user_id: user.id),
+                                  text: subs.nil? || subs.empty? ? t('activities.activity.add_to_activity') : nil,
+                                  size: 16,
+                                  classes: "btn-sm rounded-pill badge"
+                %>
+
+                <% subs.each do |sub| %>
+                    <%= presenter_button(SubscriptionPresenter.new(sub), obj: user) %>
                 <% end %>
             </td>
 
-            <!-- Action buttons -->
-            <td class="text-end">
-                <%= view_button_to(user) %>
-                <%= edit_button_to(user) %>
+            <!-- Action buttons REFERENCE -->
+            <td class="d-flex gap-1 justify-content-end">
+                <% classes = "btn-sm" %>
+                <%= view_button_to([ user ], size: 16, classes: ) %>
+                <%= edit_button_to([ :edit, user ], size: 16, classes: ) %>
 
                 <% if user.discarded? %>
-                    <%= restore_button_to(user) %>
+                    <%= restore_button_to(user, id: "#{user.id}_restore_button", size: 16, classes: ) %>
                 <% else %>
-                    <%= delete_button_to(user) %>
+                    <%= delete_button_to(user, id: "#{user.id}_delete_button", size: 16, classes: ) %>
                 <% end %>
             </td>
         </tr>

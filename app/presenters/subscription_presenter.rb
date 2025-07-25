@@ -5,7 +5,7 @@ class SubscriptionPresenter
   include Rails.application.routes.url_helpers
 
   def initialize(subscription)
-    @subscription = subscription
+    @subscription = Subscription.includes(:activity).find(subscription&.id)
   end
 
   def appropriate_path(user)
@@ -50,15 +50,15 @@ class SubscriptionPresenter
   def link_icon
     case subscription_handler
     when :active
-      'me-2 text-secondary bi bi-eye-fill'
+      'ok'
     when :inactive
-      'me-2 text-secondary bi bi-credit-card'
+      'inactive'
     when :expired
-      'me-2 text-secondary bi bi-arrow-clockwise'
+      'expired'
     when :deleted
-      'me-1 text-secondary bi bi-recycle'
+      'delete'
     else
-      'me-2 text-secondary bi bi-plus-circle-fill'
+      'add'
     end
   end
 

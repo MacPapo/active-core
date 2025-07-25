@@ -174,25 +174,25 @@ mark {
     background-color: $secondary;
 }
 
-// TABLIST COMPONENTS
+.nav-pills.nav-pills .nav-link.nav-link {
+    background-color: $light;
+    color: $secondary;
 
-.nav-pills .nav-link {
-  background-color: $light;
-  color: $secondary;
+    &:hover {
+        background-color: $dark;
+        color: $secondary;
+    }
+
+    &.active {
+        background-color: $secondary-80;
+        color: $primary;
+
+        &:hover {
+            background-color: $secondary-80;
+        }
+    }
 }
 
-.nav-pills .nav-link:hover {
-  background-color: $dark;
-}
-
-.nav-pills .nav-link.active {
-  background-color: $secondary;
-  color: $primary;
-}
-
-.nav-pills .nav-link.active:hover {
-  background-color: $secondary-80;
-}
 
 
 .form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -216,28 +216,40 @@ $alert-text: $warning-80;
 $alert-border: $border;
 $alert-shadow: rgba($dark, 0.1);
 
-.alert {
-  background-color: $alert-bg;
-  color: $alert-text;
-  border: 1px solid $alert-border;
-  border-radius: 0.375rem;
-  padding: 1rem;
-  box-shadow: 0px 2px 10px $alert-shadow;
-  position: fixed;
-  top: 0.5rem;
-  right: 1rem;
-  z-index: 1050;
-  transition: opacity 0.5s, transform 0.5s;
+// ALERT
+div.alert,
+.alert.alert-warning-custom {
+    background-color: $alert-bg;
+    color: $alert-text;
+    border: 1px solid $alert-border;
+    border-radius: 0.375rem;
+    padding: 1rem;
+    box-shadow: 0px 2px 10px $alert-shadow;
+    position: fixed;
+    top: 0.5rem;
+    right: 1rem;
+    z-index: 1050;
+    transition: opacity 0.5s, transform 0.5s;
 
-  &.fade.show {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    &.fade.show {
+        opacity: 1;
+        transform: translateX(0);
+    }
 
-  &.fade {
-    opacity: 0;
-    transform: translateX(100%);
-  }
+    &.fade {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    a {
+        color: darken($alert-text, 15%);
+        text-decoration: underline;
+    }
+
+    .btn,
+    .nav-link {
+        all: unset;
+    }
 }
 
 // NOTICE
@@ -247,28 +259,39 @@ $notice-text: $success-80;
 $notice-border: $border;
 $notice-shadow: rgba($dark, 0.1);
 
-.notice {
-  background-color: $notice-bg;
-  color: $notice-text;
-  border: 1px solid $notice-border;
-  border-radius: 0.375rem;
-  padding: 1rem;
-  box-shadow: 0px 2px 10px $notice-shadow;
-  position: fixed;
-  top: 0.5rem;
-  right: 1rem;
-  z-index: 1050;
-  transition: opacity 0.5s, transform 0.5s;
 
-  &.fade.show {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.alert.notice {
+    background-color: $notice-bg;
+    color: $notice-text;
+    border: 1px solid $notice-border;
+    border-radius: 0.375rem;
+    padding: 1rem;
+    box-shadow: 0px 2px 10px $notice-shadow;
+    position: fixed;
+    top: 0.5rem;
+    right: 1rem;
+    z-index: 1050;
+    transition: opacity 0.5s, transform 0.5s;
 
-  &.fade {
-    opacity: 0;
-    transform: translateX(100%);
-  }
+    &.fade.show {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    &.fade {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    a {
+        color: darken($notice-text, 15%);
+        text-decoration: underline;
+    }
+
+    .btn,
+    .nav-link {
+        all: unset;
+    }
 }
 
 @import "bootstrap";
