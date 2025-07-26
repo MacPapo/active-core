@@ -52,7 +52,7 @@ class StaffsController < ApplicationController
     @staff.role = params[:staff][:role] if current_staff.admin?
 
     if @staff.save
-      redirect_to staff_url(@staff), notice: t('.create_succ')
+      redirect_to staff_url(@staff), notice: t(".create_succ")
     else
       set_roles
       render :new, status: :unprocessable_entity
