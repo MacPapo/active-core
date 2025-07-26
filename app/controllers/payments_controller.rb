@@ -3,11 +3,11 @@
 # Payment Controller
 class PaymentsController < ApplicationController
   before_action :set_payment, only: %i[show edit update destroy restore]
-  before_action :set_ordering, only: [:index]
-  before_action :set_filters, only: [:index]
+  before_action :set_ordering, only: [ :index ]
+  before_action :set_filters, only: [ :index ]
   before_action :set_type_and_id, only: %i[new create]
 
-  after_action :create_receipt, only: [:create], if: -> { @payment.persisted? }
+  after_action :create_receipt, only: [ :create ], if: -> { @payment.persisted? }
 
   # GET /payments or /payments.json
   def index
@@ -42,7 +42,7 @@ class PaymentsController < ApplicationController
 
       respond_to do |format|
         if @entity_payment.save
-          format.html { redirect_to @payment, notice: t('.create_succ') }
+          format.html { redirect_to @payment, notice: t(".create_succ") }
           format.json { render :show, status: :created, location: @payment }
         else
           format.html { render :new, status: :unprocessable_entity }
@@ -56,7 +56,7 @@ class PaymentsController < ApplicationController
   def update
     respond_to do |format|
       if @payment.update(payment_params)
-        format.html { redirect_to @payment, notice: t('.update_succ') }
+        format.html { redirect_to @payment, notice: t(".update_succ") }
         format.json { render :show, status: :ok, location: @payment }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -70,14 +70,14 @@ class PaymentsController < ApplicationController
     @payment.discard
 
     respond_to do |format|
-      format.html { redirect_to payments_path, status: :see_other, notice: t('.destroy_succ') }
+      format.html { redirect_to payments_path, status: :see_other, notice: t(".destroy_succ") }
       format.json { head :no_content }
     end
   end
 
   def restore
     @payment.undiscard
-    redirect_to payments_url, notice: t('.restore_succ')
+    redirect_to payments_url, notice: t(".restore_succ")
   end
 
   private
@@ -88,8 +88,8 @@ class PaymentsController < ApplicationController
   end
 
   def set_ordering
-    @sort_by   = params[:sort_by]   || 'updated_at'
-    @direction = params[:direction] || 'desc'
+    @sort_by   = params[:sort_by]   || "updated_at"
+    @direction = params[:direction] || "desc"
   end
 
   def set_type_and_id
@@ -101,16 +101,16 @@ class PaymentsController < ApplicationController
     return nil if eid.blank? && type.blank?
 
     case type
-    when 'mem'
+    when "mem"
       mem = find_membership(eid)
       ActivateThingJob.perform_later(@type, mem.id)
       PaymentMembership.new(membership: mem, user: mem.user, payment: @payment)
-    when 'sub'
+    when "sub"
       sub = find_subscription(eid)
       ActivateThingJob.perform_later(@type, sub.id)
       PaymentSubscription.new(subscription: sub, user: sub.user, payment: @payment)
     else
-      p 'LOG PHANDLER ELSE'
+      p "LOG PHANDLER ELSE"
     end
   end
 
@@ -129,7 +129,7 @@ class PaymentsController < ApplicationController
   def find_entity(type, id)
     return unless type.present? && %w[mem sub].include?(type)
 
-    type == 'mem' ? find_membership(id) : find_subscription(id)
+    type == "mem" ? find_membership(id) : find_subscription(id)
   end
 
   def set_filters

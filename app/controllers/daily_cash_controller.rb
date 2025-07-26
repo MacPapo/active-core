@@ -2,8 +2,8 @@
 
 # Daily Cash Controller
 class DailyCashController < ApplicationController
-  before_action :set_ordering, only: [:index]
-  before_action :set_filters, only: [:index]
+  before_action :set_ordering, only: [ :index ]
+  before_action :set_filters, only: [ :index ]
 
   def index
     @morning_item = Payment.daily_cash(:morning, @filters).includes(:staff)
@@ -21,8 +21,8 @@ class DailyCashController < ApplicationController
   private
 
   def set_ordering
-    @sort_by   = params[:sort_by]   || 'updated_at'
-    @direction = params[:direction] || 'desc'
+    @sort_by   = params[:sort_by]   || "updated_at"
+    @direction = params[:direction] || "desc"
   end
 
   def set_filters

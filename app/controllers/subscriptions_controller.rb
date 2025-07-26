@@ -12,8 +12,8 @@ class SubscriptionsController < ApplicationController
 
   # GET /subscriptions
   def index
-    @sort_by = params[:sort_by] || 'updated_at'
-    @direction = params[:direction] || 'desc'
+    @sort_by = params[:sort_by] || "updated_at"
+    @direction = params[:direction] || "desc"
 
     filters = {
       visibility: params[:visibility],
@@ -58,18 +58,18 @@ class SubscriptionsController < ApplicationController
       ActiveRecord::Base.transaction do
         @subscription = Subscription.build(subscription_params)
 
-        raise t('.create_no_membership') unless @user.active_membership?
+        raise t(".create_no_membership") unless @user.active_membership?
 
         check_if_user_already_subscribed(user_id)
-        raise t('.create_failed') unless @subscription.save
+        raise t(".create_failed") unless @subscription.save
 
         if params[:open] && params[:open].to_i == 1
-          raise t('.create_duplicate_open') if open_already_exists(user_id)
+          raise t(".create_duplicate_open") if open_already_exists(user_id)
 
           create_open_subscription
         end
 
-        redirect_to new_payment_path(eid: @subscription.id, type: 'sub'), notice: t('.create_succ')
+        redirect_to new_payment_path(eid: @subscription.id, type: "sub"), notice: t(".create_succ")
       end
     rescue StandardError => e
       real_direction = params[:direction]&.to_i
@@ -82,16 +82,16 @@ class SubscriptionsController < ApplicationController
 
   def check_if_user_already_subscribed(id)
     x = @activity.subscriptions.where(user: id)
-    raise t('.create_duplicate_user') if x.present?
+    raise t(".create_duplicate_user") if x.present?
   end
 
   # GET /subscriptions/1/renew
   def renew
     if @subscription.inactive?
-      redirect_to users_path, alert: t('.subscription_already_inactive')
+      redirect_to users_path, alert: t(".subscription_already_inactive")
     else
       @subscription.start_date = Time.zone.today
-      @subscription.end_date = ''
+      @subscription.end_date = ""
       @activity = @subscription.activity
       set_plans(@activity)
       @user = User.find(@subscription.user.id)
@@ -102,7 +102,7 @@ class SubscriptionsController < ApplicationController
   def renew_update
     if @subscription.update(subscription_params)
       @subscription.inactive!
-      redirect_to new_payment_path(eid: @subscription.id, type: 'sub'), notice: t('.renew_succ')
+      redirect_to new_payment_path(eid: @subscription.id, type: "sub"), notice: t(".renew_succ")
     else
       render :renew, status: :unprocessable_entity
     end
@@ -111,7 +111,7 @@ class SubscriptionsController < ApplicationController
   # PATCH/PUT /subscriptions/1
   def update
     if @subscription.update(subscription_params)
-      redirect_to subscription_url(@subscription), notice: t('.update_succ')
+      redirect_to subscription_url(@subscription), notice: t(".update_succ")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -120,13 +120,13 @@ class SubscriptionsController < ApplicationController
   # DELETE /subscriptions/1
   def destroy
     @subscription.discard
-    redirect_to user_url(@subscription.user), notice: t('.destroy_succ')
+    redirect_to user_url(@subscription.user), notice: t(".destroy_succ")
   end
 
   # PATCH /users/1
   def restore
     @subscription.undiscard
-    redirect_to users_url, notice: t('.restore_succ')
+    redirect_to users_url, notice: t(".restore_succ")
   end
 
   private
@@ -179,11 +179,11 @@ class SubscriptionsController < ApplicationController
       end_date: @subscription.start_date.end_of_month
     )
 
-    raise t('.renew_open_failed') unless open.save
+    raise t(".renew_open_failed") unless open.save
   end
 
   def set_weight_room_activity
-    @weight_room = Activity.find_by(name: 'Sala pesi')
+    @weight_room = Activity.find_by(name: "Sala pesi")
     @weight_plan = @weight_room.activity_plans.find_by(plan: :one_month)
   end
 
@@ -200,7 +200,7 @@ class SubscriptionsController < ApplicationController
       @subscription.update(open_subscription_id: open_subscription.id)
     else
       open_subscription.destroy
-      raise t('.create_open_failed')
+      raise t(".create_open_failed")
     end
   end
 
@@ -214,7 +214,7 @@ class SubscriptionsController < ApplicationController
 
   def connect_weight_room
     set_user if @user.nil?
-    weight_room_sub = @user.subscriptions.find_by(activity: Activity.find_by(name: 'Sala pesi'))
+    weight_room_sub = @user.subscriptions.find_by(activity: Activity.find_by(name: "Sala pesi"))
     weight_room_plans = weight_room_sub.activity.activity_plans
     plan = weight_room_plans.find_by(plan: :one_month)
 
@@ -225,7 +225,7 @@ class SubscriptionsController < ApplicationController
       staff_id: subscription_params[:staff_id]
     )
 
-    raise t('.merge_failed') unless weight_room_sub.save
+    raise t(".merge_failed") unless weight_room_sub.save
 
     @subscription.update(open_subscription_id: weight_room_sub.id)
     @subscription.save

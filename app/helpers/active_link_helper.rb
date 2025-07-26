@@ -4,7 +4,7 @@ module ActiveLinkHelper
     redirect_to new_staff_session_path unless staff_signed_in?
 
     link = block_given? ? text : path
-    options[:class] = class_names(options[:class], 'fw-semibold active') if current_page? link
+    options[:class] = class_names(options[:class], "fw-semibold active") if current_page? link
 
     if block_given?
       link_to text, options, &block

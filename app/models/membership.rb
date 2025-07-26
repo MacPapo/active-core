@@ -41,7 +41,7 @@ class Membership < ApplicationRecord
     return if query.blank?
 
     where(
-      'name LIKE :q OR surname LIKE :q OR (surname LIKE :s AND name LIKE :n)',
+      "name LIKE :q OR surname LIKE :q OR (surname LIKE :s AND name LIKE :n)",
       q: "%#{query}%",
       s: "%#{query.split.last}%",
       n: "%#{query.split.first}%"
@@ -64,7 +64,7 @@ class Membership < ApplicationRecord
 
   scope :sorted, ->(sort_by, direction) do
     if %w[name surname start_date end_date updated_at].include?(sort_by)
-      direction = %w[asc desc].include?(direction) ? direction : 'asc'
+      direction = %w[asc desc].include?(direction) ? direction : "asc"
       sort_by =
         if %w[name surname].include?(sort_by)
           "users.#{sort_by}"
@@ -76,13 +76,13 @@ class Membership < ApplicationRecord
     end
   end
 
-  scope :order_by_updated_at, -> { order('memberships.updated_at desc') }
+  scope :order_by_updated_at, -> { order("memberships.updated_at desc") }
 
   def self.filter(params)
     case params[:visibility]
-    when 'all'
+    when "all"
       all
-    when 'deleted'
+    when "deleted"
       discarded
     else
       kept

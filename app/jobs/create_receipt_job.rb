@@ -6,7 +6,7 @@ class CreateReceiptJob < ApplicationJob
 
   def perform(*args)
     @type, @payment, eid = args
-    return if @payment.present? && @payment.method != 'cash'
+    return if @payment.present? && @payment.method != "cash"
 
     @current_year = Time.zone.today.year
     ActiveRecord::Base.transaction do
@@ -25,12 +25,12 @@ class CreateReceiptJob < ApplicationJob
     return unless @type.present? && @receipt.present? && eid.present?
 
     case @type
-    when 'mem'
+    when "mem"
       create_membership_receipt(eid)
-    when 'sub'
+    when "sub"
       create_subscription_receipt(eid)
     else
-      p 'LOG RHANDLER ELSE'
+      p "LOG RHANDLER ELSE"
     end
   end
 

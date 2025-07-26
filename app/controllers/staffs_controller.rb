@@ -7,8 +7,8 @@ class StaffsController < ApplicationController
 
   # GET /staffs
   def index
-    @sort_by = params[:sort_by] || 'updated_at'
-    @direction = params[:direction] || 'desc'
+    @sort_by = params[:sort_by] || "updated_at"
+    @direction = params[:direction] || "desc"
 
     filters = {
       visibility: params[:visibility],
@@ -37,7 +37,7 @@ class StaffsController < ApplicationController
     @staff = Staff.new(staff_params)
 
     if @staff.save
-      redirect_to staff_url(@staff), notice: t('.create_succ')
+      redirect_to staff_url(@staff), notice: t(".create_succ")
     else
       render :new, status: :unprocessable_entity
     end
@@ -46,7 +46,7 @@ class StaffsController < ApplicationController
   # PATCH/PUT /staffs/1 or /staffs/1.json
   def update
     if @staff.update(staff_params)
-      redirect_to staff_url(@staff), notice: t('.update_succ')
+      redirect_to staff_url(@staff), notice: t(".update_succ")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -55,13 +55,13 @@ class StaffsController < ApplicationController
   # DELETE /staffs/1
   def destroy
     @staff.discard
-    redirect_to staffs_url, notice: t('.destroy_succ')
+    redirect_to staffs_url, notice: t(".destroy_succ")
   end
 
   # PATCH /staffs/1/restore
   def restore
     @staff.undiscard
-    redirect_to staffs_url, notice: t('.restore_succ')
+    redirect_to staffs_url, notice: t(".restore_succ")
   end
 
   private

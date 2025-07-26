@@ -48,16 +48,16 @@ class Payment < ApplicationRecord
   scope :by_name, ->(query) do
     return if query.blank?
 
-    where('staffs.nickname LIKE :q OR payments.note LIKE :q', q: "%#{query}%")
+    where("staffs.nickname LIKE :q OR payments.note LIKE :q", q: "%#{query}%")
   end
 
   scope :by_type, ->(type) do
     return if type.blank?
 
     case type
-    when 'mem'
+    when "mem"
       joins(:payment_membership)
-    when 'sub'
+    when "sub"
       joins(:payment_subscription)
     else
       left_joins(:payment_membership, :payment_subscription)
@@ -73,7 +73,7 @@ class Payment < ApplicationRecord
   scope :sorted, ->(sort_by, direction) do
     return unless %w[created_at date amount staff updated_at].include?(sort_by)
 
-    sort_by = sort_by == 'staff' ? 'staffs.nickname' : "payments.#{sort_by}"
+    sort_by = sort_by == "staff" ? "staffs.nickname" : "payments.#{sort_by}"
     order("#{sort_by} #{direction}")
   end
 
@@ -83,9 +83,9 @@ class Payment < ApplicationRecord
 
   def self.filter(params)
     case params[:visibility]
-    when 'all'
+    when "all"
       all
-    when 'deleted'
+    when "deleted"
       discarded
     else
       kept
@@ -102,13 +102,13 @@ class Payment < ApplicationRecord
     return if period.blank? || params.blank?
 
     mid = Time.zone.now.beginning_of_day
-    select_range = ->(y) { kept.by_method('cash').by_created_at(mid + y.first, mid + y.last).sorted(params[:sort_by], params[:direction]) }
+    select_range = ->(y) { kept.by_method("cash").by_created_at(mid + y.first, mid + y.last).sorted(params[:sort_by], params[:direction]) }
 
-    select_range.call(period == :morning ? [7.hours, 14.hours] : [14.hours, 21.hours])
+    select_range.call(period == :morning ? [ 7.hours, 14.hours ] : [ 14.hours, 21.hours ])
   end
 
   def self.humanize_payment_methods
-    methods.keys.map { |key| [Payment.human_attribute_name("method.#{key}"), key] }
+    methods.keys.map { |key| [ Payment.human_attribute_name("method.#{key}"), key ] }
   end
 
   def humanize_payment_method(method = self.method)
@@ -121,7 +121,7 @@ class Payment < ApplicationRecord
 
     return unless mem.present? || sub.present?
 
-    type = mem.present? ? 'membership' : 'subscription'
+    type = mem.present? ? "membership" : "subscription"
 
     Payment.human_attribute_name("payable.#{type}")
   end

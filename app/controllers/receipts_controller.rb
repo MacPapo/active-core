@@ -32,7 +32,7 @@ class ReceiptsController < ApplicationController
 
     respond_to do |format|
       if @receipt.save
-        format.html { redirect_to @receipt, notice: 'Receipt was successfully created.' }
+        format.html { redirect_to @receipt, notice: "Receipt was successfully created." }
         format.json { render :show, status: :created, location: @receipt }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -45,7 +45,7 @@ class ReceiptsController < ApplicationController
   def update
     respond_to do |format|
       if @receipt.update(receipt_params)
-        format.html { redirect_to @receipt, notice: 'Receipt was successfully updated.' }
+        format.html { redirect_to @receipt, notice: "Receipt was successfully updated." }
         format.json { render :show, status: :ok, location: @receipt }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -60,7 +60,7 @@ class ReceiptsController < ApplicationController
 
     # WATCH
     respond_to do |format|
-      format.html { redirect_to users_path, status: :see_other, notice: t('.delete_succ') }
+      format.html { redirect_to users_path, status: :see_other, notice: t(".delete_succ") }
       format.json { head :no_content }
     end
   end
@@ -80,7 +80,7 @@ class ReceiptsController < ApplicationController
   def send_pdf
     send_data @pdf.render,
               filename: "#{@receipt.created_at.strftime('%s')}-ricevuta.pdf",
-              type: 'application/pdf',
+              type: "application/pdf",
               disposition: :inline
   end
 

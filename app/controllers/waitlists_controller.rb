@@ -23,7 +23,7 @@ class WaitlistsController < ApplicationController
     @waitlist = Waitlist.build(user:, activity_id: waitlist_params[:activity_id])
 
     if @waitlist.save
-      redirect_to activity_url(@waitlist.activity), notice: t('.create_succ')
+      redirect_to activity_url(@waitlist.activity), notice: t(".create_succ")
     else
       render :new, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class WaitlistsController < ApplicationController
     user = @waitlist.user
 
     if user.update(name: waitlist_params[:name], surname: waitlist_params[:surname], phone:)
-      redirect_to waitlist_url(@waitlist), notice: t('.update_succ')
+      redirect_to waitlist_url(@waitlist), notice: t(".update_succ")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -46,7 +46,7 @@ class WaitlistsController < ApplicationController
     activity = @waitlist.activity
     @waitlist.destroy!
 
-    redirect_to activity_path(activity), notice: t('.destroy_succ')
+    redirect_to activity_path(activity), notice: t(".destroy_succ")
   end
 
   private

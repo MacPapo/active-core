@@ -6,7 +6,7 @@ class ValidateMembershipStatusJob < ApplicationJob
 
   # TODO Guarda se corretto
   def perform(*)
-    memberships_to_update = Membership.where(status: :active).where('end_date < ?', Time.zone.today)
+    memberships_to_update = Membership.where(status: :active).where("end_date < ?", Time.zone.today)
 
     memberships_to_update.find_each(&:expired!)
   end

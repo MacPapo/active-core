@@ -11,7 +11,7 @@ module IconHelper
     # Merge class
     if options[:class]
       existing_class = svg_element["class"]
-      svg_element["class"] = [existing_class, options.delete(:class)].compact.join(" ")
+      svg_element["class"] = [ existing_class, options.delete(:class) ].compact.join(" ")
     end
 
     # Set default size if not provided explicitly

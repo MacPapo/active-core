@@ -6,7 +6,7 @@ class Staff < ApplicationRecord
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
-  devise :database_authenticatable, :timeoutable, :trackable, authentication_keys: [:nickname]
+  devise :database_authenticatable, :timeoutable, :trackable, authentication_keys: [ :nickname ]
   belongs_to :user
 
   has_many :memberships, dependent: :nullify
@@ -19,8 +19,8 @@ class Staff < ApplicationRecord
 
   enum :role, { contributor: 0, volunteer: 1, admin: 2 }, default: :contributor
 
-  delegate :cf, :full_name, :name, :surname, 'med_cert_valid?',
-           :age, :email, :phone, :birth_day, 'affiliated?',
+  delegate :cf, :full_name, :name, :surname, "med_cert_valid?",
+           :age, :email, :phone, :birth_day, "affiliated?",
            :med_cert_issue_date, :med_cert_exp_date, to: :user
 
   after_undiscard do
@@ -30,7 +30,7 @@ class Staff < ApplicationRecord
   scope :by_name, ->(query) do
     if query.present?
       where(
-        'users.name LIKE :q OR users.surname LIKE :q OR (users.surname LIKE :s AND users.name LIKE :n)',
+        "users.name LIKE :q OR users.surname LIKE :q OR (users.surname LIKE :s AND users.name LIKE :n)",
         q: "%#{query}%",
         s: "%#{query.split.last}%",
         n: "%#{query.split.first}%"
@@ -47,16 +47,16 @@ class Staff < ApplicationRecord
   scope :sorted, ->(sort_by, direction) do
     return unless %w[name surname birth_day updated_at].include?(sort_by)
 
-    direction = %w[asc desc].include?(direction) ? direction : 'asc'
-    sort_by = sort_by == 'updated_at' ? "staffs.#{sort_by}" : "users.#{sort_by}"
+    direction = %w[asc desc].include?(direction) ? direction : "asc"
+    sort_by = sort_by == "updated_at" ? "staffs.#{sort_by}" : "users.#{sort_by}"
     order("#{sort_by} #{direction}")
   end
 
   def self.filter(params)
     case params[:visibility]
-    when 'all'
+    when "all"
       all
-    when 'deleted'
+    when "deleted"
       discarded
     else
       kept
@@ -88,7 +88,7 @@ class Staff < ApplicationRecord
 
   def self.humanize_roles
     roles.keys.map do |key|
-      [Staff.human_attribute_name("role.#{key}"), key]
+      [ Staff.human_attribute_name("role.#{key}"), key ]
     end
   end
 end

@@ -8,10 +8,10 @@ class ActivateThingJob < ApplicationJob
     type, eid = args
 
     case type
-    when 'mem'
+    when "mem"
       membership = Membership.find(eid)
       membership.active!
-    when 'sub'
+    when "sub"
       subscription = Subscription.find(eid)
       subscription.active!
 

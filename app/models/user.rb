@@ -5,7 +5,7 @@ class User < ApplicationRecord
   include Discard::Model
 
   validates :name, :surname, presence: true
-  validates :affiliated, inclusion: { in: [true, false] }
+  validates :affiliated, inclusion: { in: [ true, false ] }
 
   validates :cf, length: { is: 16 }, allow_blank: true
   normalizes :cf, with: -> { _1.strip.upcase }
@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   normalizes :email, with: -> { _1.strip.downcase }
 
-  validates :phone, phone: { possible: true, allow_blank: true, types: [:fixed_or_mobile] }
+  validates :phone, phone: { possible: true, allow_blank: true, types: [ :fixed_or_mobile ] }
   validate :med_cert_issue_date_cannot_be_in_future, if: -> { med_cert_issue_date.present? }
 
   before_save :normalize_phone, if: -> { phone.present? }
@@ -79,7 +79,7 @@ class User < ApplicationRecord
     return if query.blank?
 
     where(
-      'users.name LIKE :q OR users.surname LIKE :q OR (users.surname LIKE :s AND users.name LIKE :n)',
+      "users.name LIKE :q OR users.surname LIKE :q OR (users.surname LIKE :s AND users.name LIKE :n)",
       q: "%#{query}%",
       s: "%#{query.split.last}%",
       n: "%#{query.split.first}%"
@@ -101,7 +101,7 @@ class User < ApplicationRecord
   scope :by_activity_id, ->(id) do
     return if id.blank?
 
-    joins(:subscriptions).where('subscriptions.activity_id = ? AND subscriptions.discarded_at IS NULL', id.to_i)
+    joins(:subscriptions).where("subscriptions.activity_id = ? AND subscriptions.discarded_at IS NULL", id.to_i)
   end
 
   scope :sorted, ->(sort_by, direction) do
@@ -112,9 +112,9 @@ class User < ApplicationRecord
 
   def self.filter(params)
     case params[:visibility]
-    when 'all'
+    when "all"
       all
-    when 'deleted'
+    when "deleted"
       discarded
     else
       kept
@@ -123,14 +123,14 @@ class User < ApplicationRecord
       .by_membership_status(params[:membership_status])
       .by_activity_status(params[:activity_status])
       .by_activity_id(params[:activity_id])
-      .sorted(params[:sort_by], params[:direction] || 'desc')
+      .sorted(params[:sort_by], params[:direction] || "desc")
   end
 
   def sfilter(params)
     case params[:visibility]
-    when 'all'
+    when "all"
       subscriptions.all
-    when 'deleted'
+    when "deleted"
       subscriptions.discarded
     else
       subscriptions.kept
@@ -138,14 +138,14 @@ class User < ApplicationRecord
       .by_activity_name(params[:name])
       .by_activity_id(params[:activity_id])
       .by_open(params[:open])
-    #.sorted(params[:sort_by], params[:direction] || 'desc')
+    # .sorted(params[:sort_by], params[:direction] || 'desc')
   end
 
   def pfilter(params)
     case params[:visibility]
-    when 'all'
+    when "all"
       payments.all
-    when 'deleted'
+    when "deleted"
       payments.discarded
     else
       payments.kept
@@ -233,6 +233,6 @@ class User < ApplicationRecord
   def med_cert_issue_date_cannot_be_in_future
     return unless med_cert_issue_date > Time.zone.today
 
-    errors.add(:med_cert_issue_date, I18n.t('global.errors.med_date_future'))
+    errors.add(:med_cert_issue_date, I18n.t("global.errors.med_date_future"))
   end
 end

@@ -28,12 +28,12 @@ class Activity < ApplicationRecord
     activity_plans&.undiscard_all
   end
 
-  scope :by_name, ->(name) { where('name LIKE ?', "%#{name}%") if name.present? }
+  scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
 
   scope :by_range, lambda { |range|
     return unless range.present? && range.to_i.positive?
 
-    joins(:subscriptions).group(:activity_id).having('COUNT(*) = ?', range.to_i)
+    joins(:subscriptions).group(:activity_id).having("COUNT(*) = ?", range.to_i)
   }
 
   scope :by_max_num, lambda { |num|
@@ -45,17 +45,17 @@ class Activity < ApplicationRecord
   scope :sorted, lambda { |sort_by, direction|
     return unless %w[name num_participants updated_at].include?(sort_by)
 
-    direction = %w[asc desc].include?(direction) ? direction : 'asc'
+    direction = %w[asc desc].include?(direction) ? direction : "asc"
     order("activities.#{sort_by} #{direction}")
   }
 
-  scope :order_by_updated_at, -> { order('updated_at desc') }
+  scope :order_by_updated_at, -> { order("updated_at desc") }
 
   def self.filter(params)
     case params[:visibility]
-    when 'all'
+    when "all"
       all
-    when 'deleted'
+    when "deleted"
       discarded
     else
       kept
@@ -67,9 +67,9 @@ class Activity < ApplicationRecord
 
   def pfilter(params)
     case params[:visibility]
-    when 'all'
+    when "all"
       activity_plans.all
-    when 'deleted'
+    when "deleted"
       activity_plans.discarded
     else
       activity_plans.kept

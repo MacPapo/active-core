@@ -8,8 +8,8 @@ class ActivitiesController < ApplicationController
   def index
     @max = Activity.kept.joins(:subscriptions).group(:activity_id).count.values.max || 0
 
-    @sort_by = params[:sort_by] || 'updated_at'
-    @direction = params[:direction] || 'desc'
+    @sort_by = params[:sort_by] || "updated_at"
+    @direction = params[:direction] || "desc"
 
     filters = {
       visibility: params[:visibility],
@@ -45,7 +45,7 @@ class ActivitiesController < ApplicationController
 
     render json: { plans: @plans.map { |plan| { id: plan.id, name: plan.humanize_plan } } }
   rescue ActiveRecord::RecordNotFound
-    render json: { error: t('.act_not_found') }, status: :not_found
+    render json: { error: t(".act_not_found") }, status: :not_found
   end
 
   # GET /activities/new
@@ -61,7 +61,7 @@ class ActivitiesController < ApplicationController
     @activity = Activity.new(activity_params)
 
     if @activity.save
-      redirect_to new_activity_plan_path(activity_id: @activity.id), notice: t('.create_succ')
+      redirect_to new_activity_plan_path(activity_id: @activity.id), notice: t(".create_succ")
     else
       render :new, status: :unprocessable_entity
     end
@@ -70,7 +70,7 @@ class ActivitiesController < ApplicationController
   # PATCH/PUT /activities/1
   def update
     if @activity.update(activity_params)
-      redirect_to activity_url(@activity), notice: t('.update_succ')
+      redirect_to activity_url(@activity), notice: t(".update_succ")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -79,13 +79,13 @@ class ActivitiesController < ApplicationController
   # DELETE /activities/1
   def destroy
     @activity.discard
-    redirect_to activities_url, notice: t('.destroy_succ')
+    redirect_to activities_url, notice: t(".destroy_succ")
   end
 
   # PATCH /activities/1/restore
   def restore
     @activity.undiscard
-    redirect_to activities_url, notice: t('.restore_succ')
+    redirect_to activities_url, notice: t(".restore_succ")
   end
 
   # GET /activities/1/name

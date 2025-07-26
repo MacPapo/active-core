@@ -11,6 +11,6 @@ class CleanupEolRecordsJob < ApplicationJob
        Activity ActivityPlan Receipt].freeze
 
   def perform
-    TARGET_CLASSES.each { |cname| Object.const_get(cname).where('discarded_at < ?', 10.years.ago).destroy_all }
+    TARGET_CLASSES.each { |cname| Object.const_get(cname).where("discarded_at < ?", 10.years.ago).destroy_all }
   end
 end

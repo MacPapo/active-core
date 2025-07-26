@@ -13,7 +13,7 @@ class MembershipPresenter
     when :active
       membership_path(@membership)
     when :inactive
-      new_payment_path(eid: @membership.id, type: 'mem')
+      new_payment_path(eid: @membership.id, type: "mem")
     when :expired
       renew_membership_path(@membership, user_id: user&.id)
     when :deleted
@@ -30,39 +30,39 @@ class MembershipPresenter
   end
 
   def link_title
-    return I18n.t('global.restore') if membership_handler == :deleted
+    return I18n.t("global.restore") if membership_handler == :deleted
     return @membership.humanize_status unless membership_handler == :empty
 
-    I18n.t('empty')
+    I18n.t("empty")
   end
 
   def link_icon
     case membership_handler
     when :active
-      'ok'
+      "ok"
     when :inactive
-      'inactive'
+      "inactive"
     when :expired
-      'expired'
+      "expired"
     when :deleted
-      'delete'
+      "delete"
     else
-      'add'
+      "add"
     end
   end
 
   def css_color
     case membership_handler
     when :active
-      'success'
+      "success"
     when :inactive
-      'info'
+      "info"
     when :expired
-      'warning'
+      "warning"
     when :deleted
-      'restore'
+      "restore"
     else
-      'danger'
+      "danger"
     end
   end
 

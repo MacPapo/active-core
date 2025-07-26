@@ -10,13 +10,13 @@ class LegalGuardian < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   normalizes :email, with: -> { _1.strip.downcase }
 
-  validates :phone, phone: { possible: true, types: [:fixed_or_mobile] }
+  validates :phone, phone: { possible: true, types: [ :fixed_or_mobile ] }
   validate :an_eligible_legal_guardian?
 
   scope :by_name, ->(query) do
     if query.present?
       where(
-        'legal_guardians.name LIKE :q OR legal_guardians.surname LIKE :q OR (legal_guardians.surname LIKE :s AND legal_guardians.name LIKE :n)',
+        "legal_guardians.name LIKE :q OR legal_guardians.surname LIKE :q OR (legal_guardians.surname LIKE :s AND legal_guardians.name LIKE :n)",
         q: "%#{query}%",
         s: "%#{query.split.last}%",
         n: "%#{query.split.first}%"
@@ -27,13 +27,13 @@ class LegalGuardian < ApplicationRecord
   scope :by_range, ->(range) do
     return unless range.present? && range.to_i.positive?
 
-    joins(:users).group(:legal_guardian_id).having('COUNT(users.id) = ?', range.to_i)
+    joins(:users).group(:legal_guardian_id).having("COUNT(users.id) = ?", range.to_i)
   end
 
   scope :sorted, ->(sort_by, direction) do
     return unless %w[name surname birth_day email updated_at].include?(sort_by)
 
-    direction = %w[asc desc].include?(direction) ? direction : 'asc'
+    direction = %w[asc desc].include?(direction) ? direction : "asc"
     order("legal_guardians.#{sort_by} #{direction}")
   end
 
@@ -42,7 +42,7 @@ class LegalGuardian < ApplicationRecord
 
     lgs = lgs.by_name(params[:name])
     lgs = lgs.by_range(params[:range])
-    lgs = lgs.sorted(params[:sort_by], params[:direction] || 'desc')
+    lgs = lgs.sorted(params[:sort_by], params[:direction] || "desc")
 
     lgs
   end
@@ -64,7 +64,7 @@ class LegalGuardian < ApplicationRecord
   def an_eligible_legal_guardian?
     return unless minor?
 
-    errors.add(:birth_day, :too_young, message: I18n.t('global.errors.eligible'))
+    errors.add(:birth_day, :too_young, message: I18n.t("global.errors.eligible"))
   end
 
   def normalize_phone

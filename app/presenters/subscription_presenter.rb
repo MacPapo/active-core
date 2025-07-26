@@ -13,7 +13,7 @@ class SubscriptionPresenter
     when :active
       subscription_path(@subscription)
     when :inactive
-      new_payment_path(eid: @subscription.id, type: 'sub')
+      new_payment_path(eid: @subscription.id, type: "sub")
     when :expired
       renew_subscription_path(@subscription, user_id: user&.id)
     when :deleted
@@ -41,39 +41,39 @@ class SubscriptionPresenter
   end
 
   def status_title
-    return I18n.t('global.restore') if subscription_handler == :deleted
+    return I18n.t("global.restore") if subscription_handler == :deleted
     return @subscription.humanize_status unless subscription_handler == :empty
 
-    I18n.t('empty')
+    I18n.t("empty")
   end
 
   def link_icon
     case subscription_handler
     when :active
-      'ok'
+      "ok"
     when :inactive
-      'inactive'
+      "inactive"
     when :expired
-      'expired'
+      "expired"
     when :deleted
-      'delete'
+      "delete"
     else
-      'add'
+      "add"
     end
   end
 
   def css_color
     case subscription_handler
     when :active
-      'success'
+      "success"
     when :inactive
-      'info'
+      "info"
     when :expired
-      'warning'
+      "warning"
     when :deleted
-      'restore'
+      "restore"
     else
-      'danger'
+      "danger"
     end
   end
 

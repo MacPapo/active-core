@@ -16,7 +16,7 @@ class ActivityPlansController < ApplicationController
     @activity = @activity_plan.activity
 
     # Take all unused plans and the current plan
-    used_plans = @activity.activity_plans.pluck(:plan) - [@activity_plan.plan]
+    used_plans = @activity.activity_plans.pluck(:plan) - [ @activity_plan.plan ]
     @plans = ActivityPlan.humanize_plans(ActivityPlan.plans.keys - used_plans)
   end
 
@@ -25,7 +25,7 @@ class ActivityPlansController < ApplicationController
     @activity_plan = ActivityPlan.new(activity_plan_params)
 
     if @activity_plan.save
-      redirect_to activity_path(@activity_plan.activity), notice: t('.create_succ')
+      redirect_to activity_path(@activity_plan.activity), notice: t(".create_succ")
     else
       render :new, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class ActivityPlansController < ApplicationController
   # PATCH/PUT /activity_plans/1
   def update
     if @activity_plan.update(activity_plan_params)
-      redirect_to activity_path(@activity_plan.activity), notice: t('.update_succ')
+      redirect_to activity_path(@activity_plan.activity), notice: t(".update_succ")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -43,12 +43,12 @@ class ActivityPlansController < ApplicationController
   # DELETE /activity_plans/1
   def destroy
     @activity_plan.discard
-    redirect_to activity_path(@activity_plan.activity), notice: t('.destroy_succ')
+    redirect_to activity_path(@activity_plan.activity), notice: t(".destroy_succ")
   end
 
   def restore
     @activity_plan.undiscard
-    redirect_to activities_url, notice: t('.restore_succ')
+    redirect_to activities_url, notice: t(".restore_succ")
   end
 
   private

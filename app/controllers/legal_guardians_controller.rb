@@ -8,8 +8,8 @@ class LegalGuardiansController < ApplicationController
   def index
     @max = LegalGuardian.joins(:users).group(:legal_guardian_id).count.values.max || 0
 
-    @sort_by = params[:sort_by] || 'updated_at'
-    @direction = params[:direction] || 'desc'
+    @sort_by = params[:sort_by] || "updated_at"
+    @direction = params[:direction] || "desc"
 
     filters = {
       name: params[:name],
@@ -52,7 +52,7 @@ class LegalGuardiansController < ApplicationController
     @legal_guardian = LegalGuardian.new(legal_guardian_params)
 
     if @legal_guardian.save
-      redirect_to legal_guardian_url(@legal_guardian), notice: t('.create_succ')
+      redirect_to legal_guardian_url(@legal_guardian), notice: t(".create_succ")
     else
       render :new, status: :unprocessable_entity
     end
@@ -61,7 +61,7 @@ class LegalGuardiansController < ApplicationController
   # PATCH/PUT /legal_guardians/1
   def update
     if @legal_guardian.update(legal_guardian_params)
-      redirect_to legal_guardian_url(@legal_guardian), notice: t('.update_succ')
+      redirect_to legal_guardian_url(@legal_guardian), notice: t(".update_succ")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -70,7 +70,7 @@ class LegalGuardiansController < ApplicationController
   # DELETE /legal_guardians/1
   def destroy
     @legal_guardian.destroy!
-    redirect_to legal_guardians_url, notice: t('.destroy_succ')
+    redirect_to legal_guardians_url, notice: t(".destroy_succ")
   end
 
   private

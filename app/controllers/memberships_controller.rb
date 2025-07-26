@@ -7,8 +7,8 @@ class MembershipsController < ApplicationController
 
   # GET /memberships
   def index
-    @sort_by = params[:sort_by] || 'updated_at'
-    @direction = params[:direction] || 'desc'
+    @sort_by = params[:sort_by] || "updated_at"
+    @direction = params[:direction] || "desc"
 
     filters = {
       visibility: params[:visibility],
@@ -28,7 +28,7 @@ class MembershipsController < ApplicationController
   # GET /memberships/new
   def new
     if user_has_membership?
-      redirect_to memberships_path, alert: t('.membership_already_registered')
+      redirect_to memberships_path, alert: t(".membership_already_registered")
     else
       @membership = Membership.build
       @membership.start_date = Time.zone.today
@@ -44,7 +44,7 @@ class MembershipsController < ApplicationController
     @membership = Membership.build(membership_params)
 
     if @membership.save
-      redirect_to new_payment_path(eid: @membership.id, type: 'mem'), notice: t('.create_succ')
+      redirect_to new_payment_path(eid: @membership.id, type: "mem"), notice: t(".create_succ")
     else
       render :new, user_id:, status: :unprocessable_entity
     end
@@ -52,7 +52,7 @@ class MembershipsController < ApplicationController
 
   def renew
     if @membership.inactive?
-      redirect_to users_path, alert: t('.membership_inactive')
+      redirect_to users_path, alert: t(".membership_inactive")
     else
       @membership.start_date = Time.zone.today
       @membership.update!(end_date: nil)
@@ -62,7 +62,7 @@ class MembershipsController < ApplicationController
   def renew_update
     if @membership.update(membership_params)
       @membership.inactive!
-      redirect_to new_payment_path(eid: @membership.id, type: 'mem'), notice: t('.renew_succ')
+      redirect_to new_payment_path(eid: @membership.id, type: "mem"), notice: t(".renew_succ")
     else
       render :renew, status: :unprocessable_entity
     end
@@ -71,7 +71,7 @@ class MembershipsController < ApplicationController
   # PATCH/PUT /memberships/1
   def update
     if @membership.update(membership_params)
-      redirect_to @membership, notice: t('.update_succ')
+      redirect_to @membership, notice: t(".update_succ")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -80,12 +80,12 @@ class MembershipsController < ApplicationController
   # DELETE /memberships/1
   def destroy
     @membership.discard
-    redirect_to memberships_url, notice: t('.destroy_succ')
+    redirect_to memberships_url, notice: t(".destroy_succ")
   end
 
   def restore
     @membership.undiscard
-    redirect_to memberships_url, notice: t('.restore_succ')
+    redirect_to memberships_url, notice: t(".restore_succ")
   end
 
   private

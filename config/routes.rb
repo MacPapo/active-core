@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   unauthenticated do
     as :staff do
-      root to: 'devise/sessions#new', as: :login
+      root to: "devise/sessions#new", as: :login
     end
   end
 
@@ -19,30 +19,30 @@ Rails.application.routes.draw do
     end
 
     resources :daily_cash
-    resources :receipts, only: [:show]
+    resources :receipts, only: [ :show ]
     resources :waitlists
 
     authenticated :staff, -> { !_1.admin? } do
-      resources :legal_guardians, except: [:destroy] do
+      resources :legal_guardians, except: [ :destroy ] do
         collection do
-          get 'find_by_email'
+          get "find_by_email"
         end
       end
 
       # Removed restore
       resources :activities, except: %i[new edit update create destroy] do
         member do
-          get 'plans'
-          get 'name'
+          get "plans"
+          get "name"
           patch :restore
         end
       end
 
       resources :activity_plans, except: %i[new edit create destroy]
 
-      resources :payments, except: [:index]
+      resources :payments, except: [ :index ]
 
-      resources :memberships, except: [:index] do
+      resources :memberships, except: [ :index ] do
         member do
           get   :renew
           patch :renew_update
@@ -50,7 +50,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :subscriptions, except: [:index] do
+      resources :subscriptions, except: [ :index ] do
         member do
           get   :renew
           patch :renew_update
@@ -69,14 +69,14 @@ Rails.application.routes.draw do
 
       resources :legal_guardians do
         collection do
-          get 'find_by_email'
+          get "find_by_email"
         end
       end
 
       resources :activities do
         member do
-          get 'plans'
-          get 'name'
+          get "plans"
+          get "name"
           patch :restore
         end
       end
@@ -113,7 +113,7 @@ Rails.application.routes.draw do
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get 'up' => 'rails/health#show', as: :rails_health_check
+  get "up" => "rails/health#show", as: :rails_health_check
 
-  root to: 'users#index'
+  root to: "users#index"
 end

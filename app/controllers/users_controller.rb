@@ -6,8 +6,8 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @sort_by = params[:sort_by] || 'updated_at'
-    @direction = params[:direction] || 'desc'
+    @sort_by = params[:sort_by] || "updated_at"
+    @direction = params[:direction] || "desc"
 
     filters = {
       visibility: params[:visibility],
@@ -15,8 +15,8 @@ class UsersController < ApplicationController
       membership_status: params[:membership_status],
       activity_status: params[:activity_status],
       activity_id: params[:activity_id],
-      sort_by: @sort_by || 'updated_at',
-      direction: @direction || 'desc'
+      sort_by: @sort_by || "updated_at",
+      direction: @direction || "desc"
     }
 
     @pagy, @users = pagy(User.filter(filters).includes(:membership).load_async)
@@ -25,11 +25,11 @@ class UsersController < ApplicationController
   def activity_search
     query = params[:query]
     if query.present?
-      @users = User.kept.joins(:membership).where('membership.status' => :active)
+      @users = User.kept.joins(:membership).where("membership.status" => :active)
 
-      query.split.each { |term| @users = @users.where('name LIKE ? OR surname LIKE ?', "%#{term}%", "%#{term}%") }
+      query.split.each { |term| @users = @users.where("name LIKE ? OR surname LIKE ?", "%#{term}%", "%#{term}%") }
     else
-      @users = User.kept.joins(:membership).where('membership.status' => :active).limit(50)
+      @users = User.kept.joins(:membership).where("membership.status" => :active).limit(50)
     end
 
     respond_to do |f|
@@ -41,8 +41,8 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    @sort_by = params[:sort_by] || 'updated_at'
-    @direction = params[:direction] || 'desc'
+    @sort_by = params[:sort_by] || "updated_at"
+    @direction = params[:direction] || "desc"
     @activities = @user.activities.pluck(:name, :id)
 
     sfilters = {
@@ -87,7 +87,7 @@ class UsersController < ApplicationController
 
     if @user.save
       redirect_to new_membership_path(user_id: @user.id, staff_id: current_staff),
-                  notice: t('.create_succ')
+                  notice: t(".create_succ")
     else
       render :new, status: :unprocessable_entity
     end
@@ -99,7 +99,7 @@ class UsersController < ApplicationController
       # TODO: review membership papers
       # update_this_lg(@user, params.dig(:user, :legal_guardian))
 
-      redirect_to user_url(@user), notice: t('.update_succ')
+      redirect_to user_url(@user), notice: t(".update_succ")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -108,13 +108,13 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     @user.discard
-    redirect_to users_url, notice: t('.destroy_succ')
+    redirect_to users_url, notice: t(".destroy_succ")
   end
 
   # PATCH /users/1
   def restore
     @user.undiscard
-    redirect_to users_url, notice: t('.restore_succ')
+    redirect_to users_url, notice: t(".restore_succ")
   end
 
   private

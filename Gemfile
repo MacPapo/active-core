@@ -1,8 +1,8 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 8.0.2'
-gem 'rails-i18n'
+gem "rails", "~> 8.0.2"
+gem "rails-i18n"
 
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
@@ -19,11 +19,11 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-gem "devise", '~> 4.9'
+gem "devise", "~> 4.9"
 gem "devise-i18n"
 
-gem 'discard'
-gem 'receipts'
+gem "discard"
+gem "receipts"
 
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem "solid_cache"
@@ -34,7 +34,7 @@ gem "solid_cable"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Vaildate phone numbers
-gem 'phonelib'
+gem "phonelib"
 
 # Add pagination to queries
 gem "pagy"
@@ -76,6 +76,6 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem 'capybara'
-  gem 'selenium-webdriver'
+  gem "capybara"
+  gem "selenium-webdriver"
 end

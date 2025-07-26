@@ -9,12 +9,12 @@ class Subscription < ApplicationRecord
 
   # validate :date_valid_for_membership?, if: -> { user&.membership&.active? }
 
-  delegate :cost, :affiliated_cost, prefix: 'plan', to: :activity_plan
+  delegate :cost, :affiliated_cost, prefix: "plan", to: :activity_plan
   delegate :active_membership?, to: :user
 
   # TODO
   before_validation :set_end_date_if_blank
-  after_validation  :set_start_date, if: -> { will_save_change_to_attribute?('start_date') }
+  after_validation  :set_start_date, if: -> { will_save_change_to_attribute?("start_date") }
 
   after_save -> { ValidateSubscriptionStatusJob.perform_later }
 
@@ -23,9 +23,9 @@ class Subscription < ApplicationRecord
   belongs_to :activity, touch: true
   belongs_to :activity_plan
 
-  belongs_to :open_subscription, inverse_of: :normal_subscription, class_name: 'Subscription', optional: true, dependent: :destroy
+  belongs_to :open_subscription, inverse_of: :normal_subscription, class_name: "Subscription", optional: true, dependent: :destroy
 
-  has_one :normal_subscription, inverse_of: :open_subscription, class_name: 'Subscription', foreign_key: 'open_subscription_id', dependent: :destroy
+  has_one :normal_subscription, inverse_of: :open_subscription, class_name: "Subscription", foreign_key: "open_subscription_id", dependent: :destroy
 
   has_many :payment_subscriptions, dependent: :destroy
   has_many :receipt_subscriptions, dependent: :destroy
@@ -52,14 +52,14 @@ class Subscription < ApplicationRecord
 
   scope :by_name, ->(query) do
     if query.present?
-      where('users.name LIKE :q OR users.surname LIKE :q OR (users.surname LIKE :s AND users.name LIKE :n)', q: "%#{query}%", s: "%#{query.split.last}%", n: "%#{query.split.first}%")
+      where("users.name LIKE :q OR users.surname LIKE :q OR (users.surname LIKE :s AND users.name LIKE :n)", q: "%#{query}%", s: "%#{query.split.last}%", n: "%#{query.split.first}%")
     end
   end
 
   scope :by_activity_id, ->(id) do
     return if id.blank?
 
-    where('subscriptions.activity_id = ?', id.to_i)
+    where("subscriptions.activity_id = ?", id.to_i)
   end
 
   scope :by_open, ->(open) do
@@ -86,20 +86,20 @@ class Subscription < ApplicationRecord
   scope :by_activity_name, ->(name) do
     return if name.blank?
 
-    joins(:activity).where('activities.name LIKE ?', "%#{name}%")
+    joins(:activity).where("activities.name LIKE ?", "%#{name}%")
   end
 
-  scope :by_plan_id, ->(id) { where('subscriptions.activity_plan_id' => ActivityPlan.where(plan: id).pluck(:id)) unless id.blank? }
+  scope :by_plan_id, ->(id) { where("subscriptions.activity_plan_id" => ActivityPlan.where(plan: id).pluck(:id)) unless id.blank? }
 
   scope :sorted, ->(sort_by, direction) do
     if %w[name surname activity_name start_date end_date updated_at].include?(sort_by)
-      direction = %w[asc desc].include?(direction) ? direction : 'asc'
+      direction = %w[asc desc].include?(direction) ? direction : "asc"
 
       res =
         case sort_by
-        when 'name', 'surname'
+        when "name", "surname"
           "users.#{sort_by}"
-        when 'activity_name'
+        when "activity_name"
           "activities.name"
         else
           "subscriptions.#{sort_by}"
@@ -111,9 +111,9 @@ class Subscription < ApplicationRecord
 
   def self.filter(params)
     case params[:visibility]
-    when 'all'
+    when "all"
       all
-    when 'deleted'
+    when "deleted"
       discarded
     else
       kept
@@ -128,7 +128,7 @@ class Subscription < ApplicationRecord
 
   def self.humanize_statuses(keys = statuses.keys)
     keys.map do |key|
-      [Subscription.human_attribute_name("status.#{key}"), key]
+      [ Subscription.human_attribute_name("status.#{key}"), key ]
     end
   end
 
