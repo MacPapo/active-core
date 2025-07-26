@@ -34,7 +34,7 @@ class UsersController < ApplicationController
 
     respond_to do |f|
       f.json do
-        render json: localize_activity_search_result(@users.select(:id, :name, :surname, :birth_day))
+        render json: localize_activity_search_result(@users.select(:id, :name, :surname, :birth_day, :email, :phone))
       end
     end
   end
@@ -155,7 +155,7 @@ class UsersController < ApplicationController
   end
 
   def localize_activity_search_result(res)
-    res.map { |u| { id: u.id, name: u.name, surname: u.surname, birth_day: I18n.l(u.birth_day, formt: :short) } }
+    res.map { |u| { id: u.id, name: u.name, surname: u.surname, birth_day: I18n.l(u.birth_day, formt: :short), email: u.email, phone: u.phone } }
   end
 
   # Only allow a list of trusted parameters through.

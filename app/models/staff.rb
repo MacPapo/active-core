@@ -8,6 +8,7 @@ class Staff < ApplicationRecord
   # :confirmable, :lockable, and :omniauthable
   devise :database_authenticatable, :timeoutable, :trackable, authentication_keys: [ :nickname ]
   belongs_to :user
+  accepts_nested_attributes_for :user
 
   has_many :memberships, dependent: :nullify
   has_many :subscriptions, dependent: :nullify

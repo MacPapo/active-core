@@ -26,7 +26,8 @@ class StaffsController < ApplicationController
 
   # GET /staffs/new
   def new
-    @staff = Staff.build
+    @staff = Staff.new
+    @staff.build_user
   end
 
   # GET /staffs/1/edit
@@ -34,11 +35,26 @@ class StaffsController < ApplicationController
 
   # POST /staffs
   def create
+    if params[:staff][:user_id].present?
+      @user = User.find(params[:staff].delete(:user_id))
+    else
+      @user = User.new(user_params)
+      unless @user.save
+        @staff = Staff.new(staff_params)
+        @staff.errors.add(:base, "Impossibile creare l’utente: #{@user.errors.full_messages.join(', ')}")
+        set_roles
+        return render :new, status: :unprocessable_entity
+      end
+    end
+
     @staff = Staff.new(staff_params)
+    @staff.user = @user
+    @staff.role = params[:staff][:role] if current_staff.admin?
 
     if @staff.save
-      redirect_to staff_url(@staff), notice: t(".create_succ")
+      redirect_to staff_url(@staff), notice: t('.create_succ')
     else
+      set_roles
       render :new, status: :unprocessable_entity
     end
   end
@@ -75,8 +91,14 @@ class StaffsController < ApplicationController
     @roles = Staff.humanize_roles
   end
 
+  def user_params
+    params.require(:staff).require(:user).permit(:email, :phone, :name, :surname)
+  end
+
   # Only allow a list of trusted parameters through.
   def staff_params
-    params.require(:staff).permit(:user_id, :nickname, :password, :role)
+    attrs = [ :nickname, :password, :password_confirmation ]
+    attrs << :role if current_staff.admin?
+    params.require(:staff).permit(attrs)
   end
 end
