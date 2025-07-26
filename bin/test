@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-
-if [ $1 ]; then
-    exec bundle exec rspec $1
-else
-    exec bundle exec rspec
-fi
