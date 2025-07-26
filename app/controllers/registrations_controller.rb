@@ -51,7 +51,7 @@ class RegistrationsController < ApplicationController
     if @registration.update(registration_update_params)
       redirect_to registrations_path, notice: "Registrazione aggiornata."  # TODO localize
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

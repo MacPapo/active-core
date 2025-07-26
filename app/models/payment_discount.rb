@@ -3,7 +3,7 @@
 # PaymentDiscount Model
 class PaymentDiscount < ApplicationRecord
   belongs_to :payment
-  belongs_to :discount
+  belongs_to :discount, counter_cache: true
 
   validates :discount_amount, numericality: { greater_than: 0, presence: true }
   validates :payment_id, uniqueness: { scope: :discount_id }

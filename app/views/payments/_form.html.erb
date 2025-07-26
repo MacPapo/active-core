@@ -1,56 +1,42 @@
-<%= form_with(model: payment, url: payments_path(eid: @eid, type: @type)) do |form| %>
+<%= form_with model: payment, local: true do |form| %>
     <% if payment.errors.any? %>
-        <div style="color: red">
-            <h2><%= pluralize(payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
-
-            <ul>
-                <% payment.errors.each do |error| %>
-                    <li><%= error.full_message %></li>
-                <% end %>
-            </ul>
+        <div>
+            <% payment.errors.full_messages.each do |message| %>
+                <p><%= message %></p>
+            <% end %>
         </div>
     <% end %>
 
-    <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <%= form.label :date, class: 'form-label fw-semibold text-secondary' %>
-                <%= form.date_field :date, default: payment.date, class: 'form-control' %>
-            </div>
+    <div>
+        <%= form.label :date %>
+        <%= form.date_field :date, value: payment.date || Date.current %>
+    </div>
+
+    <div>
+        <%= form.label :income, "Tipo" %>
+        <%= form.select :income, [["Incasso", true], ["Spesa", false]] %>
+    </div>
+
+    <div>
+        <%= form.label :payment_method %>
+        <%= form.select :payment_method, [["Contanti", "cash"], ["Carta", "card"], ["Bonifico", "bank_transfer"]] %>
+    </div>
+
+    <div>
+        <%= form.label :notes %>
+        <%= form.text_area :notes %>
+    </div>
+
+    <h3>Voci</h3>
+    <%= form.fields_for :payment_items do |item_form| %>
+        <div>
+            <%= item_form.label :amount %>
+            <%= item_form.number_field :amount, step: 0.01 %>
+
+            <%= item_form.label :description %>
+            <%= item_form.text_field :description %>
         </div>
+    <% end %>
 
-        <div class="col">
-            <div class="mb-3">
-                <%= form.label :amount, class: 'form-label fw-semibold text-secondary' %>
-                <div class="input-group">
-                    <span class="input-group-text"><%= t('number.currency.format.unit') %></span>
-                    <%= form.number_field :amount, value: payment.amount, class: 'form-control', step: 'any' %>
-                </div>
-            </div>
-        </div>
-        <% unless %w[mem sub].include? @type %>
-            <div class="col-md-2 align-self-center mt-3">
-                <div class="form-check">
-                    <%= form.check_box :income, class: 'form-check-input' %>
-                    <%= form.label :income, class: 'form-check-label fw-semibold text-secondary' %>
-                </div>
-            </div>
-        <% end %>
-    </div>
-
-    <div class="mb-3">
-        <%= form.label :method, class: 'form-label fw-semibold text-secondary' %>
-        <%= form.select :method, Payment.humanize_payment_methods, {}, { class: 'form-select', selected: payment.method } %>
-    </div>
-
-    <div class="mb-3">
-        <%= form.label :note, class: 'form-label fw-semibold text-secondary' %>
-        <%= form.text_area :note, value: payment.note, class: 'form-control' %>
-    </div>
-
-    <%= form.hidden_field :staff_id, value: current_staff.id %>
-
-    <div class="mt-4">
-        <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
-    </div>
+    <%= form.submit %>
 <% end %>

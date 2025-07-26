@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Staff Controller
-class StaffsController < ApplicationController
+class OldStaffsController < ApplicationController
   before_action :set_staff, only: %i[show edit update destroy restore]
   before_action :set_roles, only: %i[new edit]
 
@@ -43,7 +43,7 @@ class StaffsController < ApplicationController
         @staff = User.new(staff_params)
         @staff.errors.add(:base, "Impossibile creare l’utente: #{@user.errors.full_messages.join(', ')}")
         set_roles
-        return render :new, status: :unprocessable_entity
+        return render :new, status: :unprocessable_content
       end
     end
 
@@ -55,7 +55,7 @@ class StaffsController < ApplicationController
       redirect_to staff_url(@staff), notice: t(".create_succ")
     else
       set_roles
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -64,7 +64,7 @@ class StaffsController < ApplicationController
     if @staff.update(staff_params)
       redirect_to staff_url(@staff), notice: t(".update_succ")
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

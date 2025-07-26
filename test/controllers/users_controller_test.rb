@@ -108,7 +108,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select ".field_with_errors"
   end
 
@@ -126,7 +126,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   # EDIT tests
@@ -156,7 +156,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
             user: { nickname: "" }
           }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select ".field_with_errors"
   end
 

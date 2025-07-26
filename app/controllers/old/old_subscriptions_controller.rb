@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Subscription Controller
-class SubscriptionsController < ApplicationController
+class OldSubscriptionsController < ApplicationController
   before_action :set_subscription, only: %i[show edit update renew renew_update destroy restore]
   before_action :set_activity, only: %i[create update renew_update]
   before_action :set_plans, only: %i[create update renew_update]
@@ -76,7 +76,7 @@ class SubscriptionsController < ApplicationController
       set_user_and_activities(user_id) if real_direction.zero?
       set_activity_and_plan(subscription_params[:activity_id]) unless real_direction.zero?
       flash.now[:alert] = e
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -104,7 +104,7 @@ class SubscriptionsController < ApplicationController
       @subscription.inactive!
       redirect_to new_payment_path(eid: @subscription.id, type: "sub"), notice: t(".renew_succ")
     else
-      render :renew, status: :unprocessable_entity
+      render :renew, status: :unprocessable_content
     end
   end
 
@@ -113,7 +113,7 @@ class SubscriptionsController < ApplicationController
     if @subscription.update(subscription_params)
       redirect_to subscription_url(@subscription), notice: t(".update_succ")
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

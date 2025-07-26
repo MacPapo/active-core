@@ -1,61 +1,30 @@
-<%= content_for :counter do %>
-    <% count = Payment.count %>
-    <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
-    <span class="fs-6 fw-light ps-2 text-muted"><%= t('global.registered', count:) %></span>
-<% end %>
+<h1>Pagamenti</h1>
 
-<%= content_for :search do %>
-    <div class="flex-fill">
-        <%= render 'partials/search_form', loc: t('global.search_payment'), path: payments_path, frame: :payments, size: '600px', ctrls: 'filters' do |f| %>
-            <div class="row g-2 mb-2">
-                <!-- Payable Type -->
-                <div class="col">
-                    <%= f.label :payable_type, t('global.payable_type'), class: 'form-label fw-semibold text-secondary' %>
-                    <%= f.select :payable_type, [[t('global.mem'), 'mem'], [t('global.sub'), 'sub']], { prompt: t('global.all-m') },
-                     class: 'form-select', data: { action: 'change->filters#submit' } %>
-                </div>
+<%= link_to "Nuovo Pagamento", new_payment_path, class: "btn" %>
 
-                <!-- Payable Method -->
-                <div class="col">
-                    <%= f.label :payment_method, t('global.payment_method'), class: 'form-label fw-semibold text-secondary' %>
-                    <%= f.select :payment_method, Payment.humanize_payment_methods, { prompt: t('global.all-m') },
-                     class: 'form-select', data: { action: 'change->filters#submit' } %>
-                </div>
-            </div>
-
-            <% max = Payment.maximum(:date) %>
-            <% min = Payment.minimum(:date) %>
-            <div class="row g-2 mb-2">
-                <!-- DATE FROM -->
-                <div class="col">
-                    <%= f.label :date_from, t('global.activity_from'), class: 'form-label fw-semibold text-secondary' %>
-                    <%= f.date_field :date_from, max: , min: ,
-                        class: 'form-control', data: { action: 'change->filters#submit' } %>
-                </div>
-
-                <!-- DATE TO -->
-                <div class="col">
-                    <%= f.label :date_to, t('global.activity_to'), class: 'form-label fw-semibold text-secondary' %>
-                    <%= f.date_field :date_to, max: , min: ,
-                        class: 'form-control', data: { action: 'change->filters#submit' } %>
-                </div>
-            </div>
-
-            <div class="row mb-2">
-                <!-- Visibility -->
-                <div class="col">
-                    <%= f.label :visibility, t('global.payment_visibility'), class: 'form-label fw-semibold text-secondary' %>
-                    <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
-                     class: 'form-select', data: { action: 'change->filters#submit' } %>
-                </div>
-            </div>
+<table>
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Metodo</th>
+            <th>Importo</th>
+            <th>Utente</th>
+            <th>Ricevuta</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @payments.each do |payment| %>
+            <tr>
+                <td><%= payment.date %></td>
+                <td><%= payment.income? ? "Incasso" : "Spesa" %></td>
+                <td><%= payment.payment_method.humanize %></td>
+                <td>€<%= payment.final_amount %></td>
+                <td><%= payment.user.nickname %></td>
+                <td><%= payment.receipts.any? ? "Sì" : "No" %></td>
+                <td><%= link_to "Dettagli", payment %></td>
+            </tr>
         <% end %>
-    </div>
-<% end %>
-
-<%= render 'partials/index_container', title: model_to_string(Payment, 2), tframe: :payments do %>
-    <div id="payments" class="table-responsive">
-        <%= render 'partials/payments_table', payments: @payments, frame: :payments, path: payments_path, fmt: :simple %>
-        <%== pagy_bootstrap_nav(@pagy) %>
-    </div>
-<% end %>
+    </tbody>
+</table>

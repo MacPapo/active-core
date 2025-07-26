@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Legal Guardian Controller
-class LegalGuardiansController < ApplicationController
+class OldLegalGuardiansController < ApplicationController
   before_action :set_legal_guardian, only: %i[show edit update destroy]
 
   # GET /legal_guardians or /legal_guardians.json
@@ -54,7 +54,7 @@ class LegalGuardiansController < ApplicationController
     if @legal_guardian.save
       redirect_to legal_guardian_url(@legal_guardian), notice: t(".create_succ")
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -63,7 +63,7 @@ class LegalGuardiansController < ApplicationController
     if @legal_guardian.update(legal_guardian_params)
       redirect_to legal_guardian_url(@legal_guardian), notice: t(".update_succ")
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

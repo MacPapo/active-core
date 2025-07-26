@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Products Controller
 class ProductsController < ApplicationController
   include Filterable
   include Sortable
@@ -26,7 +29,7 @@ class ProductsController < ApplicationController
     if @product.save
       redirect_to @product, notice: "Prodotto creato con successo!"
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -37,7 +40,7 @@ class ProductsController < ApplicationController
     if @product.update(product_params)
       redirect_to @product, notice: "Prodotto aggiornato con successo."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

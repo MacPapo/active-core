@@ -1,0 +1,40 @@
+<h1>Sconti</h1>
+
+<%= link_to "Nuovo Sconto", new_discount_path, class: "btn" %>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Valore</th>
+            <th>Applicabile a</th>
+            <th>Validità</th>
+            <th>Utilizzi</th>
+            <th>Attivo</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @discounts.each do |discount| %>
+            <tr>
+                <td><%= discount.name %></td>
+                <td><%= discount.discount_type.humanize %></td>
+                <td><%= discount.discount_description %></td>
+                <td><%= discount.applicable_to.humanize %></td>
+                <td>
+                    <%= discount.valid_from if discount.valid_from %>
+                    <% if discount.valid_until %>
+                        - <%= discount.valid_until %>
+                    <% end %>
+                </td>
+                <td><%= discount.usage_count %></td>
+                <td><%= discount.active? ? "Sì" : "No" %></td>
+                <td>
+                    <%= link_to "Dettagli", discount %>
+                    <%= link_to "Modifica", edit_discount_path(discount) %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

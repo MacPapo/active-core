@@ -1,0 +1,15 @@
+<div class="package-inclusion">
+    <%= form.select :product_id, options_from_collection_for_select(@available_products, :id, :name, form.object.product_id), { prompt: "Seleziona prodotto" } %>
+
+    <%= form.select :access_type, [
+        ["Accesso illimitato", "unlimited"],
+        ["Sessioni limitate", "limited_sessions"],
+        ["Accesso temporizzato", "time_based"]
+    ] %>
+
+    <%= form.number_field :session_limit, placeholder: "N. sessioni" %>
+    <%= form.text_field :notes, placeholder: "Note" %>
+
+    <%= form.check_box :_destroy %>
+    <%= form.label :_destroy, "Rimuovi" %>
+</div>

@@ -1,0 +1,56 @@
+<%= form_with(model: payment, url: payments_path(eid: @eid, type: @type)) do |form| %>
+    <% if payment.errors.any? %>
+        <div style="color: red">
+            <h2><%= pluralize(payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
+
+            <ul>
+                <% payment.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :date, class: 'form-label fw-semibold text-secondary' %>
+                <%= form.date_field :date, default: payment.date, class: 'form-control' %>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="mb-3">
+                <%= form.label :amount, class: 'form-label fw-semibold text-secondary' %>
+                <div class="input-group">
+                    <span class="input-group-text"><%= t('number.currency.format.unit') %></span>
+                    <%= form.number_field :amount, value: payment.amount, class: 'form-control', step: 'any' %>
+                </div>
+            </div>
+        </div>
+        <% unless %w[mem sub].include? @type %>
+            <div class="col-md-2 align-self-center mt-3">
+                <div class="form-check">
+                    <%= form.check_box :income, class: 'form-check-input' %>
+                    <%= form.label :income, class: 'form-check-label fw-semibold text-secondary' %>
+                </div>
+            </div>
+        <% end %>
+    </div>
+
+    <div class="mb-3">
+        <%= form.label :method, class: 'form-label fw-semibold text-secondary' %>
+        <%= form.select :method, Payment.humanize_payment_methods, {}, { class: 'form-select', selected: payment.method } %>
+    </div>
+
+    <div class="mb-3">
+        <%= form.label :note, class: 'form-label fw-semibold text-secondary' %>
+        <%= form.text_area :note, value: payment.note, class: 'form-control' %>
+    </div>
+
+    <%= form.hidden_field :staff_id, value: current_staff.id %>
+
+    <div class="mt-4">
+        <%= form.submit class: 'btn btn-dark text-secondary border border-secondary-subtle fs-4 fw-semibold w-100' %>
+    </div>
+<% end %>

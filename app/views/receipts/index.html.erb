@@ -1,14 +1,29 @@
-<p style="color: green"><%= notice %></p>
+<h1>Ricevute</h1>
 
-<h1>Receipts</h1>
-
-<div id="receipts">
-  <% @receipts.each do |receipt| %>
-    <%= render receipt %>
-    <p>
-      <%= link_to "Show this receipt", receipt %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New receipt", new_receipt_path %>
+<table>
+    <thead>
+        <tr>
+            <th>Numero</th>
+            <th>Anno</th>
+            <th>Data</th>
+            <th>Importo</th>
+            <th>Utente</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @receipts.each do |receipt| %>
+            <tr>
+                <td><%= receipt.number %></td>
+                <td><%= receipt.year %></td>
+                <td><%= receipt.date %></td>
+                <td>€<%= receipt.payment.final_amount %></td>
+                <td><%= receipt.user.nickname %></td>
+                <td>
+                    <%= link_to "Dettagli", receipt %>
+                    <%= link_to "Stampa", receipt_path(receipt, format: :pdf), target: "_blank" %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

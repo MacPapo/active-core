@@ -17,6 +17,8 @@ class Package < ApplicationRecord
   has_many :registrations, dependent: :destroy
   has_many :members, through: :package_purchases
 
+  accepts_nested_attributes_for :package_inclusions, allow_destroy: true, reject_if: :all_blank
+
   # Active scope combining multiple concerns
   scope :active, -> { where(active: true).currently_valid.available_for_sale }
 

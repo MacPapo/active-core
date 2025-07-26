@@ -30,7 +30,7 @@ class MembersController < ApplicationController
       @member = Member.new(member_params)
       @member.errors.add(:base, "Devi selezionare un piano di tesseramento valido.")
       load_form_data
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
       return # Interrompiamo l'esecuzione
     end
 
@@ -47,7 +47,7 @@ class MembersController < ApplicationController
       redirect_to member_path(@member), notice: "Membro registrato e iscritto con successo!" # TODO localize
     else
       load_form_data
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -60,7 +60,7 @@ class MembersController < ApplicationController
       redirect_to @member, notice: "Membro aggiornato con successo."
     else
       @available_pricing_plans = PricingPlan.active.includes(:product)
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -176,7 +176,7 @@ end
 #       redirect_to @member, notice: "Membro creato con successo."
 #     else
 #       @legal_guardians = LegalGuardian.all.order(:surname, :name)
-#       render :new, status: :unprocessable_entity
+#       render :new, status: :unprocessable_content
 #     end
 #   end
 
@@ -189,7 +189,7 @@ end
 #       redirect_to @member, notice: "Membro aggiornato con successo."
 #     else
 #       @legal_guardians = LegalGuardian.all.order(:surname, :name)
-#       render :edit, status: :unprocessable_entity
+#       render :edit, status: :unprocessable_content
 #     end
 #   end
 

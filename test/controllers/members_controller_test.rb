@@ -43,7 +43,7 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
              member: { name: "Mario", surname: "Rossi", birth_day: "2002-01-01", affiliated: false }
            }
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test "should show member with stats" do

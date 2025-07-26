@@ -1,31 +1,18 @@
-<%= render 'partials/container_with_receipt', obj: @payment, title: t('.title') do %>
+<h1>Pagamento #<%= @payment.id %></h1>
 
-    <div>
-        <% if @payment.method == 'cash' %>
-            <%= link_to receipt_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2 fs-5 text-secondary' do %>
-                <i class="bi bi-receipt me-1"></i>
-                <%= t('global.receipt_button') %>
-            <% end %>
-        <% end %>
-    </div>
+<p><strong>Data:</strong> <%= @payment.date %></p>
+<p><strong>Tipo:</strong> <%= @payment.income? ? "Incasso" : "Spesa" %></p>
+<p><strong>Metodo:</strong> <%= @payment.payment_method.humanize %></p>
+<p><strong>Totale:</strong> €<%= @payment.total_amount %></p>
+<p><strong>Sconto:</strong> €<%= @payment.discount_amount %></p>
+<p><strong>Finale:</strong> €<%= @payment.final_amount %></p>
+<p><strong>Utente:</strong> <%= @payment.user.nickname %></p>
 
-    <div class="d-flex">
-        <% if current_staff.admin? %>
-            <!-- Edit -->
-            <%= link_to edit_payment_path(@payment), class: 'btn btn-warning me-2 fs-5 text-secondary' do %>
-                <i class="bi bi-pencil-fill me-1"></i>
-                <%= t('global.edit_button') %>
-            <% end %>
+<h3>Voci di Pagamento</h3>
+<ul>
+    <% @payment.payment_items.each do |item| %>
+        <li>€<%= item.amount %> - <%= item.description %></li>
+    <% end %>
+</ul>
 
-            <!-- Destroy -->
-            <%= button_to @payment,
-                          class: 'btn btn-danger fs-5 text-secondary',
-                          method: :delete,
-                          data: { turbo_confirm: t('global.delete_dialog') } do %>
-                <i class="bi bi-trash3-fill"></i>
-                <%= t('global.delete_button') %>
-            <% end %>
-        <% end %>
-    </div>
-
-<% end %>
+<%= link_to "Indietro", payments_path %>

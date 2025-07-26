@@ -31,7 +31,7 @@ class UsersController < ApplicationController
       redirect_to @user, notice: "Utente staff creato con successo."
     else
       @available_members = available_staff_members
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
       redirect_to @user, notice: "Utente aggiornato con successo."
     else
       @available_members = available_staff_members
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

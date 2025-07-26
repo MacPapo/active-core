@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # WaitList Controller
-class WaitlistsController < ApplicationController
+class OldWaitlistsController < ApplicationController
   before_action :set_waitlist, only: %i[edit update destroy]
   before_action :set_activity, only: %i[new edit]
 
@@ -25,7 +25,7 @@ class WaitlistsController < ApplicationController
     if @waitlist.save
       redirect_to activity_url(@waitlist.activity), notice: t(".create_succ")
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -37,7 +37,7 @@ class WaitlistsController < ApplicationController
     if user.update(name: waitlist_params[:name], surname: waitlist_params[:surname], phone:)
       redirect_to waitlist_url(@waitlist), notice: t(".update_succ")
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

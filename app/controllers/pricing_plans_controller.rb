@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# PricingPlans Controller
 class PricingPlansController < ApplicationController
   before_action :authorize_admin!
 
@@ -14,7 +17,7 @@ class PricingPlansController < ApplicationController
     if @pricing_plan.save
       redirect_to @product, notice: "Piano di prezzo creato con successo!"
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -25,7 +28,7 @@ class PricingPlansController < ApplicationController
     if @pricing_plan.update(pricing_plan_params)
       redirect_to [ @product, @pricing_plan ], notice: "Piano di prezzo aggiornato."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

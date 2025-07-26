@@ -3,6 +3,7 @@
 # Receipt Model
 class Receipt < ApplicationRecord
   include Discard::Model
+  include Receipt::Printable
 
   belongs_to :payment
   belongs_to :user

@@ -1,4 +1,6 @@
-# app/controllers/memberships_controller.rb
+# frozen_string_literal: true
+
+# Memberships Controller
 class MembershipsController < ApplicationController
   include Filterable
   include Sortable
@@ -43,7 +45,7 @@ class MembershipsController < ApplicationController
       redirect_to memberships_path, notice: "Membership aggiornata." # TODO localize
     else
       @available_pricing_plans = PricingPlan.kept.active
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

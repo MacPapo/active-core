@@ -46,7 +46,7 @@ class OldMembershipsController < ApplicationController
     if @membership.save
       redirect_to new_payment_path(eid: @membership.id, type: "mem"), notice: t(".create_succ")
     else
-      render :new, user_id:, status: :unprocessable_entity
+      render :new, user_id:, status: :unprocessable_content
     end
   end
 
@@ -64,7 +64,7 @@ class OldMembershipsController < ApplicationController
       @membership.inactive!
       redirect_to new_payment_path(eid: @membership.id, type: "mem"), notice: t(".renew_succ")
     else
-      render :renew, status: :unprocessable_entity
+      render :renew, status: :unprocessable_content
     end
   end
 
@@ -73,7 +73,7 @@ class OldMembershipsController < ApplicationController
     if @membership.update(membership_params)
       redirect_to @membership, notice: t(".update_succ")
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

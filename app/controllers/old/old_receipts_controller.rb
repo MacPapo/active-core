@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Receipts Controler
-class ReceiptsController < ApplicationController
+class OldReceiptsController < ApplicationController
   before_action :set_receipt, only: %i[show edit update destroy]
 
   # GET /receipts or /receipts.json
@@ -35,8 +35,8 @@ class ReceiptsController < ApplicationController
         format.html { redirect_to @receipt, notice: "Receipt was successfully created." }
         format.json { render :show, status: :created, location: @receipt }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @receipt.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @receipt.errors, status: :unprocessable_content }
       end
     end
   end
@@ -48,8 +48,8 @@ class ReceiptsController < ApplicationController
         format.html { redirect_to @receipt, notice: "Receipt was successfully updated." }
         format.json { render :show, status: :ok, location: @receipt }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @receipt.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @receipt.errors, status: :unprocessable_content }
       end
     end
   end

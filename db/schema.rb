@@ -38,6 +38,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_27_212031) do
     t.boolean "stackable", default: true, null: false
     t.integer "applicable_to", default: 0, null: false
     t.boolean "active", default: true, null: false
+    t.integer "payment_discounts_count", default: 0, null: false
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

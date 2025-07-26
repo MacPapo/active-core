@@ -18,6 +18,8 @@ class Payment < ApplicationRecord
   has_many :registrations, through: :payment_items, source: :payable, source_type: "Registration"
   has_many :package_purchases, through: :payment_items, source: :payable, source_type: "PackagePurchase"
 
+  accepts_nested_attributes_for :payment_items, allow_destroy: true
+
   # Validations
   validates :payment_items, presence: true
   validate :final_amount_matches_calculation

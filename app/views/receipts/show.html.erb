@@ -1,10 +1,12 @@
-<p style="color: green"><%= notice %></p>
+<h1>Ricevuta #<%= @receipt.number %>/<%= @receipt.year %></h1>
 
-<%= render @receipt %>
+<p><strong>Data:</strong> <%= @receipt.date %></p>
+<p><strong>Importo:</strong> €<%= @receipt.payment.final_amount %></p>
+<p><strong>Metodo:</strong> <%= @receipt.payment.payment_method.humanize %></p>
+<p><strong>Emessa da:</strong> <%= @receipt.user.nickname %></p>
 
-<div>
-  <%= link_to "Edit this receipt", edit_receipt_path(@receipt) %> |
-  <%= link_to "Back to receipts", receipts_path %>
+<h3>Dettagli Pagamento</h3>
+<%= @receipt.payment.display_summary %>
 
-  <%= button_to "Destroy this receipt", @receipt, method: :delete %>
-</div>
+<%= link_to "Stampa", receipt_path(@receipt, format: :pdf), target: "_blank" %>
+<%= link_to "Indietro", receipts_path %>

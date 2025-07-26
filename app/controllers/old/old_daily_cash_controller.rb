@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Daily Cash Controller
-class DailyCashController < ApplicationController
+class OldDailyCashController < ApplicationController
   before_action :set_ordering, only: [ :index ]
   before_action :set_filters, only: [ :index ]
 

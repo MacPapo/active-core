@@ -1,0 +1,31 @@
+<%= render 'partials/container_with_receipt', obj: @payment, title: t('.title') do %>
+
+    <div>
+        <% if @payment.method == 'cash' %>
+            <%= link_to receipt_path(payment_id: @payment.id, format: :pdf), class: 'btn btn-info me-2 fs-5 text-secondary' do %>
+                <i class="bi bi-receipt me-1"></i>
+                <%= t('global.receipt_button') %>
+            <% end %>
+        <% end %>
+    </div>
+
+    <div class="d-flex">
+        <% if current_staff.admin? %>
+            <!-- Edit -->
+            <%= link_to edit_payment_path(@payment), class: 'btn btn-warning me-2 fs-5 text-secondary' do %>
+                <i class="bi bi-pencil-fill me-1"></i>
+                <%= t('global.edit_button') %>
+            <% end %>
+
+            <!-- Destroy -->
+            <%= button_to @payment,
+                          class: 'btn btn-danger fs-5 text-secondary',
+                          method: :delete,
+                          data: { turbo_confirm: t('global.delete_dialog') } do %>
+                <i class="bi bi-trash3-fill"></i>
+                <%= t('global.delete_button') %>
+            <% end %>
+        <% end %>
+    </div>
+
+<% end %>

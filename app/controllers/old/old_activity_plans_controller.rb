@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Activity Plans Controller
-class ActivityPlansController < ApplicationController
+class OldActivityPlansController < ApplicationController
   before_action :set_activity_plan, only: %i[edit update destroy restore]
   before_action :set_activity, only: %i[new]
 
@@ -27,7 +27,7 @@ class ActivityPlansController < ApplicationController
     if @activity_plan.save
       redirect_to activity_path(@activity_plan.activity), notice: t(".create_succ")
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -36,7 +36,7 @@ class ActivityPlansController < ApplicationController
     if @activity_plan.update(activity_plan_params)
       redirect_to activity_path(@activity_plan.activity), notice: t(".update_succ")
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

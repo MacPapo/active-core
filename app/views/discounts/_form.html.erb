@@ -1,0 +1,61 @@
+<%= form_with model: discount, local: true do |form| %>
+  <% if discount.errors.any? %>
+    <div>
+      <% discount.errors.full_messages.each do |message| %>
+        <p><%= message %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :discount_type %>
+    <%= form.select :discount_type, [["Percentuale", "percentage"], ["Importo fisso", "fixed_amount"]] %>
+  </div>
+
+  <div>
+    <%= form.label :value %>
+    <%= form.number_field :value, step: 0.01 %>
+  </div>
+
+  <div>
+    <%= form.label :max_amount, "Importo massimo (solo per percentuale)" %>
+    <%= form.number_field :max_amount, step: 0.01 %>
+  </div>
+
+  <div>
+    <%= form.label :applicable_to %>
+    <%= form.select :applicable_to, [
+      ["Tutti i servizi", "all_services"],
+      ["Solo tessere", "memberships"], 
+      ["Solo corsi", "courses"],
+      ["Solo pacchetti", "packages"]
+    ] %>
+  </div>
+
+  <div>
+    <%= form.label :valid_from %>
+    <%= form.date_field :valid_from %>
+  </div>
+
+  <div>
+    <%= form.label :valid_until %>
+    <%= form.date_field :valid_until %>
+  </div>
+
+  <div>
+    <%= form.check_box :stackable %>
+    <%= form.label :stackable, "Cumulabile con altri sconti" %>
+  </div>
+
+  <div>
+    <%= form.check_box :active %>
+    <%= form.label :active, "Attivo" %>
+  </div>
+
+  <%= form.submit %>
+<% end %>
