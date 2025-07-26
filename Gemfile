@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 8.0.2'
-gem 'rails-i18n', '~> 8.0.0'
+gem 'rails-i18n'
 
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
@@ -19,7 +19,7 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-gem "devise"
+gem "devise", '~> 4.9'
 gem "devise-i18n"
 
 gem 'discard'
@@ -67,7 +67,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
   gem "mission_control-jobs", "~> 1.0"
   gem 'factory_bot_rails', '~> 6.4'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 8.0'
 end
 
 group :development do
@@ -81,5 +81,3 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
 end
-
-gem "inline_svg", "~> 1.10"

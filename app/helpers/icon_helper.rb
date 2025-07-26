@@ -1,15 +1,4 @@
 module IconHelper
-  # def icon(name, color: nil, size: nil, css: "")
-  #   classes = []
-  #   classes << "text-#{color}" if color
-  #   classes << css if css.present?
-
-  #   styles = []
-  #   styles << "fill: currentColor"
-
-  #   inline_svg_tag("icons/#{name}.svg", class: classes.join(" "), style: styles.join(" "))
-  # end
-
   def icon(name, size: 24, **options)
     filename = Rails.root.join("app/assets/images/icons/#{name}.svg")
     return "(missing icon: #{name})" unless File.exist?(filename)
