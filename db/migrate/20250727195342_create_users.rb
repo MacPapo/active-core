@@ -1,11 +1,8 @@
-# frozen_string_literal: true
-
-# Devise Staff Migration
-class DeviseCreateStaffs < ActiveRecord::Migration[7.1]
+class CreateUsers < ActiveRecord::Migration[8.0]
   def change
-    create_table :staffs do |t|
+    create_table :users do |t|
       ## Database authenticatable
-      t.string :nickname, null: false, default: ''
+      t.string :nickname, null: false
       t.string :encrypted_password, null: false, default: ''
 
       ## Trackable
@@ -16,11 +13,13 @@ class DeviseCreateStaffs < ActiveRecord::Migration[7.1]
       t.string   :last_sign_in_ip
 
       t.integer    :role, default: 0, null: false
-      t.references :user, null: false, foreign_key: true
+      t.references :member, null: false, foreign_key: true
 
-      t.timestamps null: false
+      t.datetime :discarded_at
+      t.timestamps
     end
 
-    add_index :staffs, :nickname, unique: true
+    add_index :users, :nickname, unique: true
+    add_index :users, :discarded_at
   end
 end
