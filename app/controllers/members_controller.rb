@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# User Controller
-class UsersController < ApplicationController
+# Member Controller
+class MembersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy restore]
 
   # GET /users
@@ -19,17 +19,17 @@ class UsersController < ApplicationController
       direction: @direction || "desc"
     }
 
-    @pagy, @users = pagy(User.filter(filters).includes(:membership).load_async)
+    @pagy, @users = pagy(Member.filter(filters).includes(:membership).load_async)
   end
 
   def activity_search
     query = params[:query]
     if query.present?
-      @users = User.kept.joins(:membership).where("membership.status" => :active)
+      @users = Member.kept.joins(:membership).where("membership.status" => :active)
 
       query.split.each { |term| @users = @users.where("name LIKE ? OR surname LIKE ?", "%#{term}%", "%#{term}%") }
     else
-      @users = User.kept.joins(:membership).where("membership.status" => :active).limit(50)
+      @users = Member.kept.joins(:membership).where("membership.status" => :active).limit(50)
     end
 
     respond_to do |f|
@@ -71,7 +71,7 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    @user = User.new
+    @user = Member.new
   end
 
   # GET /users/1/edit
@@ -81,7 +81,7 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
-    @user = User.new(extract_user_params(user_params))
+    @user = Member.new(extract_user_params(user_params))
     legal_guardian_params = params.dig(:user, :legal_guardian)
     @user.legal_guardian = find_or_create_this_lg(legal_guardian_params)
 
@@ -121,7 +121,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.find(params[:id])
+    @user = Member.find(params[:id])
   end
 
   def find_or_create_this_lg(data)

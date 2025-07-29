@@ -18,7 +18,7 @@ class CreateMemberships < ActiveRecord::Migration[8.0]
     end
 
     add_index :memberships, :status
-    add_index :memberships, [:start_date, :end_date]
+    add_index :memberships, [ :start_date, :end_date ]
     add_index :memberships, :discarded_at
   end
 end

@@ -1,0 +1,6 @@
+membership_item:
+  payment: membership_payment
+  payable: active_membership (Membership)
+  amount: "45.00"
+  description: "Monthly membership fee"
+

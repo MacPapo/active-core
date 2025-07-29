@@ -1,0 +1,6 @@
+applied_discount:
+  payment: membership_payment
+  discount: student_discount
+  discount_amount: "5.00"
+  notes: "Student discount applied"
+

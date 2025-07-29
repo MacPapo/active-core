@@ -9,6 +9,6 @@ class CreatePaymentDiscounts < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :payment_discounts, [:payment_id, :discount_id], unique: true
+    add_index :payment_discounts, [ :payment_id, :discount_id ], unique: true
   end
 end

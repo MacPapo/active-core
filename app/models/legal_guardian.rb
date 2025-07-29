@@ -7,7 +7,7 @@ class LegalGuardian < ApplicationRecord
   has_many :users, dependent: :nullify
 
   validates :name, :surname, :email, :phone, :birth_day, presence: true
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true
   normalizes :email, with: -> { _1.strip.downcase }
 
   validates :phone, phone: { possible: true, types: [ :fixed_or_mobile ] }

@@ -19,7 +19,7 @@ class WaitlistsController < ApplicationController
   def create
     phone = Phonelib.parse(waitlist_params[:phone]).national
 
-    user = User.find_or_create_by!(name: waitlist_params[:name], surname: waitlist_params[:surname], phone:)
+    user = Member.find_or_create_by!(name: waitlist_params[:name], surname: waitlist_params[:surname], phone:)
     @waitlist = Waitlist.build(user:, activity_id: waitlist_params[:activity_id])
 
     if @waitlist.save

@@ -12,7 +12,7 @@ class CreateReceipts < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :receipts, [:number, :year], unique: true
+    add_index :receipts, [ :number, :year ], unique: true
     add_index :receipts, :discarded_at
   end
 end

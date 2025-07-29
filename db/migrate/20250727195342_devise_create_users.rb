@@ -1,9 +1,9 @@
-class CreateUsers < ActiveRecord::Migration[8.0]
+class DeviseCreateUsers < ActiveRecord::Migration[8.0]
   def change
     create_table :users do |t|
       ## Database authenticatable
       t.string :nickname, null: false
-      t.string :encrypted_password, null: false, default: ''
+      t.string :encrypted_password, default: "", null: false
 
       ## Trackable
       t.integer  :sign_in_count, default: 0, null: false

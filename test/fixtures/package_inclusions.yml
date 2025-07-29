@@ -1,0 +1,13 @@
+package_activity:
+  package: beginner_package
+  product: activity_product
+  access_type: 1  # limited
+  session_limit: 4
+  notes: "4 yoga sessions included"
+
+package_pilates:
+  package: beginner_package
+  product: pilates_class
+  access_type: 0  # unlimited
+  session_limit: null
+  notes: "Unlimited pilates sessions"

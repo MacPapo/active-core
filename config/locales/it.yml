@@ -7,6 +7,10 @@ it:
   true: "Si"
   false: "No"
 
+  errors:
+    messages:
+      on_or_before: "non può essere nel futuro"
+
   activerecord:
     models:
       user:

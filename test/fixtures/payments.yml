@@ -1,0 +1,10 @@
+membership_payment:
+  user: admin_user
+  total_amount: "45.00"
+  discount_amount: "0.00"
+  final_amount: "45.00"
+  date: "2024-01-01"
+  payment_method: 0  # cash
+  income: true
+  notes: "Monthly membership payment"
+

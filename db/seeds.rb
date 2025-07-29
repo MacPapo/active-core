@@ -33,7 +33,7 @@
 # end
 
 # Seed Staff Members
-admin_user = User.new(
+admin_user = Member.new(
   cf: 'SRUDMN80A01L736P',
   name: 'Admin',
   surname: 'User',
@@ -46,7 +46,7 @@ admin_user = User.new(
 
 admin_user.save
 
-staff_admin = Staff.new(
+staff_admin = User.new(
   user: admin_user,
   nickname: 'admin',
   password: Rails.application.credentials.dig(:development, :admin, :password),

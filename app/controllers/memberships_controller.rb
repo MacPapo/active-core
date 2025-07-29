@@ -96,7 +96,7 @@ class MembershipsController < ApplicationController
   end
 
   def set_user
-    @user ||= User.find(params[:user_id] || membership_params[:user_id])
+    @user ||= Member.find(params[:user_id] || membership_params[:user_id])
   end
 
   def user_has_membership?

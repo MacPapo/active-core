@@ -14,7 +14,7 @@ class CreatePaymentItems < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :payment_items, [:payable_type, :payable_id]
+    add_index :payment_items, [ :payable_type, :payable_id ]
     add_index :payment_items, :discarded_at
   end
 end

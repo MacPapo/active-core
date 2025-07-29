@@ -4,124 +4,86 @@
 class Membership < ApplicationRecord
   include Discard::Model
 
-  validates :start_date, presence: true
-  validates :end_date, comparison: { greater_than: :start_date }, if: -> { start_date.present? && end_date.present? }
+  # Associations
+  belongs_to :user
+  belongs_to :member
+  belongs_to :pricing_plan
+  belongs_to :renewed_from, class_name: "Membership", optional: true
+  has_many :renewals, class_name: "Membership", foreign_key: "renewed_from_id", dependent: :nullify
+  has_many :payment_items, as: :payable, dependent: :destroy
 
-  before_validation :set_dates
+  # Enums
+  enum :status, {
+         active: 0,
+         expired: 1,
+         cancelled: 2,
+         suspended: 3
+       }, prefix: true
 
-  after_save -> { ValidateMembershipStatusJob.perform_later }
-  after_destroy -> { AfterDeleteMembershipCleanupSubsJob.perform_later }
+  # Validations
+  validates :start_date, :end_date, :billing_period_start, :billing_period_end, presence: true
+  validates :amount_paid, presence: true, numericality: { greater_than: 0 }
+  validates :end_date, comparison: { greater_than: :start_date }
+  validates :billing_period_end, comparison: { greater_than: :billing_period_start }
 
-  belongs_to :user, touch: true
-  belongs_to :staff, touch: true
+  # Scopes
+  scope :current, -> { where("start_date <= ? AND end_date >= ?", Date.current, Date.current) }
+  scope :expired, -> { where("end_date < ?", Date.current) }
+  scope :expiring_soon, ->(days = 7) { where(end_date: Date.current..(Date.current + days.days)) }
+  scope :by_member, ->(member) { where(member: member) }
+  scope :recent, -> { order(created_at: :desc) }
 
-  has_many :payment_memberships, dependent: :destroy
-  has_many :receipt_memberships, dependent: :destroy
+  # Callbacks
+  before_validation :set_billing_periods, if: :new_record?
+  after_create :update_member_status
+  after_update :update_member_status, if: :saved_change_to_status?
 
-  has_many :payments, through: :payment_memberships
-  has_many :receipts, through: :receipt_memberships
-
-  after_discard do
-    user&.subscriptions&.discard_all
-    payments&.discard_all
-    receipts&.discard_all
+  # Instance methods
+  def current?
+    Date.current.between?(start_date, end_date) && status_active?
   end
 
-  after_undiscard do
-    user&.subscriptions&.undiscard_all
-    payments&.undiscard_all
-    receipts&.undiscard_all
+  def expired?
+    end_date < Date.current || status_expired?
   end
 
-  enum :status, { inactive: 0, active: 1, expired: 2 }, default: :inactive
-
-  MEMBERSHIP_COST = 35.0
-
-  scope :by_name, ->(query) do
-    return if query.blank?
-
-    where(
-      "name LIKE :q OR surname LIKE :q OR (surname LIKE :s AND name LIKE :n)",
-      q: "%#{query}%",
-      s: "%#{query.split.last}%",
-      n: "%#{query.split.first}%"
-    )
+  def days_remaining
+    return 0 if expired?
+    (end_date - Date.current).to_i
   end
 
-  scope :by_interval, ->(from = nil, to = nil) do
-    return if from.blank? && to.blank?
-
-    if from.blank?
-      end_date = DateTime.parse(to).end_of_day
-      where('memberships.created_at': ..end_date)
-    elsif to.blank?
-      where('memberships.created_at': from..)
-    else
-      end_date = to.is_a?(String) ? DateTime.parse(to).end_of_day : to
-      where('memberships.created_at': from..end_date)
-    end
+  def renewal?
+    renewed_from.present?
   end
 
-  scope :sorted, ->(sort_by, direction) do
-    if %w[name surname start_date end_date updated_at].include?(sort_by)
-      direction = %w[asc desc].include?(direction) ? direction : "asc"
-      sort_by =
-        if %w[name surname].include?(sort_by)
-          "users.#{sort_by}"
-        else
-          "memberships.#{sort_by}"
-        end
-
-      order("#{sort_by} #{direction}")
-    end
+  def can_renew?
+    status_active? && days_remaining <= 30
   end
 
-  scope :order_by_updated_at, -> { order("memberships.updated_at desc") }
-
-  def self.filter(params)
-    case params[:visibility]
-    when "all"
-      all
-    when "deleted"
-      discarded
-    else
-      kept
-    end.joins(:user)
-      .by_name(params[:name])
-      .by_interval(params[:from], params[:to])
-      .sorted(params[:sort_by], params[:direction])
-  end
-
-  def cost
-    MEMBERSHIP_COST
-  end
-
-  def humanize_status(status = self.status)
-    Membership.human_attribute_name("status.#{status}")
-  end
-
-  def num_of_days_til_renewal
-    (end_date - Time.zone.today).to_i
-  end
-
-  def summary
-    "#{self.class.model_name.human} (#{I18n.l(start_date)} al #{I18n.l(end_date)})"
+  def duration_in_days
+    (end_date - start_date).to_i + 1
   end
 
   private
 
-  def set_dates
-    set_default_date
-    set_end_date_if_blank
+  def set_billing_periods
+    return unless pricing_plan&.duration_type && pricing_plan&.duration_value
+
+    self.billing_period_start = start_date
+    case pricing_plan.duration_type
+    when "days"
+      self.billing_period_end = start_date + (pricing_plan.duration_value - 1).days
+    when "months"
+      self.billing_period_end = start_date + pricing_plan.duration_value.months - 1.day
+    when "years"
+      self.billing_period_end = start_date + pricing_plan.duration_value.years - 1.day
+    end
   end
 
-  def set_default_date
-    self.start_date ||= Time.zone.today
-  end
-
-  def set_end_date_if_blank
-    return unless end_date.blank? && start_date.present?
-
-    self.end_date = Date.new((self.start_date + 1.year).year, 9, 1)
+  def update_member_status
+    # Update member's affiliated status based on active memberships
+    member.update!(
+      affiliated: member.memberships.kept.status_active.current.exists?
+    )
   end
 end

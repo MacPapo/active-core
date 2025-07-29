@@ -12,7 +12,7 @@ class CreateProducts < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :products, [:name, :product_type], unique: true, where: "discarded_at IS NULL"
+    add_index :products, [ :name, :product_type ], unique: true, where: "discarded_at IS NULL"
     add_index :products, :product_type
     add_index :products, :discarded_at
   end

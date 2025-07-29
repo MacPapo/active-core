@@ -1,0 +1,11 @@
+active_package:
+  member: adult_member
+  package: beginner_package
+  user: admin_user
+  start_date: "2024-01-01"
+  end_date: "2024-01-31"
+  billing_period_start: "2024-01-01"
+  billing_period_end: "2024-01-31"
+  amount_paid: "90.00"
+  status: 0
+

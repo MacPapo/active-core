@@ -94,7 +94,7 @@ class SubscriptionsController < ApplicationController
       @subscription.end_date = ""
       @activity = @subscription.activity
       set_plans(@activity)
-      @user = User.find(@subscription.user.id)
+      @user = Member.find(@subscription.user.id)
     end
   end
 
@@ -154,7 +154,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def set_user(uid = subscription_params[:user_id])
-    @user = User.find(uid)
+    @user = Member.find(uid)
   end
 
   def update_open
@@ -205,7 +205,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def open_already_exists(id)
-    User.find(id).has_open_subscription?
+    Member.find(id).has_open_subscription?
   end
 
   def weight_room_subscription_already_exists(id)

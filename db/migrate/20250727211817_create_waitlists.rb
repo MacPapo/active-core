@@ -9,7 +9,7 @@ class CreateWaitlists < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :waitlists, [:member_id, :product_id], unique: true
-    add_index :waitlists, [:product_id, :priority]
+    add_index :waitlists, [ :member_id, :product_id ], unique: true
+    add_index :waitlists, [ :product_id, :priority ]
   end
 end

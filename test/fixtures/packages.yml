@@ -1,0 +1,11 @@
+beginner_package:
+  name: "Beginner Package"
+  description: "Perfect for new members"
+  price: "100.00"
+  affiliated_price: "90.00"
+  duration_type: 1  # monthly
+  duration_value: 1
+  valid_from: "2024-01-01"
+  valid_until: "2024-12-31"
+  active: true
+

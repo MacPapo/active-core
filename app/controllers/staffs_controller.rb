@@ -18,7 +18,7 @@ class StaffsController < ApplicationController
       direction: @direction
     }
 
-    @pagy, @staffs = pagy(Staff.filter(filters).includes(:user).load_async)
+    @pagy, @staffs = pagy(User.filter(filters).includes(:user).load_async)
   end
 
   # GET /staffs/1
@@ -26,7 +26,7 @@ class StaffsController < ApplicationController
 
   # GET /staffs/new
   def new
-    @staff = Staff.new
+    @staff = User.new
     @staff.build_user
   end
 
@@ -36,18 +36,18 @@ class StaffsController < ApplicationController
   # POST /staffs
   def create
     if params[:staff][:user_id].present?
-      @user = User.find(params[:staff].delete(:user_id))
+      @user = Member.find(params[:staff].delete(:user_id))
     else
-      @user = User.new(user_params)
+      @user = Member.new(user_params)
       unless @user.save
-        @staff = Staff.new(staff_params)
+        @staff = User.new(staff_params)
         @staff.errors.add(:base, "Impossibile creare l’utente: #{@user.errors.full_messages.join(', ')}")
         set_roles
         return render :new, status: :unprocessable_entity
       end
     end
 
-    @staff = Staff.new(staff_params)
+    @staff = User.new(staff_params)
     @staff.user = @user
     @staff.role = params[:staff][:role] if current_staff.admin?
 
@@ -84,11 +84,11 @@ class StaffsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_staff
-    @staff = Staff.find(params[:id])
+    @staff = User.find(params[:id])
   end
 
   def set_roles
-    @roles = Staff.humanize_roles
+    @roles = User.humanize_roles
   end
 
   def user_params

@@ -11,7 +11,7 @@ class CreatePackageInclusions < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :package_inclusions, [:package_id, :product_id], unique: true
+    add_index :package_inclusions, [ :package_id, :product_id ], unique: true
     add_index :package_inclusions, :access_type
   end
 end

@@ -1,0 +1,20 @@
+student_discount:
+  name: "Student Discount"
+  discount_type: 0  # percentage
+  value: "10.00"
+  max_amount: "20.00"
+  valid_from: "2024-01-01"
+  valid_until: "2024-12-31"
+  stackable: true
+  applicable_to: 0  # all
+  active: true
+
+fixed_discount:
+  name: "New Member Discount"
+  discount_type: 1  # fixed amount
+  value: "5.00"
+  max_amount: null
+  stackable: false
+  applicable_to: 1  # memberships only
+  active: true
+
