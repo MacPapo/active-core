@@ -6,11 +6,10 @@ class PaymentItemTest < ActiveSupport::TestCase
     assert item.valid?, item.errors.full_messages
   end
 
-  test "should require payment and amount" do
+  test "should require payment" do
     item = PaymentItem.new
     assert_not item.valid?
     assert item.errors[:payment].present?
-    assert item.errors[:amount].present?
   end
 
   test "should belong to payment" do

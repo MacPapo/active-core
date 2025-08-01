@@ -3,6 +3,7 @@
 # User Model
 class User < ApplicationRecord
   include Discard::Model
+  include StaffIdentity, RoleManagement, ActivityTracking, AuthenticationTracking
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
@@ -10,114 +11,23 @@ class User < ApplicationRecord
 
   # Associations
   belongs_to :member
-  has_many :payments, dependent: :restrict_with_error
-  has_many :receipts, dependent: :restrict_with_error
-  has_many :memberships, dependent: :restrict_with_error
-  has_many :package_purchases, dependent: :restrict_with_error
-  has_many :registrations, dependent: :restrict_with_error
+  has_many :memberships, dependent: :destroy
+  has_many :package_purchases, dependent: :destroy
+  has_many :registrations, dependent: :destroy
+  has_many :payments, dependent: :destroy
+  has_many :receipts, dependent: :destroy
 
-  validates :nickname, :password, :role, presence: true
+  delegate :full_name, :email, :phone, :affiliated?, to: :member, allow_nil: true
 
-  enum :role, { staff: 0, admin: 1 }, prefix: true
-
-  # Delegations for easier access to member info
-  delegate :name, :surname, :full_name, :email, :phone, to: :member, prefix: false
-  delegate :affiliated?, to: :member
-
-  # Validations
-  validates :nickname,
-            presence: true,
-            uniqueness: { case_sensitive: false },
-            length: { minimum: 3, maximum: 30 },
-            format: { with: /\A[a-zA-Z0-9_]+\z/, message: "only allows letters, numbers and underscores" }
-  validates :role, presence: true
-  validates :member_id, presence: true, uniqueness: true
-
-  # Custom validations
-  validate :member_must_exist
-  validate :cannot_discard_with_pending_transactions
-
-  normalizes :nickname, with: -> { _1&.downcase&.strip }
-
-  # Scopes
-  scope :admins, -> { where(role: :admin) }
-  scope :staff_members, -> { where(role: :staff) }
-  scope :active_recently, -> { where("current_sign_in_at > ?", 30.days.ago) }
-  scope :by_role, ->(role) { where(role: role) }
-
-  # Callbacks
-  before_discard :check_pending_transactions
-
-  # Instance methods
-  def admin?
-    role_admin?
-  end
-
-  def staff?
-    role_staff?
-  end
-
-  def can_manage_users?
-    admin?
-  end
-
-  def can_manage_payments?
-    admin? || staff?
-  end
-
-  def can_manage_members?
-    admin? || staff?
-  end
-
-  def can_view_reports?
-    admin?
-  end
-
-  def has_pending_transactions?
-    payments.exists? || receipts.exists? ||
-      memberships.exists? || package_purchases.exists? ||
-      registrations.exists?
-  end
-
-  def last_activity
-    [ current_sign_in_at, last_sign_in_at ].compact.max
-  end
-
-  def active_recently?
-    last_activity && last_activity > 30.days.ago
-  end
-
-  def display_name
-    "#{full_name} (@#{nickname})"
-  end
-
-  # Class methods
-  def self.find_by_nickname_or_email(login)
-    joins(:member).where(
-      "users.nickname LIKE ? OR members.email LIKE ?",
-      login.downcase,
-      login.downcase
-    ).first
-  end
+  after_discard :discard_associated_records
 
   private
 
-  def member_must_exist
-    return if member_id.blank?
-    return if Member.exists?(member_id)
-    errors.add(:member, "must exist")
-  end
-
-  def cannot_discard_with_pending_transactions
-    return unless has_pending_transactions?
-    errors.add(:base, "Cannot discard user with pending transactions, payments, or receipts")
-  end
-
-  def check_pending_transactions
-    if has_pending_transactions?
-      errors.add(:base, "Cannot discard user with existing transactions")
-      throw :abort
-    end
+  def discard_associated_records
+    # Keep financial records, just discard operational ones
+    memberships.discard_all
+    package_purchases.discard_all
+    registrations.discard_all
   end
 end
 

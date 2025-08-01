@@ -3,76 +3,52 @@
 # PaymentItem Model
 class PaymentItem < ApplicationRecord
   include Discard::Model
+  include LineItemManagement
+  include PolymorphicAssociationManagement
+  include RevenueAttribution
+  include ItemAnalytics
 
   # Associations
   belongs_to :payment
   belongs_to :payable, polymorphic: true
 
-  # Validations
-  validates :amount, presence: true, numericality: { greater_than: 0 }
-  validates :payable_type, inclusion: {
-    in: %w[Membership Registration PackagePurchase],
-    message: "must be a valid payable type"
-  }
-
-  # Scopes
-  scope :for_memberships, -> { where(payable_type: "Membership") }
-  scope :for_registrations, -> { where(payable_type: "Registration") }
-  scope :for_packages, -> { where(payable_type: "PackagePurchase") }
-  scope :by_amount, ->(amount) { where(amount: amount) }
-  scope :recent, -> { order(created_at: :desc) }
+  # Delegations for clean API
+  delegate :user, :date, :payment_method, to: :payment, allow_nil: true
+  delegate :full_name, to: :payable_member, prefix: :member, allow_nil: true
 
   # Callbacks
-  after_create :update_payment_total
-  after_update :update_payment_total, if: :saved_change_to_amount?
-  after_destroy :update_payment_total
+  after_save :update_payment_totals
+  after_destroy :update_payment_totals
+  before_validation :set_default_amount
 
-  # Instance methods
-  def payable_name
-    case payable_type
-    when "Membership"
-      "Membership - #{payable.pricing_plan.product.name}"
-    when "Registration"
-      "Registration - #{payable.product.name}"
-    when "PackagePurchase"
-      "Package - #{payable.package.name}"
-    else
-      payable_type
-    end
+  def display_summary
+    member_name = member_full_name || "Unknown"
+    service_info = display_description
+    "#{member_name} - #{service_info} (€#{amount})"
   end
 
-  def member_name
-    case payable_type
-    when "Membership", "Registration", "PackagePurchase"
-      "#{payable.member.name} #{payable.member.surname}"
-    else
-      "Unknown"
-    end
-  end
-
-  def formatted_amount
-    "€#{amount}"
-  end
-
-  def duration_info
-    return nil unless payable.respond_to?(:start_date) && payable.respond_to?(:end_date)
-
-    "#{payable.start_date.strftime('%d/%m/%Y')} - #{payable.end_date.strftime('%d/%m/%Y')}"
+  def self.revenue_by_service_type
+    revenue_generating
+      .group(:payable_type)
+      .sum(:amount)
+      .transform_keys { |k| k.underscore.humanize }
   end
 
   private
 
-  def update_payment_total
-    return unless payment&.persisted?
+  def update_payment_totals
+    payment&.send(:ensure_amounts_consistency)
+    payment&.save! if payment&.changed?
+  end
 
-    # Recalculate payment total based on current payment items
-    new_total = payment.payment_items.kept.sum(:amount)
+  def set_default_amount
+    return if amount.present?
 
-    # Update without triggering callbacks to avoid infinite loops
-    payment.update_column(:total_amount, new_total)
-
-    # Recalculate final amount considering discounts
-    final_amount = new_total - payment.discount_amount
-    payment.update_column(:final_amount, final_amount)
+    self.amount = case payable
+    when Membership then payable.amount_paid
+    when Registration then payable.amount_paid
+    when PackagePurchase then payable.amount_paid
+    else 0
+    end
   end
 end

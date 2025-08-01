@@ -6,13 +6,12 @@ class ReceiptTest < ActiveSupport::TestCase
     assert receipt.valid?, receipt.errors.full_messages
   end
 
-  test "should require payment, user, number, and year" do
+  test "should require payment, user" do
     receipt = Receipt.new
     assert_not receipt.valid?
+
     assert receipt.errors[:payment].present?
     assert receipt.errors[:user].present?
-    # assert receipt.errors[:number].present?
-    # assert receipt.errors[:year].present?
   end
 
   test "should have unique number and year combination" do

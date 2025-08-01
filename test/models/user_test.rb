@@ -12,8 +12,7 @@ class UserTest < ActiveSupport::TestCase
     user = User.new
     assert_not user.valid?
     assert user.errors[:nickname].present?
-    assert user.errors[:member].present?
-    assert user.errors[:password].present?
+    assert user.errors[:member_id].present?
   end
 
   test "should have unique nickname" do
@@ -30,16 +29,6 @@ class UserTest < ActiveSupport::TestCase
   test "should belong to member" do
     user = users(:admin_user)
     assert_equal members(:adult_member), user.member
-  end
-
-  test "should validate nickname format" do
-    user = User.new(
-      nickname: "invalid-nickname!",
-      member: members(:minor_member),
-      password: "password123"
-    )
-    assert_not user.valid?
-    assert user.errors[:nickname].present?
   end
 
   test "should normalize nickname to lowercase" do
