@@ -1,0 +1,49 @@
+<% content_for :title, "Prodotti" %>
+
+<div class="header-section">
+    <h1>Prodotti</h1>
+    <% if current_user.can_manage_system? %>
+        <%= link_to "Nuovo Prodotto", new_product_path, class: "btn btn-primary" %>
+    <% end %>
+</div>
+
+<div class="filters-section">
+    <%= form_with url: products_path, method: :get, local: true do |form| %>
+        <%= form.text_field :search, placeholder: "Cerca prodotto...", value: params[:search] %>
+        <%= form.select :product_type, options_for_select([
+            ["Tutti", ""], ["Corsi", "course"], ["Attività", "activity"], ["Membership", "membership"], ["Servizi", "service"]
+        ], params[:product_type]), {}, { onchange: "this.form.submit();" } %>
+        <%= form.select :requires_membership, options_for_select([
+            ["Tutti", ""], ["Richiede Membership", "true"], ["Accesso Libero", "false"]
+        ], params[:requires_membership]), {}, { onchange: "this.form.submit();" } %>
+    <% end %>
+</div>
+
+<div class="products-grid">
+    <% @products.each do |product| %>
+        <div class="product-card">
+            <h3><%= link_to product.display_name, product %></h3>
+            <p class="product-type"><%= product.product_type.humanize %></p>
+            <p class="product-description"><%= truncate(product.description, length: 100) %></p>
+
+            <div class="product-info">
+                <span class="capacity">
+                    <%= product.capacity ? "Max #{product.capacity}" : "Illimitato" %>
+                </span>
+                <span class="price-range"><%= product.price_range %></span>
+            </div>
+
+            <% if product.requires_membership? %>
+                <span class="membership-required">Richiede Membership</span>
+            <% end %>
+
+            <% if current_user.can_manage_system? %>
+                <div class="actions">
+                    <%= link_to "Modifica", edit_product_path(product) %>
+                    <%= link_to "Elimina", product, method: :delete,
+                    confirm: "Sei sicuro?", class: "danger" %>
+                </div>
+            <% end %>
+        </div>
+    <% end %>
+</div>

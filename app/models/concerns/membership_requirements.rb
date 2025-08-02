@@ -16,13 +16,13 @@ module MembershipRequirements
 
   def accessible_by?(member)
     return true if open_access?
-    member&.has_active_membership? && member&.medical_certificate_valid?
+    member&.has_active_membership? # && member&.medical_certificate_valid? TODO
   end
 
   def access_requirements
     requirements = []
     requirements << "Active membership" if requires_membership?
-    requirements << "Valid medical certificate"
+    # requirements << "Valid medical certificate" TODO
     requirements
   end
 end

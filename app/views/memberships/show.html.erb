@@ -1,22 +1,68 @@
-<%= content_for :counter do %>
-    <% count = @membership&.num_of_days_til_renewal %>
-    <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
-    <span class="fs-6 fw-light ps-2 text-muted"><%= t('global.remaining', count:) %></span>
-<% end %>
+<div>
+    <header>
+        <h1>Membership di <%= @membership.member.name %> <%= @membership.member.surname %></h1>
+        <nav>
+            <%= link_to "← Torna al Membro", @member %>
+            <%= link_to "Modifica", edit_membership_path(@membership) %>
+            <%= link_to "Cancella", [@member, @membership], method: :delete,
+            confirm: "Sicuro di voler cancellare questa membership?" %>
+        </nav>
+    </header>
 
-<%= render 'partials/container', obj: @membership, title: t('.title') do %>
-    <!-- Edit -->
-    <%= link_to edit_membership_path(@membership, user_id: @membership.user.id), class: 'btn btn-warning me-2 fs-5 text-secondary' do %>
-        <i class="bi bi-pencil-fill me-1"></i>
-        <%= t('global.edit_button') %>
-    <% end %>
+    <section>
+        <h2>Dettagli Membership</h2>
+        <dl>
+            <dt>Piano</dt>
+            <dd><%= @membership.pricing_plan.duration_description %></dd>
 
-    <!-- Destroy -->
-    <%= button_to @membership,
-                  class: 'btn btn-danger fs-5 text-secondary',
-                  method: :delete,
-                  data: { turbo_confirm: t('global.delete_dialog') } do %>
-        <i class="bi bi-trash3-fill"></i>
-        <%= t('global.delete_button') %>
+            <dt>Periodo</dt>
+            <dd><%= @membership.start_date.strftime("%d/%m/%Y") %> - <%= @membership.end_date.strftime("%d/%m/%Y") %></dd>
+
+            <dt>Stato</dt>
+            <dd><%= @membership.status.humanize %></dd>
+
+            <dt>Importo Pagato</dt>
+            <dd>€ <%= number_with_precision(@membership.amount_paid, precision: 2) %></dd>
+
+            <% if @membership.renewed_from %>
+                <dt>Rinnovata da</dt>
+                <dd>
+                    <%= link_to "Membership ##{@membership.renewed_from.id}",
+                    [@member, @membership.renewed_from] %>
+                </dd>
+            <% end %>
+        </dl>
+    </section>
+
+    <section>
+        <h2>Statistiche</h2>
+        <dl>
+            <dt>Giorni Rimanenti</dt>
+            <dd><%= @membership_stats[:days_remaining] %></dd>
+
+            <dt>Registrazioni Attive</dt>
+            <dd><%= @membership_stats[:active_registrations] %></dd>
+
+            <dt>Totale Speso</dt>
+            <dd>€ <%= number_with_precision(@membership_stats[:total_spent], precision: 2) %></dd>
+        </dl>
+    </section>
+
+    <% if @membership.status == 'expired' %>
+        <section>
+            <%= form_with url: member_memberships_path(@member), method: :post do |form| %>
+                <h3>Rinnova Membership</h3>
+
+                <%= form.select :pricing_plan_id,
+                    options_from_collection_for_select(PricingPlan.active, :id, :duration_description),
+                 { prompt: "Seleziona piano" } %>
+
+                <%= form.select :payment_method,
+                    options_for_select([['Contanti', 'cash'], ['Carta', 'card'], ['Bonifico', 'bank_transfer']]),
+                 { prompt: "Metodo pagamento" } %>
+
+                <%= form.submit "Rinnova" %>
+            <% end %>
+        </section>
     <% end %>
-<% end %>
+</div>

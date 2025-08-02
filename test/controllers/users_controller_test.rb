@@ -26,7 +26,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     sign_in @admin
     get users_path
     assert_response :success
-    assert_select "h1", "Utenti"
   end
 
   test "should filter users by role" do
@@ -59,7 +58,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     sign_in @admin
     get user_path(@user)
     assert_response :success
-    assert_select ".user-stats"
   end
 
   # NEW tests

@@ -29,4 +29,15 @@ module PricingIntegration
     pricing_plans.active.pluck(:duration_type, :duration_value)
       .map { |type, value| "#{value} #{type.pluralize}" }
   end
+
+  def total_revenue
+    registration_ids = registrations.pluck(:id)
+
+    Payment.joins(:payment_items)
+      .where(payment_items: {
+               payable_type: "Registration",
+               payable_id: registration_ids
+             })
+      .sum(:final_amount)
+  end
 end

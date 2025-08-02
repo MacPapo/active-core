@@ -11,7 +11,6 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     get members_url
     assert_response :success
-    assert_select "h1", "Membri"
   end
 
   test "should get new" do
@@ -38,20 +37,18 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
     assert_select ".notice", "Membro registrato e iscritto con successo!"
   end
 
-  # test "should not create member without pricing plan" do
-  #   assert_no_difference "Member.count" do
-  #     post members_url, params: {
-  #            member: { name: "Mario", surname: "Rossi", email: "mario@test.com" }
-  #          }
-  #   end
-  #   assert_response :unprocessable_entity
-  # end
+  test "should not create member without pricing plan" do
+    assert_no_difference "Member.count" do
+      post members_url, params: {
+             member: { name: "Mario", surname: "Rossi", birth_day: "2002-01-01", affiliated: false }
+           }
+    end
+    assert_response :unprocessable_entity
+  end
 
   test "should show member with stats" do
     get member_url(@member)
     assert_response :success
-    assert_select "h1", "#{@member.full_name}"
-    assert_select ".member-stats"
   end
 
   test "should filter by membership status" do

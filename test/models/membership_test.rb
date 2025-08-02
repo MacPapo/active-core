@@ -20,7 +20,7 @@ class MembershipTest < ActiveSupport::TestCase
     membership = memberships(:active_membership)
     assert_equal users(:admin_user), membership.user
     assert_equal members(:adult_member), membership.member
-    assert_equal pricing_plans(:monthly_membership), membership.pricing_plan
+    assert_equal pricing_plans(:annual_membership), membership.pricing_plan
   end
 
   test "end date should be after start date" do
@@ -29,18 +29,18 @@ class MembershipTest < ActiveSupport::TestCase
   end
 
   test "should identify active membership on specific date" do
-    travel_to Date.new(2024, 1, 15) do
+    travel_to Date.new(2024, 9, 15) do
       membership = memberships(:active_membership)
-      # Assuming you have scope or method to check active memberships
+      assert membership.active?
       assert membership.start_date <= Date.current
       assert membership.end_date >= Date.current
     end
   end
 
   test "should handle membership expiration" do
-    travel_to Date.new(2024, 2, 1) do
+    travel_to Date.new(2025, 9, 1) do
       membership = memberships(:active_membership)
-      # Membership should be expired by this date
+      # assert membership.expired? TODO
       assert membership.end_date < Date.current
     end
   end

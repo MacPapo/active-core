@@ -1,10 +1,51 @@
-<p class="mb-b fs-3 fw-semibold text-secondary">
-    <%= t '.title' %>
-</p>
+<div>
+    <header>
+        <h1>Modifica Membership</h1>
+        <p>Membro: <%= @membership.member.name %> <%= @membership.member.surname %></p>
+    </header>
 
-<div class="bg-primary border border-secondary-subtle rounded-3 container-fluid">
+    <%= form_with model: @membership do |form| %>
+        <% if @membership.errors.any? %>
+            <div>
+                <h3>Errori:</h3>
+                <ul>
+                    <% @membership.errors.full_messages.each do |message| %>
+                        <li><%= message %></li>
+                    <% end %>
+                </ul>
+            </div>
+        <% end %>
 
-    <div class="py-3">
-        <%= render "form", membership: @membership %>
-    </div>
+        <fieldset>
+            <legend>Modifica Stato e Date</legend>
+
+            <div>
+                <%= form.label :status %>
+                <%= form.select :status,
+                    options_for_select([
+                        ['Attiva', 'active'],
+                        ['Sospesa', 'suspended'],
+                        ['Scaduta', 'expired']
+                    ], @membership.status) %>
+            </div>
+
+            <div>
+                <%= form.label :end_date, "Data Scadenza" %>
+                <%= form.date_field :end_date %>
+            </div>
+
+            <div>
+                <%= form.label :pricing_plan_id, "Cambia Piano" %>
+                <%= form.select :pricing_plan_id,
+                    options_from_collection_for_select(@available_pricing_plans, :id, :duration_description, @membership.pricing_plan_id),
+                 { prompt: "Seleziona nuovo piano" } %>
+                <small>Attenzione: Cambio piano non modifica il prezzo già pagato</small>
+            </div>
+        </fieldset>
+
+        <div>
+            <%= form.submit "Aggiorna Membership" %>
+            <%= link_to "Annulla", @membership %>
+        </div>
+    <% end %>
 </div>

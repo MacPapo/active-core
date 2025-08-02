@@ -1,0 +1,42 @@
+<section>
+    <h3>Rinnova Membership</h3>
+
+    <%= form_with model: [ @member, @member.memberships.build ], local: true do |form| %>
+        <fieldset>
+            <legend>Dettagli Rinnovo</legend>
+
+            <div>
+                <%= form.label :pricing_plan_id, "Piano" %>
+                <%= form.select :pricing_plan_id,
+                 options_from_collection_for_select(PricingPlan.active, :id, :duration_description),
+                 { prompt: "Seleziona piano" } %>
+            </div>
+
+            <div>
+                <%= form.label :payment_method, "Metodo Pagamento" %>
+                <%= form.select :payment_method,
+                    options_for_select([
+                        ['Contanti', 'cash'],
+                        ['Carta', 'card'],
+                        ['Bonifico', 'bank_transfer']
+                    ]),
+                 { prompt: "Seleziona metodo" } %>
+            </div>
+
+            <div>
+                <p>
+                    <strong>Membership corrente scade:</strong>
+                    <%= @member.current_membership&.end_date&.strftime("%d/%m/%Y") %>
+                </p>
+                <p>
+                    <strong>Nuova membership inizierà:</strong>
+                    <%= (@member.current_membership&.end_date&.next_day || Date.current).strftime("%d/%m/%Y") %>
+                </p>
+            </div>
+        </fieldset>
+
+        <div>
+            <%= form.submit "Rinnova Membership" %>
+        </div>
+    <% end %>
+</section>

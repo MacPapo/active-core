@@ -1,0 +1,22 @@
+<%= content_for :counter do %>
+    <% count = @membership&.num_of_days_til_renewal %>
+    <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
+    <span class="fs-6 fw-light ps-2 text-muted"><%= t('global.remaining', count:) %></span>
+<% end %>
+
+<%= render 'partials/container', obj: @membership, title: t('.title') do %>
+    <!-- Edit -->
+    <%= link_to edit_membership_path(@membership, user_id: @membership.user.id), class: 'btn btn-warning me-2 fs-5 text-secondary' do %>
+        <i class="bi bi-pencil-fill me-1"></i>
+        <%= t('global.edit_button') %>
+    <% end %>
+
+    <!-- Destroy -->
+    <%= button_to @membership,
+                  class: 'btn btn-danger fs-5 text-secondary',
+                  method: :delete,
+                  data: { turbo_confirm: t('global.delete_dialog') } do %>
+        <i class="bi bi-trash3-fill"></i>
+        <%= t('global.delete_button') %>
+    <% end %>
+<% end %>

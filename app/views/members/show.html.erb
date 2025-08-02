@@ -31,6 +31,20 @@
         <% end %>
     </div>
 
+    <% if @member.current_membership.nil? || @member.current_membership.expired? %>
+        <%= render 'renewal_form' %>
+    <% else %>
+        <p>
+            Membership attiva fino al <%= @member.current_membership.end_date.strftime("%d/%m/%Y") %>
+            <br>
+            <%= link_to "Rinnova in Anticipo", "#", onclick: "document.getElementById('renewal-form').style.display='block'; return false;" %>
+        </p>
+
+        <div id="renewal-form" style="display: none;">
+            <%= render 'renewal_form' %>
+        </div>
+    <% end %>
+
     <div class="member-stats">
         <h2>Statistiche</h2>
         <p><strong>Totale abbonamenti:</strong> <%= @member_stats[:total_memberships] %></p>

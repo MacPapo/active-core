@@ -23,6 +23,10 @@ class Product < ApplicationRecord
   has_many :active_registrations, -> { where(status: :active) }, class_name: "Registration"
   has_many :active_members, through: :active_registrations, source: :member
 
+  accepts_nested_attributes_for :pricing_plans,
+                                allow_destroy: true,
+                                reject_if: :all_blank
+
   # Scopes specific to Product
   scope :popular, -> {
     joins(:registrations)

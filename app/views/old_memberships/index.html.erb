@@ -1,0 +1,43 @@
+<%= content_for :counter do %>
+    <% count = Membership.count %>
+    <p class="fs-3 fw-bold text-secondary mb-0"><%= count %></p>
+    <span class="fs-6 fw-light ps-2 text-muted"><%= t('.registered', count:) %></span>
+<% end %>
+
+<%= content_for :search do %>
+    <div class="flex-fill">
+        <%= render 'partials/search_form', loc: t('global.search_name'), path: memberships_path, frame: :memberships, size: '600px', ctrls: 'filters' do |f| %>
+            <% max = Membership.maximum(:end_date) %>
+            <% min = Membership.minimum(:start_date) %>
+            <div class="row g-2 mb-2">
+                <!-- DATE FROM -->
+                <div class="col">
+                    <%= f.label :date_from, t('global.activity_from'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.date_field :date_from, max: , min: ,
+		     class: 'form-control', data: { action: 'change->filters#submit' } %>
+                </div>
+
+                <!-- DATE TO -->
+                <div class="col">
+                    <%= f.label :date_to, t('global.activity_to'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.date_field :date_to, max: , min: ,
+                        class: 'form-control', data: { action: 'change->filters#submit' } %>
+                </div>
+            </div>
+
+	    <div class="row mb-2">
+                <!-- Visibility -->
+                <div class="col">
+                    <%= f.label :visibility, t('global.membership_visibility'), class: 'form-label fw-semibold text-secondary' %>
+                    <%= f.select :visibility, [[t('global.all-m'), 'all'], [t('global.invisible'), 'deleted']], { prompt: t('global.visible') },
+                     class: 'form-select', data: { action: 'change->filters#submit' } %>
+                </div>
+            </div>
+        <% end %>
+    </div>
+<% end %>
+
+<%= render 'partials/index_container', title: model_to_string(Membership, 2), tframe: :memberships do %>
+    <%= render 'partials/membership_table', memberships: @memberships %>
+    <%== pagy_bootstrap_nav(@pagy) %>
+<% end %>

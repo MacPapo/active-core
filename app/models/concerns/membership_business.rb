@@ -3,16 +3,16 @@ module MembershipBusiness
 
   included do
     scope :with_active_membership, -> {
-      joins(:memberships).where(memberships: { status: :active })
+      kept.joins(:memberships).where(memberships: { status: :active }).distinct
     }
   end
 
-  def has_active_membership?
-    current_membership.present?
+  def current_membership
+    @current_membership ||= memberships.kept.order(created_at: :desc).first
   end
 
-  def current_membership
-    memberships.active.order(created_at: :desc).first
+  def has_active_membership?
+    current_membership.present? && current_membership.active?
   end
 
   def can_register_for_product?(product)
@@ -20,7 +20,10 @@ module MembershipBusiness
   end
 
   def membership_status
-    return :none unless has_active_membership?
-    current_membership.expires_soon? ? :expiring : :active
+    membership = current_membership
+
+    return :none unless membership.present? && membership.active?
+
+    membership.expires_soon? ? :expiring : :active
   end
 end

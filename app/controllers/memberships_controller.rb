@@ -1,110 +1,110 @@
-# frozen_string_literal: true
-
-# Membership Controller
+# app/controllers/memberships_controller.rb
 class MembershipsController < ApplicationController
-  before_action :set_membership, only: %i[show edit renew renew_update update destroy restore]
-  before_action :set_user, only: %i[edit new renew create update renew_update]
+  include Filterable
+  include Sortable
 
-  # GET /memberships
+  before_action :authorize_admin!, only: [ :index, :edit, :update ]
+  before_action :set_membership, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_member, only: [ :show, :create, :destroy ], if: -> { params[:member_id] }
+  before_action :set_pricing_plan, only: [ :create ]
+
   def index
-    @sort_by = params[:sort_by] || "updated_at"
-    @direction = params[:direction] || "desc"
-
-    filters = {
-      visibility: params[:visibility],
-      name: params[:name],
-      from: params[:date_from],
-      to: params[:date_to],
-      sort_by: @sort_by,
-      direction: @direction
-    }
-
-    @pagy, @memberships = pagy(Membership.filter(filters).includes(:user).load_async)
+    @memberships = Membership.kept
+                     .then { |memberships| apply_filters(memberships) }
+                     .then { |memberships| apply_sorting(memberships) }
   end
 
-  # GET /memberships/1
-  def show; end
-
-  # GET /memberships/new
-  def new
-    if user_has_membership?
-      redirect_to memberships_path, alert: t(".membership_already_registered")
-    else
-      @membership = Membership.build
-      @membership.start_date = Time.zone.today
-    end
+  def show
+    @membership_stats = membership_statistics
   end
 
-  # GET /memberships/1/edit
-  def edit; end
-
-  # POST /memberships
   def create
-    user_id = membership_params[:user_id]
-    @membership = Membership.build(membership_params)
+    @membership = @member.renew_annual_membership!(
+      pricing_plan: @pricing_plan,
+      payment_method: membership_params[:payment_method],
+      user: current_user
+    )
 
-    if @membership.save
-      redirect_to new_payment_path(eid: @membership.id, type: "mem"), notice: t(".create_succ")
-    else
-      render :new, user_id:, status: :unprocessable_entity
-    end
+    redirect_to @member, notice: "Membership rinnovata con successo!"
+  rescue StandardError => e
+    redirect_to @member, alert: "Errore nel rinnovo: #{e.message}"
   end
 
-  def renew
-    if @membership.inactive?
-      redirect_to users_path, alert: t(".membership_inactive")
-    else
-      @membership.start_date = Time.zone.today
-      @membership.update!(end_date: nil)
-    end
+  def edit
+    @available_pricing_plans = PricingPlan.kept.active
   end
 
-  def renew_update
-    if @membership.update(membership_params)
-      @membership.inactive!
-      redirect_to new_payment_path(eid: @membership.id, type: "mem"), notice: t(".renew_succ")
-    else
-      render :renew, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /memberships/1
   def update
-    if @membership.update(membership_params)
-      redirect_to @membership, notice: t(".update_succ")
+    if @membership.update(membership_update_params)
+      redirect_to @membership, notice: "Membership aggiornata."
     else
+      @available_pricing_plans = PricingPlan.active
       render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /memberships/1
   def destroy
     @membership.discard
-    redirect_to memberships_url, notice: t(".destroy_succ")
-  end
 
-  def restore
-    @membership.undiscard
-    redirect_to memberships_url, notice: t(".restore_succ")
+    redirect_to @member, notice: "Membership cancellata."
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
+  def set_member
+    @member = Member.kept.find(params[:member_id])
+  end
+
   def set_membership
-    @membership = Membership.find(params[:id])
+    @membership = Membership.kept.find(params[:id])
   end
 
-  def set_user
-    @user ||= Member.find(params[:user_id] || membership_params[:user_id])
+  def set_pricing_plan
+    id = params.dig(:membership, :pricing_plan_id)
+    @pricing_plan = PricingPlan.kept.find(id)
   end
 
-  def user_has_membership?
-    Membership.exists?(user_id: @user.id)
-  end
-
-  # Only allow a list of trusted parameters through.
   def membership_params
-    params.require(:membership).permit(:start_date, :end_date, :user_id, :staff_id)
+    params.require(:membership).permit(:pricing_plan_id, :payment_method, :user)
+  end
+
+  def membership_update_params
+    params.require(:membership).permit(:status, :end_date)
+  end
+
+  def membership_statistics
+    {
+      days_remaining: (@membership.end_date - Date.current).to_i,
+      total_registrations: @membership.member.registrations.count,
+      active_registrations: @membership.member.registrations.where(status: :active).count,
+      total_spent: calculate_member_revenue
+    }
+  end
+
+  def calculate_member_revenue
+    @membership.member.total_revenue
+  end
+
+  # Filterable methods
+  def filterable_attributes
+    {
+      search: ->(scope, value) { scope.joins(:member).merge(Member.search_by_name(value)) if value.present? },
+      status: ->(scope, value) { scope.where(status: value) if value.present? },
+      expiring_soon: ->(scope, value) { scope.where(end_date: ..30.days.from_now) if value == "true" }
+    }
+  end
+
+  # Sortable methods
+  def sortable_attributes
+    {
+      "member_name" => "members.surname",
+      "end_date" => "memberships.end_date",
+      "status" => "memberships.status",
+      "created_at" => "memberships.created_at"
+    }
+  end
+
+  def default_sort
+    { attribute: "end_date", direction: "asc" }
   end
 end

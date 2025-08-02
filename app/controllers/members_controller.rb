@@ -23,6 +23,7 @@ class MembersController < ApplicationController
     @available_pricing_plans = PricingPlan.active.includes(:product)
   end
 
+  # TODO controlla che sia solo memberships e non corsi a caso!
   def create
     @member = Member.new(member_params)
     reg_params = registration_params
@@ -34,10 +35,7 @@ class MembersController < ApplicationController
     )
       redirect_to @member, notice: "Membro registrato e iscritto con successo!"
     else
-      puts "Member errors: #{@member.errors.full_messages}"
-      puts "Pricing plan present: #{pricing_plan.present?}"
-
-      @member.errors.add(:base, "Seleziona un piano di abbonamento") unless pricing_plan.present?
+      @member.errors.add(:base, "Seleziona un piano di abbonamento") unless reg_params[:pricing_plan_id].present?
       @available_pricing_plans = PricingPlan.active.includes(:product)
       render :new, status: :unprocessable_entity
     end

@@ -13,7 +13,7 @@ class PricingPlan < ApplicationRecord
   has_many :registrations, dependent: :destroy
 
   # Active scope
-  scope :active, -> { where(active: true).currently_valid }
+  scope :active, -> { kept.where(active: true).currently_valid }
 
   # Business logic scopes
   scope :most_popular, -> {

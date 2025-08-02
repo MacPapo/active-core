@@ -3,6 +3,7 @@
 # Member Model
 class Member < ApplicationRecord
   include Discard::Model
+  include Member::RevenueTracking
   include PersonalIdentity, Contactable, MedicalCertification
   include MembershipBusiness
   include MembershipLifecycle
@@ -29,7 +30,7 @@ class Member < ApplicationRecord
   normalizes :email, with: -> { _1&.downcase&.strip }
 
   after_discard :discard_associated_records
-  after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor?
+  # after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor? TODO
 
   private
 

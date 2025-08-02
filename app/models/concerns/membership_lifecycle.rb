@@ -20,18 +20,23 @@ module MembershipLifecycle
 
   def renew_annual_membership!(user:, payment_method:, pricing_plan:)
     current = current_membership
-    raise "Nessuna membership da rinnovare" unless current
+    return create_annual_membership!(user:, payment_method:, pricing_plan:) unless current
 
     next_sport_year = SportYear.new(current.end_date + 1.day)
 
     ApplicationRecord.transaction do
+      save!
       new_membership = build_renewal_membership(current, next_sport_year, user, pricing_plan)
       new_membership.save!
       process_membership_payment!(new_membership, payment_method, user)
-      new_membership.activate!
-      current.expire!
+      new_membership.update!(status: :active)
+      current.update!(status: :expired)
       new_membership
     end
+  rescue ActiveRecord::RecordInvalid => e
+    puts "Membership creation failed: #{e.record.errors.full_messages}"
+    errors.merge!(e.record.errors) if e.record != self
+    raise ActiveRecord::Rollback
   end
 
   private

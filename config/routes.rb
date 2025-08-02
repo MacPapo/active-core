@@ -114,7 +114,13 @@ Rails.application.routes.draw do
   devise_for :users, path: "", path_names: { sign_in: "login", sign_out: "logout" }
 
   resources :users # SOLO le 7 azioni REST standard
-  resources :members
+  resources :members do
+    resources :memberships, only: [ :show, :create, :destroy ]
+  end
+  resources :memberships, only: [ :index, :edit, :update ] # ADMIN
+  resources :products do
+    resources :pricing_plans, except: [ :index, :show ]
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
