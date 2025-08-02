@@ -1,0 +1,53 @@
+<% content_for :title, "Modifica #{@member.full_name}" %>
+
+<h1>Modifica <%= @member.full_name %></h1>
+
+<%= form_with model: @member, local: true do |form| %>
+    <% if @member.errors.any? %>
+        <div class="error-messages">
+            <% @member.errors.full_messages.each do |message| %>
+                <p><%= message %></p>
+            <% end %>
+        </div>
+    <% end %>
+
+    <div class="form-group">
+        <%= form.label :name, "Nome" %>
+        <%= form.text_field :name, required: true %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label :surname, "Cognome" %>
+        <%= form.text_field :surname, required: true %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label :email, "Email" %>
+        <%= form.email_field :email %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label :phone, "Telefono" %>
+        <%= form.text_field :phone %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label :birth_day, "Data di nascita" %>
+        <%= form.date_field :birth_day %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label :cf, "Codice Fiscale" %>
+        <%= form.text_field :cf %>
+    </div>
+
+    <div class="form-group">
+        <%= form.check_box :affiliated %>
+        <%= form.label :affiliated, "Affiliato" %>
+    </div>
+
+    <div class="form-actions">
+        <%= form.submit "Aggiorna Membro", class: "btn btn-primary" %>
+        <%= link_to "Annulla", @member, class: "btn btn-secondary" %>
+    </div>
+<% end %>

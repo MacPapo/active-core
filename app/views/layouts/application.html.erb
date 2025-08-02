@@ -14,13 +14,13 @@
     <body class="bg-light">
 
         <!-- Sidebar -->
-        <%= render "partials/sidebar" if staff_signed_in? %>
+        <%#= render "partials/sidebar" if user_signed_in? %>
 
 
         <!-- Flash Messages -->
         <%= render "partials/flash", flash: %>
 
-        <div class="flex-grow-1" style="<%= staff_signed_in? ? 'padding: 1rem;margin-left: 250px;' : 'height: 100vh;' %>">
+        <div class="flex-grow-1" style="<%= user_signed_in? ? 'padding: 1rem;margin-left: 250px;' : 'height: 100vh;' %>">
             <!-- Contents -->
             <%= yield %>
         </div>

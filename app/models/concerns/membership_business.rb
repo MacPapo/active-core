@@ -7,15 +7,16 @@ module MembershipBusiness
     }
   end
 
-  def has_active_membership? = current_membership.present?
+  def has_active_membership?
+    current_membership.present?
+  end
 
   def current_membership
-    active_memberships.current.first
+    memberships.active.order(created_at: :desc).first
   end
 
   def can_register_for_product?(product)
-    medical_certificate_valid? &&
-      (product.requires_membership? ? has_active_membership? : true)
+    product.requires_membership? ? has_active_membership? : true
   end
 
   def membership_status

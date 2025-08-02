@@ -1,17 +1,82 @@
-<%= render 'partials/container', obj: @user, title: t('.user_detail') do %>
-    <!-- Edit -->
-    <%= link_to edit_user_path(@user), class: 'btn btn-edit me-2 fs-5 text-secondary' do %>
-        <%= icon("edit") %>
-        <%= t('global.edit_button') %>
-    <% end %>
+<h1><%= @user.nickname %></h1>
 
+<div class="user-details">
+    <h2>Informazioni Utente</h2>
+    
+    <dl>
+        <dt>Nome Completo:</dt>
+        <dd><%= @user.full_name %></dd>
+        
+        <dt>Nickname:</dt>
+        <dd><%= @user.nickname %></dd>
+        
+        <dt>Email:</dt>
+        <dd><%= @user.member.email %></dd>
+        
+        <dt>Telefono:</dt>
+        <dd><%= @user.member.phone %></dd>
+        
+        <dt>Ruolo:</dt>
+        <dd><%= @user.role.humanize %></dd>
+        
+        <dt>Membro Affiliato:</dt>
+        <dd><%= @user.member.affiliated? ? "Sì" : "No" %></dd>
+        
+        <dt>Accessi Totali:</dt>
+        <dd><%= @user.sign_in_count %></dd>
+        
+        <dt>Ultimo Accesso:</dt>
+        <dd>
+            <% if @user.current_sign_in_at %>
+                <%= @user.current_sign_in_at.strftime("%d/%m/%Y alle %H:%M") %>
+                da IP <%= @user.current_sign_in_ip %>
+            <% else %>
+                Mai effettuato l'accesso
+            <% end %>
+        </dd>
+        
+        <dt>Penultimo Accesso:</dt>
+        <dd>
+            <% if @user.last_sign_in_at %>
+                <%= @user.last_sign_in_at.strftime("%d/%m/%Y alle %H:%M") %>
+                da IP <%= @user.last_sign_in_ip %>
+            <% else %>
+                N/A
+            <% end %>
+        </dd>
+        
+        <dt>Account Creato:</dt>
+        <dd><%= @user.created_at.strftime("%d/%m/%Y alle %H:%M") %></dd>
+        
+        <dt>Ultimo Aggiornamento:</dt>
+        <dd><%= @user.updated_at.strftime("%d/%m/%Y alle %H:%M") %></dd>
+    </dl>
+</div>
 
-    <!-- Delete -->
-    <%= button_to @user,
-                  class: 'btn btn-delete fs-5 text-secondary',
-                  method: :delete,
-                  data: { turbo_confirm: t('global.delete_dialog') } do %>
-        <%= icon("delete") %>
-        <%= t('global.delete_button') %>
-    <% end %>
-<% end %>
+<div class="user-stats">
+    <h2>Statistiche Attività</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-item">
+            <h3>Iscrizioni Create</h3>
+            <p><%= @user_stats[:created_memberships] %></p>
+        </div>
+        
+        <div class="stat-item">
+            <h3>Pagamenti Processati</h3>
+            <p><%= @user_stats[:processed_payments] %></p>
+        </div>
+        
+        <div class="stat-item">
+            <h3>Registrazioni Create</h3>
+            <p><%= @user_stats[:created_registrations] %></p>
+        </div>
+    </div>
+</div>
+
+<div class="actions">
+    <%= link_to "Modifica", edit_user_path(@user) %>
+    <%= button_to "Elimina", user_path(@user), method: :delete, 
+    confirm: "Sei sicuro di voler eliminare questo utente? Questa azione non può essere annullata." %>
+    <%= link_to "Torna alla Lista", users_path %>
+</div>

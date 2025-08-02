@@ -1,0 +1,67 @@
+<% content_for :title, "Nuovo Membro" %>
+
+<h1>Nuovo Membro</h1>
+
+<%= form_with model: @member, local: true do |form| %>
+    <% if @member.errors.any? %>
+        <div class="error-messages">
+            <% @member.errors.full_messages.each do |message| %>
+                <p><%= message %></p>
+            <% end %>
+        </div>
+    <% end %>
+
+    <div class="form-group">
+        <%= form.label :name, "Nome" %>
+        <%= form.text_field :name, required: true %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label :surname, "Cognome" %>
+        <%= form.text_field :surname, required: true %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label :email, "Email" %>
+        <%= form.email_field :email %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label :phone, "Telefono" %>
+        <%= form.text_field :phone %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label :birth_day, "Data di nascita" %>
+        <%= form.date_field :birth_day %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label :cf, "Codice Fiscale" %>
+        <%= form.text_field :cf %>
+    </div>
+
+    <div class="form-group">
+        <%= form.check_box :affiliated %>
+        <%= form.label :affiliated, "Affiliato" %>
+    </div>
+
+    <div class="form-group">
+        <%= label_tag :pricing_plan_id, "Piano di abbonamento" %>
+        <%= select_tag :pricing_plan_id, 
+        options_from_collection_for_select(@available_pricing_plans, :id, :display_name),
+                       { prompt: "Seleziona piano...", required: true } %>
+    </div>
+
+    <div class="form-group">
+        <%= label_tag :payment_method, "Metodo di pagamento" %>
+        <%= select_tag :payment_method, 
+        options_for_select([["Contanti", "cash"], ["Carta", "card"], ["Bonifico", "bank_transfer"]]),
+                       { prompt: "Seleziona metodo...", required: true } %>
+    </div>
+
+    <div class="form-actions">
+        <%= form.submit "Registra Membro", class: "btn btn-primary" %>
+        <%= link_to "Annulla", members_path, class: "btn btn-secondary" %>
+    </div>
+<% end %>

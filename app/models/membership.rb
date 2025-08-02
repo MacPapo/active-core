@@ -14,7 +14,7 @@ class Membership < ApplicationRecord
   has_many :renewals, class_name: "Membership", foreign_key: "renewed_from_id"
 
   # Callbacks for automatic status management
-  after_create :activate_if_current
+  # after_create :activate_if_current TODO
   after_update :deactivate_expired_memberships
 
   private

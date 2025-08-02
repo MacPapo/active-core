@@ -28,7 +28,7 @@ class Payment < ApplicationRecord
   # Callbacks
   before_save :ensure_amounts_consistency
   after_create :generate_receipt_if_income
-  after_update :update_daily_cash_report
+  # after_update :update_daily_cash_report TODO
 
   # Business logic scopes
   scope :needs_receipt, -> { income.left_joins(:receipts).where(receipts: { id: nil }) }

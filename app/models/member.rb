@@ -5,6 +5,7 @@ class Member < ApplicationRecord
   include Discard::Model
   include PersonalIdentity, Contactable, MedicalCertification
   include MembershipBusiness
+  include MembershipLifecycle
 
   # Associations
   belongs_to :legal_guardian, optional: true

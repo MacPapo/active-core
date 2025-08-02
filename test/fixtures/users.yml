@@ -1,7 +1,7 @@
 admin_user:
-  nickname: "admin"
+  nickname: "admin1"
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
-  role: 1
+  role: :admin
   member: adult_member
   sign_in_count: 5
   current_sign_in_at: "2024-01-15 10:00:00"
@@ -10,6 +10,19 @@ admin_user:
 regular_user:
   nickname: "member1"
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
-  role: 0
+  role: :user
   member: minor_member
   sign_in_count: 2
+
+collaborator_user:
+  nickname: "collaborator"
+  member: collaborator_member
+  role: :collaborator
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+
+staff_user:
+  nickname: "staff_user"
+  member: staff_member
+  role: :collaborator
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+

@@ -2,167 +2,204 @@
 
 # Member Controller
 class MembersController < ApplicationController
-  before_action :set_user, only: %i[show edit update destroy restore]
+  include Filterable
+  include Sortable
 
-  # GET /users
+  before_action :authorize_internal_access!
+  before_action :set_member, only: [ :show, :edit, :update, :destroy ]
+
   def index
-    @sort_by = params[:sort_by] || "updated_at"
-    @direction = params[:direction] || "desc"
-
-    filters = {
-      visibility: params[:visibility],
-      name: params[:name],
-      membership_status: params[:membership_status],
-      activity_status: params[:activity_status],
-      activity_id: params[:activity_id],
-      sort_by: @sort_by || "updated_at",
-      direction: @direction || "desc"
-    }
-
-    @pagy, @users = pagy(Member.filter(filters).includes(:membership).load_async)
+    @members = Member.kept
+                 .then { |members| apply_filters(members) }
+                 .then { |members| apply_sorting(members) }
   end
 
-  def activity_search
-    query = params[:query]
-    if query.present?
-      @users = Member.kept.joins(:membership).where("membership.status" => :active)
-
-      query.split.each { |term| @users = @users.where("name LIKE ? OR surname LIKE ?", "%#{term}%", "%#{term}%") }
-    else
-      @users = Member.kept.joins(:membership).where("membership.status" => :active).limit(50)
-    end
-
-    respond_to do |f|
-      f.json do
-        render json: localize_activity_search_result(@users.select(:id, :name, :surname, :birth_day, :email, :phone))
-      end
-    end
-  end
-
-  # GET /users/1
   def show
-    @sort_by = params[:sort_by] || "updated_at"
-    @direction = params[:direction] || "desc"
-    @activities = @user.activities.pluck(:name, :id)
-
-    sfilters = {
-      visibility: params[:visibility],
-      name: params[:name],
-      activity_id: params[:activity_id],
-      open: params[:sub_open],
-      sort_by: @sort_by,
-      direction: @direction
-    }
-
-    pfilters = {
-      visibility: params[:visibility],
-      name: params[:name],
-      type: params[:payable_type],
-      method: params[:payment_method],
-      from: params[:date_from],
-      to: params[:date_to],
-      sort_by: @sort_by,
-      direction: @direction
-    }
-
-    @pagy_sub, @subscriptions = pagy(@user.sfilter(sfilters))
-    @pagy_pay, @payments = pagy(@user.pfilter(pfilters))
+    @member_stats = member_statistics
   end
 
-  # GET /users/new
   def new
-    @user = Member.new
+    @member = Member.new
+    @available_pricing_plans = PricingPlan.active.includes(:product)
   end
 
-  # GET /users/1/edit
-  def edit
-    @legal_guardian = @user.legal_guardian
-  end
-
-  # POST /users
   def create
-    @user = Member.new(extract_user_params(user_params))
-    legal_guardian_params = params.dig(:user, :legal_guardian)
-    @user.legal_guardian = find_or_create_this_lg(legal_guardian_params)
+    @member = Member.new(member_params)
+    reg_params = registration_params
 
-    if @user.save
-      redirect_to new_membership_path(user_id: @user.id, staff_id: current_staff),
-                  notice: t(".create_succ")
+    if set_pricing_plan(reg_params[:pricing_plan_id]) && @member.create_annual_membership!(
+      pricing_plan: @pricing_plan,
+      payment_method: reg_params[:payment_method],
+      user: current_user
+    )
+      redirect_to @member, notice: "Membro registrato e iscritto con successo!"
     else
+      puts "Member errors: #{@member.errors.full_messages}"
+      puts "Pricing plan present: #{pricing_plan.present?}"
+
+      @member.errors.add(:base, "Seleziona un piano di abbonamento") unless pricing_plan.present?
+      @available_pricing_plans = PricingPlan.active.includes(:product)
       render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /users/1
-  def update
-    if @user.update(extract_user_params(user_params))
-      # TODO: review membership papers
-      # update_this_lg(@user, params.dig(:user, :legal_guardian))
+  def edit
+    @available_pricing_plans = PricingPlan.active.includes(:product)
+  end
 
-      redirect_to user_url(@user), notice: t(".update_succ")
+  def update
+    if @member.update(member_params)
+      redirect_to @member, notice: "Membro aggiornato con successo."
     else
+      @available_pricing_plans = PricingPlan.active.includes(:product)
       render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /users/1
   def destroy
-    @user.discard
-    redirect_to users_url, notice: t(".destroy_succ")
-  end
-
-  # PATCH /users/1
-  def restore
-    @user.undiscard
-    redirect_to users_url, notice: t(".restore_succ")
+    @member.discard
+    redirect_to members_path, notice: "Membro eliminato con successo."
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_user
-    @user = Member.find(params[:id])
+  def set_member
+    @member = Member.kept.find(params[:id])
   end
 
-  def find_or_create_this_lg(data)
-    return nil if data.blank?
+  def set_pricing_plan(id)
+    return nil if id.nil?
 
-    LegalGuardian.find_or_create_by(email: data[:email]) do |lg|
-      lg.email = data[:email]
-      lg.name = data[:name]
-      lg.surname = data[:surname]
-      lg.phone = data[:phone]
-      lg.birth_day = data[:birth_day]
-    end
+    @pricing_plan = PricingPlan.kept.find(id)
   end
 
-  def update_this_lg(user, lg_params)
-    return if lg_params.values.all?(&:empty?)
-
-    lg = user.legal_guardian
-    if lg.present?
-      lg.update!(email: lg_params[:email], name: lg_params[:name],
-                 surname: lg_params[:surname], phone: lg_params[:phone],
-                 birth_day: lg_params[:birth_day])
-    else
-      user.legal_guardian = find_or_create_this_lg(lg_params)
-      user.save
-    end
+  def member_params
+    params.require(:member).permit(:name, :surname, :email, :phone, :birth_day, :cf, :affiliated)
   end
 
-  def extract_user_params(params)
-    params.except(:legal_guardian)
+  def registration_params
+    params.permit(:pricing_plan_id, :payment_method)
   end
 
-  def localize_activity_search_result(res)
-    res.map { |u| { id: u.id, name: u.name, surname: u.surname, birth_day: I18n.l(u.birth_day, formt: :short), email: u.email, phone: u.phone } }
+  def member_statistics
+    member_payments = Payment.joins(:payment_items)
+                        .where(payment_items: { payable_type: "Membership", payable_id: @member.memberships.select(:id) })
+                        .or(Payment.joins(:payment_items)
+                              .where(payment_items: { payable_type: "Registration", payable_id: @member.registrations.select(:id) }))
+                        .or(Payment.joins(:payment_items)
+                              .where(payment_items: { payable_type: "PackagePurchase", payable_id: @member.package_purchases.select(:id) }))
+    {
+      total_memberships: @member.memberships.count,
+      active_registrations: @member.registrations.where(status: :active).count,
+      total_payments: member_payments.count
+    }
   end
 
-  # Only allow a list of trusted parameters through.
-  def user_params
-    params.require(:user).permit(
-      :cf, :name, :surname, :email, :phone, :birth_day, :med_cert_issue_date, :affiliated,
-      legal_guardian: %i[email name surname phone birth_day]
-    )
+  # Filterable methods
+  def filterable_attributes
+    {
+      search: ->(scope, value) {
+      scope.search_by_name(value) if value.present?
+    },
+      membership_status: ->(scope, value) {
+      case value
+      when "active"
+        scope.with_active_membership
+      when "expired"
+        scope.joins(:memberships).where.not(id: Member.with_active_membership.select(:id))
+      when "none"
+        scope.left_joins(:memberships).where(memberships: { id: nil })
+      end
+    },
+      affiliated: ->(scope, value) {
+      scope.where(affiliated: value) if value.present?
+    }
+    }
+  end
+
+  # Sortable methods
+  def sortable_attributes
+    {
+      "name" => "members.name",
+      "surname" => "members.surname",
+      "email" => "members.email",
+      "birth_day" => "members.birth_day",
+      "created_at" => "members.created_at"
+    }
+  end
+
+  def default_sort
+    { attribute: "surname", direction: "asc" }
   end
 end
+
+# class MembersController < ApplicationController
+#   before_action :set_member, only: [ :show, :edit, :update, :destroy ]
+
+#   def index
+#     @members = Member.kept
+#                  .includes(:legal_guardian, :active_memberships, :active_registrations)
+#                  .order(:surname, :name)
+
+#     @members = @members.where("name LIKE ? OR surname LIKE ? OR email LIKE ?",
+#                               "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
+#     @members = @members.affiliated if params[:affiliated] == "true"
+#     @members = @members.unaffiliated if params[:affiliated] == "false"
+#   end
+
+#   def show
+#     @active_memberships = @member.active_memberships.includes(:pricing_plan)
+#     @active_registrations = @member.active_registrations.includes(:product)
+#     @recent_payments = PaymentItem.joins(:payment)
+#                          .for_member(@member)
+#                          .includes(:payment)
+#                          .order(created_at: :desc)
+#                          .limit(5)
+#   end
+
+#   def new
+#     @member = Member.new
+#     @legal_guardians = LegalGuardian.all.order(:surname, :name)
+#   end
+
+#   def create
+#     @member = Member.new(member_params)
+
+#     if @member.save
+#       redirect_to @member, notice: "Membro creato con successo."
+#     else
+#       @legal_guardians = LegalGuardian.all.order(:surname, :name)
+#       render :new, status: :unprocessable_entity
+#     end
+#   end
+
+#   def edit
+#     @legal_guardians = LegalGuardian.all.order(:surname, :name)
+#   end
+
+#   def update
+#     if @member.update(member_params)
+#       redirect_to @member, notice: "Membro aggiornato con successo."
+#     else
+#       @legal_guardians = LegalGuardian.all.order(:surname, :name)
+#       render :edit, status: :unprocessable_entity
+#     end
+#   end
+
+#   def destroy
+#     @member.discard
+#     redirect_to members_path, notice: "Membro eliminato con successo."
+#   end
+
+#   private
+
+#   def set_member
+#     @member = Member.kept.find(params[:id])
+#   end
+
+#   def member_params
+#     params.require(:member).permit(:cf, :name, :surname, :email, :phone,
+#                                    :birth_day, :med_cert_issue_date,
+#                                    :affiliated, :legal_guardian_id)
+#   end
+# end

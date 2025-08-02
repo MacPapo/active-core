@@ -1,0 +1,17 @@
+<%= render 'partials/container', obj: @user, title: t('.user_detail') do %>
+    <!-- Edit -->
+    <%= link_to edit_user_path(@user), class: 'btn btn-edit me-2 fs-5 text-secondary' do %>
+        <%= icon("edit") %>
+        <%= t('global.edit_button') %>
+    <% end %>
+
+
+    <!-- Delete -->
+    <%= button_to @user,
+                  class: 'btn btn-delete fs-5 text-secondary',
+                  method: :delete,
+                  data: { turbo_confirm: t('global.delete_dialog') } do %>
+        <%= icon("delete") %>
+        <%= t('global.delete_button') %>
+    <% end %>
+<% end %>

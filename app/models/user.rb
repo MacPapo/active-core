@@ -21,6 +21,10 @@ class User < ApplicationRecord
 
   after_discard :discard_associated_records
 
+  def active_for_authentication?
+    super && !discarded?
+  end
+
   private
 
   def discard_associated_records

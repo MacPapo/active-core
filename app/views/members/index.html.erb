@@ -1,0 +1,33 @@
+<% content_for :title, "Membri" %>
+
+<div class="header-section">
+    <h1>Membri</h1>
+    <%= link_to "Nuovo Membro", new_member_path, class: "btn btn-primary" %>
+</div>
+
+<div class="filters-section">
+    <%= form_with url: members_path, method: :get, local: true do |form| %>
+        <%= form.text_field :search, placeholder: "Cerca per nome...", value: params[:search] %>
+        <%= form.select :membership_status, options_for_select([
+            ["Tutti", ""], ["Attivi", "active"], ["Scaduti", "expired"], ["Nessuna", "none"]
+        ], params[:membership_status]), {}, { onchange: "this.form.submit();" } %>
+        <%= form.select :affiliated, options_for_select([
+            ["Tutti", ""], ["Affiliati", "true"], ["Non Affiliati", "false"]
+        ], params[:affiliated]), {}, { onchange: "this.form.submit();" } %>
+    <% end %>
+</div>
+
+<div class="members-list">
+    <% @members.each do |member| %>
+        <div class="member-card">
+            <h3><%= link_to member.full_name, member %></h3>
+            <p>Email: <%= member.email %></p>
+            <p>Status: <%= member.membership_status %></p>
+            <div class="actions">
+                <%= link_to "Modifica", edit_member_path(member) %>
+                <%= link_to "Elimina", member, method: :delete, 
+                confirm: "Sei sicuro?", class: "danger" %>
+            </div>
+        </div>
+    <% end %>
+</div>

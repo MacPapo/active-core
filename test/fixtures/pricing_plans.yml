@@ -1,3 +1,10 @@
+annual_membership:
+  product: membership_product
+  duration_type: :years
+  duration_value: 1
+  price: "35.00"
+  active: true
+
 monthly_membership:
   product: membership_product
   duration_type: 1  # monthly

@@ -1,0 +1,40 @@
+<% content_for :title, @member.full_name %>
+
+<div class="member-header">
+    <h1><%= @member.full_name %></h1>
+    <div class="member-actions">
+        <%= link_to "Modifica", edit_member_path(@member), class: "btn btn-primary" %>
+        <%= link_to "Torna alla lista", members_path, class: "btn btn-secondary" %>
+    </div>
+</div>
+
+<div class="member-details">
+    <div class="detail-section">
+        <h2>Informazioni Personali</h2>
+        <p><strong>Nome:</strong> <%= @member.name %></p>
+        <p><strong>Cognome:</strong> <%= @member.surname %></p>
+        <p><strong>Email:</strong> <%= @member.email %></p>
+        <p><strong>Telefono:</strong> <%= @member.phone %></p>
+        <p><strong>Data di nascita:</strong> <%= @member.birth_day %></p>
+        <p><strong>Codice Fiscale:</strong> <%= @member.cf %></p>
+        <p><strong>Affiliato:</strong> <%= @member.affiliated? ? "Sì" : "No" %></p>
+    </div>
+
+    <div class="detail-section">
+        <h2>Status Abbonamento</h2>
+        <p><strong>Status:</strong> <%= @member.membership_status %></p>
+        <% if @member.current_membership %>
+            <p><strong>Abbonamento corrente:</strong> <%= @member.current_membership.pricing_plan.product.name %></p>
+            <p><strong>Scadenza:</strong> <%= @member.current_membership.end_date %></p>
+        <% else %>
+            <p>Nessun abbonamento attivo</p>
+        <% end %>
+    </div>
+
+    <div class="member-stats">
+        <h2>Statistiche</h2>
+        <p><strong>Totale abbonamenti:</strong> <%= @member_stats[:total_memberships] %></p>
+        <p><strong>Registrazioni attive:</strong> <%= @member_stats[:active_registrations] %></p>
+        <p><strong>Totale pagamenti:</strong> <%= @member_stats[:total_payments] %></p>
+    </div>
+</div>

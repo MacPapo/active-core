@@ -47,9 +47,9 @@ admin_user = Member.new(
 admin_user.save
 
 staff_admin = User.new(
-  user: admin_user,
+  member: admin_user,
   nickname: 'admin',
-  password: Rails.application.credentials.dig(:development, :admin, :password),
+  password: 'admin',
   role: :admin
 )
 

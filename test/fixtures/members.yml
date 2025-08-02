@@ -19,3 +19,33 @@ minor_member:
   med_cert_issue_date: "2024-02-01"
   affiliated: false
   legal_guardian: two
+
+available_member:
+  name: "Mario"
+  surname: "Disponibile"
+  email: "mario.disponibile@example.com"
+  birth_day: "1990-01-01"
+  affiliated: false
+
+admin_member:
+  name: "Admin"
+  surname: "User"
+  email: "admin@gym.com"
+  birth_day: "1985-01-01"
+  affiliated: true
+
+collaborator_member:
+  name: "Collaborator"
+  surname: "User"
+  email: "collaborator@gym.com"
+  birth_day: "1988-01-01"
+  affiliated: false
+
+staff_member:
+  name: "Staff"
+  surname: "Member"
+  email: "staff@gym.com"
+  phone: "3333333333"
+  birth_day: "1992-01-01"
+  affiliated: false
+
