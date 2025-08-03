@@ -2,10 +2,10 @@
 class Registration < ApplicationRecord
   include Discard::Model
   include SubscriptionLifecycle  # Reuse from Membership!
-  include BillingManagement      # Reuse from Membership!
+  include Financial::BillingManagement
   include SessionManagement
   include CourseAccess
-  include PackageIntegration
+  include Package::Integration
   include RegistrationAnalytics
 
   # Associations

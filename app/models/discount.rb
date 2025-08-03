@@ -1,10 +1,7 @@
 class Discount < ApplicationRecord
   include Discard::Model
-  include DiscountMechanics
   include ValidityPeriod           # Reuse from PricingPlan!
-  include DiscountApplicability
-  include DiscountUsageTracking
-  include PromotionalCampaignIntegration
+  include Discount::Mechanics, Discount::Applicability, Discount::UsageTracking, Discount::PromotionalCampaignIntegration
 
   # Associations
   has_many :payment_discounts, dependent: :destroy

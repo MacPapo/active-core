@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   private
 
   def authorize_internal_access!
-    unless current_user&.internal_user?
+    unless current_user&.staff?
       redirect_to root_path, alert: "Accesso negato. Solo personale interno."
     end
   end

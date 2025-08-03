@@ -5,7 +5,7 @@ class PaymentDiscount < ApplicationRecord
   belongs_to :payment
   belongs_to :discount
 
-  validates :discount_amount, presence: true, numericality: { greater_than: 0 }
+  validates :discount_amount, numericality: { greater_than: 0, presence: true }
   validates :payment_id, uniqueness: { scope: :discount_id }
   validate :discount_amount_within_limits
   validate :discount_is_applicable

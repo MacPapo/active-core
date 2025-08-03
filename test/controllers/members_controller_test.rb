@@ -32,7 +32,7 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
 
     member = Member.last
     assert_redirected_to member_url(member)
-    assert member.has_active_membership?
+    assert member.active_membership?
     follow_redirect!
     assert_select ".notice", "Membro registrato e iscritto con successo!"
   end

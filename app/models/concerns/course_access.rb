@@ -11,7 +11,7 @@ module CourseAccess
     return false unless active? && !expired?
     return false unless member.medical_certificate_valid?
     return false if sessions_exhausted?
-    return false if product.requires_membership? && !member.has_active_membership?
+    return false if product.requires_membership? && !member.active_membership?
 
     true
   end
@@ -21,7 +21,7 @@ module CourseAccess
     requirements << "Active registration" unless active?
     requirements << "Valid medical certificate" unless member.medical_certificate_valid?
     requirements << "Sessions remaining" if sessions_exhausted?
-    requirements << "Active membership" if product.requires_membership? && !member.has_active_membership?
+    requirements << "Active membership" if product.requires_membership? && !member.active_membership?
     requirements
   end
 

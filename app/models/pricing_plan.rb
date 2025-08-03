@@ -4,8 +4,8 @@
 class PricingPlan < ApplicationRecord
   include Discard::Model
   include DurationManagement
-  include PricingLogic
   include ValidityPeriod
+  include Pricing::Pricable, Pricing::Logic
 
   # Associations
   belongs_to :product

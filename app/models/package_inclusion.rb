@@ -8,7 +8,7 @@ class PackageInclusion < ApplicationRecord
   validates :access_type, presence: true
   validates :package_id, uniqueness: { scope: :product_id,
                                        message: "Product already included in this package" }
-  validates :session_limit, presence: true, numericality: { greater_than: 0 },
+  validates :session_limit, numericality: { greater_than: 0, presence: true },
             if: :limited_sessions?
   validates :session_limit, absence: true, unless: :limited_sessions?
   validate :product_cannot_be_membership_type

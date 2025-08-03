@@ -7,7 +7,7 @@ class Waitlist < ApplicationRecord
 
   validates :member_id, uniqueness: { scope: :product_id,
                                       message: "is already on waitlist for this product" }
-  validates :priority, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :priority, numericality: { greater_than_or_equal_to: 0, presence: true }
 
   scope :for_product, ->(product) { where(product: product) }
   scope :for_member, ->(member) { where(member: member) }

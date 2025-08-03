@@ -5,8 +5,8 @@ class PaymentItem < ApplicationRecord
   include Discard::Model
   include LineItemManagement
   include PolymorphicAssociationManagement
-  include RevenueAttribution
   include ItemAnalytics
+  include Financial::RevenueAttribution
 
   # Associations
   belongs_to :payment

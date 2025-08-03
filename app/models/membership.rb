@@ -3,8 +3,10 @@
 # Membership Model
 class Membership < ApplicationRecord
   include Discard::Model
-  include SubscriptionLifecycle, BillingManagement, MemberIntegration
+  include Member::Access
+  include SubscriptionLifecycle
   include Renewable
+  include Financial::BillingManagement
 
   # Associations
   belongs_to :user

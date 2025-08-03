@@ -3,10 +3,10 @@
 # PackagePurchase Model
 class PackagePurchase < ApplicationRecord
   include Discard::Model
-  include BillingManagement
+  include Financial::BillingManagement
   include SubscriptionLifecycle
-  include MemberIntegration
-  include PackageIntegration
+  include Member::Access
+  include Package::Integration
 
   belongs_to :member
   belongs_to :package
@@ -16,7 +16,7 @@ class PackagePurchase < ApplicationRecord
   has_many :registrations, dependent: :destroy
 
   validates :start_date, :end_date, :billing_period_start, :billing_period_end, presence: true
-  validates :amount_paid, presence: true, numericality: { greater_than: 0 }
+  validates :amount_paid, numericality: { greater_than: 0, presence: true }
 
   scope :for_member, ->(member) { where(member: member) }
   scope :for_package, ->(package) { where(package: package) }

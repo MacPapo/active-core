@@ -2,16 +2,16 @@
 
 # DailyCashReport Model
 class DailyCashReport < ApplicationRecord
-  include PaymentAnalytics
-  include RevenueAttribution
+  include Financial::PaymentAnalytics, Financial::RevenueAttribution
 
   validates :report_date, presence: true, uniqueness: true
   validates :total_cash, :total_card, :total_bank_transfer,
             :total_income, :total_expenses, :net_total,
             presence: true, numericality: true
+
   validates :transaction_count, :membership_sales,
             :activity_registrations, :package_sales,
-            presence: true, numericality: { greater_than_or_equal_to: 0 }
+            numericality: { greater_than_or_equal_to: 0, presence: true }
 
   scope :for_month, ->(date) { where(report_date: date.beginning_of_month..date.end_of_month) }
   scope :for_year, ->(year) { where("strftime('%Y', report_date) = ?", year.to_s) }

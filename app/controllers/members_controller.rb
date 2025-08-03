@@ -28,7 +28,7 @@ class MembersController < ApplicationController
     @member = Member.new(member_params)
     reg_params = registration_params
 
-    if set_pricing_plan(reg_params[:pricing_plan_id]) && @member.create_annual_membership!(
+    if set_pricing_plan(reg_params[:pricing_plan_id]) && @member.create_or_renew_membership!(
       pricing_plan: @pricing_plan,
       payment_method: reg_params[:payment_method],
       user: current_user

@@ -3,10 +3,8 @@
 # Payment Model
 class Payment < ApplicationRecord
   include Discard::Model
-  include FinancialTransaction
-  include IncomeExpenseManagement
-  include DiscountIntegration
-  include PaymentAnalytics
+  include Discount::Integration
+  include Financial::Transaction, Financial::IncomeExpenseManagement, Financial::PaymentAnalytics
 
   # Associations
   belongs_to :user

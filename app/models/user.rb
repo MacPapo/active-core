@@ -3,7 +3,7 @@
 # User Model
 class User < ApplicationRecord
   include Discard::Model
-  include StaffIdentity, RoleManagement, ActivityTracking, AuthenticationTracking
+  include User::StaffIdentity, User::RoleManagement, User::ActivityTracking, User::AuthenticationTracking
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable

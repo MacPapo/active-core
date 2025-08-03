@@ -19,7 +19,7 @@ class MembershipsController < ApplicationController
   end
 
   def create
-    @membership = @member.renew_annual_membership!(
+    @membership = @member.create_or_renew_membership!(
       pricing_plan: @pricing_plan,
       payment_method: membership_params[:payment_method],
       user: current_user
