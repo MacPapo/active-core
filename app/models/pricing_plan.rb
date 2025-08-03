@@ -3,8 +3,9 @@
 # PricingPlan Model
 class PricingPlan < ApplicationRecord
   include Discard::Model
-  include DurationManagement
+
   include ValidityPeriod
+  include DurationManagement
   include Pricing::Pricable, Pricing::Logic
 
   # Associations

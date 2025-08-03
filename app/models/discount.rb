@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
+# Discount Model
 class Discount < ApplicationRecord
   include Discard::Model
-  include ValidityPeriod           # Reuse from PricingPlan!
+
+  include ValidityPeriod
   include Discount::Mechanics, Discount::Applicability, Discount::UsageTracking, Discount::PromotionalCampaignIntegration
 
   # Associations

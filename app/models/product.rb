@@ -4,10 +4,8 @@
 class Product < ApplicationRecord
   include Discard::Model
 
-  include Product::CapacityManagement
-  include Product::Catalog
-  include Membership::Requirements
   include Pricing::Integration
+  include Product::CapacityManagement, Product::Catalog, Product::MembershipRequirement
 
   # Associations
   has_many :pricing_plans, dependent: :destroy

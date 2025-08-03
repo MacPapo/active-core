@@ -1,4 +1,4 @@
-module SessionManagement
+module Registration::SessionManagement
   extend ActiveSupport::Concern
 
   included do
@@ -31,15 +31,17 @@ module SessionManagement
     return false unless sessions_available?
     return true if unlimited_sessions?
 
-    update!(sessions_remaining: sessions_remaining - 1)
+    decrement!(:sessions_remaining)
     update!(status: :expired) if sessions_exhausted?
     true
   end
 
   def sessions_status
-    return :unlimited if unlimited_sessions?
-    return :exhausted if sessions_exhausted?
-    return :low if sessions_remaining <= 2
-    :available
+    case
+    when unlimited_sessions? then :unlimited
+    when sessions_exhausted? then :exhausted
+    when sessions_remaining <= 2 then :low
+    else :available
+    end
   end
 end

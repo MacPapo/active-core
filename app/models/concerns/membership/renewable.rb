@@ -1,5 +1,22 @@
-module Membership::Lifecycle
+module Membership::Renewable
   extend ActiveSupport::Concern
+
+  included do
+    scope :renewable, -> { where(status: [ :active, :expired ]) }
+    scope :recently_renewed, -> { where.not(renewed_from_id: nil) }
+  end
+
+  def renewable?
+    status.in?(%w[active expired]) && member.medical_certificate_valid?
+  end
+
+  def can_renew_early?
+    active? && expires_soon?(30) # 30 days before expiration
+  end
+
+  def renewal_start_date
+    expired? ? Date.current : end_date + 1.day
+  end
 
   def create_or_renew_membership!(user:, payment_method:, pricing_plan:)
     previous_membership = current_membership
@@ -9,6 +26,26 @@ module Membership::Lifecycle
     else
       create_new!(user, payment_method, pricing_plan)
     end
+  end
+
+  def renewal_chain
+    chain = [ self ]
+    current = self
+
+    # Get all previous renewals
+    while current.renewed_from.present?
+      current = current.renewed_from
+      chain.unshift(current)
+    end
+
+    # Get all subsequent renewals
+    current = self
+    while (next_renewal = self.class.find_by(renewed_from: current))
+      chain.push(next_renewal)
+      current = next_renewal
+    end
+
+    chain
   end
 
   private

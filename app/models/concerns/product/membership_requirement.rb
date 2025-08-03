@@ -1,4 +1,4 @@
-module Membership::Requirements
+module Product::MembershipRequirement
   extend ActiveSupport::Concern
 
   included do
@@ -21,6 +21,7 @@ module Membership::Requirements
     member.active_membership?
   end
 
+  # TODO localization
   def access_requirements
     requirements = []
     requirements << "Active membership" if requires_membership?

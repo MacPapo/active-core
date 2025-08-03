@@ -1,13 +1,13 @@
-module LineItemManagement
+module LineItem::Management
   extend ActiveSupport::Concern
 
   included do
-    validates :amount, comparison: { greater_than_or_equal_to: 0 }, presence: true
+    validates :amount, comparison: { greater_than_or_equal_to: 0, presence: true }
     validates :description, length: { maximum: 500 }, allow_blank: true
     validates :payable_type, :payable_id, presence: true
 
     scope :by_amount_range, ->(min, max) { where(amount: min..max) }
-    scope :expensive_items, -> { where(amount: 50..) }
+    scope :expensive_items, -> { where("amount >= 50") }
     scope :by_payable_type, ->(type) { where(payable_type: type) if type.present? }
   end
 
@@ -15,8 +15,9 @@ module LineItemManagement
     amount >= 50
   end
 
+  # TODO localize
   def item_category
-    payable_type.underscore.humanize
+    I18n.t("line_items.category.#{payable_type.underscore}")
   end
 
   def display_description
@@ -25,23 +26,24 @@ module LineItemManagement
 
   def contributes_significantly?
     return false unless payment&.total_amount&.positive?
-    (amount / payment.total_amount) > 0.3
+    (amount.to_f / payment.total_amount) > 0.3
   end
 
   private
 
+  # TODO localize
   def default_description
-    return "Unknown item" unless payable
+    return I18n.t("line_items.description.unknown_item") unless payable
 
     case payable
     when Membership
-      "Membership: #{payable.pricing_plan.display_name}"
+      I18n.t("line_items.description.membership", name: payable.pricing_plan.display_name)
     when Registration
-      "Course: #{payable.product.name}"
+      I18n.t("line_items.description.registration", name: payable.product.name)
     when PackagePurchase
-      "Package: #{payable.package.name}"
+      I18n.t("line_items.description.package", name: payable.package.name)
     else
-      payable_type.humanize
+      I18n.t("line_items.description.default", type: payable_type.humanize)
     end
   end
 end

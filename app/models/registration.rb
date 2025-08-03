@@ -1,12 +1,15 @@
-# app/models/registration.rb
+# frozen_string_literal: true
+
+# Registration Model
 class Registration < ApplicationRecord
   include Discard::Model
-  include SubscriptionLifecycle  # Reuse from Membership!
-  include Financial::BillingManagement
-  include SessionManagement
-  include CourseAccess
+
+  include ServiceLifecycle
+  include Terminable
+  include Course::Access
   include Package::Integration
-  include RegistrationAnalytics
+  include Financial::BillingManagement
+  include Registration::Analytics, Registration::SessionManagement
 
   # Associations
   belongs_to :user

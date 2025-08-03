@@ -1,4 +1,4 @@
-module SubscriptionLifecycle
+module Terminable
   extend ActiveSupport::Concern
 
   included do

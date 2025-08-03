@@ -3,10 +3,11 @@
 # PackagePurchase Model
 class PackagePurchase < ApplicationRecord
   include Discard::Model
-  include Financial::BillingManagement
-  include SubscriptionLifecycle
+
+  include Terminable
   include Member::Access
   include Package::Integration
+  include Financial::BillingManagement
 
   belongs_to :member
   belongs_to :package

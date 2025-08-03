@@ -1,10 +1,8 @@
-module Membership::Business
+module Member::MembershipStatus
   extend ActiveSupport::Concern
 
   included do
-    scope :with_active_membership, -> {
-      joins(:memberships).merge(Membership.kept.active).distinct
-    }
+    scope :with_active_membership, -> { joins(:memberships).merge(Membership.kept.active).distinct }
   end
 
   def current_membership

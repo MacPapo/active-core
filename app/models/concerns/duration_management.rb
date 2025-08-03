@@ -2,11 +2,9 @@ module DurationManagement
   extend ActiveSupport::Concern
 
   included do
-    enum :duration_type, { days: 0, weeks: 1, months: 2, years: 3 },
-         validate: true
+    enum :duration_type, { days: 0, weeks: 1, months: 2, years: 3 }, validate: true
 
-    validates :duration_value, comparison: { greater_than: 0 },
-              presence: true
+    validates :duration_value, numericality: { greater_than: 0, presence: true }
     validates :duration_type, presence: true
 
     scope :short_term, -> { where(duration_type: [ :days, :weeks ]) }
@@ -23,8 +21,9 @@ module DurationManagement
     end
   end
 
+  # TODO localization
   def duration_description
-    "#{duration_value} #{duration_type.singularize.humanize.downcase}#{'s' if duration_value > 1}"
+    I18n.t("duration_type.#{duration_type}", count: duration_value)
   end
 
   def short_term?

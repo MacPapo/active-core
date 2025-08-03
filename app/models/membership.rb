@@ -3,9 +3,11 @@
 # Membership Model
 class Membership < ApplicationRecord
   include Discard::Model
+
+  include ServiceLifecycle
+  include Terminable
   include Member::Access
-  include SubscriptionLifecycle
-  include Renewable
+  include Membership::Renewable
   include Financial::BillingManagement
 
   # Associations

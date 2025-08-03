@@ -3,10 +3,8 @@
 # PaymentItem Model
 class PaymentItem < ApplicationRecord
   include Discard::Model
-  include LineItemManagement
-  include PolymorphicAssociationManagement
-  include ItemAnalytics
-  include Financial::RevenueAttribution
+  include Financial::ItemAnalytics, Financial::RevenueAttribution
+  include LineItem::Management, LineItem::PolymorphicAssociationManagement
 
   # Associations
   belongs_to :payment

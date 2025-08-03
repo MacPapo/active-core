@@ -3,12 +3,12 @@
 # Package Model
 class Package < ApplicationRecord
   include Discard::Model
-  include SalesManagement
-  include ValidityPeriod      # Reuse from PricingPlan!
-  include DurationManagement  # Reuse from PricingPlan!
-  include InclusionManagement
+
+  include ValidityPeriod
+  include DurationManagement
   include Pricing::Pricable
-  include Package::Analytics, Package::BundleManagement
+  include Package::SalesManagement
+  include Package::Analytics, Package::BundleManagement, Package::InclusionManagement
 
   # Associations
   has_many :package_inclusions, dependent: :destroy

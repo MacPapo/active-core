@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# SportYear Value Model
 class SportYear
   attr_reader :year
 
