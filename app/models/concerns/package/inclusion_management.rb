@@ -50,7 +50,6 @@ module Package::InclusionManagement
     #       end_date: calculate_end_date(Date.current),
     #       billing_period_start: Date.current,
     #       billing_period_end: calculate_end_date(Date.current),
-    #       amount_paid: 0, # Already paid for package
     #       sessions_remaining: inclusion.session_limit,
     #       status: :active
     #     )
@@ -69,7 +68,6 @@ module Package::InclusionManagement
           end_date: end_date,
           billing_period_start: Date.current,
           billing_period_end: end_date,
-          amount_paid: 0,
           sessions_remaining: inclusion.session_limit,
           status: :active
         )

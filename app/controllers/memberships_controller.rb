@@ -4,30 +4,34 @@ class MembershipsController < ApplicationController
   include Sortable
 
   before_action :authorize_admin!, only: [ :index, :edit, :update ]
-  before_action :set_membership, only: [ :show, :edit, :update, :destroy ]
-  before_action :set_member, only: [ :show, :create, :destroy ], if: -> { params[:member_id] }
-  before_action :set_pricing_plan, only: [ :create ]
+  before_action :authorize_internal_access!, only: [ :destroy ]
+
+  before_action :set_membership, only: [ :edit, :update, :destroy ]
+  before_action :set_member, only: [ :create, :destroy ], if: -> { params[:member_id] }
 
   def index
     @memberships = Membership.kept
+                     .includes(:member, :pricing_plan)
                      .then { |memberships| apply_filters(memberships) }
                      .then { |memberships| apply_sorting(memberships) }
   end
 
-  def show
-    @membership_stats = membership_statistics
-  end
-
   def create
+    pricing_plan = PricingPlan.kept.active.find(membership_params[:pricing_plan_id])
+    discounts = Discount.kept.active.where(id: membership_params[:discount_ids] || [])
+
     @membership = @member.create_or_renew_membership!(
-      pricing_plan: @pricing_plan,
+      user: current_user,
       payment_method: membership_params[:payment_method],
-      user: current_user
+      pricing_plan:,
+      discounts:
     )
 
-    redirect_to @member, notice: "Membership rinnovata con successo!"
-  rescue StandardError => e
-    redirect_to @member, alert: "Errore nel rinnovo: #{e.message}"
+    if @membership&.persisted?
+      redirect_to member_path(@member), notice: "Tesseramento creato o rinnovato con successo." # TODO localize
+    else
+      redirect_to member_path(@member), alert: @member.errors.full_messages.to_sentence
+    end
   end
 
   def edit
@@ -36,9 +40,9 @@ class MembershipsController < ApplicationController
 
   def update
     if @membership.update(membership_update_params)
-      redirect_to @membership, notice: "Membership aggiornata."
+      redirect_to memberships_path, notice: "Membership aggiornata." # TODO localize
     else
-      @available_pricing_plans = PricingPlan.active
+      @available_pricing_plans = PricingPlan.kept.active
       render :edit, status: :unprocessable_entity
     end
   end
@@ -59,13 +63,8 @@ class MembershipsController < ApplicationController
     @membership = Membership.kept.find(params[:id])
   end
 
-  def set_pricing_plan
-    id = params.dig(:membership, :pricing_plan_id)
-    @pricing_plan = PricingPlan.kept.find(id)
-  end
-
   def membership_params
-    params.require(:membership).permit(:pricing_plan_id, :payment_method, :user)
+    params.require(:membership).permit(:pricing_plan_id, :payment_method, discount_ids: [])
   end
 
   def membership_update_params

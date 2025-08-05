@@ -7,7 +7,7 @@ class PackagePurchase < ApplicationRecord
   include Terminable
   include Member::Access
   include Package::Integration
-  include Financial::BillingManagement
+  include Financial::Payable, Financial::BillingManagement
 
   belongs_to :member
   belongs_to :package
@@ -17,7 +17,6 @@ class PackagePurchase < ApplicationRecord
   has_many :registrations, dependent: :destroy
 
   validates :start_date, :end_date, :billing_period_start, :billing_period_end, presence: true
-  validates :amount_paid, numericality: { greater_than: 0, presence: true }
 
   scope :for_member, ->(member) { where(member: member) }
   scope :for_package, ->(package) { where(package: package) }
@@ -28,6 +27,16 @@ class PackagePurchase < ApplicationRecord
 
   def description
     "#{package.name} - #{member.full_name}"
+  end
+
+  def price
+    is_affiliated = self.member&.affiliated?
+
+    if is_affiliated && package.affiliated_price.present?
+      package.affiliated_price
+    else
+      package.price
+    end
   end
 
   def total_sessions_included
@@ -42,8 +51,9 @@ class PackagePurchase < ApplicationRecord
     package.price
   end
 
-  def discount_applied
-    package_value - amount_paid
+  def balance_due
+    paid_amount = payments.sum(:final_amount)
+    package.price - paid_amount
   end
 
   private

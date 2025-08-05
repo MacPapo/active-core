@@ -4,7 +4,7 @@
 class Payment < ApplicationRecord
   include Discard::Model
   include Discount::Integration
-  include Financial::Transaction, Financial::IncomeExpenseManagement, Financial::PaymentAnalytics
+  include Financial::Receiptable, Financial::Transaction, Financial::IncomeExpenseManagement, Financial::PaymentAnalytics
 
   # Associations
   belongs_to :user

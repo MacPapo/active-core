@@ -11,7 +11,6 @@ class CreateRegistrations < ActiveRecord::Migration[8.0]
       t.date :end_date, null: false
       t.date :billing_period_start, null: false
       t.date :billing_period_end, null: false
-      t.decimal :amount_paid, precision: 8, scale: 2, null: false
       t.integer :sessions_remaining
       t.integer :status, default: 0, null: false
 

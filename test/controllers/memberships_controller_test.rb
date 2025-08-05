@@ -15,12 +15,6 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_select "table"
   end
 
-  test "should show membership" do
-    get member_membership_path(@member, @membership)
-    assert_response :success
-    assert_select "h1", text: /Membership di/
-  end
-
   test "should get edit" do
     get edit_membership_path(@membership)
     assert_response :success
@@ -31,7 +25,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
             membership: { status: "suspended" }
           }
 
-    assert_redirected_to membership_path(@membership)
+    assert_redirected_to memberships_path
     assert_equal "suspended", @membership.reload.status
   end
 

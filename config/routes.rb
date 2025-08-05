@@ -113,11 +113,15 @@ Rails.application.routes.draw do
 
   devise_for :users, path: "", path_names: { sign_in: "login", sign_out: "logout" }
 
-  resources :users # SOLO le 7 azioni REST standard
+  resources :users
+
   resources :members do
-    resources :memberships, only: [ :show, :create, :destroy ]
+    resources :memberships, only: [ :create, :destroy ]
+    resources :registrations, only: [ :create, :destroy ]
   end
-  resources :memberships, only: [ :index, :edit, :update ] # ADMIN
+  resources :memberships, only: [ :index, :edit, :update ]   # ADMIN
+  resources :registrations, only: [ :index, :edit, :update ] # ADMIN
+
   resources :products do
     resources :pricing_plans, except: [ :index, :show ]
   end
@@ -126,5 +130,5 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  root to: "users#index"
+  root to: "members#index"
 end

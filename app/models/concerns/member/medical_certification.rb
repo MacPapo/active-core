@@ -19,7 +19,8 @@ module Member::MedicalCertification
   end
 
   def medical_certificate_valid?
-    med_cert_issue_date && med_cert_issue_date > 1.year.ago
+    # med_cert_issue_date && med_cert_issue_date > 1.year.ago TODO
+    true
   end
 
   def medical_certificate_expired?

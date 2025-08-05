@@ -23,6 +23,14 @@ module Product::CapacityManagement
     [ capacity - current_registrations_count, 0 ].max
   end
 
+  def can_accept_registration?
+    active? && has_available_spots?
+  end
+
+  def unlimited_capacity?
+    capacity.blank?
+  end
+
   def full?
     return false if unlimited_capacity?
     current_registrations_count >= capacity

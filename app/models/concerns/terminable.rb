@@ -7,8 +7,6 @@ module Terminable
 
     validates :start_date, :end_date, presence: true
     validates :end_date, comparison: { greater_than: :start_date }
-    validates :amount_paid, comparison: { greater_than_or_equal_to: 0 },
-              presence: true
 
     scope :current, -> { where(start_date: ..Date.current, end_date: Date.current..) }
     scope :expired_recently, -> { where(end_date: 1.month.ago..Date.current) }

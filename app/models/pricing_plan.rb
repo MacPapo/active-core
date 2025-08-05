@@ -15,6 +15,7 @@ class PricingPlan < ApplicationRecord
 
   # Active scope
   scope :active, -> { kept.where(active: true).currently_valid }
+  scope :for_memberships, -> { joins(:product).where(products: { product_type: "membership" }) }
 
   # Business logic scopes
   scope :most_popular, -> {

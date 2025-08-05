@@ -7,6 +7,7 @@ class Member < ApplicationRecord
   include Member::RevenueTracking, Member::MembershipStatus
   include Member::PersonalIdentity, Member::Contactable, Member::MedicalCertification
   include Membership::Renewable
+  include Registration::Renewable
 
   # Associations
   belongs_to :legal_guardian, optional: true
@@ -31,6 +32,23 @@ class Member < ApplicationRecord
 
   after_discard :discard_associated_records
   # after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor? TODO
+
+  def self.onboard!(member_attrs:, membership_attrs:)
+    member = new(member_attrs)
+
+    transaction do
+      member.save!
+
+      membership = member.create_or_renew_membership!(**membership_attrs)
+      raise ActiveRecord::Rollback unless membership&.persisted?
+    end
+
+    member
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error "Member onboarding failed: #{e.record.errors.full_messages}"
+    member.errors.merge!(e.record.errors) if e.record != member
+    member
+  end
 
   private
 

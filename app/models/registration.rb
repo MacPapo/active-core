@@ -8,7 +8,7 @@ class Registration < ApplicationRecord
   include Terminable
   include Course::Access
   include Package::Integration
-  include Financial::BillingManagement
+  include Financial::Payable, Financial::BillingManagement
   include Registration::Analytics, Registration::SessionManagement
 
   # Associations
@@ -32,6 +32,16 @@ class Registration < ApplicationRecord
 
   def display_name
     "#{member.full_name} - #{product.name}"
+  end
+
+  def price
+    is_affiliated = member&.affiliated?
+
+    if is_affiliated && pricing_plan.affiliated_price.present?
+      pricing_plan.affiliated_price
+    else
+      pricing_plan.price
+    end
   end
 
   private

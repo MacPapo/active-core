@@ -18,13 +18,13 @@ module Registration::Analytics
     (used_sessions.to_f / initial_sessions * 100).round(1)
   end
 
-  def value_per_session
-    return 0 if amount_paid.zero? || unlimited_sessions?
+  def cost_per_session
+    paid_amount = payments.sum(:final_amount)
 
-    total_sessions = pricing_plan&.session_limit || 1
-    (amount_paid.to_f / total_sessions).round(2)
+    return 0 if paid_amount.zero? || unlimited_sessions? || total_sessions.zero?
+
+    (paid_amount.to_f / total_sessions).round(2)
   end
-
   def registration_age_in_days
     (Date.current - created_at.to_date).to_i
   end

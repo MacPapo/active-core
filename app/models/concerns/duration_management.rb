@@ -30,7 +30,18 @@ module DurationManagement
     duration_type.in?(%w[days weeks])
   end
 
+  # TODO chiedere
   def calculate_end_date(start_date)
     start_date + duration_in_days.days
+  end
+
+  def session_limit
+    case duration_type
+    when "days" then duration_value * 1  # 1 sessione per giorno
+    when "weeks" then duration_value * 3 # 3 sessioni per settimana
+    when "months" then duration_value * 12 # 12 sessioni per mese
+    when "years" then nil # Annuale = illimitato
+    else nil
+    end
   end
 end

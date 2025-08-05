@@ -29,10 +29,9 @@
                     <td>
                         <span><%= membership.status.humanize %></span>
                     </td>
-                    <td>€ <%= number_with_precision(membership.amount_paid, precision: 2) %></td>
                     <td>
-                        <%= link_to "Dettagli", membership %>
                         <%= link_to "Modifica", edit_membership_path(membership) %>
+                        <%= button_to "Elimina", [ membership.member, membership ], method: :delete, confirm: "Sicuro?" %>
                     </td>
                 </tr>
             <% end %>

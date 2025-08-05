@@ -2,10 +2,10 @@ module Package::Analytics
   extend ActiveSupport::Concern
 
   included do
-    scope :revenue_generators, -> {
-      joins(:package_purchases)
-        .group(:id)
-        .order("SUM(package_purchases.amount_paid) DESC")
+    scope :most_profitable, -> {
+      joins(package_purchases: { payment_items: :payment })
+        .group("packages.id")
+        .order("SUM(payments.final_amount) DESC")
     }
     scope :by_purchase_period, ->(from, to) {
       joins(:package_purchases).where(package_purchases: { created_at: from..to })
@@ -13,11 +13,15 @@ module Package::Analytics
   end
 
   def total_revenue
-    package_purchases.sum(:amount_paid)
+    Payment.joins(payment_items: :payable)
+      .where(payment_items: { payable_type: "PackagePurchase", payable_id: self.package_purchase_ids })
+      .sum(:final_amount)
   end
 
-  def average_purchase_price
-    package_purchases.average(:amount_paid)&.round(2) || 0
+  def average_revenue
+    Payment.joins(payment_items: :payable)
+      .where(payment_items: { payable_type: "PackagePurchase", payable_id: self.package_purchase_ids })
+      .average(:final_amount)&.round(2) || 0
   end
 
   def conversion_rate

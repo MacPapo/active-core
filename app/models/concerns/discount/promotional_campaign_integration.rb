@@ -36,22 +36,23 @@ module Discount::PromotionalCampaignIntegration
     # end
   end
 
-  def estimated_savings_for(member)
-    # Calculate potential savings based on member's typical purchases
-    return 0 unless applicable_to_member?(member)
+  # TODO no amount_paid anymore!
+  # def estimated_savings_for(member)
+  #   # Calculate potential savings based on member's typical purchases
+  #   return 0 unless applicable_to_member?(member)
 
-    case applicable_to
-    when "memberships"
-      avg_membership_cost = member.memberships.average(:amount_paid) || 50
-      calculate_discount_for(avg_membership_cost)
-    when "courses"
-      avg_course_cost = member.registrations.average(:amount_paid) || 30
-      calculate_discount_for(avg_course_cost)
-    when "packages"
-      avg_package_cost = member.package_purchases.average(:amount_paid) || 100
-      calculate_discount_for(avg_package_cost)
-    else
-      calculate_discount_for(50) # Assume average service cost
-    end
-  end
+  #   case applicable_to
+  #   when "memberships"
+  #     avg_membership_cost = member.memberships.average(:amount_paid) || 50
+  #     calculate_discount_for(avg_membership_cost)
+  #   when "courses"
+  #     avg_course_cost = member.registrations.average(:amount_paid) || 30
+  #     calculate_discount_for(avg_course_cost)
+  #   when "packages"
+  #     avg_package_cost = member.package_purchases.average(:amount_paid) || 100
+  #     calculate_discount_for(avg_package_cost)
+  #   else
+  #     calculate_discount_for(50) # Assume average service cost
+  #   end
+  # end
 end

@@ -20,23 +20,33 @@ class MembersController < ApplicationController
 
   def new
     @member = Member.new
-    @available_pricing_plans = PricingPlan.active.includes(:product)
+    load_form_data
   end
 
-  # TODO controlla che sia solo memberships e non corsi a caso!
   def create
-    @member = Member.new(member_params)
-    reg_params = registration_params
+    pricing_plan = PricingPlan.kept.active.find_by(membership_params[:pricing_plan_id])
 
-    if set_pricing_plan(reg_params[:pricing_plan_id]) && @member.create_or_renew_membership!(
-      pricing_plan: @pricing_plan,
-      payment_method: reg_params[:payment_method],
-      user: current_user
-    )
-      redirect_to @member, notice: "Membro registrato e iscritto con successo!"
+    unless pricing_plan
+      @member = Member.new(member_params)
+      @member.errors.add(:base, "Devi selezionare un piano di tesseramento valido.")
+      load_form_data
+      render :new, status: :unprocessable_entity
+      return # Interrompiamo l'esecuzione
+    end
+
+    discounts = Discount.kept.active.where(id: membership_params[:discount_ids] || [])
+    membership_attrs = {
+      user: current_user,
+      payment_method: membership_params[:payment_method],
+      pricing_plan:,
+      discounts:
+    }
+
+    @member = Member.onboard!(member_attrs: member_params, membership_attrs:)
+    if @member&.persisted?
+      redirect_to member_path(@member), notice: "Membro registrato e iscritto con successo!" # TODO localize
     else
-      @member.errors.add(:base, "Seleziona un piano di abbonamento") unless reg_params[:pricing_plan_id].present?
-      @available_pricing_plans = PricingPlan.active.includes(:product)
+      load_form_data
       render :new, status: :unprocessable_entity
     end
   end
@@ -56,7 +66,8 @@ class MembersController < ApplicationController
 
   def destroy
     @member.discard
-    redirect_to members_path, notice: "Membro eliminato con successo."
+
+    redirect_to member_path(@member), notice: "Membro eliminato con successo."
   end
 
   private
@@ -65,18 +76,16 @@ class MembersController < ApplicationController
     @member = Member.kept.find(params[:id])
   end
 
-  def set_pricing_plan(id)
-    return nil if id.nil?
-
-    @pricing_plan = PricingPlan.kept.find(id)
-  end
-
   def member_params
     params.require(:member).permit(:name, :surname, :email, :phone, :birth_day, :cf, :affiliated)
   end
 
-  def registration_params
-    params.permit(:pricing_plan_id, :payment_method)
+  def membership_params
+    params.permit(:pricing_plan_id, :payment_method, :discount_ids)
+  end
+
+  def load_form_data
+    @available_pricing_plans = PricingPlan.active.for_memberships # Assicurati di avere questo scope
   end
 
   def member_statistics

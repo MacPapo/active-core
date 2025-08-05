@@ -1,0 +1,44 @@
+<div>
+    <header>
+        <h1>Registrazioni</h1>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Prodotto</th>
+                <th>Piano</th>
+                <th>Inizio</th>
+                <th>Scadenza</th>
+                <th>Sessioni</th>
+                <th>Stato</th>
+                <th>Importo</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @registrations.each do |registration| %>
+                <tr>
+                    <td><%= registration.product.name %></td>
+                    <td><%= registration.pricing_plan.duration_description %></td>
+                    <td><%= registration.start_date.strftime("%d/%m/%Y") %></td>
+                    <td><%= registration.end_date.strftime("%d/%m/%Y") %></td>
+                    <td>
+                        <% if registration.has_session_limit? %>
+                            <%= registration.sessions_remaining %> / <%= registration.pricing_plan.session_limit %>
+                        <% else %>
+                            Illimitate
+                        <% end %>
+                    </td>
+                    <td>
+                        <span><%= registration.status.humanize %></span>
+                    </td>
+                    <td>
+                        <%= link_to "Modifica", edit_registration_path(registration) %>
+                        <%= button_to "Elimina", [ registration.member, registration ], method: :delete, confirm: "Sicuro?" %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>

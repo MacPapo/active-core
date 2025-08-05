@@ -42,7 +42,6 @@ class Package < ApplicationRecord
         end_date: calculate_end_date(Date.current),
         billing_period_start: Date.current,
         billing_period_end: calculate_end_date(Date.current),
-        amount_paid: price_for(member),
         status: :active
       )
 

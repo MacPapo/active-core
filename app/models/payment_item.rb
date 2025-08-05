@@ -40,13 +40,6 @@ class PaymentItem < ApplicationRecord
   end
 
   def set_default_amount
-    return if amount.present?
-
-    self.amount = case payable
-    when Membership then payable.amount_paid
-    when Registration then payable.amount_paid
-    when PackagePurchase then payable.amount_paid
-    else 0
-    end
+    self.amount ||= payable&.price || 0.0
   end
 end

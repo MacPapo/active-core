@@ -8,6 +8,5 @@ yoga_registration:
   end_date: "2024-01-16"
   billing_period_start: "2024-01-15"
   billing_period_end: "2024-01-16"
-  amount_paid: "0.00"  # covered by package
   sessions_remaining: 3
   status: 0
