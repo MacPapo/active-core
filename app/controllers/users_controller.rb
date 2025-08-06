@@ -68,7 +68,7 @@ class UsersController < ApplicationController
     Member.kept
       .left_joins(:user)
       .where(users: { id: nil })
-      .order(:surname, :name)
+      .order(:last_name, :first_name)
   end
 
   def user_statistics
@@ -85,7 +85,7 @@ class UsersController < ApplicationController
       role: ->(scope, value) { scope.where(role: value) if value.present? },
       search: ->(scope, value) {
       scope.joins(:member)
-        .where("members.name LIKE ? OR members.surname LIKE ? OR users.nickname LIKE ?",
+        .where("members.first_name LIKE ? OR members.last_name LIKE ? OR users.nickname LIKE ?",
           "%#{value}%", "%#{value}%", "%#{value}%") if value.present?
     }
     }
@@ -94,8 +94,8 @@ class UsersController < ApplicationController
   # Sortable concern methods
   def sortable_attributes
     {
-      "name" => "members.name",
-      "surname" => "members.surname",
+      "first_name" => "members.first_name",
+      "last_name" => "members.last_name",
       "nickname" => "users.nickname",
       "role" => "users.role",
       "created_at" => "users.created_at"

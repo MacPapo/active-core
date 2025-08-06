@@ -1,0 +1,17 @@
+<%= form_with(model: access_grant) do |form| %>
+  <% if access_grant.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(access_grant.errors.count, "error") %> prohibited this access_grant from being saved:</h2>
+
+      <ul>
+        <% access_grant.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

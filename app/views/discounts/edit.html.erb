@@ -1,5 +1,12 @@
-<h1>Modifica Sconto</h1>
+<% content_for :title, "Editing discount" %>
+
+<h1>Editing discount</h1>
 
 <%= render "form", discount: @discount %>
 
-<%= link_to "Indietro", @discount %>
+<br>
+
+<div>
+  <%= link_to "Show this discount", @discount %> |
+  <%= link_to "Back to discounts", discounts_path %>
+</div>

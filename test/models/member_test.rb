@@ -7,20 +7,20 @@ class MemberTest < ActiveSupport::TestCase
     assert member.valid?, member.errors.full_messages
   end
 
-  test "should require name and surname" do
+  test "should require name and last_name" do
     member = Member.new
     assert_not member.valid?
-    assert member.errors[:name].present?
-    assert member.errors[:surname].present?
+    assert member.errors[:first_name].present?
+    assert member.errors[:last_name].present?
   end
 
   test "should have unique email when present" do
     existing_member = members(:adult_member)
     member = Member.new(
-      name: "Test",
-      surname: "User",
+      first_name: "Test",
+      last_name: "User",
       email: existing_member.email,
-      birth_day: existing_member.birth_day
+      birth_date: existing_member.birth_date
     )
     assert_not member.valid?
     assert member.errors[:email].present?, member.errors.full_messages

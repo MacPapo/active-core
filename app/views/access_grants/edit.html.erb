@@ -1,0 +1,12 @@
+<% content_for :title, "Editing access grant" %>
+
+<h1>Editing access grant</h1>
+
+<%= render "form", access_grant: @access_grant %>
+
+<br>
+
+<div>
+  <%= link_to "Show this access grant", @access_grant %> |
+  <%= link_to "Back to access grants", access_grants_path %>
+</div>

@@ -30,7 +30,7 @@
 <div class="sorting">
     Ordina per:
     <%= link_to "Nome", users_path(sort_by: "name", direction: "asc") %>
-    <%= link_to "Cognome", users_path(sort_by: "surname", direction: "asc") %>
+    <%= link_to "Cognome", users_path(sort_by: "last_name", direction: "asc") %>
     <%= link_to "Nickname", users_path(sort_by: "nickname", direction: "asc") %>
     <%= link_to "Ruolo", users_path(sort_by: "role", direction: "asc") %>
     <%= link_to "Data Creazione", users_path(sort_by: "created_at", direction: "desc") %>
@@ -52,7 +52,7 @@
         <% @users.each do |user| %>
             <tr>
                 <td><%= user.member.name %></td>
-                <td><%= user.member.surname %></td>
+                <td><%= user.member.last_name %></td>
                 <td><%= user.nickname %></td>
                 <td><%= user.member.email %></td>
                 <td><%= user.role.humanize %></td>

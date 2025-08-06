@@ -12,11 +12,11 @@
     <div class="detail-section">
         <h2>Informazioni Personali</h2>
         <p><strong>Nome:</strong> <%= @member.name %></p>
-        <p><strong>Cognome:</strong> <%= @member.surname %></p>
+        <p><strong>Cognome:</strong> <%= @member.last_name %></p>
         <p><strong>Email:</strong> <%= @member.email %></p>
         <p><strong>Telefono:</strong> <%= @member.phone %></p>
-        <p><strong>Data di nascita:</strong> <%= @member.birth_day %></p>
-        <p><strong>Codice Fiscale:</strong> <%= @member.cf %></p>
+        <p><strong>Data di nascita:</strong> <%= @member.birth_date %></p>
+        <p><strong>Codice Fiscale:</strong> <%= @member.tax_code %></p>
         <p><strong>Affiliato:</strong> <%= @member.affiliated? ? "Sì" : "No" %></p>
     </div>
 

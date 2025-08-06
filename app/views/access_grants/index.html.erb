@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Access grants" %>
+
+<h1>Access grants</h1>
+
+<div id="access_grants">
+  <% @access_grants.each do |access_grant| %>
+    <%= render access_grant %>
+    <p>
+      <%= link_to "Show this access grant", access_grant %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New access grant", new_access_grant_path %>

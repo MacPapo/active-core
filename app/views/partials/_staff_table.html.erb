@@ -3,8 +3,8 @@
 <%= content_for :header do %>
     <tr class="fs-6">
         <th><%= staff_sortable_column.call('name' ,User.human_attribute_name('name')) %></th>
-        <th><%= staff_sortable_column.call('surname' ,User.human_attribute_name('surname')) %></th>
-        <th><%= staff_sortable_column.call('birth_day' ,User.human_attribute_name('birth_day')) %></th>
+        <th><%= staff_sortable_column.call('last_name' ,User.human_attribute_name('last_name')) %></th>
+        <th><%= staff_sortable_column.call('birth_date' ,User.human_attribute_name('birth_date')) %></th>
         <th class="text-primary fw-semibold"><%= Staff.human_attribute_name('role') %></th>
         <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
     </tr>
@@ -18,14 +18,14 @@
                 <%= highlight staff.name, params.dig(:name) %>
             </td>
 
-            <!-- Surname -->
+            <!-- Last_Name -->
             <td>
-                <%= highlight staff.surname, params.dig(:name) %>
+                <%= highlight staff.last_name, params.dig(:name) %>
             </td>
 
             <!-- Birth Day -->
             <td>
-                <%= l staff.birth_day %>
+                <%= l staff.birth_date %>
             </td>
 
             <!-- Role -->

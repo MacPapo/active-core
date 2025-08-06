@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @access_grant %>
+
+<div>
+  <%= link_to "Edit this access grant", edit_access_grant_path(@access_grant) %> |
+  <%= link_to "Back to access grants", access_grants_path %>
+
+  <%= button_to "Destroy this access grant", @access_grant, method: :delete %>
+</div>

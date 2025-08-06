@@ -1,5 +1,11 @@
-<h1>Nuovo Pagamento</h1>
+<% content_for :title, "New payment" %>
+
+<h1>New payment</h1>
 
 <%= render "form", payment: @payment %>
 
-<%= link_to "Indietro", payments_path %>
+<br>
+
+<div>
+  <%= link_to "Back to payments", payments_path %>
+</div>

@@ -24,7 +24,7 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
   test "should create member with membership" do
     assert_difference([ "Member.count", "Membership.count", "Payment.count" ]) do
       post members_url, params: {
-             member: { name: "Mario", surname: "Rossi", email: "mario_#{Time.current.to_i}@test.com", birth_day: "1999-01-01", affiliated: false },
+             member: { name: "Mario", last_name: "Rossi", email: "mario_#{Time.current.to_i}@test.com", birth_date: "1999-01-01", affiliated: false },
              pricing_plan_id: @pricing_plan.id,
              payment_method: "cash"
            }
@@ -40,7 +40,7 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
   test "should not create member without pricing plan" do
     assert_no_difference "Member.count" do
       post members_url, params: {
-             member: { name: "Mario", surname: "Rossi", birth_day: "2002-01-01", affiliated: false }
+             member: { name: "Mario", last_name: "Rossi", birth_date: "2002-01-01", affiliated: false }
            }
     end
     assert_response :unprocessable_content

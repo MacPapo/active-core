@@ -1,42 +1,17 @@
-<%= form_with model: payment, local: true do |form| %>
-    <% if payment.errors.any? %>
-        <div>
-            <% payment.errors.full_messages.each do |message| %>
-                <p><%= message %></p>
-            <% end %>
-        </div>
-    <% end %>
+<%= form_with(model: payment) do |form| %>
+  <% if payment.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
 
-    <div>
-        <%= form.label :date %>
-        <%= form.date_field :date, value: payment.date || Date.current %>
+      <ul>
+        <% payment.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
     </div>
+  <% end %>
 
-    <div>
-        <%= form.label :income, "Tipo" %>
-        <%= form.select :income, [["Incasso", true], ["Spesa", false]] %>
-    </div>
-
-    <div>
-        <%= form.label :payment_method %>
-        <%= form.select :payment_method, [["Contanti", "cash"], ["Carta", "card"], ["Bonifico", "bank_transfer"]] %>
-    </div>
-
-    <div>
-        <%= form.label :notes %>
-        <%= form.text_area :notes %>
-    </div>
-
-    <h3>Voci</h3>
-    <%= form.fields_for :payment_items do |item_form| %>
-        <div>
-            <%= item_form.label :amount %>
-            <%= item_form.number_field :amount, step: 0.01 %>
-
-            <%= item_form.label :description %>
-            <%= item_form.text_field :description %>
-        </div>
-    <% end %>
-
+  <div>
     <%= form.submit %>
+  </div>
 <% end %>

@@ -1,81 +1,10 @@
-<% content_for :title, @product.name %>
+<p style="color: green"><%= notice %></p>
 
-<div class="product-header">
-    <h1><%= @product.name %></h1>
-    <div class="product-actions">
-        <% if current_user.can_manage_system? %>
-            <%= link_to "Modifica", edit_product_path(@product), class: "btn btn-primary" %>
-        <% end %>
-        <%= link_to "Torna alla lista", products_path, class: "btn btn-secondary" %>
-    </div>
-</div>
+<%= render @product %>
 
-<div class="product-details">
-    <div class="detail-section">
-        <h2>Informazioni Prodotto</h2>
-        <p><strong>Tipo:</strong> <%= @product.product_type.humanize %></p>
-        <p><strong>Descrizione:</strong> <%= @product.description %></p>
-        <p><strong>Capacità:</strong> <%= @product.capacity || "Illimitata" %></p>
-        <p><strong>Richiede Membership:</strong> <%= @product.requires_membership? ? "Sì" : "No" %></p>
-        <p><strong>Status:</strong> <%= @product.active? ? "Attivo" : "Non Attivo" %></p>
-    </div>
+<div>
+  <%= link_to "Edit this product", edit_product_path(@product) %> |
+  <%= link_to "Back to products", products_path %>
 
-    <% if @product.has_capacity_limit? %>
-        <div class="capacity-section">
-            <h2>Utilizzo Capacità</h2>
-            <p><strong>Iscritti attuali:</strong> <%= @product.current_registrations_count %></p>
-            <p><strong>Posti disponibili:</strong> <%= @product.available_spots %></p>
-            <p><strong>Utilizzo:</strong> <%= @product.utilization_percentage %>%</p>
-
-            <% if @product.full? %>
-                <div class="alert alert-warning">
-                    <strong>Prodotto al completo!</strong>
-                </div>
-            <% end %>
-        </div>
-    <% end %>
-
-    <div class="pricing-section">
-        <div class="section-header">
-            <h2>Piani di Prezzo</h2>
-            <% if current_user.can_manage_system? %>
-                <%= link_to "Nuovo Piano", new_product_pricing_plan_path(@product), class: "btn btn-sm" %>
-            <% end %>
-        </div>
-
-        <% if @product.pricing_plans.active.any? %>
-            <div class="pricing-plans">
-                <% @product.pricing_plans.active.each do |plan| %>
-                    <div class="pricing-plan-card">
-                        <p><strong>Durata:</strong> <%= plan.duration_description %></p>
-                        <p><strong>Prezzo:</strong> €<%= plan.price %></p>
-                        <% if plan.affiliated_price %>
-                            <p><strong>Prezzo Affiliati:</strong> €<%= plan.affiliated_price %></p>
-                        <% end %>
-
-                        <% if current_user.can_manage_system? %>
-                            <div class="plan-actions">
-                                <%= link_to "Modifica", edit_product_pricing_plan_path(@product, plan), class: "btn btn-sm" %>
-                                <%= button_to "Elimina", [ @product, plan ], method: :delete,
-                                              confirm: "Sei sicuro?", class: "btn btn-sm danger" %>
-                            </div>
-                        <% end %>
-                    </div>
-                <% end %>
-            </div>
-        <% else %>
-            <p>Nessun piano di prezzo configurato</p>
-        <% end %>
-    </div>
-
-    <% if @product.access_requirements.any? %>
-        <div class="requirements-section">
-            <h2>Requisiti di Accesso</h2>
-            <ul>
-                <% @product.access_requirements.each do |requirement| %>
-                    <li><%= requirement %></li>
-                <% end %>
-            </ul>
-        </div>
-    <% end %>
+  <%= button_to "Destroy this product", @product, method: :delete %>
 </div>

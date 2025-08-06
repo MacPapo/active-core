@@ -3,7 +3,7 @@
 <%= content_for :header do %>
     <tr class="fs-6">
         <th><%= sub_sortable_column.call('name', User.human_attribute_name('name')) %></th>
-        <th><%= sub_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
+        <th><%= sub_sortable_column.call('last_name', User.human_attribute_name('last_name')) %></th>
         <th><%= sub_sortable_column.call('activity_name', Subscription.human_attribute_name('activity')) %></th>
         <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('open') %></th>
         <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('plan') %></th>
@@ -25,9 +25,9 @@
                 <%= highlight user.name, params.dig(:name) %>
             </td>
 
-            <!-- Surname -->
+            <!-- Last_Name -->
             <td>
-                <%= highlight user.surname, params.dig(:name) %>
+                <%= highlight user.last_name, params.dig(:name) %>
             </td>
 
             <!-- Activity -->

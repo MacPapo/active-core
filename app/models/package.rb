@@ -1,64 +1,40 @@
-# frozen_string_literal: true
-
-# Package Model
 class Package < ApplicationRecord
   include Discard::Model
 
-  include ValidityPeriod
-  include DurationManagement
-  include Pricing::Pricable
-  include Package::SalesManagement
-  include Package::Analytics, Package::BundleManagement, Package::InclusionManagement
-
-  # Associations
+  # --- ASSOCIATIONS ---
   has_many :package_inclusions, dependent: :destroy
   has_many :products, through: :package_inclusions
-  has_many :package_purchases, dependent: :destroy
-  has_many :registrations, dependent: :destroy
-  has_many :members, through: :package_purchases
 
-  accepts_nested_attributes_for :package_inclusions, allow_destroy: true, reject_if: :all_blank
+  # A package can be sold many times via AccessGrants
+  has_many :access_grants, dependent: :restrict_with_error
 
-  # Active scope combining multiple concerns
-  scope :active, -> { where(active: true).currently_valid.available_for_sale }
+  # --- ENUMS (Consistent with PricingPlan) ---
+  enum duration_unit: { day: 0, week: 1, month: 2, year: 3 }
 
-  # Callbacks
-  after_create :validate_inclusions
-  before_destroy :handle_active_purchases
+  # --- VALIDATIONS ---
+  validates :name, :duration_interval, :duration_unit, :price, presence: true
+  validates :name, uniqueness: { conditions: -> { kept } }
+  validates :price, :affiliated_price, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :duration_interval, numericality: { only_integer: true, greater_than: 0 }
+  validates :max_sales, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
-  def display_name
-    savings = savings_amount
-    base = "#{name} - €#{price}"
-    savings > 0 ? "#{base} (Save €#{savings})" : base
+  # --- METHODS ---
+  def sold_out?
+    return false if max_sales.blank?
+    access_grants.kept.count >= max_sales
   end
 
-  def purchase_for!(member:, user:)
-    raise "Package not available" unless available_for_purchase?
-    raise "Member not eligible" unless member.medical_certificate_valid?
-
-    transaction do
-      purchase = package_purchases.create!(
-        member: member,
-        user: user,
-        start_date: Date.current,
-        end_date: calculate_end_date(Date.current),
-        billing_period_start: Date.current,
-        billing_period_end: calculate_end_date(Date.current),
-        status: :active
-      )
-
-      create_registrations_for!(member, user)
-      purchase
-    end
+  # Same exact methods as PricingPlan! Reusability for the win.
+  def calculate_end_date(start_date)
+    return nil unless start_date.is_a?(Date)
+    start_date + duration_interval.send(duration_unit)
   end
 
-  private
-
-  def validate_inclusions
-    errors.add(:base, "Package must include at least one product") if products.empty?
+  def price_for(member)
+    member.affiliated? && affiliated_price.present? ? affiliated_price : price
   end
 
-  def handle_active_purchases
-    package_purchases.active.update_all(status: :cancelled)
+  def available_for_sale?
+    !sold_out? && kept? && (valid_from.nil? || valid_from <= Date.current) && (valid_until.nil? || valid_until >= Date.current)
   end
 end

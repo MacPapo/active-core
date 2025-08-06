@@ -1,30 +1,52 @@
-# frozen_string_literal: true
-
-# PricingPlan Model
 class PricingPlan < ApplicationRecord
   include Discard::Model
 
-  include ValidityPeriod
-  include DurationManagement
-  include Pricing::Pricable, Pricing::Logic
-
-  # Associations
   belongs_to :product
-  has_many :memberships, dependent: :destroy
-  has_many :registrations, dependent: :destroy
 
-  # Active scope
-  scope :active, -> { kept.where(active: true).currently_valid }
-  scope :for_memberships, -> { joins(:product).where(products: { product_type: "membership" }) }
+  # Un piano tariffario può essere venduto molte volte tramite gli AccessGrant
+  # Se eliminiamo un piano dal listino, non eliminiamo le vendite già fatte!
+  has_many :access_grants, dependent: :restrict_with_error
 
-  # Business logic scopes
-  scope :most_popular, -> {
-    joins(:memberships, :registrations)
-      .group(:id)
-      .order("COUNT(memberships.id) + COUNT(registrations.id) DESC")
-  }
+  # ------------------------------------------------------------------
+  # ENUM
+  # ------------------------------------------------------------------
 
-  def display_name
-    "#{product.name} - #{duration_description} (€#{price})"
+  # Definiamo le unità di durata possibili in modo pulito e leggibile
+  enum duration_unit: { day: 0, week: 1, month: 2, year: 3 }
+
+  # ------------------------------------------------------------------
+  # VALIDAZIONI
+  # ------------------------------------------------------------------
+
+  validates :name, :duration_interval, :duration_unit, :price, presence: true
+  validates :name, uniqueness: { scope: :product_id, conditions: -> { kept } }
+  validates :price, :affiliated_price, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :duration_interval, numericality: { only_integer: true, greater_than: 0 }
+
+  # ------------------------------------------------------------------
+  # METODI DI UTILITÀ
+  # ------------------------------------------------------------------
+
+  # Il nome completo che puoi mostrare nelle interfacce, es. "Corso di Karate - Mensile"
+  def full_name
+    "#{product.name} - #{name}"
+  end
+
+  # Metodo FONDAMENTALE: calcola la data di scadenza di un abbonamento
+  # basandosi su questo piano tariffario.
+  def calculate_end_date(start_date)
+    return nil unless start_date.is_a?(Date)
+    # La magia di ActiveSupport: 1.month, 3.years, etc.
+    start_date + duration_interval.send(duration_unit)
+  end
+
+  # Determina il prezzo corretto per un dato membro
+  def price_for(member)
+    member.affiliated? && affiliated_price.present? ? affiliated_price : price
+  end
+
+  # Verifica se il piano è attualmente in listino (attivo e valido)
+  def available_for_sale?
+    kept? && (valid_from.nil? || valid_from <= Date.current) && (valid_until.nil? || valid_until >= Date.current)
   end
 end

@@ -1,78 +1,17 @@
-<%= form_with model: product, local: true do |form| %>
-    <% if product.errors.any? %>
-        <div class="error-messages">
-            <% product.errors.full_messages.each do |message| %>
-                <p><%= message %></p>
-            <% end %>
-        </div>
-    <% end %>
+<%= form_with(model: product) do |form| %>
+  <% if product.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
 
-    <div class="form-group">
-        <%= form.label :name, "Nome" %>
-        <%= form.text_field :name, required: true %>
+      <ul>
+        <% product.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
     </div>
+  <% end %>
 
-    <div class="form-group">
-        <%= form.label :product_type, "Tipo Prodotto" %>
-        <%= form.select :product_type,
-            options_for_select([
-                ["Corso", "course"],
-                ["Attività", "activity"],
-                ["Membership", "membership"],
-                ["Servizio", "service"]
-            ], product.product_type),
-         { prompt: "Seleziona tipo..." },
-         { required: true } %>
-    </div>
-
-    <div class="form-group">
-        <%= form.label :description, "Descrizione" %>
-        <%= form.text_area :description, rows: 4 %>
-    </div>
-
-    <div class="form-group">
-        <%= form.label :capacity, "Capacità (lascia vuoto per illimitata)" %>
-        <%= form.number_field :capacity, min: 1 %>
-    </div>
-
-    <div class="form-group">
-        <%= form.check_box :requires_membership %>
-        <%= form.label :requires_membership, "Richiede Membership" %>
-    </div>
-
-    <div class="form-group">
-        <%= form.check_box :active %>
-        <%= form.label :active, "Attivo" %>
-    </div>
-
-    <div data-controller="pricing-plans-add"
-         data-pricing-plans-add-association-name-value="pricing_plans"
-         data-pricing-plans-add-wrapper-class-value="nested-fields">
-
-        <h3>Piani di Prezzo</h3>
-
-        <div data-pricing-plans-add-target="container">
-            <%= form.fields_for :pricing_plans do |pp_form| %>
-                <%= render 'pricing_plan_fields', form: pp_form %>
-            <% end %>
-        </div>
-
-        <template data-pricing-plans-add-target="template">
-            <%= form.fields_for :pricing_plans, PricingPlan.new, child_index: "NEW_RECORD" do |pp_form| %>
-                <%= render 'pricing_plan_fields', form: pp_form %>
-            <% end %>
-        </template>
-
-        <button type="button"
-                data-action="click->pricing-plans-add#add"
-                class="btn btn-secondary">
-            + Aggiungi Piano
-        </button>
-    </div>
-
-    <div class="form-actions">
-        <%= form.submit "Crea Prodotto", class: "btn btn-primary" %>
-        <%= link_to "Annulla", products_path, class: "btn btn-secondary" %>
-    </div>
-
+  <div>
+    <%= form.submit %>
+  </div>
 <% end %>

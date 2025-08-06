@@ -3,8 +3,8 @@
     <tr class="fs-6">
         <th class="text-primary text-begin fw-semibold"><%= t 'global.table.status' %></th>
         <th><%= user_sortable_column.call('name', User.human_attribute_name('name')) %></th>
-        <th><%= user_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
-        <th><%= user_sortable_column.call('birth_day', User.human_attribute_name('birth_day')) %></th>
+        <th><%= user_sortable_column.call('last_name', User.human_attribute_name('last_name')) %></th>
+        <th><%= user_sortable_column.call('birth_date', User.human_attribute_name('birth_date')) %></th>
         <th class="text-primary fw-semibold"><%= User.human_attribute_name('membership') %></th>
         <th class="text-primary fw-semibold"><%= User.human_attribute_name('activity') %></th>
         <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
@@ -41,14 +41,14 @@
                 <%= highlight user.name, params.dig(:name) %>
             </td>
 
-            <!-- Surname -->
+            <!-- Last_Name -->
             <td>
-                <%= highlight user.surname, params.dig(:name) %>
+                <%= highlight user.last_name, params.dig(:name) %>
             </td>
 
             <!-- Birth Day -->
             <td>
-                <%= user.birth_day ? l(user.birth_day, format: :default) : nil %>
+                <%= user.birth_date ? l(user.birth_date, format: :default) : nil %>
             </td>
 
             <!-- Membership -->

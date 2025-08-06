@@ -1,74 +1,70 @@
 class DiscountsController < ApplicationController
-  include Filterable
-  include Sortable
+  before_action :set_discount, only: %i[ show edit update destroy ]
 
-  before_action :authorize_admin!
-  before_action :set_discount, only: [ :show, :edit, :update, :destroy ]
-
+  # GET /discounts or /discounts.json
   def index
-    @discounts = Discount.kept
-                   .then { |discounts| apply_filters(discounts) }
-                   .then { |discounts| apply_sorting(discounts) }
+    @discounts = Discount.all
   end
 
-  def show; end
+  # GET /discounts/1 or /discounts/1.json
+  def show
+  end
 
+  # GET /discounts/new
   def new
     @discount = Discount.new
   end
 
+  # GET /discounts/1/edit
+  def edit
+  end
+
+  # POST /discounts or /discounts.json
   def create
     @discount = Discount.new(discount_params)
 
-    if @discount.save
-      redirect_to @discount, notice: "Sconto creato con successo."
-    else
-      render :new, status: :unprocessable_content
+    respond_to do |format|
+      if @discount.save
+        format.html { redirect_to @discount, notice: "Discount was successfully created." }
+        format.json { render :show, status: :created, location: @discount }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @discount.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  def edit; end
-
+  # PATCH/PUT /discounts/1 or /discounts/1.json
   def update
-    if @discount.update(discount_params)
-      redirect_to @discount, notice: "Sconto aggiornato con successo."
-    else
-      render :edit, status: :unprocessable_content
+    respond_to do |format|
+      if @discount.update(discount_params)
+        format.html { redirect_to @discount, notice: "Discount was successfully updated." }
+        format.json { render :show, status: :ok, location: @discount }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @discount.errors, status: :unprocessable_entity }
+      end
     end
   end
 
+  # DELETE /discounts/1 or /discounts/1.json
   def destroy
-    @discount.discard
-    redirect_to discounts_path, notice: "Sconto eliminato con successo."
+    @discount.destroy!
+
+    respond_to do |format|
+      format.html { redirect_to discounts_path, status: :see_other, notice: "Discount was successfully destroyed." }
+      format.json { head :no_content }
+    end
   end
 
   private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_discount
+      @discount = Discount.find(params.expect(:id))
+    end
 
-  def set_discount
-    @discount = Discount.kept.find(params[:id])
-  end
-
-  def discount_params
-    params.require(:discount).permit(:name, :discount_type, :value, :max_amount,
-                                     :valid_from, :valid_until, :stackable,
-                                     :applicable_to, :active)
-  end
-
-  # Filterable
-  def filterable_attributes
-    {
-      active: ->(scope, value) { scope.where(active: value) if value.present? },
-      discount_type: ->(scope, value) { scope.by_type(value) },
-      applicable_to: ->(scope, value) { scope.by_applicable_to(value) }
-    }
-  end
-
-  # Sortable
-  def sortable_attributes
-    { "name" => "discounts.name", "value" => "discounts.value", "created_at" => "discounts.created_at" }
-  end
-
-  def default_sort
-    { attribute: "name", direction: "asc" }
-  end
+    # Only allow a list of trusted parameters through.
+    def discount_params
+      params.fetch(:discount, {})
+    end
 end

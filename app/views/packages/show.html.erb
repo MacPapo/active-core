@@ -1,42 +1,10 @@
-<h1><%= @package.name %></h1>
+<p style="color: green"><%= notice %></p>
 
-<p><strong>Descrizione:</strong> <%= @package.description %></p>
-<p><strong>Prezzo:</strong> €<%= @package.price %></p>
-<p><strong>Prezzo Affiliati:</strong> €<%= @package.affiliated_price || "Non impostato" %></p>
-<p><strong>Durata:</strong> <%= @package.duration_value %> <%= @package.duration_type.humanize %></p>
-<p><strong>Attivo:</strong> <%= @package.active? ? "Sì" : "No" %></p>
+<%= render @package %>
 
-<% if @package.valid_from || @package.valid_until %>
-    <h3>Periodo di Validità</h3>
-    <p><strong>Da:</strong> <%= @package.valid_from if @package.valid_from %></p>
-    <p><strong>Fino a:</strong> <%= @package.valid_until if @package.valid_until %></p>
-<% end %>
+<div>
+  <%= link_to "Edit this package", edit_package_path(@package) %> |
+  <%= link_to "Back to packages", packages_path %>
 
-<h3>Prodotti Inclusi</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Prodotto</th>
-            <th>Tipo Accesso</th>
-            <th>Sessioni</th>
-            <th>Note</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% @package.package_inclusions.each do |inclusion| %>
-            <tr>
-                <td><%= inclusion.product.name %></td>
-                <td><%= inclusion.access_description %></td>
-                <td><%= inclusion.session_limit || "-" %></td>
-                <td><%= inclusion.notes %></td>
-            </tr>
-        <% end %>
-    </tbody>
-</table>
-
-<h3>Statistiche</h3>
-<p><strong>Vendite totali:</strong> <%= @package.package_purchases.count %></p>
-<p><strong>Vendite attive:</strong> <%= @package.package_purchases.active_purchases.count %></p>
-
-<%= link_to "Modifica", edit_package_path(@package) %>
-<%= link_to "Indietro", packages_path %>
+  <%= button_to "Destroy this package", @package, method: :delete %>
+</div>

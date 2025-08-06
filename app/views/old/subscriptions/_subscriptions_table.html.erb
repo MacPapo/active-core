@@ -5,7 +5,7 @@
                 <tr class="fs-6">
                     <% if actv  %>
                         <th class="text-primary fw-semibold"><%= User.human_attribute_name('name') %></th>
-                        <th class="text-primary fw-semibold"><%= User.human_attribute_name('surname') %></th>
+                        <th class="text-primary fw-semibold"><%= User.human_attribute_name('last_name') %></th>
                     <% else %>
                         <th class="text-primary fw-semibold"><%= Subscription.human_attribute_name('activity') %></th>
                     <% end %>
@@ -33,9 +33,9 @@
                                 <%= user.name %>
                             </td>
 
-                            <!-- User Surname -->
+                            <!-- User Last_Name -->
                             <td>
-                                <%= user.surname %>
+                                <%= user.last_name %>
                             </td>
                         <% else %>
                             <!-- Activity Name -->

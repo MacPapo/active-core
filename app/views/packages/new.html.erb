@@ -1,5 +1,11 @@
-<h1>Nuovo Pacchetto</h1>
+<% content_for :title, "New package" %>
+
+<h1>New package</h1>
 
 <%= render "form", package: @package %>
 
-<%= link_to "Indietro", packages_path %>
+<br>
+
+<div>
+  <%= link_to "Back to packages", packages_path %>
+</div>

@@ -1,6 +1,12 @@
-<% content_for :title, "Modifica Piano" %>
+<% content_for :title, "Editing pricing plan" %>
 
-<h1>Modifica Piano</h1>
+<h1>Editing pricing plan</h1>
 
-<%= render "form", product: @product, pricing_plan: @pricing_plan %>
+<%= render "form", pricing_plan: @pricing_plan %>
 
+<br>
+
+<div>
+  <%= link_to "Show this pricing plan", @pricing_plan %> |
+  <%= link_to "Back to pricing plans", pricing_plans_path %>
+</div>

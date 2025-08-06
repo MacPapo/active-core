@@ -7,7 +7,7 @@
                     <th><%= payment_sortable_column.call('created_at', Payment.human_attribute_name('date')) %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('payable_type') %></th>
                     <th class="text-primary fw-semibold"><%= User.human_attribute_name('name') %></th>
-                    <th class="text-primary fw-semibold"><%= User.human_attribute_name('surname') %></th>
+                    <th class="text-primary fw-semibold"><%= User.human_attribute_name('last_name') %></th>
                     <th><%= payment_sortable_column.call('amount', Payment.human_attribute_name('amount')) %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('method') %></th>
                     <th class="text-primary fw-semibold"><%= Payment.human_attribute_name('note') %></th>
@@ -37,15 +37,15 @@
                                 <%= user.name %>
                             </td>
 
-                            <!-- User surname -->
+                            <!-- User last_name -->
                             <td>
-                                <%= user.surname %>
+                                <%= user.last_name %>
                             </td>
                         <% else %>
                             <!-- User name -->
                             <td></td>
 
-                            <!-- User surname -->
+                            <!-- User last_name -->
                             <td></td>
                         <% end %>
 

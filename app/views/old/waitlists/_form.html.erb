@@ -21,9 +21,9 @@
         </div>
         <div class="col mb-2">
             <div class="d-flex">
-                <%= form.label :surname, class: 'form-label fw-semibold text-secondary' %>*
+                <%= form.label :last_name, class: 'form-label fw-semibold text-secondary' %>*
             </div>
-            <%= form.text_field :surname, required: true, placeholder: 'Trevisano', class: 'form-control', value: @user.present? ? @user.surname : '' %>
+            <%= form.text_field :last_name, required: true, placeholder: 'Trevisano', class: 'form-control', value: @user.present? ? @user.last_name : '' %>
         </div>
     </div>
     <div class="row mb-2">

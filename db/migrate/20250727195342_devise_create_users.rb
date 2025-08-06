@@ -15,11 +15,10 @@ class DeviseCreateUsers < ActiveRecord::Migration[8.0]
       t.integer    :role, default: 0, null: false
       t.references :member, null: false, foreign_key: true
 
-      t.datetime :discarded_at
+      t.datetime :discarded_at, index: true
       t.timestamps
     end
 
-    add_index :users, :nickname, unique: true
-    add_index :users, :discarded_at
+    add_index :users, :nickname, unique: true, where: "discarded_at IS NULL"
   end
 end

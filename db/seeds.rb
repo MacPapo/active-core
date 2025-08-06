@@ -22,10 +22,10 @@
 # csv.each do |row|
 #   u = User.new
 
-#   u.cf = row['Codice Fiscale'].length == 16 ? row['Codice Fiscale'] : nil
-#   u.surname = row['Cognome']
+#   u.tax_code = row['Codice Fiscale'].length == 16 ? row['Codice Fiscale'] : nil
+#   u.last_name = row['Cognome']
 #   u.name = row['Nome']
-#   u.birth_day = row['Data di Nascita']
+#   u.birth_date = row['Data di Nascita']
 #   u.email = row['Email']
 #   u.phone = Phonelib.parse(row['Cellulare']).valid? ? row['Cellulare'] : nil
 
@@ -34,13 +34,13 @@
 
 # Seed Staff Members
 admin_user = Member.new(
-  cf: 'SRUDMN80A01L736P',
+  tax_code: 'SRUDMN80A01L736P',
   name: 'Admin',
-  surname: 'User',
+  last_name: 'User',
   email: 'admin@example.com',
   phone: '+39 341 4488 935',
-  birth_day: Date.new(2001, 3, 18),
-  med_cert_issue_date: nil,
+  birth_date: Date.new(2001, 3, 18),
+  medical_certificate_issued_on: nil,
   affiliated: false
 )
 

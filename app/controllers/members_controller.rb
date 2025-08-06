@@ -31,7 +31,7 @@ class MembersController < ApplicationController
       @member.errors.add(:base, "Devi selezionare un piano di tesseramento valido.")
       load_form_data
       render :new, status: :unprocessable_content
-      return # Interrompiamo l'esecuzione
+      return
     end
 
     discounts = Discount.kept.active.where(id: membership_params[:discount_ids] || [])
@@ -77,7 +77,7 @@ class MembersController < ApplicationController
   end
 
   def member_params
-    params.require(:member).permit(:name, :surname, :email, :phone, :birth_day, :cf, :affiliated)
+    params.require(:member).permit(:first_name, :last_name, :email, :phone, :birth_date, :tax_code, :affiliated)
   end
 
   def membership_params
@@ -127,86 +127,15 @@ class MembersController < ApplicationController
   # Sortable methods
   def sortable_attributes
     {
-      "name" => "members.name",
-      "surname" => "members.surname",
+      "first_name" => "members.first_name",
+      "last_name" => "members.last_name",
       "email" => "members.email",
-      "birth_day" => "members.birth_day",
+      "birth_date" => "members.birth_date",
       "created_at" => "members.created_at"
     }
   end
 
   def default_sort
-    { attribute: "surname", direction: "asc" }
+    { attribute: "last_name", direction: "asc" }
   end
 end
-
-# class MembersController < ApplicationController
-#   before_action :set_member, only: [ :show, :edit, :update, :destroy ]
-
-#   def index
-#     @members = Member.kept
-#                  .includes(:legal_guardian, :active_memberships, :active_registrations)
-#                  .order(:surname, :name)
-
-#     @members = @members.where("name LIKE ? OR surname LIKE ? OR email LIKE ?",
-#                               "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
-#     @members = @members.affiliated if params[:affiliated] == "true"
-#     @members = @members.unaffiliated if params[:affiliated] == "false"
-#   end
-
-#   def show
-#     @active_memberships = @member.active_memberships.includes(:pricing_plan)
-#     @active_registrations = @member.active_registrations.includes(:product)
-#     @recent_payments = PaymentItem.joins(:payment)
-#                          .for_member(@member)
-#                          .includes(:payment)
-#                          .order(created_at: :desc)
-#                          .limit(5)
-#   end
-
-#   def new
-#     @member = Member.new
-#     @legal_guardians = LegalGuardian.all.order(:surname, :name)
-#   end
-
-#   def create
-#     @member = Member.new(member_params)
-
-#     if @member.save
-#       redirect_to @member, notice: "Membro creato con successo."
-#     else
-#       @legal_guardians = LegalGuardian.all.order(:surname, :name)
-#       render :new, status: :unprocessable_content
-#     end
-#   end
-
-#   def edit
-#     @legal_guardians = LegalGuardian.all.order(:surname, :name)
-#   end
-
-#   def update
-#     if @member.update(member_params)
-#       redirect_to @member, notice: "Membro aggiornato con successo."
-#     else
-#       @legal_guardians = LegalGuardian.all.order(:surname, :name)
-#       render :edit, status: :unprocessable_content
-#     end
-#   end
-
-#   def destroy
-#     @member.discard
-#     redirect_to members_path, notice: "Membro eliminato con successo."
-#   end
-
-#   private
-
-#   def set_member
-#     @member = Member.kept.find(params[:id])
-#   end
-
-#   def member_params
-#     params.require(:member).permit(:cf, :name, :surname, :email, :phone,
-#                                    :birth_day, :med_cert_issue_date,
-#                                    :affiliated, :legal_guardian_id)
-#   end
-# end

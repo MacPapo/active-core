@@ -3,7 +3,7 @@
 <%= content_for :header do %>
     <tr class="fs-6">
         <th><%= mem_sortable_column.call('name', User.human_attribute_name('name')) %></th>
-        <th><%= mem_sortable_column.call('surname', User.human_attribute_name('surname')) %></th>
+        <th><%= mem_sortable_column.call('last_name', User.human_attribute_name('last_name')) %></th>
         <th><%= mem_sortable_column.call('start_date', Membership.human_attribute_name('start_date')) %></th>
         <th><%= mem_sortable_column.call('end_date', Membership.human_attribute_name('end_date')) %></th>
         <th class="text-primary text-end fw-semibold"><%= t 'global.table.action' %></th>
@@ -20,9 +20,9 @@
                 <%= highlight user.name, params.dig(:name) %>
             </td>
 
-            <!-- Surname -->
+            <!-- Last_Name -->
             <td>
-                <%= highlight user.surname, params.dig(:name) %>
+                <%= highlight user.last_name, params.dig(:name) %>
             </td>
 
             <!-- Start Date -->

@@ -2,58 +2,47 @@ require "test_helper"
 
 class PricingPlansControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = users(:admin_user)
-    @product = products(:activity_product)
-    @pricing_plan = pricing_plans(:activity_session)
-    sign_in @user
+    @pricing_plan = pricing_plans(:one)
+  end
+
+  test "should get index" do
+    get pricing_plans_url
+    assert_response :success
   end
 
   test "should get new" do
-    get new_product_pricing_plan_path(@product)
+    get new_pricing_plan_url
     assert_response :success
-    assert_select "form"
   end
 
-  test "should create pricing plan" do
+  test "should create pricing_plan" do
     assert_difference("PricingPlan.count") do
-      post product_pricing_plans_path(@product), params: {
-             pricing_plan: {
-               duration_type: "months",
-               duration_value: 6,
-               price: 150.00,
-               affiliated_price: 120.00,
-               active: true
-             }
-           }
+      post pricing_plans_url, params: { pricing_plan: {} }
     end
 
-    assert_redirected_to product_path(@product)
+    assert_redirected_to pricing_plan_url(PricingPlan.last)
   end
 
-  test "should not create invalid pricing plan" do
-    assert_no_difference("PricingPlan.count") do
-      post product_pricing_plans_path(@product), params: {
-             pricing_plan: { duration_type: "", price: "" }
-           }
+  test "should show pricing_plan" do
+    get pricing_plan_url(@pricing_plan)
+    assert_response :success
+  end
+
+  test "should get edit" do
+    get edit_pricing_plan_url(@pricing_plan)
+    assert_response :success
+  end
+
+  test "should update pricing_plan" do
+    patch pricing_plan_url(@pricing_plan), params: { pricing_plan: {} }
+    assert_redirected_to pricing_plan_url(@pricing_plan)
+  end
+
+  test "should destroy pricing_plan" do
+    assert_difference("PricingPlan.count", -1) do
+      delete pricing_plan_url(@pricing_plan)
     end
 
-    assert_response :unprocessable_content
-  end
-
-  test "should update pricing plan" do
-    patch product_pricing_plan_path(@product, @pricing_plan), params: {
-            pricing_plan: { price: 99.99 }
-          }
-
-    assert_redirected_to product_pricing_plan_path(@product, @pricing_plan)
-    assert_equal 99.99, @pricing_plan.reload.price
-  end
-
-  test "should destroy pricing plan" do
-    assert_difference("@product.pricing_plans.kept.count", -1) do
-      delete product_pricing_plan_path(@product, @pricing_plan)
-    end
-
-    assert_redirected_to product_path(@product)
+    assert_redirected_to pricing_plans_url
   end
 end

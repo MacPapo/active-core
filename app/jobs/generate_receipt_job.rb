@@ -53,7 +53,7 @@ class GenerateReceiptJob < ApplicationJob
     user = @entity.user
     [
       "<b>#{I18n.t('global.receipt.to')}</b>",
-      user.cf,
+      user.tax_code,
       user.full_name,
       user.email,
       user.phone

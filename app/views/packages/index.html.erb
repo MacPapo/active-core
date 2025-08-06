@@ -1,35 +1,16 @@
-<h1>Pacchetti</h1>
+<p style="color: green"><%= notice %></p>
 
-<%= link_to "Nuovo Pacchetto", new_package_path, class: "btn" %>
+<% content_for :title, "Packages" %>
 
-<table>
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Prezzo</th>
-            <th>Prezzo Affiliati</th>
-            <th>Durata</th>
-            <th>Prodotti Inclusi</th>
-            <th>Vendite</th>
-            <th>Attivo</th>
-            <th>Azioni</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% @packages.each do |package| %>
-            <tr>
-                <td><%= package.name %></td>
-                <td>€<%= package.price %></td>
-                <td>€<%= package.affiliated_price || "-" %></td>
-                <td><%= package.duration_value %> <%= package.duration_type.humanize %></td>
-                <td><%= package.products.count %></td>
-                <td><%= package.package_purchases.count %></td>
-                <td><%= package.active? ? "Sì" : "No" %></td>
-                <td>
-                    <%= link_to "Dettagli", package %>
-                    <%= link_to "Modifica", edit_package_path(package) %>
-                </td>
-            </tr>
-        <% end %>
-    </tbody>
-</table>
+<h1>Packages</h1>
+
+<div id="packages">
+  <% @packages.each do |package| %>
+    <%= render package %>
+    <p>
+      <%= link_to "Show this package", package %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New package", new_package_path %>

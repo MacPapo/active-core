@@ -27,22 +27,22 @@
     <!-- Birth Day -->
     <div class="col">
         <p class="fs-6 fw-light text-muted mb-2">
-            <%= user_attribute_to_string.('birth_day') %>
+            <%= user_attribute_to_string.('birth_date') %>
         </p>
-        <% if staff.birth_day %>
+        <% if staff.birth_date %>
             <p class="fs-5 fw-semibold text-secondary">
-                <%= l staff.birth_day %> (<%= num_to_human_years staff.age %>)
+                <%= l staff.birth_date %> (<%= num_to_human_years staff.age %>)
             </p>
         <% end %>
     </div>
 
-    <!-- CF -->
+    <!-- TAX_CODE -->
     <div class="col">
         <p class="fs-6 fw-light text-muted mb-2">
-            <%= user_attribute_to_string.('cf') %>
+            <%= user_attribute_to_string.('tax_code') %>
         </p>
         <p class="fs-5 fw-semibold text-secondary">
-            <%= staff.cf %>
+            <%= staff.tax_code %>
         </p>
     </div>
 </div>
@@ -95,10 +95,10 @@
 <% unless staff.volunteer? %>
 
     <!-- Cert med -->
-    <% med = staff.med_cert_issue_date %>
+    <% med = staff.medical_certificate_issued_on %>
     <div class="row mb-2">
         <p class="fs-6 fw-light text-muted mb-2">
-            <%= user_attribute_to_string.('med_cert_issue_date') %>
+            <%= user_attribute_to_string.('medical_certificate_issued_on') %>
         </p>
         <p class="fs-5 fw-semibold <%= med.present? ? 'text-secondary' : 'text-warning' %>">
 

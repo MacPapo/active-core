@@ -1,18 +1,10 @@
-<h1>Pagamento #<%= @payment.id %></h1>
+<p style="color: green"><%= notice %></p>
 
-<p><strong>Data:</strong> <%= @payment.date %></p>
-<p><strong>Tipo:</strong> <%= @payment.income? ? "Incasso" : "Spesa" %></p>
-<p><strong>Metodo:</strong> <%= @payment.payment_method.humanize %></p>
-<p><strong>Totale:</strong> €<%= @payment.total_amount %></p>
-<p><strong>Sconto:</strong> €<%= @payment.discount_amount %></p>
-<p><strong>Finale:</strong> €<%= @payment.final_amount %></p>
-<p><strong>Utente:</strong> <%= @payment.user.nickname %></p>
+<%= render @payment %>
 
-<h3>Voci di Pagamento</h3>
-<ul>
-    <% @payment.payment_items.each do |item| %>
-        <li>€<%= item.amount %> - <%= item.description %></li>
-    <% end %>
-</ul>
+<div>
+  <%= link_to "Edit this payment", edit_payment_path(@payment) %> |
+  <%= link_to "Back to payments", payments_path %>
 
-<%= link_to "Indietro", payments_path %>
+  <%= button_to "Destroy this payment", @payment, method: :delete %>
+</div>

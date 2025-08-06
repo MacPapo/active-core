@@ -1,25 +1,11 @@
-annual_membership:
-  product: membership_product
-  duration_type: :years
-  duration_value: 1
-  price: "35.00"
-  active: true
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-monthly_membership:
-  product: membership_product
-  duration_type: 1  # monthly
-  duration_value: 1
-  price: "50.00"
-  affiliated_price: "45.00"
-  valid_from: "2024-01-01"
-  valid_until: "2024-12-31"
-  active: true
-
-activity_session:
-  product: activity_product
-  duration_type: 0  # session-based
-  duration_value: 1
-  price: "15.00"
-  affiliated_price: "12.00"
-  active: true
-
+# This model initially had no columns defined. If you add columns to the
+# model remove the "{}" from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: {}
+# column: value
+#
+two: {}
+# column: value

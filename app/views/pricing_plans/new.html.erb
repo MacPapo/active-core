@@ -1,6 +1,11 @@
-<% content_for :title, "Nuovo Piano" %>
+<% content_for :title, "New pricing plan" %>
 
-<h1>Nuovo Piano</h1>
+<h1>New pricing plan</h1>
 
-<%= render "form", product: @product, pricing_plan: @pricing_plan %>
+<%= render "form", pricing_plan: @pricing_plan %>
 
+<br>
+
+<div>
+  <%= link_to "Back to pricing plans", pricing_plans_path %>
+</div>

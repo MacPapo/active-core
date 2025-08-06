@@ -1,23 +1,11 @@
-membership_product:
-  name: "Basic Membership"
-  product_type: "membership"
-  description: "Basic gym membership"
-  capacity: null
-  requires_membership: false
-  active: true
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-activity_product:
-  name: "Yoga Class"
-  product_type: "activity"
-  description: "Weekly yoga sessions"
-  capacity: 20
-  requires_membership: true
-  active: true
-
-pilates_class:
-  name: "Pilates Class"
-  product_type: "activity"
-  description: "Weekly pilates sessions"
-  capacity: 15
-  requires_membership: true
-  active: true
+# This model initially had no columns defined. If you add columns to the
+# model remove the "{}" from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: {}
+# column: value
+#
+two: {}
+# column: value

@@ -1,2 +1,0 @@
-module LegalGuardiansHelper
-end

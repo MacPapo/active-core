@@ -15,11 +15,6 @@
             <span class="ps-3"><%= model_to_string(User, 2) %></span>
         <% end %>
 
-        <%= active_link_to legal_guardians_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
-            <%= icon("legal_guardians") %>
-            <span class="ps-3"><%= model_to_string(LegalGuardian, 2) %></span>
-        <% end %>
-
         <%= active_link_to activities_path, class: 'btn btn-bd-secondary d-flex align-items-center' do %>
             <%= icon("activities") %>
             <span class="ps-3"><%= model_to_string(Activity) %></span>

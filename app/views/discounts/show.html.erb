@@ -1,21 +1,10 @@
-<h1><%= @discount.name %></h1>
+<p style="color: green"><%= notice %></p>
 
-<p><strong>Tipo:</strong> <%= @discount.discount_type.humanize %></p>
-<p><strong>Valore:</strong> <%= @discount.discount_description %></p>
-<p><strong>Applicabile a:</strong> <%= @discount.applicable_to.humanize %></p>
-<p><strong>Stackable:</strong> <%= @discount.stackable? ? "Sì" : "No" %></p>
-<p><strong>Attivo:</strong> <%= @discount.active? ? "Sì" : "No" %></p>
+<%= render @discount %>
 
-<% if @discount.valid_from || @discount.valid_until %>
-    <h3>Periodo di Validità</h3>
-    <p><strong>Da:</strong> <%= @discount.valid_from if @discount.valid_from %></p>
-    <p><strong>Fino a:</strong> <%= @discount.valid_until if @discount.valid_until %></p>
-<% end %>
+<div>
+  <%= link_to "Edit this discount", edit_discount_path(@discount) %> |
+  <%= link_to "Back to discounts", discounts_path %>
 
-<h3>Statistiche Utilizzo</h3>
-<p><strong>Utilizzi totali:</strong> <%= @discount.usage_count %></p>
-<p><strong>Sconto totale erogato:</strong> €<%= @discount.total_discount_given %></p>
-<p><strong>Ultimo utilizzo:</strong> <%= @discount.last_used_date || "Mai utilizzato" %></p>
-
-<%= link_to "Modifica", edit_discount_path(@discount) %>
-<%= link_to "Indietro", discounts_path %>
+  <%= button_to "Destroy this discount", @discount, method: :delete %>
+</div>

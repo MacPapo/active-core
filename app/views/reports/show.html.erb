@@ -1,0 +1,45 @@
+<h1>Resoconto del <%= l @report.date, format: :long %></h1>
+
+<%# Aggiungi un date picker per permettere all'utente di scegliere il giorno %>
+<%= form_with url: report_path, method: :get do |form| %>
+    <%= form.date_field :date, value: @report_date %>
+    <%= form.submit "Vai" %>
+<% end %>
+
+<hr>
+
+<h3>Riepilogo Incassi</h3>
+<p><strong>Incasso Totale:</strong> <%= number_to_currency @report.total_income %></p>
+<ul>
+    <li><strong>Contanti:</strong> <%= number_to_currency @report.total_cash %></li>
+    <li><strong>Carta:</strong> <%= number_to_currency @report.total_card %></li>
+    <li><strong>Bonifico:</strong> <%= number_to_currency @report.total_bank_transfer %></li>
+</ul>
+
+<h3>Riepilogo Vendite</h3>
+<ul>
+    <li><strong>Piani Tariffari Venduti:</strong> <%= @report.plan_grants_sold %></li>
+    <li><strong>Pacchetti Venduti:</strong> <%= @report.package_grants_sold %></li>
+</ul>
+
+<h3>Dettaglio Transazioni</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Orario</th>
+            <th>Descrizione</th>
+            <th>Metodo</th>
+            <th>Importo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @report.payments.order(created_at: :desc).each do |payment| %>
+            <tr>
+                <td><%= l payment.created_at, format: :short %></td>
+                <td><%= payment.payment_items.map(&:description).join(', ') %></td> <%# Esempio %>
+                <td><%= payment.payment_method.humanize %></td>
+                <td><%= number_to_currency payment.final_amount %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

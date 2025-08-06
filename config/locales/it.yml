@@ -40,13 +40,13 @@ it:
         other: "Liste di Attesa"
     attributes:
       user:
-        cf: "Codice Fiscale"
+        tax_code: "Codice Fiscale"
         name: "Nome"
-        surname: "Cognome"
+        last_name: "Cognome"
         email: "Email"
         phone: "Numero di Telefono"
-        birth_day: "Data di Nascita"
-        med_cert_issue_date: "Data rilascio del Certificato Medico"
+        birth_date: "Data di Nascita"
+        medical_certificate_issued_on: "Data rilascio del Certificato Medico"
         affiliated: "Convenzionato"
         legal_guardian: "Tutore Legale"
         legal_guardian_id: "Tutore Legale"
@@ -71,10 +71,10 @@ it:
 
       legal_guardian:
         name: "Nome"
-        surname: "Cognome"
+        last_name: "Cognome"
         email: "Email"
         phone: "Numero di Telefono"
-        birth_day: "Data di Nascita"
+        birth_date: "Data di Nascita"
         users: "Utenti Associati"
         updated_at: "Data aggiornamento"
         created_at: "Data creazione"
@@ -119,7 +119,7 @@ it:
 
       waitlist:
         name: "Nome"
-        surname: "Cognome"
+        last_name: "Cognome"
         phone: "Numero di Cellulare"
 
       membership:
@@ -247,7 +247,7 @@ it:
       direction: "Direzione"
       status: "Stato"
       name: "Nome"
-      surname: "Cognome"
+      last_name: "Cognome"
       birth: "Data di Nascita"
       affiliated: "Convenzionato"
       membership: "Quota Associativa"
@@ -268,8 +268,8 @@ it:
       lg_email: "Email"
       lg_phone: "Numero di Telefono"
       lg_name: "Nome"
-      lg_surname: "Cognome"
-      lg_birth_day: "Data di Nascita"
+      lg_last_name: "Cognome"
+      lg_birth_date: "Data di Nascita"
     new:
       title: "Inserimento di un Nuovo Utente"
     show:

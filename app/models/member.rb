@@ -4,50 +4,55 @@
 class Member < ApplicationRecord
   include Discard::Model
 
-  include Member::RevenueTracking, Member::MembershipStatus
-  include Member::PersonalIdentity, Member::Contactable, Member::MedicalCertification
-  include Membership::Renewable
-  include Registration::Renewable
-
   # Associations
-  belongs_to :legal_guardian, optional: true
   has_one :user, dependent: :destroy
-  has_many :memberships, dependent: :destroy
-  has_many :package_purchases, dependent: :destroy
-  has_many :registrations, dependent: :destroy
-  has_many :waitlists, dependent: :destroy
 
-  # Through associations for easier querying
-  has_many :active_memberships, -> { where(status: :active) }, class_name: "Membership"
-  has_many :active_registrations, -> { where(status: :active) }, class_name: "Registration"
-  has_many :products, through: :registrations
-  has_many :packages, through: :package_purchases
+  has_many :access_grants, dependent: :restrict_with_error
+  has_many :waitlists, dependent: :restrict_with_error
+  has_many :payments, dependent: :restrict_with_error
 
-  # Scopes
-  scope :affiliated, -> { where(affiliated: true) }
-  scope :unaffiliated, -> { where(affiliated: false) }
+  # LegalGuardian
+  belongs_to :legal_guardian, class_name: "Member", optional: true
+  has_many :dependents, class_name: "Member", foreign_key: "legal_guardian_id", dependent: :nullify
 
-  normalizes :cf, with: -> { _1&.upcase&.strip }
+  validates :first_name, :last_name, :birth_date, presence: true
+
+  validates :tax_code, uniqueness: { case_sensitive: false, allow_blank: true, conditions: -> { kept } },
+            format: { with: /\A[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]\z/i,
+                      message: "non è in un formato valido", allow_blank: true } # TODO LOCALIZE
+
+  validates :email, uniqueness: { case_sensitive: false, allow_blank: true, conditions: -> { kept } },
+            format: { with: URI::MailTo::EMAIL_REGEXP, message: "non è un'email valida", allow_blank: true }
+
+
+  normalizes :first_name, with: -> { _1&.strip }
+  normalizes :last_name, with: -> { _1&.strip }
+  normalizes :tax_code, with: -> { _1&.upcase&.strip }
   normalizes :email, with: -> { _1&.downcase&.strip }
 
   after_discard :discard_associated_records
   # after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor? TODO
 
-  def self.onboard!(member_attrs:, membership_attrs:)
-    member = new(member_attrs)
+  def full_name
+    "#{first_name} #{last_name}".squish
+  end
 
-    transaction do
-      member.save!
+  def age
+    return nil unless birth_date
+    now = Time.now.utc.to_date
+    now.year - birth_date.year - ((now.month > birth_date.month || (now.month == birth_date.month && now.day >= birth_date.day)) ? 0 : 1)
+  end
 
-      membership = member.create_or_renew_membership!(**membership_attrs)
-      raise ActiveRecord::Rollback unless membership&.persisted?
-    end
+  def minor?
+    age && age < 18
+  end
 
-    member
-  rescue ActiveRecord::RecordInvalid => e
-    Rails.logger.error "Member onboarding failed: #{e.record.errors.full_messages}"
-    member.errors.merge!(e.record.errors) if e.record != member
-    member
+  def staff?
+    user.present? && user.kept?
+  end
+
+  def active_grants
+    access_grants.active.where("start_date <= :today AND end_date >= :today", today: Date.current)
   end
 
   private
@@ -59,88 +64,3 @@ class Member < ApplicationRecord
     waitlists.destroy_all
   end
 end
-
-# TODO
-# scope :by_name, ->(query) do
-#   return if query.blank?
-
-#   where(
-#     "users.name LIKE :q OR users.surname LIKE :q OR (users.surname LIKE :s AND users.name LIKE :n)",
-#     q: "%#{query}%",
-#     s: "%#{query.split.last}%",
-#     n: "%#{query.split.first}%"
-#   )
-# end
-
-# scope :by_membership_status, ->(status) do
-#   return if status.blank?
-
-#   joins(:membership).where(membership: { status: status })
-# end
-
-# scope :by_activity_status, ->(status) do
-#   return if status.blank?
-
-#   joins(:subscriptions).where(subscriptions: { status: status })
-# end
-
-# scope :by_activity_id, ->(id) do
-#   return if id.blank?
-
-#   joins(:subscriptions).where("subscriptions.activity_id = ? AND subscriptions.discarded_at IS NULL", id.to_i)
-# end
-
-# scope :sorted, ->(sort_by, direction) do
-#   return unless %w[name surname birth_day updated_at].include?(sort_by)
-
-#   order("users.#{sort_by} #{direction}")
-# end
-
-# def self.filter(params)
-#   case params[:visibility]
-#   when "all"
-#     all
-#   when "deleted"
-#     discarded
-#   else
-#     kept
-#   end
-#     .by_name(params[:name])
-#     .by_membership_status(params[:membership_status])
-#     .by_activity_status(params[:activity_status])
-#     .by_activity_id(params[:activity_id])
-#     .sorted(params[:sort_by], params[:direction] || "desc")
-# end
-
-# def sfilter(params)
-#   case params[:visibility]
-#   when "all"
-#     subscriptions.all
-#   when "deleted"
-#     subscriptions.discarded
-#   else
-#     subscriptions.kept
-#   end
-#     .by_activity_name(params[:name])
-#     .by_activity_id(params[:activity_id])
-#     .by_open(params[:open])
-#   # .sorted(params[:sort_by], params[:direction] || 'desc')
-# end
-
-# def pfilter(params)
-#   case params[:visibility]
-#   when "all"
-#     payments.all
-#   when "deleted"
-#     payments.discarded
-#   else
-#     payments.kept
-#   end
-#     .joins(:staff)
-#     .includes(:staff, :payment_membership, :payment_subscription)
-#     .by_created_at(params[:from], params[:to])
-#     .by_name(params[:name])
-#     .by_type(params[:type])
-#     .by_method(params[:method])
-#     .sorted(params[:sort_by], params[:direction])
-# end

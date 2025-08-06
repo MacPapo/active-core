@@ -3,7 +3,7 @@ import debounce from "debounce";
 
 // Connects to data-controller="activity-search-user"
 export default class extends Controller {
-    static targets = ["input", "results", "hiddenUserId", "name", "surname", "email", "phone"]
+    static targets = ["input", "results", "hiddenUserId", "name", "last_name", "email", "phone"]
 
     connect() {
         console.log("User search controller connected!")
@@ -22,14 +22,14 @@ export default class extends Controller {
             .then(data => {
                 this.resultsTarget.innerHTML = data.map(user => `
         <option
-          value="${user.name} ${user.surname}"
+          value="${user.name} ${user.last_name}"
           data-id="${user.id}"
           data-name="${user.name}"
-          data-surname="${user.surname}"
+          data-last_name="${user.last_name}"
           data-email="${user.email}"
           data-phone="${user.phone}"
         >
-          ${user.name} ${user.surname} (${user.birth_day})
+          ${user.name} ${user.last_name} (${user.birth_date})
         </option>
       `).join("");
             });
@@ -43,7 +43,7 @@ export default class extends Controller {
         if (option) {
             this.hiddenUserIdTarget.value = option.dataset.id;
             this.nameTarget.value    = option.dataset.name;
-            this.surnameTarget.value = option.dataset.surname;
+            this.last_nameTarget.value = option.dataset.last_name;
             this.emailTarget.value   = option.dataset.email;
             this.phoneTarget.value   = option.dataset.phone;
         } else {
@@ -54,7 +54,7 @@ export default class extends Controller {
     resetUserFields() {
         this.hiddenUserIdTarget.value = ""
         this.nameTarget.value    = ""
-        this.surnameTarget.value = ""
+        this.last_nameTarget.value = ""
         this.emailTarget.value   = ""
         this.phoneTarget.value   = ""
     }

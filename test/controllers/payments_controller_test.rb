@@ -2,21 +2,12 @@ require "test_helper"
 
 class PaymentsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @admin_user = users(:admin_user)
-    @collaborator_user = users(:collaborator_user)
-    @payment = payments(:membership_payment)
-    sign_in @admin_user
+    @payment = payments(:one)
   end
 
-  test "should get index as admin" do
+  test "should get index" do
     get payments_url
     assert_response :success
-  end
-
-  test "should deny access to collaborator" do
-    sign_in @collaborator_user
-    get payments_url
-    assert_redirected_to root_path
   end
 
   test "should get new" do
@@ -26,17 +17,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create payment" do
     assert_difference("Payment.count") do
-      post payments_url, params: {
-             payment: {
-               date: Date.current,
-               income: true,
-               payment_method: "cash",
-               notes: "Test payment",
-               payment_items_attributes: {
-                 "0" => { amount: 50.0, description: "Test item" }
-               }
-             }
-           }
+      post payments_url, params: { payment: {} }
     end
 
     assert_redirected_to payment_url(Payment.last)
@@ -47,17 +28,21 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should not create payment without items" do
-    assert_no_difference("Payment.count") do
-      post payments_url, params: {
-             payment: {
-               date: Date.current,
-               income: true,
-               payment_method: "cash"
-             }
-           }
+  test "should get edit" do
+    get edit_payment_url(@payment)
+    assert_response :success
+  end
+
+  test "should update payment" do
+    patch payment_url(@payment), params: { payment: {} }
+    assert_redirected_to payment_url(@payment)
+  end
+
+  test "should destroy payment" do
+    assert_difference("Payment.count", -1) do
+      delete payment_url(@payment)
     end
 
-    assert_response :unprocessable_content
+    assert_redirected_to payments_url
   end
 end

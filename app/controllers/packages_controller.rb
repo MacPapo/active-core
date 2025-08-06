@@ -1,85 +1,70 @@
-# frozen_string_literal: true
-
-# Packages Controller
 class PackagesController < ApplicationController
-  include Filterable
-  include Sortable
+  before_action :set_package, only: %i[ show edit update destroy ]
 
-  before_action :authorize_admin!
-  before_action :set_package, only: [ :edit, :update, :destroy ]
-
+  # GET /packages or /packages.json
   def index
-    @packages = Package.kept
-                  .then { |packages| apply_filters(packages) }
-                  .then { |packages| apply_sorting(packages) }
+    @packages = Package.all
   end
 
+  # GET /packages/1 or /packages/1.json
   def show
-    @package = Package.includes(package_inclusions: :product).kept.find(params[:id])
   end
 
+  # GET /packages/new
   def new
     @package = Package.new
-    @package.package_inclusions.build
-    @available_products = Product.kept.active.where.not(product_type: "membership")
   end
 
+  # GET /packages/1/edit
+  def edit
+  end
+
+  # POST /packages or /packages.json
   def create
     @package = Package.new(package_params)
 
-    if @package.save
-      redirect_to @package, notice: "Pacchetto creato con successo."
-    else
-      @available_products = Product.kept.active.where.not(product_type: "membership")
-      render :new, status: :unprocessable_content
+    respond_to do |format|
+      if @package.save
+        format.html { redirect_to @package, notice: "Package was successfully created." }
+        format.json { render :show, status: :created, location: @package }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @package.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  def edit
-    @available_products = Product.kept.active.where.not(product_type: "membership")
-  end
-
+  # PATCH/PUT /packages/1 or /packages/1.json
   def update
-    if @package.update(package_params)
-      redirect_to @package, notice: "Pacchetto aggiornato con successo."
-    else
-      @available_products = Product.kept.active.where.not(product_type: "membership")
-      render :edit, status: :unprocessable_content
+    respond_to do |format|
+      if @package.update(package_params)
+        format.html { redirect_to @package, notice: "Package was successfully updated." }
+        format.json { render :show, status: :ok, location: @package }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @package.errors, status: :unprocessable_entity }
+      end
     end
   end
 
+  # DELETE /packages/1 or /packages/1.json
   def destroy
-    @package.discard
-    redirect_to packages_path, notice: "Pacchetto eliminato con successo."
+    @package.destroy!
+
+    respond_to do |format|
+      format.html { redirect_to packages_path, status: :see_other, notice: "Package was successfully destroyed." }
+      format.json { head :no_content }
+    end
   end
 
   private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_package
+      @package = Package.find(params.expect(:id))
+    end
 
-  def set_package
-    @package = Package.kept.find(params[:id])
-  end
-
-  def package_params
-    params.require(:package).permit(:name, :description, :price, :affiliated_price,
-                                    :duration_type, :duration_value, :valid_from,
-                                    :valid_until, :active, :max_sales,
-                                    package_inclusions_attributes: [ :id, :product_id,
-                                                                    :access_type, :session_limit, :notes, :_destroy ])
-  end
-
-  # Filterable
-  def filterable_attributes
-    {
-      active: ->(scope, value) { scope.where(active: value) if value.present? }
-    }
-  end
-
-  # Sortable
-  def sortable_attributes
-    { "name" => "packages.name", "price" => "packages.price" }
-  end
-
-  def default_sort
-    { attribute: "name", direction: "asc" }
-  end
+    # Only allow a list of trusted parameters through.
+    def package_params
+      params.fetch(:package, {})
+    end
 end

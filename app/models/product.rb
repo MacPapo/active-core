@@ -1,46 +1,24 @@
-# frozen_string_literal: true
-
-# Product Model
 class Product < ApplicationRecord
   include Discard::Model
 
-  include Pricing::Integration
-  include Product::CapacityManagement, Product::Catalog, Product::MembershipRequirement
-
-  # Associations
   has_many :pricing_plans, dependent: :destroy
-  has_many :registrations, dependent: :destroy
   has_many :package_inclusions, dependent: :destroy
   has_many :packages, through: :package_inclusions
   has_many :waitlists, dependent: :destroy
-  has_many :members, through: :registrations
 
-  has_many :active_registrations, -> { active }, class_name: "Registration"
-  has_many :active_pricing_plans, -> { active }, class_name: "PricingPlan"
+  validates :name, presence: true, uniqueness: { case_sensitive: false, conditions: -> { kept } }
 
-  # Through associations for easier querying
-  has_many :members, through: :registrations
-  has_many :active_registrations, -> { where(status: :active) }, class_name: "Registration"
-  has_many :active_members, through: :active_registrations, source: :member
+  # Metodi
+  def current_enrollment
+    # Trova tutti gli abbonamenti attivi per questo prodotto
+    AccessGrant.active
+      .joins(:pricing_plan)
+      .where(pricing_plans: { product_id: self.id })
+      .count
+  end
 
-  accepts_nested_attributes_for :pricing_plans,
-                                allow_destroy: true,
-                                reject_if: :all_blank
-
-  # Scopes specific to Product
-  scope :popular, -> {
-    joins(:registrations)
-      .group(:id)
-      .order("COUNT(registrations.id) DESC")
-  }
-
-  # Callbacks
-  after_discard :handle_active_registrations
-
-  private
-
-  def handle_active_registrations
-    # Business logic: what happens to active registrations when product is deleted?
-    active_registrations.update_all(status: :cancelled)
+  def spots_available?
+    return true if max_capacity.blank?
+    current_enrollment < max_capacity
   end
 end
