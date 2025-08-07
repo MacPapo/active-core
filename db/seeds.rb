@@ -35,7 +35,7 @@
 # Seed Staff Members
 admin_user = Member.new(
   tax_code: 'SRUDMN80A01L736P',
-  name: 'Admin',
+  first_name: 'Admin',
   last_name: 'User',
   email: 'admin@example.com',
   phone: '+39 341 4488 935',
