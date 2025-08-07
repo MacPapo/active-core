@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
-    <head>
-        <title><%= @page_title || 'Querini Fit' %></title>
-        <%= favicon_link_tag asset_path('asd-querini.png') %>
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <%= csrf_meta_tags %>
-        <%= csp_meta_tag %>
+  <head>
+    <title><%= @page_title || 'Querini Fit' %></title>
+    <%= favicon_link_tag asset_path('asd-querini.png') %>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="turbo-refresh-method" content="morph"><!-- TURBO MORPH -->
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
 
-        <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-        <%= javascript_importmap_tags %>
-    </head>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
 
-    <body class="bg-light">
+  <body class="bg-light">
 
-        <!-- Sidebar -->
-        <%#= render "partials/sidebar" if user_signed_in? %>
+    <!-- Sidebar -->
+    <%#= render "partials/sidebar" if user_signed_in? %>
 
+    <!-- Flash Messages -->
+    <div id="flash" data-turbo-temporary></div>
 
-        <!-- Flash Messages -->
-        <%= render "partials/flash", flash: %>
+    <!-- TODO -->
+    <%= render "partials/flash", flash: %>
 
-        <div class="flex-grow-1" style="<%= user_signed_in? ? 'padding: 1rem;margin-left: 250px;' : 'height: 100vh;' %>">
-            <!-- Contents -->
-            <%= yield %>
-        </div>
-    </body>
+    <div class="flex-grow-1" style="<%= user_signed_in? ? 'padding: 1rem;margin-left: 250px;' : 'height: 100vh;' %>">
+      <!-- Contents -->
+      <%= yield %>
+    </div>
+  </body>
 </html>

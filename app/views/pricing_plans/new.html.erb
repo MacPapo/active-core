@@ -1,11 +1,4 @@
-<% content_for :title, "New pricing plan" %>
-
-<h1>New pricing plan</h1>
-
-<%= render "form", pricing_plan: @pricing_plan %>
-
-<br>
-
-<div>
-  <%= link_to "Back to pricing plans", pricing_plans_path %>
-</div>
+<%= turbo_frame_tag @pricing_plan do %>
+  <h3>Nuovo Piano Tariffario</h3>
+  <%= render "form", product: @product, pricing_plan: @pricing_plan %>
+<% end %>

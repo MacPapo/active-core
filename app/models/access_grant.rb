@@ -25,7 +25,7 @@ class AccessGrant < ApplicationRecord
   # ------------------------------------------------------------------
   # ENUM per lo STATO
   # ------------------------------------------------------------------
-  enum status: {
+  enum :status, {
          pending: 0,   # Creato ma non ancora attivo (es. partenza futura)
          active: 1,    # Attualmente valido
          expired: 2,   # Scaduto

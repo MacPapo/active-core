@@ -12,6 +12,28 @@
   <% end %>
 
   <div>
+    <%= form.label :name, "Nome Prodotto" %><br>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description, "Descrizione" %><br>
+    <%= form.text_area :description %>
+  </div>
+
+  <div>
+    <%= form.label :max_capacity, "Capienza Massima (lascia vuoto se illimitata)" %><br>
+    <%= form.number_field :max_capacity %>
+  </div>
+
+  <div>
+    <%= form.check_box :requires_medical_certificate %>
+    <%= form.label :requires_medical_certificate, "Richiede certificato medico" %>
+  </div>
+
+  <br>
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>

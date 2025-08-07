@@ -1,7 +1,10 @@
 class Discount < ApplicationRecord
   include Discard::Model
 
-  enum discount_type: { percentage: 0, fixed: 1 }
+  enum :discount_type, {
+         percentage: 0,
+         fixed: 1
+       }
 
   validates :name, :discount_type, :value, presence: true
   validates :name, uniqueness: { conditions: -> { kept } }

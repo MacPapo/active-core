@@ -1,5 +1,7 @@
 class PricingPlan < ApplicationRecord
   include Discard::Model
+  include Pricable
+  include HasValidityPeriod
 
   belongs_to :product
 
@@ -12,7 +14,12 @@ class PricingPlan < ApplicationRecord
   # ------------------------------------------------------------------
 
   # Definiamo le unità di durata possibili in modo pulito e leggibile
-  enum duration_unit: { day: 0, week: 1, month: 2, year: 3 }
+  enum :duration_unit, {
+         day: 0,
+         week: 1,
+         month: 2,
+         year: 3
+       }
 
   # ------------------------------------------------------------------
   # VALIDAZIONI
@@ -38,15 +45,5 @@ class PricingPlan < ApplicationRecord
     return nil unless start_date.is_a?(Date)
     # La magia di ActiveSupport: 1.month, 3.years, etc.
     start_date + duration_interval.send(duration_unit)
-  end
-
-  # Determina il prezzo corretto per un dato membro
-  def price_for(member)
-    member.affiliated? && affiliated_price.present? ? affiliated_price : price
-  end
-
-  # Verifica se il piano è attualmente in listino (attivo e valido)
-  def available_for_sale?
-    kept? && (valid_from.nil? || valid_from <= Date.current) && (valid_until.nil? || valid_until >= Date.current)
   end
 end

@@ -1,10 +1,19 @@
-<p style="color: green"><%= notice %></p>
+<div id="product_<%= @produt.id %>">
+  <h1><%= @product.name %></h1>
+  <hr>
 
-<%= render @product %>
+  <h2>Piani Tariffari</h2>
 
-<div>
-  <%= link_to "Edit this product", edit_product_path(@product) %> |
-  <%= link_to "Back to products", products_path %>
+  <%# 1. Link per mostrare il form di creazione %>
+  <%= link_to "Aggiungi Nuovo Piano", new_product_pricing_plan_path(@product),
+              data: { turbo_frame: dom_id(PricingPlan.new) } %>
 
-  <%= button_to "Destroy this product", @product, method: :delete %>
+  <%# 2. Contenitore per il form (di creazione o modifica) %>
+  <%# Questo frame verrà riempito dal link qui sopra o dai link "Modifica" %>
+  <%= turbo_frame_tag PricingPlan.new %>
+
+  <hr>
+
+  <%# 3. Contenitore per la lista dei piani, che si aggiornerà dinamicamente %>
+  <%= turbo_frame_tag "pricing_plans" %>
 </div>

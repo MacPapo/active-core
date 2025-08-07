@@ -17,7 +17,7 @@ class User < ApplicationRecord
   delegate :first_name, :last_name, :full_name, :birth_date, :age,
            :phone, :email, to: :member, allow_nil: true
 
-  enum role: {
+  enum :role, {
          staff: 0,
          admin: 1
        }
@@ -26,5 +26,5 @@ class User < ApplicationRecord
   validates :member_id, presence: true, uniqueness: true
   validates :role, presence: true
 
-  normalize :nickname, with: -> { _1&.downcase&.strip }
+  normalizes :nickname, with: -> { _1&.downcase&.strip }
 end

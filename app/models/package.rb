@@ -1,5 +1,7 @@
 class Package < ApplicationRecord
   include Discard::Model
+  include Pricable
+  include HasValidityPeriod
 
   # --- ASSOCIATIONS ---
   has_many :package_inclusions, dependent: :destroy
@@ -9,7 +11,12 @@ class Package < ApplicationRecord
   has_many :access_grants, dependent: :restrict_with_error
 
   # --- ENUMS (Consistent with PricingPlan) ---
-  enum duration_unit: { day: 0, week: 1, month: 2, year: 3 }
+  enum :duration_unit, {
+         day: 0,
+         week: 1,
+         month: 2,
+         year: 3
+       }
 
   # --- VALIDATIONS ---
   validates :name, :duration_interval, :duration_unit, :price, presence: true
@@ -28,13 +35,5 @@ class Package < ApplicationRecord
   def calculate_end_date(start_date)
     return nil unless start_date.is_a?(Date)
     start_date + duration_interval.send(duration_unit)
-  end
-
-  def price_for(member)
-    member.affiliated? && affiliated_price.present? ? affiliated_price : price
-  end
-
-  def available_for_sale?
-    !sold_out? && kept? && (valid_from.nil? || valid_from <= Date.current) && (valid_until.nil? || valid_until >= Date.current)
   end
 end

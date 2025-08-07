@@ -1,13 +1,17 @@
 class ProductsController < ApplicationController
+  # Questo metodo trova il prodotto specifico prima di azioni come show, edit, update, destroy
   before_action :set_product, only: %i[ show edit update destroy ]
 
-  # GET /products or /products.json
+  # GET /products
   def index
-    @products = Product.all
+    # Mostra solo i prodotti non "scartati"
+    @products = Product.kept.order(:name)
   end
 
-  # GET /products/1 or /products/1.json
+  # GET /products/1
   def show
+    # Qui potrai vedere i dettagli del prodotto e, in futuro,
+    # aggiungere la gestione dei suoi PricingPlan.
   end
 
   # GET /products/new
@@ -19,52 +23,41 @@ class ProductsController < ApplicationController
   def edit
   end
 
-  # POST /products or /products.json
+  # POST /products
   def create
     @product = Product.new(product_params)
 
-    respond_to do |format|
-      if @product.save
-        format.html { redirect_to @product, notice: "Product was successfully created." }
-        format.json { render :show, status: :created, location: @product }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
+    if @product.save
+      redirect_to @product, notice: "Prodotto creato con successo."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /products/1 or /products/1.json
+  # PATCH/PUT /products/1
   def update
-    respond_to do |format|
-      if @product.update(product_params)
-        format.html { redirect_to @product, notice: "Product was successfully updated." }
-        format.json { render :show, status: :ok, location: @product }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
+    if @product.update(product_params)
+      redirect_to @product, notice: "Prodotto aggiornato con successo."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /products/1 or /products/1.json
+  # DELETE /products/1
   def destroy
-    @product.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to products_path, status: :see_other, notice: "Product was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    # Usiamo .discard invece di .destroy per il soft-delete!
+    @product.discard
+    redirect_to products_url, notice: "Prodotto archiviato con successo."
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params.expect(:id))
-    end
+  # Metodo per trovare il prodotto
+  def set_product
+    @product = Product.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def product_params
-      params.fetch(:product, {})
-    end
+  # Definisce i parametri "sicuri" che possono essere accettati dal form
+  def product_params
+    params.require(:product).permit(:name, :description, :requires_medical_certificate, :max_capacity)
+  end
 end

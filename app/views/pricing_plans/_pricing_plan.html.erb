@@ -1,2 +1,15 @@
-<div id="<%= dom_id pricing_plan %>">
-</div>
+<%= turbo_frame_tag pricing_plan do %>
+  <div class="pricing-plan-item">
+    <p>
+      <strong><%= pricing_plan.name %>:</strong>
+      <%= number_to_currency(pricing_plan.price) %>
+    </p>
+    <div>
+      <%# Questo link sostituirà il frame "form_container" con il form di modifica %>
+      <%= link_to "Modifica", edit_product_pricing_plan_path(pricing_plan.product, pricing_plan) %>
+
+      <%= button_to "Archivia", [pricing_plan.product, pricing_plan], method: :delete,
+                    data: { turbo_confirm: "Sei sicuro?" } %>
+    </div>
+  </div>
+<% end %>

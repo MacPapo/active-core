@@ -1,4 +1,5 @@
-<%= form_with(model: pricing_plan) do |form| %>
+<%# app/views/pricing_plans/_form.html.erb %>
+<%= form_with(model: [ product, pricing_plan ], html: { id: dom_id(pricing_plan, :form) }) do |form| %>
   <% if pricing_plan.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(pricing_plan.errors.count, "error") %> prohibited this pricing_plan from being saved:</h2>
@@ -11,7 +12,46 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.submit %>
+  <!-- Nome piano -->
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
   </div>
+
+  <!-- Prezzo intero -->
+  <div class="field">
+    <%= form.label :price %>
+    <%= form.number_field :price, step: 0.01 %>
+  </div>
+
+  <!-- Prezzo affiliato (opzionale) -->
+  <div class="field">
+    <%= form.label :affiliated_price %>
+    <%= form.number_field :affiliated_price, step: 0.01 %>
+  </div>
+
+  <!-- Durata piano -->
+  <div class="field">
+    <%= form.label :duration_interval, "Durata (quantità)" %>
+    <%= form.number_field :duration_interval, min: 1 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :duration_unit, "Unità di tempo" %>
+    <%= form.select :duration_unit, PricingPlan.duration_units.keys.map { |u| [u.humanize, u] } %>
+  </div>
+
+  <!-- Validità del piano -->
+  <div class="field">
+    <%= form.label :valid_from, "Valido dal" %>
+    <%= form.date_field :valid_from %>
+  </div>
+
+  <div class="field">
+    <%= form.label :valid_until, "Valido fino al" %>
+    <%= form.date_field :valid_until %>
+  </div>
+
+  <%= form.submit "Salva" %>
+  <%= link_to "Annulla", product_path(product) %>
 <% end %>

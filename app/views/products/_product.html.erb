@@ -1,2 +1,10 @@
 <div id="<%= dom_id product %>">
+    <ul>
+        <li><%= product.name %></li>
+        <li><%= product.max_capacity || "Nessuna" %></li>
+        <li><%= product.requires_medical_certificate? ? "Sì" : "No" %></li>
+        <li><%= link_to "Mostra", product %></li>
+        <li><%= link_to "Modifica", edit_product_path(product) %></li>
+        <li><%= button_to "Archivia", product, method: :delete, data: { turbo_confirm: "Sei sicuro di voler archiviare questo prodotto?" } %></li>
+    </ul>
 </div>

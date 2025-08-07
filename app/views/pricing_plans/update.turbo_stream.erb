@@ -1,0 +1,5 @@
+<%# app/views/pricing_plans/update.turbo_stream.erb %>
+<%# Sostituisce il piano nella lista con la sua versione aggiornata %>
+<%= turbo_stream.replace @pricing_plan %>
+<%# Svuota il contenitore del form %>
+<%= turbo_stream.update @pricing_plan, "" %>

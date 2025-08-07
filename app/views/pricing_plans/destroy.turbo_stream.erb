@@ -1,0 +1,5 @@
+<%# app/views/pricing_plans/destroy.turbo_stream.erb %>
+<%# Rimuove il piano dalla lista con una bella animazione (se usi CSS) %>
+<%= turbo_stream.remove @pricing_plan %>
+<%# Mostra il messaggio di notifica %>
+<%= turbo_stream.prepend "flash", partial: "layouts/flash" %>

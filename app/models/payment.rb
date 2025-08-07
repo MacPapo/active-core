@@ -15,7 +15,12 @@ class Payment < ApplicationRecord
   accepts_nested_attributes_for :payment_discounts, allow_destroy: true
 
   # --- ENUM ---
-  enum payment_method: { cash: 0, card: 1, bank_transfer: 2, other: 3 }
+  enum :payment_method, {
+         cash: 0,
+         card: 1,
+         bank_transfer: 2,
+         other: 3
+       }
 
   # --- LOGICA ---
   before_validation :calculate_totals

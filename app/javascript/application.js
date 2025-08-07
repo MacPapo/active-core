@@ -7,4 +7,3 @@ import "bootstrap";
 import "@hotwired/turbo-rails"
 
 import "initialize-popovers"
-
