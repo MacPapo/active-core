@@ -20,6 +20,6 @@ class CreateMembers < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :members, :email, unique: true, where: "email IS NOT NULL AND discarded_at IS NOT NULL"
+    add_index :members, :email, unique: true, where: "discarded_at IS NULL"
   end
 end

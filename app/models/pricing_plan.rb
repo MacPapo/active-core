@@ -1,5 +1,6 @@
 class PricingPlan < ApplicationRecord
   include Discard::Model
+  include Broadcastable
   include Pricable
   include HasValidityPeriod
 

@@ -1,10 +1,24 @@
-<div id="<%= dom_id product %>">
-    <ul>
-        <li><%= product.name %></li>
-        <li><%= product.max_capacity || "Nessuna" %></li>
-        <li><%= product.requires_medical_certificate? ? "Sì" : "No" %></li>
-        <li><%= link_to "Mostra", product %></li>
-        <li><%= link_to "Modifica", edit_product_path(product) %></li>
-        <li><%= button_to "Archivia", product, method: :delete, data: { turbo_confirm: "Sei sicuro di voler archiviare questo prodotto?" } %></li>
-    </ul>
-</div>
+<%# app/views/products/_product.html.erb %>
+
+<%# 1. CACHING CON SOLID CACHE:
+Ogni singolo prodotto viene messo in cache. La chiave di cache viene
+automaticamente invalidata quando il prodotto viene aggiornato, grazie
+alla magia combinata di `broadcasts_to` e Solid Cache. %>
+<% cache product do %>
+    <%# 2. L'ELEMENTO CON UN ID UNIVOCO:
+    `dom_id(product)` crea un ID HTML unico (es. "product_123").
+    Questo è FONDAMENTALE perché Turbo e Action Cable sappiano
+    quale elemento della pagina aggiornare o rimuovere. %>
+    <%= tag.div id: dom_id(product), class: "product-item" do %>
+        <p>
+            <strong><%= product.name %></strong>
+            <span>(<%= product.requires_medical_certificate? ? "Certificato richiesto" : "Nessun certificato" %>)</span>
+        </p>
+        <div>
+            <%= link_to "Modifica", edit_product_path(product),
+                        data: { turbo_frame: "new_product" } %>
+            <%= button_to "Archivia", product, method: :delete,
+                          data: { turbo_confirm: "Sei sicuro?" } %>
+        </div>
+    <% end %>
+<% end %>

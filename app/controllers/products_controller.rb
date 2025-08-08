@@ -10,8 +10,7 @@ class ProductsController < ApplicationController
 
   # GET /products/1
   def show
-    # Qui potrai vedere i dettagli del prodotto e, in futuro,
-    # aggiungere la gestione dei suoi PricingPlan.
+    @pricing_plans = @product.pricing_plans.kept
   end
 
   # GET /products/new
@@ -28,7 +27,7 @@ class ProductsController < ApplicationController
     @product = Product.new(product_params)
 
     if @product.save
-      redirect_to @product, notice: "Prodotto creato con successo."
+      flash.now[:notice] = "Prodotto creato con successo!" # TODO localize
     else
       render :new, status: :unprocessable_entity
     end
@@ -37,7 +36,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   def update
     if @product.update(product_params)
-      redirect_to @product, notice: "Prodotto aggiornato con successo."
+      flash.now[:notice] = "Prodotto aggiornato con successo!" # TODO localize
     else
       render :edit, status: :unprocessable_entity
     end
@@ -47,17 +46,18 @@ class ProductsController < ApplicationController
   def destroy
     # Usiamo .discard invece di .destroy per il soft-delete!
     @product.discard
-    redirect_to products_url, notice: "Prodotto archiviato con successo."
+
+    flash.now[:notice] = "Prodotto archiviato con successo!" # TODO localize
   end
 
   private
-  # Metodo per trovare il prodotto
-  def set_product
-    @product = Product.find(params[:id])
-  end
+    # Metodo per trovare il prodotto
+    def set_product
+      @product = Product.find(params[:id])
+    end
 
-  # Definisce i parametri "sicuri" che possono essere accettati dal form
-  def product_params
-    params.require(:product).permit(:name, :description, :requires_medical_certificate, :max_capacity)
-  end
+    # Definisce i parametri "sicuri" che possono essere accettati dal form
+    def product_params
+      params.require(:product).permit(:name, :description, :requires_medical_certificate, :max_capacity)
+    end
 end

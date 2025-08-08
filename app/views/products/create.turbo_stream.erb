@@ -1,0 +1,10 @@
+<%# app/views/products/create.turbo_stream.erb %>
+
+<%# Il broadcast del modello si occupa GIA' di aggiungere il nuovo prodotto alla lista.
+    Questo file si occupa solo del feedback per l'utente che ha sottomesso il form. %>
+
+<%# Azione 1: Svuota il contenitore del form per farlo sparire. %>
+<%= turbo_stream.update "new_product", "" %>
+
+<%# Azione 2: Aggiunge il messaggio di notifica nel suo contenitore. %>
+<%= turbo_stream.prepend "flash", partial: "layouts/flash" %>

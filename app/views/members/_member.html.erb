@@ -1,0 +1,10 @@
+<% cache member do %>
+  <%= tag.div id: dom_id(member), class: "member-item" do %>
+    <p>
+      <strong><%= member.full_name %></strong>
+      <span>(<%= member.email %>)</span>
+      <%= link_to "Modifica", edit_member_path(member), data: { turbo_frame: "new_member" } %>
+      <%= button_to "Archivia", member, method: :delete, data: { turbo_confirm: "Sei sicuro?" } %>
+    </p>
+  <% end %>
+<% end %>

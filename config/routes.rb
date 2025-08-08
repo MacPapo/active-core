@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     resources :pricing_plans, except: [ :index, :show ]
   end
 
+  resources :members
+
   resources :access_grants
   resources :payments, only: [ :index, :show, :new, :create ]
   resources :receipts, only: [ :index, :show ]

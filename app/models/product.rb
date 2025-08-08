@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   include Discard::Model
+  include Broadcastable
 
   has_many :pricing_plans, dependent: :destroy
   has_many :package_inclusions, dependent: :destroy

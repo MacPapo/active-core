@@ -1,16 +1,19 @@
-<p style="color: green"><%= notice %></p>
+<%= turbo_stream_from "products" %>
 
-<% content_for :title, "Products" %>
+<h1>Prodotti</h1>
+<p>La lista dei servizi base. Si aggiorna in tempo reale.</p>
 
-<h1>Products</h1>
+<%# 2. IL FORM DI CREAZIONE (come prima) %>
+<%= link_to "Nuovo Prodotto", new_product_path, data: { turbo_frame: "new_product" } %>
+<%= turbo_frame_tag "new_product" %>
 
+<hr>
+
+<%# 3. LA LISTA DEI PRODOTTI:
+Questo contenitore ha un ID che useremo per aggiungere/rimuovere elementi. %>
 <div id="products">
-  <% @products.each do |product| %>
-    <%= render product %>
-    <p>
-      <%= link_to "Show this product", product %>
-    </p>
-  <% end %>
+    <%# Iteriamo sui prodotti per la visualizzazione iniziale %>
+    <% @products.each do |product| %>
+        <%= render product %>
+    <% end %>
 </div>
-
-<%= link_to "New product", new_product_path %>

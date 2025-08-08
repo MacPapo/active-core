@@ -1,0 +1,78 @@
+<%= form_with(model: member) do |form| %>
+  <% if member.errors.any? %>
+    <div style="color: red;">
+      <% member.errors.full_messages.each do |message| %>
+        <p><%= message %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :tax_code, "Codice Fiscale" %><br>
+    <%= form.text_field :tax_code %>
+  </div>
+
+  <div>
+    <%= form.label :first_name, "Nome" %><br>
+    <%= form.text_field :first_name, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :last_name, "Cognome" %><br>
+    <%= form.text_field :last_name, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :birth_date, "Data di nascita" %><br>
+    <%= form.date_field :birth_date %>
+  </div>
+
+  <div>
+    <%= form.label :email, "Email" %><br>
+    <%= form.email_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :phone, "Telefono" %><br>
+    <%= form.telephone_field :phone %>
+  </div>
+
+  <div>
+    <%= form.label :address, "Indirizzo" %><br>
+    <%= form.text_field :address %>
+  </div>
+
+  <div>
+    <%= form.label :city, "Città" %><br>
+    <%= form.text_field :city %>
+  </div>
+
+  <div>
+    <%= form.label :province, "Provincia" %><br>
+    <%= form.text_field :province %>
+  </div>
+
+  <div>
+    <%= form.label :zip_code, "CAP" %><br>
+    <%= form.text_field :zip_code %>
+  </div>
+
+  <div>
+    <%= form.label :medical_certificate_issued_on, "Data rilascio certificato medico" %><br>
+    <%= form.date_field :medical_certificate_issued_on %>
+  </div>
+
+  <div>
+    <%= form.label :affiliated, "Tesserato" %><br>
+    <%= form.check_box :affiliated %>
+  </div>
+
+  <div>
+    <%= form.label :legal_guardian_id, "Genitore/Tutore legale" %><br>
+    <%= form.collection_select :legal_guardian_id, Member.all, :id, :full_name, include_blank: true %>
+  </div>
+
+  <div>
+    <%= form.submit "Salva Membro" %>
+  </div>
+<% end %>

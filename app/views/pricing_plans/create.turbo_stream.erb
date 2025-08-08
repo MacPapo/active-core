@@ -1,2 +1,2 @@
-<%= turbo_stream.prepend "pricing_plans", @pricing_plan %>
-<%= turbo_stream.update PricingPlan.new, "" %>
+<%= turbo_stream.update "new_pricing_plan", "" %>
+<%= turbo_stream.prepend "flash", partial: "layouts/flash" %>

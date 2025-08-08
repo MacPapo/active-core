@@ -3,6 +3,7 @@
 # Member Model
 class Member < ApplicationRecord
   include Discard::Model
+  include Broadcastable
 
   # Associations
   has_one :user, dependent: :destroy
@@ -30,7 +31,6 @@ class Member < ApplicationRecord
   normalizes :tax_code, with: -> { _1&.upcase&.strip }
   normalizes :email, with: -> { _1&.downcase&.strip }
 
-  after_discard :discard_associated_records
   # after_update -> { DetachLegalGuardiansJob.perform_later }, unless: :minor? TODO
 
   def full_name
@@ -53,14 +53,5 @@ class Member < ApplicationRecord
 
   def active_grants
     access_grants.active.where("start_date <= :today AND end_date >= :today", today: Date.current)
-  end
-
-  private
-
-  def discard_associated_records
-    memberships.discard_all
-    package_purchases.discard_all
-    registrations.discard_all
-    waitlists.destroy_all
   end
 end

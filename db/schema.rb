@@ -65,7 +65,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_06_192742) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["discarded_at"], name: "index_members_on_discarded_at"
-    t.index ["email"], name: "index_members_on_email", unique: true, where: "email IS NOT NULL AND discarded_at IS NOT NULL"
+    t.index ["email"], name: "index_members_on_email", unique: true, where: "discarded_at IS NULL"
     t.index ["legal_guardian_id"], name: "index_members_on_legal_guardian_id"
   end
 
